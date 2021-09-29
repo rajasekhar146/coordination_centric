@@ -10,7 +10,10 @@ import AcceptanceCriteria from '../../../pages/acceptance-criteria';
 import BankInformation from '../../../pages/bank-information';
 import ServiceLevelAgreement from '../../../pages/service-level-agreement';
 import TermsAndConditions from '../../../pages/terms-and-conditions';
+import headerImage from '../../../assets/images/header_image.png'
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
+import './Onboarding.Component.css'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies'];
 
 
@@ -62,7 +65,10 @@ export const OnboardingComponent = () => {
 
 
     return (
-        <div>
+        <div className="ob__main__section">
+        <div className="ob__align__center">
+        <div className="ob__header__section"><img src={headerImage} alt="logo" /></div>
+        <div className="ob__content__section">
         <Box sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label, index) => {
@@ -101,28 +107,28 @@ export const OnboardingComponent = () => {
           {(activeStep + 1 === 4 ? <TermsAndConditions /> : null)}
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
+          {activeStep == 0 ? null : <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+            className="ob__back__btn"
+          >
+            Back
+          </Button>}
+            
             <Box sx={{ flex: '1 1 auto' }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            
+            <Button onClick={handleNext} className="ob__next__btn">
+              {activeStep === steps.length - 1 ? 'Finish' : 'Save & Next '} &nbsp;<ArrowForwardIosRoundedIcon />
             </Button>
           </Box>
         </React.Fragment>
       )}
     </Box>
+        </div>
+        
+        </div>
         </div>
     )
 }

@@ -1,0 +1,112 @@
+.ob__main__section {
+    background: #F6F8FB;
+}
+
+.ob__header__section {
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+}
+
+.ob__content__section {
+    width: 90%;
+    background-color:#F6F8FB;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.ob__next__btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+
+    position: absolute;
+    width: 160px;
+    height: 54px;
+    right: 50px;
+    bottom: 10px;
+
+    /* Primary/Default */
+    background: #E42346 !important;
+    border-radius: 8px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+
+    /* identical to box height, or 129% */
+    letter-spacing: 0.2px;
+
+    /* Neutral/White */
+    color: #FFFFFF !important;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 0px;
+}
+
+.ob__back__btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+
+    position: absolute;
+    width: 160px;
+    height: 54px;
+    right: 95px;
+    bottom: 10px;
+    left: 50px;
+
+    /* Primary/Default */
+    border: 1px solid #E42346 !important;
+    border-radius: 8px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+
+    /* identical to box height, or 129% */
+    letter-spacing: 0.2px;
+
+    /* Neutral/White */
+    color: #E42346 !important;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed,
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+    color: #E42346 !important;
+}
+
+/* .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root */
+
+/* .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+    font-size: 1.5rem;
+    color: #FFFFFF !important;
+    border: 1px solid #E42346;
+    border-radius: 15px;
+} */
+
+.ob__align__center {
+    justify-content: center;
+    align-items: center;
+    margin-left: 8%;
+}
