@@ -1,0 +1,70 @@
+image: node:10
+
+cache:
+  paths:
+    # - node_modules/
+    - .yarn
+
+before_script:
+  - apt-get update
+  - apt-get install -y -qq python3-dev python3-pip
+  - pip3 install --upgrade awscli
+  - export PATH=./node_modules/.bin:$PATH
+  - npm i
+  - npm i serverless
+
+variables:
+  BUCKET: 'deployment-772697371069-eu-central-1'
+  LOCAL_DIR: 'build'
+
+deploy_development:
+  stage: deploy
+  environment:
+    name: Development
+  only:
+    - dev
+  script:
+    - yarn clean
+    - yarn build:development
+    - export UPLOAD_DIR=manager_ui/dev
+    - aws s3 cp --recursive --acl public-read --exclude "node_modules" --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build s3://deployment-772697371069-eu-central-1/manager_ui/dev
+    - aws cloudformation deploy --no-fail-on-empty-changeset --template-file cloudfront.yaml --capabilities CAPABILITY_NAMED_IAM  --stack-name weeve-managerui-dev --force-upload --parameter-overrides Stage=Dev DeploymentBucket=deployment-772697371069-eu-central-1 DeploymentFolder=/manager_ui/dev AppName=weeve-managerui DomainName=devmanager.weeve.engineering AcmCertificateArn=arn:aws:acm:us-east-1:772697371069:certificate/4170a09f-ad08-477c-889d-7eb0733b3d84
+
+deploy_qa:
+  stage: deploy
+  environment:
+    name: QA
+  only:
+    - qa
+  script:
+    - yarn clean
+    - yarn build:qa
+    - export UPLOAD_DIR=manager_ui/qa
+    - aws s3 cp --recursive --acl public-read --exclude "node_modules" --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build s3://deployment-772697371069-eu-central-1/manager_ui/qa
+    - aws cloudformation deploy --no-fail-on-empty-changeset --template-file cloudfront.yaml --capabilities CAPABILITY_NAMED_IAM  --stack-name weeve-managerui-qa --force-upload --parameter-overrides Stage=Demo DeploymentBucket=deployment-772697371069-eu-central-1 DeploymentFolder=/manager_ui/qa AppName=weeve-managerui DomainName=qamanager.weeve.engineering AcmCertificateArn=arn:aws:acm:us-east-1:772697371069:certificate/4170a09f-ad08-477c-889d-7eb0733b3d84
+
+deploy_demo:
+  stage: deploy
+  environment:
+    name: Demo
+  only:
+    - demo
+  script:
+    - yarn clean
+    - yarn build:demo
+    - export UPLOAD_DIR=manager_ui/demo
+    - aws s3 cp --recursive --acl public-read --exclude "node_modules" --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build s3://deployment-772697371069-eu-central-1/manager_ui/demo
+    - aws cloudformation deploy --no-fail-on-empty-changeset --template-file cloudfront.yaml --capabilities CAPABILITY_NAMED_IAM  --stack-name weeve-managerui-demo --force-upload --parameter-overrides Stage=Demo DeploymentBucket=deployment-772697371069-eu-central-1 DeploymentFolder=/manager_ui/demo AppName=weeve-managerui DomainName=demomanager.weeve.engineering AcmCertificateArn=arn:aws:acm:us-east-1:772697371069:certificate/4170a09f-ad08-477c-889d-7eb0733b3d84
+
+deploy_prod:
+  stage: deploy
+  environment:
+    name: Prod
+  only:
+    - master
+  script:
+    - yarn clean
+    - yarn build:production
+    - export UPLOAD_DIR=manager_ui/demo
+    - aws s3 cp --recursive --acl public-read --exclude "node_modules" --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build s3://deployment-772697371069-eu-central-1/manager_ui/prod
+    - aws cloudformation deploy --no-fail-on-empty-changeset --template-file cloudfront.yaml --capabilities CAPABILITY_NAMED_IAM  --stack-name weeve-managerui-prod --force-upload --parameter-overrides Stage=Prod DeploymentBucket=deployment-772697371069-eu-central-1 DeploymentFolder=/manager_ui/prod AppName=weeve-managerui DomainName=manager.weeve.engineering AcmCertificateArn=arn:aws:acm:us-east-1:772697371069:certificate/4170a09f-ad08-477c-889d-7eb0733b3d84

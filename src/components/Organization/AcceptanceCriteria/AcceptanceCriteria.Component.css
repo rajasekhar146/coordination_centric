@@ -1,0 +1,39 @@
+
+.ac__main__div {
+    width: 100%;
+    height: 100vh;
+}
+
+.ac__title__text {
+    justify-content: center;
+    text-align: center;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 34px;
+
+    /* identical to box height, or 131% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    color: #000000;
+}
+
+.ac__subtitle__text {
+    justify-content: center;
+    text-align: center;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+}
