@@ -1,0 +1,92 @@
+.db__main__div{
+    background: #F6F8FB;
+    height: 100vh;
+    padding: 20px;
+}
+
+.db__row {
+    width: 100%;
+    display: flex;
+}
+
+.db__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1px;
+
+    /* Neutral / Black */
+    color: #25282B;
+}
+
+.db__card {
+    background: #FFFFFF;
+
+    /* card / floating */
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    margin-right: 20px;
+}
+
+.db__placeholder {
+    margin-top: 30px;
+    width: 96%;
+    height: 250px !important;
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+    background: #FFFFFF;
+}
+
+.db__left__placeholder {
+    margin-top: 30px;
+    width: 44% !important;
+    height: 150px !important;
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+    background: #FFFFFF;
+    margin-right: 50px;
+}
+
+.db__right__placeholder {
+    margin-top: 30px;
+    width: 44% !important;
+    height: 150px !important;
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+    background: #FFFFFF;
+    margin-right: 20px;
+}
+
+.db__row > div {
+    padding: 10px;
+}
+
+.db__card__content {
+   display: flex;
+   align-items: center; 
+}
+
+.db__label__value {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1px;
+    color: #E42346;
+}

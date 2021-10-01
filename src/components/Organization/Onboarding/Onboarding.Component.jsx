@@ -14,7 +14,10 @@ import headerImage from '../../../assets/images/header_image.png'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 import './Onboarding.Component.css'
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies'];
+import SAASAgreement from '../../../pages/saasagreement';
+import EULAAgreement from '../../../pages/eula-agreement';
+import SignupComplete from '../../../pages/signup-complete';
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'SAAS Agreement',  'EULA Agreement', 'Banking Information', 'T&C and Policies'];
 
 
 export const OnboardingComponent = () => {
@@ -103,8 +106,10 @@ export const OnboardingComponent = () => {
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>{(activeStep + 1 === 1 ? <AcceptanceCriteria/> : null)}
           {(activeStep + 1 === 2 ? <ServiceLevelAgreement /> : null)}
-          {(activeStep + 1 === 3 ? <BankInformation /> : null)}
-          {(activeStep + 1 === 4 ? <TermsAndConditions /> : null)}
+          {(activeStep + 1 === 3 ? <SAASAgreement /> : null)}
+          {(activeStep + 1 === 4 ? <EULAAgreement /> : null)}
+          {(activeStep + 1 === 5 ? <BankInformation /> : null)}
+          {(activeStep + 1 === 6 ? <TermsAndConditions /> : null)}
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           {activeStep == 0 ? null : <Button
