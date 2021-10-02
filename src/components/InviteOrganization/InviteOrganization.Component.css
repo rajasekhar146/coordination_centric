@@ -1,0 +1,125 @@
+.io__main__div {
+    padding: 20px;
+}
+
+.io__title__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+
+    /* identical to box height, or 130% */
+    letter-spacing: 0.2px;
+
+    color: #000000;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin-bottom: 20px;
+}
+
+.io__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    /* line-height: 20px; */
+
+    /* identical to box height, or 143% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+
+.io__row {
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.io__add__organization__btn {
+    background-color: #E42346 !important;
+    color: #FFFFFF !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+
+    /* identical to box height, or 200% */
+    letter-spacing: 0.2px;
+
+    /* light-text-color */
+    color: #FFFFFF;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
+
+    padding: 8px 32px 8px 32px !important;
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+}
+
+.io__add__organization__btn__close {
+    color: #E42346 !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+
+    /* identical to box height, or 200% */
+    letter-spacing: 0.2px;
+
+    
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 40px 0px 0px !important;
+
+    border: 1px solid #E42346 !important; 
+    /* padding: 8px !important; */
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+
+    padding: 8px 32px 8px 32px !important;
+}
+
+.io__column {
+    /* width: 50% !important; */
+}
+
+.io__same__line {
+    display: flex;
+}
+
+.io__invite__org__btn {
+    right: 50px;
+    display: flex;
+}
+
+.od__text__box {
+    background: #FFFFFF;
+    border-radius: 5px !important;
+    width: 370px !important;
+}

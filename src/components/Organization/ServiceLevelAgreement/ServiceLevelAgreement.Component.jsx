@@ -1,4 +1,7 @@
 import React from 'react'
+import TextField from '@mui/material/TextField';
+import './ServiceLevelAgreement.Component.css'
+
 
 const ServiceLevelAgreementComponent = () => {
     return (
@@ -33,16 +36,16 @@ Aliquam venenatis odio volutpat commodo mauris pretium massa vitae a.
               </div>
               </div>
           
-              <div className="ac__row">
-              <div className="ac__column">
-              <div className="ac__label">Sign Here</div>
-                <input type="text" />
+              <div className="sla__row">
+              <div className="sla__column">
+              <div className="sla__label">Sign Here</div>
+                <TextField id="standard-basic" className="sla__text__box"  variant="standard" />
               </div>
               
             
-              <div className="ac__column">
-              <div className="ac__label">Date</div>
-                <input type="text" />
+              <div className="sla__column">
+              <div className="sla__label">Date</div>
+                <TextField id="standard-basic" className="sla__text__box" variant="standard" />
               </div>
               
               </div>

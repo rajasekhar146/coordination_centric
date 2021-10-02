@@ -1,14 +1,11 @@
-.saas__row {
+
+.sla__row {
     width: 100%;
     display: flex;
     /* background-color: #A0A4A8; */
 }
 
-.saas__column {
-    padding-right: 30px;
-}
-
-.saas__text__box {
+.sla__text__box {
     background: #FFFFFF;
     width: 350px !important;
     left: 0px;
@@ -18,7 +15,7 @@
     /* padding: 8px !important; */
 }
 
-.saas__label {
+.sla__label {
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
@@ -37,4 +34,8 @@
     order: 0;
     flex-grow: 0;
     margin: 12px 0px;
+}
+
+.sla__column {
+    padding-right: 30px;
 }

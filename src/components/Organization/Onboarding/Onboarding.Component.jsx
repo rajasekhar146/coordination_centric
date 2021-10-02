@@ -102,6 +102,7 @@ export const OnboardingComponent = () => {
             <Button onClick={handleReset}>Reset</Button>
           </Box>
         </React.Fragment>
+        
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>{(activeStep + 1 === 1 ? <AcceptanceCriteria/> : null)}

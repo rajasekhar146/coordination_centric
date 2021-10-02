@@ -11,6 +11,12 @@ import BankInformation from './pages/bank-information'
 import Dashboard from './pages/dashboard'
 import NavBarComponent from './components/NavBar/NavBar.Component'
 import OrganizationDashboard from './pages/organization-dashboard'
+import Appointments from './pages/appointments'
+import Users from './pages/users'
+import Patients from './pages/patients'
+import Vaccinations from './pages/vaccinations'
+import Notifications from './pages/notifications'
+import Payments from './pages/payments'
 
 
 
@@ -30,7 +36,13 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
-         </Switch>
+          <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
+          <MasterLayoutWithLefuMenuComponent path="/users" component={Users} />
+          <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
+          <MasterLayoutWithLefuMenuComponent path="/vaccinations" component={Vaccinations} />
+          <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
+          <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
+          </Switch>
       </Router>
     )
   }

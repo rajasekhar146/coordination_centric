@@ -1,4 +1,6 @@
 import React from 'react'
+import TextField from '@mui/material/TextField';
+import './EULAAgreement.Component.css'
 
 const EULAAgreementComponent = () => {
     return (
@@ -33,16 +35,16 @@ Aliquam venenatis odio volutpat commodo mauris pretium massa vitae a.
               </div>
               </div>
           
-              <div className="ac__row">
-              <div className="ac__column">
-              <div className="ac__label">Sign Here</div>
-                <input type="text" />
+              <div className="eulaa__row">
+              <div className="eulaa__column">
+              <div className="eulaa__label">Sign Here</div>
+              <TextField id="standard-basic" className="eulaa__text__box"  variant="standard" />
               </div>
               
             
-              <div className="ac__column">
-              <div className="ac__label">Date</div>
-                <input type="text" />
+              <div className="eulaa__column">
+              <div className="eulaa__label">Date</div>
+              <TextField id="standard-basic" className="eulaa__text__box"  variant="standard" />
               </div>
               
               </div>

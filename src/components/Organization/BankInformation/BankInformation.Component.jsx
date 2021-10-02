@@ -1,30 +1,32 @@
 import React from 'react'
+import './BankInformation.Component.css'
+import TextField from '@mui/material/TextField';
 
 const BankInformationComponent = () => {
     return (
-        <div className="ac__main__div">
-    <div className="ac__title__text">Banking Information</div>
-        <div className="ac__subtitle__text">This is optional at this point, if you don’t want to fill it right know you can skip this step.
+        <div className="bi__main__div">
+    <div className="bi__title__text">Banking Information</div>
+        <div className="bi__subtitle__text">This is optional at this point, if you don’t want to fill it right know you can skip this step.
         </div>
         <div>
-          <div className="ac__form">
-            <div className="ac__header__text">Organization Banking Info</div>
+          <div className="bi__form">
+            <div className="bi__header__text">Organization Banking Info</div>
             <div>
-              <div className="ac__row">
-              <div className="ac__column">
-              <div className="ac__label">Routing Number <span className="ac__required">*</span></div>
-                <input type="text" />
+              <div className="bi__row">
+              <div className="bi__column">
+              <div className="bi__label">Routing Number <span className="ac__required">*</span></div>
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
-              <div className="ac__column">
-              <div className="ac__label">Name Associated with Bank Account <span className="ac__required">*</span></div>
-                <input type="text" />
+              <div className="bi__column">
+              <div className="bi__label">Name Associated with Bank Account <span className="ac__required">*</span></div>
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
 
-              <div className="ac__column">
-              <div className="ac__label">Phone Number <span className="ac__required">*</span></div>
-                <input type="text" />
+              <div className="bi__column">
+              <div className="bi__label">Phone Number <span className="ac__required">*</span></div>
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>

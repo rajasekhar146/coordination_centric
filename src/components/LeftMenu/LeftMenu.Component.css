@@ -11,3 +11,11 @@
 .lm__menu__text {
     text-decoration: none !important;
 }
+
+.MuiListItemText-primary,  .css-10hburv-MuiTypography-root {
+    text-decoration: none !important; 
+}
+
+.lm__menu__icon {
+    padding-left: 20px;
+}

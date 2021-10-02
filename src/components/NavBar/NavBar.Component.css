@@ -46,3 +46,9 @@
     width: 200px;
     margin-left: 20px;
 }
+
+.nb__serach__text {
+    background: #FFFFFF;
+    border-radius: 100px !important;
+    width: 500px !important;
+}

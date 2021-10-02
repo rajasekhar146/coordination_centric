@@ -1,5 +1,19 @@
 
+.od__main__div{
+    background: #F6F8FB;
+    height: 100vh;
+    padding: 20px;
+}
 
+.od__row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.od__row > div {
+    padding: 10px;
+}
 
 .od__title__text {
     font-family: Lato;
@@ -18,13 +32,14 @@
 .od__serach__text {
     background: #FFFFFF;
     border-radius: 100px !important;
+    width: 500px !important;
 }
 
 .od__add__organization__btn {
     background-color: #E42346 !important;
     color: #FFFFFF !important;
     border-radius: 5px;
-    font-family: Montserrat;
+    font-family: Lato;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
@@ -43,7 +58,8 @@
     flex-grow: 0;
     margin: 0px 8px;
 
-    padding: 10px !important;
+    padding: 8px 32px 8px 32px !important;
+    border-radius: 3px !important;
 }
 
 .od__add__organization__btn__text {
@@ -74,4 +90,68 @@
 .od__btn__div {
     right: 20px;
     position: absolute;
+}
+
+.od__placeholder {
+    margin-top: 30px;
+    width: 96%;
+    /* height: 460px !important; */
+    /* box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px; */
+    padding: 10px;
+    background: #FFFFFF;
+}
+
+.od__active__status {
+    color: #03B575;
+}
+
+.od__pending__status {
+    color: #EFAD0A;
+}
+
+.od__declined__status {
+    color: #E74F48;
+}
+
+.od__pagination__section {
+    width: 100% !important;
+    text-align: right !important;
+}
+
+.od__menu__text {
+    text-align: left !important;
+    padding: 10px;
+}
+
+/* .MuiButtonBase-root {
+    color: inherit;
+    border: 0;
+    cursor: pointer;
+    margin: 0;
+    display: inline-flex;
+    outline: 0;
+    padding: 0;
+    position: relative;
+    align-items: left !important;
+    border-radius: 0;
+    vertical-align: middle;
+    -moz-appearance: none;
+    justify-content: center;
+    text-decoration: none;
+    -moz-user-select: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    padding: 5px 5px 5px 20px !important;
+    text-align: left !important;
+} */
+
+.MuiButtonBase-root {
+    text-align: left !important;
+    padding: 4px !important;
+}
+
+.css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 8px !important;
 }

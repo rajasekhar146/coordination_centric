@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './AcceptanceCriteria.Component.css'
-
+import TextField from '@mui/material/TextField';
 
 const AcceptanceCriteriaComponent = () => {
   return (
@@ -15,18 +15,18 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">Full Name <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
               <div className="ac__column">
               <div className="ac__label">Email <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
 
               <div className="ac__column">
               <div className="ac__label">Phone Number <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
@@ -39,13 +39,13 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">Name <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
               <div className="ac__column">
               <div className="ac__label">Email <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
@@ -53,13 +53,13 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">Phone Number <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
               <div className="ac__column">
               <div className="ac__label">Fax Number <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
@@ -67,7 +67,7 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">Address <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
@@ -76,18 +76,18 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">NIP <span className="ac__required">*</span></div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
               <div className="ac__column">
               <div className="ac__label">Tax ID</div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
 
               <div className="ac__column">
               <div className="ac__label">Medical ID</div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
@@ -95,13 +95,13 @@ const AcceptanceCriteriaComponent = () => {
               <div className="ac__row">
               <div className="ac__column">
               <div className="ac__label">Website</div>
-                <input type="text" />
+                <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
             
               <div className="ac__column">
               <div className="ac__label">How did you hear about us?</div>
-                <input type="text" />
+                  <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
               </div>
               
               </div>
