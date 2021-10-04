@@ -17,6 +17,7 @@ import Patients from './pages/patients'
 import Vaccinations from './pages/vaccinations'
 import Notifications from './pages/notifications'
 import Payments from './pages/payments'
+import Signin from './pages/signin'
 
 
 
@@ -26,8 +27,9 @@ class Routes extends Component {
       <Router history={history}>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/onboarding" />
+            <Redirect to="/signin" />
           </Route>
+          <DefaultLayoutComponentRoute path="/signin" component={Signin} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
           <DefaultLayoutComponentRoute path="/acceptance-criteria" component={AcceptanceCriteria} />

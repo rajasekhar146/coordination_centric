@@ -25,6 +25,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 
+import EditIcon from '../../assets/icons/edit_icon.png'
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -39,10 +41,75 @@ const style = {
 };
 
 
-const options = [
-  'Active', 
-  'Pending', 
-  'Declined'
+const options1 = [ {
+    id: 1,
+    label: 'Active', 
+    icon: ''
+  },
+  {
+    id: 2,
+    label: 'Disabled',
+    icon: ''
+  },
+  { 
+    id: 3,
+    label: 'Pending',
+    icon: ''
+  },
+  { 
+    id: 4,
+    label: 'Sent',
+    icon: ''
+  },
+  { 
+    id: 5,
+    label: 'Edit',
+    icon: ''
+  },
+  { 
+    id: 6,
+    label: 'Resent Invitation',
+    icon: ''
+  },
+  { 
+    id: 7,
+    label: 'View Details',
+    icon: ''
+  },
+  { 
+    id: 8,
+    label: 'Approve',
+    icon: ''
+  },
+  { 
+    id: 9,
+    label: 'Reject',
+    icon: ''
+  }
+];
+
+const menuList = [
+  { menu: 'sent',  
+    options: [{text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+              {text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default}]},
+  { menu: 'pending',  
+    options: [{text: 'View Details', icon: require('../../assets/icons/view_details.png').default}, 
+              {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+              {text: 'Approve', icon: require('../../assets/icons/approve.png').default}, 
+              {text: 'Reject', icon: require('../../assets/icons/reject.png').default}]},
+  { menu: 'declined',  
+    options: [{text:'View Details', icon: require('../../assets/icons/view_details.png').default}, 
+              {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+              {text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default}, 
+              {text: 'Suspend', icon: require('../../assets/icons/suspend.png').default}]},
+  { menu: 'active',  
+    options: [{text:'View Details', icon: require('../../assets/icons/view_details.png').default}, 
+              {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+              {text: 'Suspend', icon: require('../../assets/icons/suspend.png').default}]},
+  { menu: 'suspended',  
+    options: [{text: 'View Details', icon: require('../../assets/icons/view_details.png').default}, 
+              {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+              {text: 'Activate', icon: require('../../assets/icons/activate.png').default}]}
 ];
 
 const ITEM_HEIGHT = 60;
@@ -119,13 +186,23 @@ const columns1 = [
 const OrganizationDashboardComponent = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  
+    const [menuOptions, setMenuOptions] = React.useState([])
     const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+
+    const handleClick = (event, status) => {
       setAnchorEl(event.currentTarget);
+      console.log('status', status, menuOptions)
+      const menus = menuList.filter(m => m.menu === status.toLowerCase());
+      console.log('menus', menus)
+      if(menus.length > 0)
+        setMenuOptions(menus[0].options)
+      else setMenuOptions([])
+
+      console.log('menus[0].options', menus[0].options)
     };
+
     const handleClose = () => {
       setAnchorEl(null);
     };
@@ -149,6 +226,11 @@ const OrganizationDashboardComponent = () => {
 
     const handleAddOrganizationOpen = () => {
       setAddOrganizationClicked(true);
+    }
+
+    const handleMenuAction = action => {
+      console.log('action', action);
+      setAnchorEl(null);
     }
 
     return (
@@ -205,7 +287,7 @@ const OrganizationDashboardComponent = () => {
                                             aria-controls="long-menu"
                                             aria-expanded={open ? 'true' : undefined}
                                             aria-haspopup="true"
-                                            onClick={handleClick}
+                                            onClick={e => handleClick(e, `${row['status']}`)}
                                           >
                                             <MoreVertRoundedIcon />
                                           </IconButton>
@@ -220,13 +302,16 @@ const OrganizationDashboardComponent = () => {
                                             PaperProps={{
                                               style: {
                                                 maxHeight: ITEM_HEIGHT * 4.5,
-                                                width: '20ch',
+                                                width: '30ch',
                                               },
                                             }}
                                           >
-                                            {options.map((option) => (
-                                              <MenuItem key={option} onClick={handleClose} className="od__row od__menu__text">
-                                                {option}                                               
+                                           {menuOptions.map((option, index) => (
+                                              <MenuItem key={option} onClick={e => handleMenuAction(`${option.text}`)} className="od__menu__row od__menu__text">
+                                                <div className="od__menu__icon__column">
+                                                  <img src={option.icon} alt={option.text} />
+                                                </div>       
+                                                <div>{option.text}</div>                                    
                                               </MenuItem>
                                             ))}
                                           </Menu>

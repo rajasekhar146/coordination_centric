@@ -5,7 +5,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Signup from '../../../pages/signup';
+// import Signup from '../../../pages/signup';
 import AcceptanceCriteria from '../../../pages/acceptance-criteria';
 import BankInformation from '../../../pages/bank-information';
 import ServiceLevelAgreement from '../../../pages/service-level-agreement';

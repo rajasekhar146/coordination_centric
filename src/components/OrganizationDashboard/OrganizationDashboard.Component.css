@@ -121,6 +121,7 @@
 
 .od__menu__text {
     text-align: left !important;
+    justify-content:  left !important;
     padding: 10px;
 }
 
@@ -154,4 +155,32 @@
 
 .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input {
     padding: 8px !important;
+}
+
+.od__menu__row {
+    width: 100%;
+    display: flex;
+    align-items: left !important;
+    justify-content: center;
+    padding: 8px !important;
+}
+
+.od__menu__icon__column {
+    width: 30%;
+    display: flex;
+    align-items: left !important;
+    justify-content: center;
+}
+
+.od__menu__text__column {
+    width: 70%;
+    display: flex;
+    align-items: left !important;
+    justify-content: center;
+}
+
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+    background-color: #E42346 !important;
+    border-radius: 3px !important;
+    color: #fff !important;
 }
