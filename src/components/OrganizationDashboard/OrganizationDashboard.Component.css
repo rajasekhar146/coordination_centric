@@ -32,7 +32,8 @@
 .od__serach__text {
     background: #FFFFFF;
     border-radius: 100px !important;
-    width: 500px !important;
+    width: 320px !important;
+    color: #A0A4A8 !important;
 }
 
 .od__add__organization__btn {
@@ -89,7 +90,7 @@
 
 .od__btn__div {
     right: 20px;
-    position: absolute;
+    /* position: absolute; */
 }
 
 .od__placeholder {
@@ -184,3 +185,18 @@
     border-radius: 3px !important;
     color: #fff !important;
 }
+
+.od__align__right {
+    justify-content: right !important;
+    display: flex !important;
+    align-items:center !important;
+    position: absolute !important;
+}
+
+.css-vamk89-MuiFormControl-root, .css-8ijah6-MuiFormControl-root {
+    margin: 0px !important;
+}
+
+/* .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 8px !important;
+} */

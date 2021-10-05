@@ -21,30 +21,17 @@ function login(username, password) {
     const fcmId ="5154646";
     const backoffice = "1";
 
-
-    let headers = new Headers();
-
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    // headers.append('Authorization', 'Basic ' + base64.encode(username + ":" +  password));
-    headers.append('Origin','*');
-    
     let axiosConfig = {
         headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
+            'Content-Type': 'application/json; charset=utf-8',
             "Access-Control-Allow-Origin": "*",
         }
       };
 
-    // const requestOptions = {
-    //     method: 'POST',
-    //     headers: headers,
-    // };
-
-    var bodyMsg = JSON.stringify({ username, password, deviceId, deviceType, fcmId, backoffice })
+    var bodyMsg = JSON.stringify({ email: username, password, deviceId, deviceType, fcmId, backoffice })
     console.log('request', axiosConfig)
     return axios.post(`${apiURL}/users/login`, bodyMsg, axiosConfig)
-        .then(handleResponse)
+        //.then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));

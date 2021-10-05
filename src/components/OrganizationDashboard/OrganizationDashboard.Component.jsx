@@ -25,6 +25,19 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 
+
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+// import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+
 import EditIcon from '../../assets/icons/edit_icon.png'
 
 const style = {
@@ -114,6 +127,28 @@ const menuList = [
 
 const ITEM_HEIGHT = 60;
 
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+
+const statusNames = [
+  'All Status',
+  'Active',
+  'Pending',
+  'Declined',
+  'Approve',
+  'Reject',
+  'Suspended',
+  'Sent'
+];
+
 const columns1 = [
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
@@ -190,7 +225,19 @@ const OrganizationDashboardComponent = () => {
     const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const [selectedStatus, setSelectedStatus] = React.useState([]);
+    const [value, setValue] = React.useState(null);
 
+    const handleChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setSelectedStatus(
+        // On autofill we get a the stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
+  
     const handleClick = (event, status) => {
       setAnchorEl(event.currentTarget);
       console.log('status', status, menuOptions)
@@ -237,6 +284,11 @@ const OrganizationDashboardComponent = () => {
         <div className="od__main__div">
             <div className="od__row">
                 <div className="od__title__text">Organizations</div>
+                <div className="od__btn__div od__align__right"><Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
+                <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Add Organization
+              </Button></div>
+            </div>
+            <div className="od__row">
                 <div><TextField id="" defaultValue="Search" className="od__serach__text" margin="normal" InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -244,9 +296,40 @@ const OrganizationDashboardComponent = () => {
                     </InputAdornment>
                    )
                   }}/></div>
-                <div className="od__btn__div"><Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
-                <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Add Organization
-              </Button></div>
+                <div className="od__btn__div">
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Select Date"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+                </div>
+                <div className="od__btn__div od__align__right">
+                  <FormControl sx={{ m: 1, width: 200, mt: 3 }}>
+                  <InputLabel id="demo-multiple-checkbox-label">Select Status</InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={selectedStatus}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="Select Status" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {statusNames.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedStatus.indexOf(name) > -1} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
             </div>
 
             <div className="od__row">

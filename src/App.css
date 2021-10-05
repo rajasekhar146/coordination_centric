@@ -1,119 +1,5 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); */
 
-:root {
-
-  /* Colors: */
-  --weeve-mint: #A2ECE2;
-  --weeve-blue: #4190C4;
-  --weeve-attention: #FF2266;
-  --weeve-turquoise: #41C4B7;
-  --shadow-4a4a4a-10-: #4A4A4A;
-  --weeve-tedratic-grey: #4A4A4A;
-  --pure-white: #FFFFFF;
-  --brilliant-shadow: #FAFAFA;
-  
-  /* Font/text values */
-  --unnamed-font-family-roboto: Roboto;
-  --unnamed-font-family-roboto-mono: Roboto Mono;
-  --unnamed-font-style-normal: normal;
-  --unnamed-font-weight-300: 300px;
-  --unnamed-font-weight-medium: medium;
-  --unnamed-font-weight-bold: bold;
-  --unnamed-font-weight-normal: normal;
-  --unnamed-font-size-12: 12px;
-  --unnamed-font-size-14: 14px;
-  --unnamed-font-size-18: 18px;
-  --unnamed-font-size-26: 26px;
-  --unnamed-font-size-32: 32px;
-  --unnamed-font-size-36: 36px;
-  --unnamed-font-size-48: 48px;
-  --unnamed-character-spacing-0: 0px;
-  --unnamed-character-spacing-1-25: 1.25px;
-  --unnamed-line-spacing-16: 16px;
-  --unnamed-line-spacing-19: 19px;
-  --unnamed-line-spacing-24: 24px;
-  --unnamed-line-spacing-34: 34px;
-  --unnamed-line-spacing-40: 40px;
-  --unnamed-line-spacing-43: 43px;
-  --unnamed-line-spacing-48: 48px;
-  --unnamed-text-transform-uppercase: uppercase;
-  }
-  
-  /* Character Styles */
-  .header-tech-text-h5 {
-  font-family: var(--unnamed-font-family-roboto-mono);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-normal);
-  font-size: var(--unnamed-font-size-18);
-  line-height: var(--unnamed-line-spacing-24);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .header-text-h3 {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-medium);
-  font-size: var(--unnamed-font-size-32);
-  line-height: var(--unnamed-line-spacing-43);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .paragraph {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-300);
-  font-size: var(--unnamed-font-size-12);
-  line-height: var(--unnamed-line-spacing-16);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .input-text-14px {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-300);
-  font-size: var(--unnamed-font-size-14);
-  line-height: var(--unnamed-line-spacing-19);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .button-text {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-medium);
-  font-size: var(--unnamed-font-size-14);
-  line-height: var(--unnamed-line-spacing-19);
-  letter-spacing: var(--unnamed-character-spacing-1-25);
-  color: var(--weeve-tedratic-grey);
-  text-transform: var(--unnamed-text-transform-uppercase);
-  }
-  .header-text-h4 {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-bold);
-  font-size: var(--unnamed-font-size-26);
-  line-height: var(--unnamed-line-spacing-34);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .header-text-h2 {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-medium);
-  font-size: var(--unnamed-font-size-36);
-  line-height: var(--unnamed-line-spacing-40);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-  .header-text-h1 {
-  font-family: var(--unnamed-font-family-roboto);
-  font-style: var(--unnamed-font-style-normal);
-  font-weight: var(--unnamed-font-weight-bold);
-  font-size: var(--unnamed-font-size-48);
-  line-height: var(--unnamed-line-spacing-48);
-  letter-spacing: var(--unnamed-character-spacing-0);
-  color: var(--weeve-tedratic-grey);
-  }
-
 
 html,
 body {
@@ -121,6 +7,7 @@ body {
   width: 100%;
   /* min-height: 100vh;
   min-width: 100vw; */
+  font-family: Lato;
 }
 body {
   margin: 0;

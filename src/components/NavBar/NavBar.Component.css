@@ -43,12 +43,92 @@
 }
 
 .nb__profile {
-    width: 200px;
+    width: 250px;
     margin-left: 20px;
+    background-color: #FFFFFF !important;
+    justify-content: center !important;
+    display: flex !important;
 }
+
+.nb__profile:hover { background-color:#FFFFFF !important}
 
 .nb__serach__text {
     background: #FFFFFF;
     border-radius: 100px !important;
-    width: 500px !important;
+    width: 400px !important;
+}
+
+.nb__profile__dropdown {
+    width: 200px !important; 
+    background-color: #FFFFFF !important;
+    display: flex;
+    justify-content: left !important;
+    text-align: left !important;  
+    /* padding: 4px !important  */
+}
+
+.nb__profile__dropdown:hover {
+    background-color: #FFFFFF !important;
+}
+
+.nb__profile__image {
+    width: 48px !important;
+}
+
+.nb__profile__dropdown > div {
+    padding: 4px !important;
+}
+
+.nb__profile__name {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+
+    color: #232738;
+}
+
+.nb__profile__role {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+
+    /* Gray 4 */
+    color: #BDBDBD;
+}
+
+.css-zddlty-MuiButtonBase-root-MuiButton-root {
+    text-transform: none !important;
+}
+
+.nb__profile__content {
+    padding: 8px !important;
+}
+
+.nb__profile__content > div {
+    padding: 4px !important;
+}
+
+.css-4ca7ag-MuiButtonBase-root-MuiButton-root {
+    text-transform: none !important;
+}
+
+.nb__profile__menu {
+    padding: 4px !important;
+}
+
+.nb__profile__menu__option {
+    /* padding: 8px !important; */
+    width: 100% !important;
+    justify-content: left !important;
+    
 }
