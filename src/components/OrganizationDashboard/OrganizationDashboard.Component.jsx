@@ -185,11 +185,11 @@ const columns1 = [
   const columns = [
     // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
     { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
-    { id: 'orgName', label: 'Org Admin', minWidth: 200, align: 'left' },
+    { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
     { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
-    { id: 'referedBy', label: 'Refered by', minWidth: 200, align: 'left' },
-    { id: 'status', label: 'Status', minWidth: 200, align: 'center' },
-    { id: 'action', label: 'Action', minWidth: 100, align: 'center' },
+    { id: 'referedBy', label: 'Refered by', minWidth: 100, align: 'left' },
+    { id: 'status', label: 'Status', minWidth: 80, align: 'center' },
+    { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
     
   ];
 
