@@ -185,7 +185,9 @@ const columns1 = [
   const columns = [
     // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
     { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
+    { id: 'orgName', label: 'Org Admin', minWidth: 200, align: 'left' },
     { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
+    { id: 'referedBy', label: 'Refered by', minWidth: 200, align: 'left' },
     { id: 'status', label: 'Status', minWidth: 200, align: 'center' },
     { id: 'action', label: 'Action', minWidth: 100, align: 'center' },
     
@@ -250,6 +252,7 @@ const OrganizationDashboardComponent = () => {
         console.log( 'totalCount', totalCount)
         console.log( 'totalData', totalData)
         console.log( 'bind', totalData)
+        
         setOrganizations(totalData)
       }
       
@@ -388,10 +391,14 @@ const OrganizationDashboardComponent = () => {
                               console.log('value', row)
                                 return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                    {columns.map((column) => {
-                                      
-                                    const value = row[column.id];
-                                    
+                                    {columns.map((column) => {                                      
+                                    var value = row[column.id];
+                                    if(row[column.id])  
+                                      value = row[column.id];  
+                                    else if(column.id === 'orgName' )
+                                      value = 'John Deo'; 
+                                    else if(column.id === 'referedBy')    
+                                      value = 'Sachin Smith'                           
                                     return (
                                       (column.id == 'status'? (<TableCell key={column.id} align={column.align} className={`od__${value.toLowerCase()}__status`}>
                                       {column.format && typeof value === 'number'
