@@ -3,10 +3,14 @@ import { authenticationService } from '../services'
 
 export function authHeader() {
     const currentUser = authenticationService.currentUserValue;
-    if (currentUser && currentUser.token) {
-        return { Authorization: `Bearer ${currentUser.token}` };
+    // console.log('currentUser', currentUser.data)
+    if (currentUser && currentUser.data && currentUser.data.token) {
+        return { "x-access-token": `${currentUser.data.token}`,
+                "Content-Type": "application/json; charset=utf-8",
+                "Access-Control-Allow-Origin": "*"};
     } else {
-        return {};
+        return {"Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"};
     }
 }
 

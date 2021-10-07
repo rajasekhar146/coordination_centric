@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         }
       },
       "&$selected:hover": {
-        backgroundColor: "purple",
+        backgroundColor: "#E42346",
         color: "white",
         "& .MuiListItemIcon-root": {
           color: "white"

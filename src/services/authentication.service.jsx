@@ -2,8 +2,7 @@ import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
 
 // import config from 'config';
-import { handleResponse } from '../helpers';
-
+import { authHeader, handleResponse } from '../helpers'
 const apiURL = 'https://api.csuite.health'
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
@@ -22,10 +21,7 @@ function login(username, password) {
     const backoffice = "1";
 
     let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            "Access-Control-Allow-Origin": "*",
-        }
+        headers: authHeader()
       };
 
     var bodyMsg = JSON.stringify({ email: username, password, deviceId, deviceType, fcmId, backoffice })

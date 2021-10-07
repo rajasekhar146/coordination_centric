@@ -123,3 +123,7 @@
     border-radius: 5px !important;
     width: 370px !important;
 }
+
+.has-error {
+    border-color: red;
+  }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './OrganizationDashboard.Component.css'
 import Button from '@mui/material/Button';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -39,6 +39,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
 import EditIcon from '../../assets/icons/edit_icon.png'
+import {organizationService} from '../../services'
 
 const style = {
   position: 'absolute',
@@ -119,6 +120,11 @@ const menuList = [
     options: [{text:'View Details', icon: require('../../assets/icons/view_details.png').default}, 
               {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
               {text: 'Suspend', icon: require('../../assets/icons/suspend.png').default}]},
+  { menu: 'invited',  
+      options: [{text:'View Details', icon: require('../../assets/icons/view_details.png').default}, 
+                {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
+                {text: 'Suspend', icon: require('../../assets/icons/suspend.png').default}]},
+            
   { menu: 'suspended',  
     options: [{text: 'View Details', icon: require('../../assets/icons/view_details.png').default}, 
               {text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default}, 
@@ -177,9 +183,9 @@ const columns1 = [
 
 
   const columns = [
-    { id: 'id', label: 'ID', minWidth: 20, align: 'left' },
-    { id: 'name', label: 'Organization Name', minWidth: 200, align: 'left' },
-    { id: 'address', label: 'Address', minWidth: 200, align: 'left' },
+    // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
+    { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
+    { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
     { id: 'status', label: 'Status', minWidth: 200, align: 'center' },
     { id: 'action', label: 'Action', minWidth: 100, align: 'center' },
     
@@ -227,6 +233,27 @@ const OrganizationDashboardComponent = () => {
     const open = Boolean(anchorEl);
     const [selectedStatus, setSelectedStatus] = React.useState([]);
     const [value, setValue] = React.useState(null);
+    const [rows, setOrganizations] = React.useState([]);
+    useEffect(() => {
+      getOrganization()
+      return () => {
+        
+      }
+    }, [])
+
+    const getOrganization = async () => {
+      const allOrganizations = await organizationService.allOrganization()
+      console.log(allOrganizations)
+      if(allOrganizations != null) {
+        const totalCount = allOrganizations?.totalCount
+        const totalData = allOrganizations?.totalData
+        console.log( 'totalCount', totalCount)
+        console.log( 'totalData', totalData)
+        console.log( 'bind', totalData)
+        setOrganizations(totalData)
+      }
+      
+    }
 
     const handleChange = (event) => {
       const {
@@ -268,6 +295,7 @@ const OrganizationDashboardComponent = () => {
     }
 
     const handleAddOrganizationClose = () => {
+      console.log('On Click - Close button')
       setAddOrganizationClicked(false);
     }
 
@@ -289,37 +317,39 @@ const OrganizationDashboardComponent = () => {
               </Button></div>
             </div>
             <div className="od__row">
-                <div><TextField id="" defaultValue="Search" className="od__serach__text" margin="normal" InputProps={{
+                <div className="od__left__section"><TextField id="" defaultValue="Search" className="od__serach__text" margin="normal" InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon style={{color: '#CACCCF'}} />
                     </InputAdornment>
                    )
                   }}/></div>
+                <div className="od__right__section">
                 <div className="od__btn__div">
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    label="Select Date"
                     value={value}
                     onChange={(newValue) => {
                       setValue(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}
+                    InputProps={{ className: "od__date__field" }}
                   />
                 </LocalizationProvider>
                 </div>
-                <div className="od__btn__div od__align__right">
-                  <FormControl sx={{ m: 1, width: 200, mt: 3 }}>
-                  <InputLabel id="demo-multiple-checkbox-label">Select Status</InputLabel>
+                <div className="od__btn__div">
+                  <FormControl sx={{ m: 1, width: 200 }}>
+                  <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
                   <Select
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
                     value={selectedStatus}
                     onChange={handleChange}
-                    input={<OutlinedInput label="Select Status" />}
+                    input={<OutlinedInput />}
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
+                    className="od__date__field"
                   >
                     {statusNames.map((name) => (
                       <MenuItem key={name} value={name}>
@@ -330,10 +360,11 @@ const OrganizationDashboardComponent = () => {
                   </Select>
                 </FormControl>
               </div>
-            </div>
+              </div>
+              </div>
 
             <div className="od__row">
-                <div className="">
+                <div className="od__table__org">
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
@@ -354,10 +385,13 @@ const OrganizationDashboardComponent = () => {
                             {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
+                              console.log('value', row)
                                 return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                     {columns.map((column) => {
+                                      
                                     const value = row[column.id];
+                                    
                                     return (
                                       (column.id == 'status'? (<TableCell key={column.id} align={column.align} className={`od__${value.toLowerCase()}__status`}>
                                       {column.format && typeof value === 'number'
@@ -385,7 +419,7 @@ const OrganizationDashboardComponent = () => {
                                             PaperProps={{
                                               style: {
                                                 maxHeight: ITEM_HEIGHT * 4.5,
-                                                width: '30ch',
+                                                width: '22ch',
                                               },
                                             }}
                                           >
@@ -428,7 +462,7 @@ const OrganizationDashboardComponent = () => {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <InviteOrganization />
+                  <InviteOrganization clickCloseButton={handleAddOrganizationClose} />
                 </Box>
               </Modal>        
 
