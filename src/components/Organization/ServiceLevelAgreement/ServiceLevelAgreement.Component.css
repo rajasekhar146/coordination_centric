@@ -39,3 +39,19 @@
 .sla__column {
     padding-right: 30px;
 }
+
+
+.sla__sign__container {
+    width: 80%;
+    height: 60%;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #252B42;
+  }
+
+.sla__sign__pad {
+    width: 80%;
+    height: 100%;
+    /* background-color: #252B42 */
+  }
+  

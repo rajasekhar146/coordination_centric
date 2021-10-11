@@ -19,8 +19,6 @@ import Notifications from './pages/notifications'
 import Payments from './pages/payments'
 import Signin from './pages/signin'
 
-
-
 class Routes extends Component {
   render() {
     return (
@@ -44,7 +42,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/vaccinations" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
-          </Switch>
+        </Switch>
       </Router>
     )
   }

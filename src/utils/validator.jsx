@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback } from 'react';
-import validator from 'validator';
-import dot from 'dot-object';
+import { useEffect, useState, useCallback } from 'react'
+import validator from 'validator'
+import dot from 'dot-object'
 
 export function useFormInput({
   name,
@@ -8,66 +8,69 @@ export function useFormInput({
   values: formData,
   setValues: setFormData,
   defaultInvalidAttr,
-  handleError
+  handleError,
 }) {
-  const formValue = dot.pick(name, formData) || '';
+  const formValue = dot.pick(name, formData) || ''
 
-  const [value, setValue] = useState(formValue);
-  const [isValid, setIsValid] = useState(true);
-  const [isTouched, setIsTouched] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  const [value, setValue] = useState(formValue)
+  const [isValid, setIsValid] = useState(true)
+  const [isTouched, setIsTouched] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
-  const [validationRules] = useState(validation);
+  const [validationRules] = useState(validation)
 
   const handleValidation = useCallback(() => {
-    const isValid = validate(value, validationRules);
-    setIsValid(isValid);
-    handleError(name, isValid);
-  }, [setIsValid, validationRules, name, value, handleError]);
+    const isValid = validate(value, validationRules)
+    setIsValid(isValid)
+    handleError(name, isValid)
+  }, [setIsValid, validationRules, name, value, handleError])
 
   // watch for external parent data changes
   useEffect(() => {
     if (value !== formValue) {
-      setValue(formValue);
-      setIsTouched(false);
-      setIsFocused(false);
+      setValue(formValue)
+      setIsTouched(false)
+      setIsFocused(false)
     }
-  }, [formValue, value, setValue, setIsFocused, setIsTouched]);
+  }, [formValue, value, setValue, setIsFocused, setIsTouched])
 
   // validate on value change
   useEffect(() => {
-    handleValidation();
-  }, [handleValidation, name]);
+    handleValidation()
+  }, [handleValidation, name])
 
   // rewrite self and parent's value
-  const handleChange = useCallback(({ target }) => {
-    const { value, checked, type } = target;
-    const newValue = type === 'checkbox' ? checked : value;
+  const handleChange = useCallback(
+    ({ target }) => {
+      const { value, checked, type } = target
+      const newValue = type === 'checkbox' ? checked : value
 
-    // using dot helps us change nested values
-    let data;
-    const isNested = name.includes('.');
-    if (isNested) {
-      dot.override = true;
-      data = dot.str(name, newValue, { ...formData });
-    } else data = { ...formData, [name]: newValue };
+      // using dot helps us change nested values
+      let data
+      const isNested = name.includes('.')
+      if (isNested) {
+        dot.override = true
+        data = dot.str(name, newValue, { ...formData })
+      } else data = { ...formData, [name]: newValue }
 
-    setValue(newValue);
-    setFormData(data);
-  }, [setValue, formData, setFormData, name]);
+      setValue(newValue)
+      setFormData(data)
+    },
+    [setValue, formData, setFormData, name]
+  )
 
   const handleFocus = useCallback(() => {
-    setIsTouched(true);
-    setIsFocused(true);
-    handleValidation();
-  }, [setIsTouched, setIsFocused, handleValidation]);
+    setIsTouched(true)
+    setIsFocused(true)
+    handleValidation()
+  }, [setIsTouched, setIsFocused, handleValidation])
 
   const handleBlur = useCallback(() => {
-    setIsFocused(false);
-  }, [setIsFocused]);
+    setIsFocused(false)
+  }, [setIsFocused])
 
-  const showError = !isValid && isTouched && !isFocused;
-  const invalidAttr = showError ? defaultInvalidAttr : null;
+  const showError = !isValid && isTouched && !isFocused
+  const invalidAttr = showError ? defaultInvalidAttr : null
 
   return {
     value,
@@ -75,93 +78,95 @@ export function useFormInput({
     onChange: handleChange,
     onFocus: handleFocus,
     onBlur: handleBlur,
-    ...invalidAttr
-  };
+    ...invalidAttr,
+  }
 }
 
-export function useFormCheckboxGroup({
-  name,
-  value,
-  values: formData,
-  setValues: setFormData
-}) {
-  const formValue = dot.pick(name, formData) || [];
-  const hasValue = formValue.indexOf(value) > -1;
+export function useFormCheckboxGroup({ name, value, values: formData, setValues: setFormData }) {
+  const formValue = dot.pick(name, formData) || []
+  const hasValue = formValue.indexOf(value) > -1
 
-  const [checked, setChecked] = useState(hasValue);
+  const [checked, setChecked] = useState(hasValue)
 
   // watch for external parent data changes
   useEffect(() => {
-    const isChecked = formValue.indexOf(value) > -1;
+    const isChecked = formValue.indexOf(value) > -1
     setChecked(isChecked)
-  }, [formValue, value]);
+  }, [formValue, value])
 
   // rewrite self and parent's value
-  const handleChange = useCallback(({ target }) => {
-    const oldValue = dot.pick(name, formData) || [];
-    const { checked } = target;
-    let newValue;
+  const handleChange = useCallback(
+    ({ target }) => {
+      const oldValue = dot.pick(name, formData) || []
+      const { checked } = target
+      let newValue
 
-    const index = oldValue.indexOf(value);
-    if (checked && index < 0) {
-      newValue = [...oldValue, value]
-    } else if (!checked && index > -1) {
-      newValue = oldValue.filter(v => v !== value);
-    }
+      const index = oldValue.indexOf(value)
+      if (checked && index < 0) {
+        newValue = [...oldValue, value]
+      } else if (!checked && index > -1) {
+        newValue = oldValue.filter(v => v !== value)
+      }
 
-    // using dot helps us change nested values
-    let data;
-    const isNested = name.includes('.');
-    if (isNested) {
-      dot.override = true;
-      data = dot.str(name, newValue, { ...formData });
-    } else {
-      data = { ...formData, [name]: newValue };
-    }
+      // using dot helps us change nested values
+      let data
+      const isNested = name.includes('.')
+      if (isNested) {
+        dot.override = true
+        data = dot.str(name, newValue, { ...formData })
+      } else {
+        data = { ...formData, [name]: newValue }
+      }
 
-    setChecked(checked);
-    setFormData(data);
-  }, [value, formData, setFormData, name]);
+      setChecked(checked)
+      setFormData(data)
+    },
+    [value, formData, setFormData, name]
+  )
 
   return {
     name,
     checked,
-    onChange: handleChange
-  };
+    onChange: handleChange,
+  }
 }
 
 export function useForm(defaultValues, invalidAttr = { error: true }) {
-  const [values, setValues] = useState(defaultValues);
-  const [mounted, setMounted] = useState(false);
-  const [formErrors, setFormErrors] = useState([]);
+  const [values, setValues] = useState(defaultValues)
+  const [mounted, setMounted] = useState(false)
+  const [formErrors, setFormErrors] = useState([])
 
-  const handleError = useCallback((name, isValid) => {
-    let errors = formErrors;
-    const index = errors.findIndex(error => error === name);
+  const handleError = useCallback(
+    (name, isValid) => {
+      let errors = formErrors
+      const index = errors.findIndex(error => error === name)
 
-    if (!isValid) {
-      if (index < 0) errors.push(name);
-    } else {
-      if (index > -1) errors.splice(index, 1);
-    }
+      if (!isValid) {
+        if (index < 0) errors.push(name)
+      } else {
+        if (index > -1) errors.splice(index, 1)
+      }
 
-    setFormErrors(errors);
-  }, [formErrors]);
+      setFormErrors(errors)
+    },
+    [formErrors]
+  )
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
-  const useInput = (name, validation) => useFormInput({
-    name,
-    validation,
-    values,
-    setValues,
-    defaultInvalidAttr: invalidAttr,
-    handleError
-  });
+  const useInput = (name, validation) =>
+    useFormInput({
+      name,
+      validation,
+      values,
+      setValues,
+      defaultInvalidAttr: invalidAttr,
+      handleError,
+    })
 
-  const useCheckboxGroup = (name, value) => useFormCheckboxGroup({ name, values, setValues, value });
+  const useCheckboxGroup = (name, value) => useFormCheckboxGroup({ name, values, setValues, value })
 
   return {
     values,
@@ -169,8 +174,8 @@ export function useForm(defaultValues, invalidAttr = { error: true }) {
     useInput,
     useCheckboxGroup,
     errors: formErrors,
-    isValid: mounted && !formErrors.length
-  };
+    isValid: mounted && !formErrors.length,
+  }
 }
 
 /**
@@ -180,34 +185,34 @@ export function useForm(defaultValues, invalidAttr = { error: true }) {
  * @returns {*}
  */
 export function validate(value, validation) {
-  const fields = [];
+  const fields = []
 
-  let trimmedValidation;
-  let validatingFields;
+  let trimmedValidation
+  let validatingFields
 
   switch (typeof validation) {
     case 'object':
       Object.keys(validation).forEach(property => {
         fields.push({
           rule: property,
-          options: validation[property]
-        });
-      });
-      break;
+          options: validation[property],
+        })
+      })
+      break
 
     case 'string':
     default:
-      if (!validation.length) return true;
-      trimmedValidation = validation.replace(/ /g, '');
-      validatingFields = trimmedValidation.split(',');
+      if (!validation.length) return true
+      trimmedValidation = validation.replace(/ /g, '')
+      validatingFields = trimmedValidation.split(',')
       validatingFields.forEach(fieldName => {
         fields.push({
-          rule: fieldName
-        });
-      });
+          rule: fieldName,
+        })
+      })
   }
 
-  let isValid = true;
+  let isValid = true
 
   fields.forEach(field => {
     const { rule, options = null } = field
@@ -222,20 +227,20 @@ export function validate(value, validation) {
             let result
             switch (options) {
               case true:
-                result = validator[rule](value);
+                result = validator[rule](value)
                 break
               case false:
-                result = !validator[rule](value);
+                result = !validator[rule](value)
                 break
               default:
-                result = validator[rule](value, options);
+                result = validator[rule](value, options)
             }
             isValid = result
-          } else isValid = validator[rule](value);
+          } else isValid = validator[rule](value)
           break
         }
     }
-  });
+  })
 
-  return isValid;
+  return isValid
 }

@@ -4,10 +4,10 @@ import { authHeader, handleResponse } from '../helpers'
 const apiURL = 'https://api.csuite.health/'
 
 export const accountService = () => {
-    getAll()
+  getAll()
 }
 
 const getAll = () => {
-    const requestOptions = { method: 'GET', headers: authHeader() };
-    return fetch(`${apiURL}/users`, requestOptions).then(handleResponse);
+  const requestOptions = { method: 'GET', headers: authHeader() }
+  return fetch(`${apiURL}/users`, requestOptions).then(handleResponse)
 }
