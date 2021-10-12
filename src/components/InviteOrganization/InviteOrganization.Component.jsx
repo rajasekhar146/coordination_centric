@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './InviteOrganization.Component.css'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -9,8 +9,8 @@ import OrganizationEmailIcon from '../../assets/icons/organization_email.png'
 import OrganizationHomeIcon from '../../assets/icons/organization_home.png'
 import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 // import OrganizationNameIcon from '../../assets/icons/OrganizationName.png'
-import { useForm } from '../../utils/validator'
-
+// import { useForm } from '../../utils/validator'
+import { useForm } from 'react-hook-form';
 import { organizationService } from '../../services'
 
 const InviteOrganizationComponent = props => {
@@ -21,36 +21,59 @@ const InviteOrganizationComponent = props => {
     facilityPhone: '',
   }
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+
+  console.log(errors);
+
   const customErrorAttribute = {
     className: 'has-error',
     'another-attr': 'look-at-me',
   }
 
-  const { values, useInput, isValid } = useForm(defaultValues, customErrorAttribute)
+  // const { values, useInput, isValid } = useForm(defaultValues, customErrorAttribute)
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    console.log(values)
-    const res = organizationService.addOrganization(values)
-    console.log('res', res)
+
+  const [isSubmit, setIsSubmit] = useState(false)
+
+  const onSubmit = (e) => {
+    setIsSubmit(true)
+    defaultValues.facilityName = watch("facilityName")
+    defaultValues.facilityEmail = watch("facilityEmail")
+    defaultValues.facilityAddress = watch("facilityAddress")
+    defaultValues.facilityPhone = watch("facilityPhone")
+    const res = organizationService.addOrganization(defaultValues);
+    res.then(() => {
+      props.clickCloseButton()
+    })
   }
 
-  const handleInviteOrganization = () => {}
+
+
+
+  const handleInviteOrganization = () => { }
 
   return (
     <div className="io__main__div">
       <div className="io__title__text">Invite Organization</div>
 
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="io__form form-body">
           <div className="io__row">
             <div className="io__label">
               Organization Name <span className="ac__required">*</span>
             </div>
             <TextField
-              {...useInput('facilityName', { isRequired: true })}
+              // {...useInput('facilityName', { isRequired: true })}
+              {...register('facilityName', { required: true })}
               className="od__text__box"
               margin="normal"
+              error={errors.facilityName && isSubmit}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -59,6 +82,8 @@ const InviteOrganizationComponent = props => {
                 ),
               }}
             />
+            {errors.facilityName && <p className="ac__required">Organization Name is required.</p>}
+
           </div>
 
           <div className="io__row">
@@ -66,9 +91,17 @@ const InviteOrganizationComponent = props => {
               Organization Email <span className="ac__required">*</span>
             </div>
             <TextField
-              {...useInput('facilityEmail', { isRequired: true })}
+              // {...useInput('facilityEmail', { isRequired: true })}
+              {...register('facilityEmail', {
+                required: 'Organization email is required.',
+                pattern: {
+                  value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: 'Please enter a valid email',
+              },
+              })}
               className="od__text__box"
               margin="normal"
+              error={errors.facilityEmail && isSubmit}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -77,12 +110,14 @@ const InviteOrganizationComponent = props => {
                 ),
               }}
             />
+            {errors.facilityEmail && <p className="ac__required">{errors.facilityEmail.message}</p>}
+
           </div>
 
           <div className="io__row">
             <div className="io__label">Address</div>
             <TextField
-              {...useInput('facilityAddress', { isRequired: true })}
+              {...register('facilityAddress', {})}
               className="od__text__box"
               margin="normal"
               InputProps={{
@@ -98,9 +133,10 @@ const InviteOrganizationComponent = props => {
           <div className="io__row">
             <div className="io__label">Phone Number</div>
             <TextField
-              {...useInput('facilityPhone', { isRequired: true })}
+              {...register('facilityPhone', {})}
               className="od__text__box"
               margin="normal"
+              type="number"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -119,7 +155,7 @@ const InviteOrganizationComponent = props => {
                 </Button>
               </div>
               <div className="io__column io__invite__org__btn">
-                <Button className="io__add__organization__btn" onClick={handleSubmit}>
+                <Button type="submit" className="io__add__organization__btn">
                   Invite Organization
                 </Button>
               </div>
