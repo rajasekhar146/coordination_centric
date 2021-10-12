@@ -88,21 +88,7 @@ const NavBarComponent = () => {
         <div className="nb__logo">
           <img src={headerImage} alt="logo" />
         </div>
-        <div className="nb__search">
-          <TextField
-            id=""
-            defaultValue="Search"
-            className="nb__serach__text"
-            margin="normal"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon style={{ color: '#CACCCF' }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
+        <div className="nb__search"></div>
       </div>
 
       <div className="nb__column__right">

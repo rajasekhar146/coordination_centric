@@ -12,16 +12,17 @@ export const organizationService = {
   addOrganization,
 }
 
-function allOrganization() {
+function allOrganization(skip, limit) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .get(`${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=1&limit=50`, axiosConfig)
+      .get(`${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         if (data?.data?.data) {
           const res = data.data.data[0]
-          return { totalCount: res.totalCount, totalData: res.totalData }
+          console.log('Result >> ', res)
+          return { totalCount: res.totalCount[0], totalData: res.totalData }
         } else {
           return { totalCount: 0, totalData: null }
         }

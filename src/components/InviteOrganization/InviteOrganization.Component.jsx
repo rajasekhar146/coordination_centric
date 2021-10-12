@@ -32,6 +32,7 @@ const InviteOrganizationComponent = props => {
     e.preventDefault()
     console.log(values)
     const res = organizationService.addOrganization(values)
+    console.log('res', res)
   }
 
   const handleInviteOrganization = () => {}
@@ -118,7 +119,7 @@ const InviteOrganizationComponent = props => {
                 </Button>
               </div>
               <div className="io__column io__invite__org__btn">
-                <Button className="io__add__organization__btn" onChange={handleSubmit}>
+                <Button className="io__add__organization__btn" onClick={handleSubmit}>
                   Invite Organization
                 </Button>
               </div>

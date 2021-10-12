@@ -19,3 +19,15 @@
 .lm__menu__icon {
     padding-left: 20px;
 }
+
+.lm__selected__menu {
+    background-color: #FFFFFF !important;
+}
+
+.lm__selected__menu:active {
+    background-color: #af0d0d !important;
+}
+
+.lm__selected__menu::selection {
+    background-color: #af0d0d !important;
+}

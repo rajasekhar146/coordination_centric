@@ -108,7 +108,8 @@ const LeftMenuComponent = () => {
           return (
             <ListItem
               button
-              selected={selectedIndex === index + 1}
+              // selected={selectedIndex === index + 1}
+              className="lm__selected__menu"
               onClick={event => handleClick(`${m.link}`, `${index}`)}
             >
               <ListItemIcon>

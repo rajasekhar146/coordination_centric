@@ -120,8 +120,18 @@
 }
 
 .od__invited__status {
-    color: #8a8686;
+    background-color: #E6F4FF !important;
+    border-radius: 16px;
+    padding: 8px !important;
     text-transform: capitalize;
+    color: #175CD3 !important;
+    line-height: 18px;
+}
+
+.od__invited__dot {
+    color: #2E90FA !important;
+    font-size: 30px;
+    border-radius: 12px !important;
 }
 
 .od__pagination__section {
@@ -132,7 +142,7 @@
 .od__menu__text {
     text-align: left !important;
     justify-content:  left !important;
-    padding: 10px;
+    padding: 4px !important;
 }
 
 /* .MuiButtonBase-root {
@@ -180,7 +190,7 @@
     display: flex;
     align-items: left !important;
     justify-content: center;
-    padding: 8px !important;
+    padding: 8px 4px 8px 4px !important;
 }
 
 .od__menu__text__column {

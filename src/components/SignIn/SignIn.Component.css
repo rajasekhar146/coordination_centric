@@ -8,7 +8,7 @@
 
 .si__left__div {
     box-sizing: border-box;
-    flex: 1;
+    flex: 0.7;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,7 +102,7 @@
 
 .si__login__btn {
     background: #E42346 !important;
-    border-radius: 8px;
+    border-radius: 8px !important;
     width: 100%;
     color: #fff !important;
     padding: 12px !important;
@@ -130,7 +130,7 @@
 }
 
 .si__right__content > div {
-    padding: 8px;
+    padding: 4px;
 }
 
 .si__check__box__text {

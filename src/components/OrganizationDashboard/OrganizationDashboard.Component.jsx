@@ -105,7 +105,7 @@ const menuList = [
   {
     menu: 'sent',
     options: [
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
     ],
   },
@@ -113,7 +113,7 @@ const menuList = [
     menu: 'pending',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Approve', icon: require('../../assets/icons/approve.png').default },
       { text: 'Reject', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -122,7 +122,7 @@ const menuList = [
     menu: 'declined',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
       { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
@@ -131,7 +131,7 @@ const menuList = [
     menu: 'active',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
@@ -139,7 +139,7 @@ const menuList = [
     menu: 'invited',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
@@ -148,7 +148,7 @@ const menuList = [
     menu: 'suspended',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
     ],
   },
@@ -238,30 +238,33 @@ const rows = [
 ]
 
 const OrganizationDashboardComponent = () => {
-  const [page, setPage] = React.useState(0)
+  const [page, setPage] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
-  const [selectedStatus, setSelectedStatus] = React.useState([])
+  const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
+  const [totalPage, setTotalPage] = React.useState(0)
+
   useEffect(() => {
     getOrganization()
     return () => {}
   }, [])
 
   const getOrganization = async () => {
-    const allOrganizations = await organizationService.allOrganization()
-    console.log(allOrganizations)
+    const allOrganizations = await organizationService.allOrganization(page, 10)
+    console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = allOrganizations?.totalCount
       const totalData = allOrganizations?.totalData
-      console.log('totalCount', totalCount)
+      const totalPage = Math.ceil(totalCount?.count / 10)
+      console.log('totalPage', totalPage)
+      console.log('totalCount', totalCount?.count)
       console.log('totalData', totalData)
-      console.log('bind', totalData)
-
+      setTotalPage(totalPage)
       setOrganizations(totalData)
     }
   }
@@ -291,8 +294,17 @@ const OrganizationDashboardComponent = () => {
     setAnchorEl(null)
   }
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = async (event, newPage) => {
     setPage(newPage)
+    const skipRecords = (newPage - 1) * 10
+    console.log('skipRecords', skipRecords)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+    console.log('skipRecords >> Records', allOrganizations)
+    if (allOrganizations != null) {
+      const totalData = allOrganizations?.totalData
+      console.log('skipRecords >> totalData', totalData)
+      setOrganizations(totalData)
+    }
   }
 
   const handleChangeRowsPerPage = event => {
@@ -318,14 +330,21 @@ const OrganizationDashboardComponent = () => {
     setAnchorEl(null)
   }
 
+  const handlePageChange = (event, value) => {
+    setPage(value)
+    console.log('Page Number >> ', value)
+  }
+
   return (
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">Organizations</div>
         <div className="od__btn__div od__align__right">
-          <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
-            <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Add Organization
-          </Button>
+          {1 === 1 ? (
+            <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
+              <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
+            </Button>
+          ) : null}
         </div>
       </div>
       <div className="od__row">
@@ -385,7 +404,7 @@ const OrganizationDashboardComponent = () => {
 
       <div className="od__row">
         <div className="od__table__org">
-          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -398,7 +417,7 @@ const OrganizationDashboardComponent = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                  {rows.map(row => {
                     console.log('value', row)
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
@@ -411,12 +430,18 @@ const OrganizationDashboardComponent = () => {
                             <TableCell
                               key={column.id}
                               align={column.align}
-                              className={`od__${value.toLowerCase()}__status`}
+                              style={{ paddingBottom: 10, paddingTop: 10 }}
                             >
-                              {column.format && typeof value === 'number' ? column.format(value) : value}
+                              <div className={`od__${value.toLowerCase()}__status`}>                         
+                                <div>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
+                              </div>
                             </TableCell>
                           ) : column.id == 'action' ? (
-                            <TableCell key={column.id} align={column.align}>
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{ paddingBottom: 10, paddingTop: 10 }}
+                            >
                               <IconButton
                                 aria-label="more"
                                 id="long-button"
@@ -428,7 +453,6 @@ const OrganizationDashboardComponent = () => {
                                 <MoreVertRoundedIcon />
                               </IconButton>
                               <Menu
-                                id="long-menu"
                                 MenuListProps={{
                                   'aria-labelledby': 'long-button',
                                 }}
@@ -438,7 +462,10 @@ const OrganizationDashboardComponent = () => {
                                 PaperProps={{
                                   style: {
                                     maxHeight: ITEM_HEIGHT * 4.5,
-                                    width: '22ch',
+                                    width: '20ch',
+                                    boxShadow:
+                                      '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+                                    border: '1px solid #9fa2a3',
                                   },
                                 }}
                               >
@@ -457,7 +484,11 @@ const OrganizationDashboardComponent = () => {
                               </Menu>
                             </TableCell>
                           ) : (
-                            <TableCell key={column.id} align={column.align}>
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{ paddingBottom: 10, paddingTop: 10 }}
+                            >
                               {column.format && typeof value === 'number' ? column.format(value) : value}
                             </TableCell>
                           )
@@ -474,7 +505,7 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__pagination__section">
           <Stack spacing={2}>
-            <Pagination count={10} variant="outlined" shape="rounded" />
+            <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
           </Stack>
         </div>
       </div>
@@ -485,7 +516,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization onChange={handleAddOrganizationClose} />
+          <InviteOrganization clickCloseButton={handleAddOrganizationClose} />
         </Box>
       </Modal>
     </div>
