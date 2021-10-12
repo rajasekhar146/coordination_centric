@@ -61,7 +61,7 @@
 
     padding: 8px 32px 8px 32px !important;
     border-radius: 3px !important;
-    width: 200px !important;
+    width: 220px !important;
 }
 
 .od__add__organization__btn__text {
@@ -85,7 +85,7 @@
     margin: 0px 8px;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+.MuiButtonBase-root-MuiButton-root {
     text-transform: none !important;
 }
 
@@ -171,10 +171,11 @@
 .MuiButtonBase-root {
     text-align: left !important;
     padding: 10px !important;
+    text-transform: none !important;
 }
 
-.css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input {
-    padding: 8px !important;
+.MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 4px !important;
 }
 
 .od__menu__row {
@@ -200,7 +201,7 @@
     justify-content: center;
 }
 
-.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+.MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
     background-color: #E42346 !important;
     border-radius: 3px !important;
     color: #fff !important;
@@ -213,7 +214,7 @@
     position: absolute !important;
 }
 
-.css-vamk89-MuiFormControl-root, .css-8ijah6-MuiFormControl-root {
+.MuiFormControl-root, .MuiFormControl-root {
     margin: 0px !important;
 }
 
@@ -246,10 +247,6 @@
 
 .od__right__section > div {
     margin-left: 10px !important;
-}
-
-.css-1igk2kn-MuiFormControl-root {
-    right: -10px !important;
 }
 
 .od__table__org {

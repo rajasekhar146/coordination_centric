@@ -40,6 +40,7 @@ export const OnboardingComponent = () => {
 
   const handleNext = () => {
     let newSkipped = skipped
+    
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values())
       newSkipped.delete(activeStep)
