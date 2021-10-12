@@ -26,7 +26,7 @@ const ListItem = withStyles({
       backgroundColor: 'white',
       color: '#E42346',
       '& .MuiListItemIcon-root': {
-        color: 'white',
+        color: '#E42346',
       },
     },
     '&$selected:hover': {
@@ -44,7 +44,9 @@ const ListItem = withStyles({
       },
     },
   },
-  selected: {},
+  selected: {
+    color: 'red',
+  },
 })(MuiListItem)
 
 const menuOptions = [
@@ -108,8 +110,7 @@ const LeftMenuComponent = () => {
           return (
             <ListItem
               button
-              // selected={selectedIndex === index + 1}
-              className="lm__selected__menu"
+              selected={selectedIndex == index}
               onClick={event => handleClick(`${m.link}`, `${index}`)}
             >
               <ListItemIcon>
