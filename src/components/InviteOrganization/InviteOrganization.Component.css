@@ -43,6 +43,10 @@
     flex-grow: 0;
     margin: 8px 0px;
 }
+.od__text__box input[type=number]::-webkit-inner-spin-button,
+           input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none;
+}
 
 .io__row {
     width: 100%;
