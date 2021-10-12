@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './OrganizationDashboard.Component.css'
 import Button from '@mui/material/Button'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
@@ -39,6 +39,8 @@ import DatePicker from '@mui/lab/DatePicker'
 
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 const style = {
   position: 'absolute',
@@ -239,7 +241,7 @@ const rows = [
 
 const OrganizationDashboardComponent = () => {
   const [page, setPage] = React.useState(1)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -247,26 +249,35 @@ const OrganizationDashboardComponent = () => {
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
-  const [totalPage, setTotalPage] = React.useState(0)
+  // const [totalPage, setTotalPage] = React.useState(0)
+  const [skip, setSkip] = React.useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // useEffect(() => {
+  //   getOrganization()
+  //   return () => { }
+  // }, [])
 
   useEffect(() => {
     getOrganization()
-    return () => {}
-  }, [])
+    return () => { }
+  }, [skip])
 
   const getOrganization = async () => {
-    const allOrganizations = await organizationService.allOrganization(page, 10)
+    setIsLoading(true)
+    const allOrganizations = await organizationService.allOrganization(skip, 10)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = allOrganizations?.totalCount
       const totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
-      console.log('totalPage', totalPage)
-      console.log('totalCount', totalCount?.count)
-      console.log('totalData', totalData)
-      setTotalPage(totalPage)
-      setOrganizations(totalData)
+      // console.log('totalPage', totalPage)
+      // console.log('totalCount', totalCount?.count)
+      // console.log('totalData', totalData)
+      // setTotalPage(totalPage)
+      setOrganizations([...rows, ...totalData])
     }
+    setIsLoading(false)
   }
 
   const handleChange = event => {
@@ -294,21 +305,21 @@ const OrganizationDashboardComponent = () => {
     setAnchorEl(null)
   }
 
-  const handleChangePage = async (event, newPage) => {
-    setPage(newPage)
-    const skipRecords = (newPage - 1) * 10
-    console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
-    console.log('skipRecords >> Records', allOrganizations)
-    if (allOrganizations != null) {
-      const totalData = allOrganizations?.totalData
-      console.log('skipRecords >> totalData', totalData)
-      setOrganizations(totalData)
-    }
-  }
+  // const handleChangePage = async (event, newPage) => {
+  //   setPage(newPage)
+  //   const skipRecords = (newPage - 1) * 10
+  //   console.log('skipRecords', skipRecords)
+  //   const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+  //   console.log('skipRecords >> Records', allOrganizations)
+  //   if (allOrganizations != null) {
+  //     const totalData = allOrganizations?.totalData
+  //     console.log('skipRecords >> totalData', totalData)
+  //     setOrganizations(totalData)
+  //   }
+  // }
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(+event.target.value)
+    // setRowsPerPage(+event.target.value)
     setPage(0)
   }
 
@@ -333,6 +344,11 @@ const OrganizationDashboardComponent = () => {
   const handlePageChange = (event, value) => {
     setPage(value)
     console.log('Page Number >> ', value)
+  }
+
+  const loadMore = () => {
+    setSkip(skip + 10)
+    setIsLoading(true)
   }
 
   return (
@@ -404,111 +420,125 @@ const OrganizationDashboardComponent = () => {
 
       <div className="od__row">
         <div className="od__table__org">
+
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
-                    {columns.map(column => (
-                      <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                        {column.label}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map(row => {
-                    console.log('value', row)
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                        {columns.map(column => {
-                          var value = row[column.id]
-                          if (row[column.id]) value = row[column.id]
-                          else if (column.id === 'orgName') value = 'John Deo'
-                          else if (column.id === 'referedBy') value = 'Sachin Smith'
-                          return column.id == 'status' ? (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ paddingBottom: 10, paddingTop: 10 }}
-                            >
-                              <div className={`od__${value.toLowerCase()}__status`}>                         
-                                <div>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
-                              </div>
-                            </TableCell>
-                          ) : column.id == 'action' ? (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ paddingBottom: 10, paddingTop: 10 }}
-                            >
-                              <IconButton
-                                aria-label="more"
-                                id="long-button"
-                                aria-controls="long-menu"
-                                aria-expanded={open ? 'true' : undefined}
-                                aria-haspopup="true"
-                                onClick={e => handleClick(e, `${row['status']}`)}
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+              <InfiniteScroll
+                dataLength={rows.length}
+                next={loadMore}
+                hasMore={true}
+                loader={isLoading ? <h4 className="eulaa__label">Loading...</h4>: null}
+                scrollableTarget="scrollableDiv"
+              >
+                <Table  stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow>
+                      {columns.map(column => (
+                        <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+
+
+
+                  <TableBody >
+                    {rows.map(row => {
+                      console.log('value', row)
+                      return (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                          {columns.map(column => {
+                            var value = row[column.id]
+                            if (row[column.id]) value = row[column.id]
+                            else if (column.id === 'orgName') value = 'John Deo'
+                            else if (column.id === 'referedBy') value = 'Sachin Smith'
+                            return column.id == 'status' ? (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ paddingBottom: 10, paddingTop: 10 }}
                               >
-                                <MoreVertRoundedIcon />
-                              </IconButton>
-                              <Menu
-                                MenuListProps={{
-                                  'aria-labelledby': 'long-button',
-                                }}
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                PaperProps={{
-                                  style: {
-                                    maxHeight: ITEM_HEIGHT * 4.5,
-                                    width: '20ch',
-                                    boxShadow:
-                                      '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-                                    border: '1px solid #9fa2a3',
-                                  },
-                                }}
+                                <div className={`od__${value.toLowerCase()}__status`}>
+                                  <div>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
+                                </div>
+                              </TableCell>
+                            ) : column.id == 'action' ? (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ paddingBottom: 10, paddingTop: 10 }}
                               >
-                                {menuOptions.map((option, index) => (
-                                  <MenuItem
-                                    key={option}
-                                    onClick={e => handleMenuAction(`${option.text}`)}
-                                    className="od__menu__row od__menu__text"
-                                  >
-                                    <div className="od__menu__icon__column">
-                                      <img src={option.icon} alt={option.text} />
-                                    </div>
-                                    <div>{option.text}</div>
-                                  </MenuItem>
-                                ))}
-                              </Menu>
-                            </TableCell>
-                          ) : (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              style={{ paddingBottom: 10, paddingTop: 10 }}
-                            >
-                              {column.format && typeof value === 'number' ? column.format(value) : value}
-                            </TableCell>
-                          )
-                        })}
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
+                                <IconButton
+                                  aria-label="more"
+                                  id="long-button"
+                                  aria-controls="long-menu"
+                                  aria-expanded={open ? 'true' : undefined}
+                                  aria-haspopup="true"
+                                  onClick={e => handleClick(e, `${row['status']}`)}
+                                >
+                                  <MoreVertRoundedIcon />
+                                </IconButton>
+                                <Menu
+                                  MenuListProps={{
+                                    'aria-labelledby': 'long-button',
+                                  }}
+                                  anchorEl={anchorEl}
+                                  open={open}
+                                  onClose={handleClose}
+                                  PaperProps={{
+                                    style: {
+                                      maxHeight: ITEM_HEIGHT * 4.5,
+                                      width: '20ch',
+                                      boxShadow:
+                                        '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+                                      border: '1px solid #9fa2a3',
+                                    },
+                                  }}
+                                >
+                                  {menuOptions.map((option, index) => (
+                                    <MenuItem
+                                      key={option}
+                                      onClick={e => handleMenuAction(`${option.text}`)}
+                                      className="od__menu__row od__menu__text"
+                                    >
+                                      <div className="od__menu__icon__column">
+                                        <img src={option.icon} alt={option.text} />
+                                      </div>
+                                      <div>{option.text}</div>
+                                    </MenuItem>
+                                  ))}
+                                </Menu>
+                              </TableCell>
+                            ) : (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ paddingBottom: 10, paddingTop: 10 }}
+                              >
+                                {column.format && typeof value === 'number' ? column.format(value) : value}
+                              </TableCell>
+                            )
+                          })}
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+
+                </Table>
+              </InfiniteScroll>
             </TableContainer>
           </Paper>
+
         </div>
       </div>
-      <div className="od__row">
+      {/* <div className="od__row">
         <div className="od__pagination__section">
           <Stack spacing={2}>
             <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
           </Stack>
         </div>
-      </div>
+      </div> */}
       <Modal
         open={IsAddOrganizationClicked}
         onClose={handleAddOrganizationClose}

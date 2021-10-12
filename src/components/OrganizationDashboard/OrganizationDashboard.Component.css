@@ -252,3 +252,6 @@
 .od__table__org {
     width: 100% !important;
 }
+.infinite_scroll div {
+    display: contents;
+}
