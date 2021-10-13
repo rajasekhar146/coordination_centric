@@ -41,6 +41,9 @@ import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AprroveOrganization from '../../pages/approve-model'
+import RejectOrganization from '../../pages/reject-model'
+import { makeStyles } from '@material-ui/core/styles'
+
 
 
 
@@ -70,6 +73,28 @@ const approveModelStyle = {
   borderRadius: 3,
   p: 4,
 }
+const rejectModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 360,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
+const useStyles = makeStyles(theme => ({
+  menuItem: {
+    fontSize: 14,
+  },
+  menu: {
+    padding: 0
+  }
+}))
 
 const options1 = [
   {
@@ -156,18 +181,12 @@ const menuList = [
   },
   {
     menu: 'invited',
-    // options: [
-    //   { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-    //   // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-    //   { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-    // ],
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
+
   },
 
   {
@@ -269,6 +288,7 @@ const rows = [
 ]
 
 const OrganizationDashboardComponent = () => {
+  const classes = useStyles()
   const [page, setPage] = React.useState(1)
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
@@ -284,6 +304,7 @@ const OrganizationDashboardComponent = () => {
   // const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedOrg, setSelectedOrg] = useState(null)
 
   // useEffect(() => {
   //   getOrganization()
@@ -366,13 +387,14 @@ const OrganizationDashboardComponent = () => {
 
   const closeApproveModel = () => {
     setIsAcceptClicked(false)
+    setIsRejectClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
   }
 
-  const handleMenuAction = action => {
+  const handleMenuAction = (action, org) => {
     switch (action) {
       case 'setIsAcceptClicked':
         setIsAcceptClicked(true)
@@ -384,6 +406,8 @@ const OrganizationDashboardComponent = () => {
         return null;
     }
     setAnchorEl(null)
+    setSelectedOrg(org)
+
   }
 
   const handlePageChange = (event, value) => {
@@ -529,6 +553,7 @@ const OrganizationDashboardComponent = () => {
                                   anchorEl={anchorEl}
                                   open={open}
                                   onClose={handleClose}
+                                  className={classes.menu}
                                   PaperProps={{
                                     style: {
                                       maxHeight: ITEM_HEIGHT * 4.5,
@@ -542,8 +567,8 @@ const OrganizationDashboardComponent = () => {
                                   {menuOptions.map((option, index) => (
                                     <MenuItem
                                       key={option}
-                                      onClick={e => handleMenuAction(option.fnKey)}
-                                      className="od__menu__row od__menu__text"
+                                      onClick={e => handleMenuAction(option.fnKey, row)}
+                                      className={`${classes.menuItem} od__menu__row od__menu__text`}
                                     >
                                       <div className="od__menu__icon__column">
                                         <img src={option.icon} alt={option.text} />
@@ -593,22 +618,28 @@ const OrganizationDashboardComponent = () => {
       </Modal>
       <Modal
         open={isRejectClicked}
-        onClose={closeApproveModel}
+        // onClose={closeApproveModel}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} />
+        <Box sx={rejectModelStyle}>
+          <RejectOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+          />
         </Box>
       </Modal>
       <Modal
         open={isAcceptClicked}
-        onClose={setIsAcceptClicked}
+        // onClose={setIsAcceptClicked}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} />
+          <AprroveOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+          />
 
         </Box>
       </Modal>

@@ -1,10 +1,10 @@
 import React from 'react'
-import ApproveModelComponent from '../components/ModelPopup/ApproveModelpopup.Component'
+import RejectModelComponent from '../components/ModelPopup/RejectModelpopup.Component'
 
-const ApproveModel = props => {
+const RejectModel = props => {
     return (
         <React.Fragment>
-            <ApproveModelComponent 
+            <RejectModelComponent
                 clickCloseButton={props.clickCloseButton}
                 selectedOrg={props.selectedOrg}
             />
@@ -14,4 +14,4 @@ const ApproveModel = props => {
 
 
 
-export default ApproveModel
+export default RejectModel
