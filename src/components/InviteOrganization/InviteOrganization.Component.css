@@ -118,12 +118,23 @@
     display: flex;
 }
 
-.od__text__box {
-    background: #FFFFFF;
+.io__text__box {
+    /* background: #FFFFFF;
     border-radius: 5px !important;
-    width: 370px !important;
+    width: 100% !important; */
+    background: #FFFFFF;
+    border-radius: 8px !important;
+    width: 380px !important;
+    color: #A0A4A8 !important;
+    height: 48px !important;
 }
 
 .has-error {
     border-color: red;
   }
+
+.io__required {
+    color: red;
+    font-family: Lato;
+    font-size: 12px !important;
+}

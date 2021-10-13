@@ -31,9 +31,10 @@
 
 .od__serach__text {
     background: #FFFFFF;
-    border-radius: 100px !important;
+    border-radius: 8px !important;
     width: 320px !important;
     color: #A0A4A8 !important;
+    height: 42px !important;
 }
 
 .od__add__organization__btn {
@@ -252,3 +253,4 @@
 .od__table__org {
     width: 100% !important;
 }
+

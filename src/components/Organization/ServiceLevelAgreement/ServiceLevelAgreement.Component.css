@@ -46,12 +46,32 @@
     height: 60%;
     margin: 0 auto;
     background-color: #fff;
-    border: 1px solid #252B42;
+    border-bottom: 1px solid #252B42;
   }
 
 .sla__sign__pad {
-    width: 80%;
+    width: 100%;
     height: 100%;
     /* background-color: #252B42 */
   }
+
+  .sa__column {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    
+    /* or 150% */
+    letter-spacing: 0.1px;
+    
+    color: #000000;
+  }
   
+  .sla__column {
+    width: 500px !important;
+  }
+
+  .sla__date__section {
+    margin-top: 50px !important;
+  }

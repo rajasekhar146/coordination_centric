@@ -350,16 +350,15 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__left__section">
           <TextField
-            id=""
-            defaultValue="Search"
-            className="od__serach__text"
             margin="normal"
+            placeholder="Search"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon style={{ color: '#CACCCF' }} />
                 </InputAdornment>
               ),
+              className: 'od__serach__text',
             }}
           />
         </div>
@@ -432,7 +431,7 @@ const OrganizationDashboardComponent = () => {
                               align={column.align}
                               style={{ paddingBottom: 10, paddingTop: 10 }}
                             >
-                              <div className={`od__${value.toLowerCase()}__status`}>                         
+                              <div className={`od__${value.toLowerCase()}__status`}>
                                 <div>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
                               </div>
                             </TableCell>
@@ -511,7 +510,6 @@ const OrganizationDashboardComponent = () => {
       </div>
       <Modal
         open={IsAddOrganizationClicked}
-        onClose={handleAddOrganizationClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

@@ -18,6 +18,10 @@ import Vaccinations from './pages/vaccinations'
 import Notifications from './pages/notifications'
 import Payments from './pages/payments'
 import Signin from './pages/signin'
+import NewOnboarding from './pages/new-onboarding'
+import SAASAgreement from './pages/saasagreement'
+import EULAAgreement from './pages/eula-agreement'
+import BankInformationComponent from './components/Organization/BankInformation/BankInformation.Component'
 
 class Routes extends Component {
   render() {
@@ -29,8 +33,12 @@ class Routes extends Component {
           </Route>
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
+          <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
           <DefaultLayoutComponentRoute path="/acceptance-criteria" component={AcceptanceCriteria} />
+          <DefaultLayoutComponentRoute path="/saas-agreement" component={SAASAgreement} />
+          <DefaultLayoutComponentRoute path="/eula-agreement" component={EULAAgreement} />
+          <DefaultLayoutComponentRoute path="/bank-info" component={BankInformationComponent} />
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
