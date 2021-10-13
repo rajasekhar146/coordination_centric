@@ -90,9 +90,29 @@ const rejectModelStyle = {
 const useStyles = makeStyles(theme => ({
   menuItem: {
     fontSize: 14,
+    borderBottom: "1px solid #E8E8E8",
+    paddingTop: 14,
+    paddingBottom: 21
+  },
+  approved: {
+    color: "#03B575"
+  },
+  reject: {
+    color: "#E74F48"
+  },
+  defaultStyle: {
+    color: "#25282B"
   },
   menu: {
-    padding: 0
+    padding: 0,
+    position: "fixed",
+    zIndex: 1300,
+    right: 0,
+    left: -75,
+    top: 0,
+    bottom: 0,
+    paddingTop: 0,
+    paddingBottom: 0
   }
 }))
 
@@ -310,6 +330,19 @@ const OrganizationDashboardComponent = () => {
   //   getOrganization()
   //   return () => { }
   // }, [])
+
+  const getTextColor = (text) => {
+    switch (text) {
+      case 'Approve':
+        return 'approved'
+        break;
+      case 'Reject':
+        return 'reject'
+        break;
+      default:
+        return 'defaultStyle';
+    }
+  }
 
   useEffect(() => {
     getOrganization()
@@ -561,6 +594,7 @@ const OrganizationDashboardComponent = () => {
                                       boxShadow:
                                         '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
                                       border: '1px solid #9fa2a3',
+                                      left: '-75px'
                                     },
                                   }}
                                 >
@@ -568,7 +602,7 @@ const OrganizationDashboardComponent = () => {
                                     <MenuItem
                                       key={option}
                                       onClick={e => handleMenuAction(option.fnKey, row)}
-                                      className={`${classes.menuItem} od__menu__row od__menu__text`}
+                                      className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                                     >
                                       <div className="od__menu__icon__column">
                                         <img src={option.icon} alt={option.text} />

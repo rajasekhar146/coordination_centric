@@ -291,3 +291,29 @@
     padding-left: 6px;
     color: #B54708;
 }
+.css-6hp17o-MuiList-root-MuiMenu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    padding-top: 0;
+    padding-bottom: 0;
+    outline: 0;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    /* identical to box height, or 143% */
+
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+
+    color: #25282B;
+}
+.MuiMenuItem-root {
+    width: 100% !important;
+    padding-top: 14px !important;
+    padding-bottom: 21px !important
+}
