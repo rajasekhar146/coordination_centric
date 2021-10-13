@@ -21,11 +21,13 @@
 }
 
 .lm__selected__menu {
-    background-color: #FFFFFF !important;
+    background-color: #f3dfdf !important;
+    color: #E42346;
 }
 
 .lm__selected__menu:active {
     background-color: #af0d0d !important;
+    color: #f3dfdf;
 }
 
 .lm__selected__menu::selection {
