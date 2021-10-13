@@ -1,3 +1,5 @@
+
+ /* {showPassword ? <VisibilityOff /> : <Visibility />} */
 .si__main__div {
     width: 100vw;
     /* height: 100vh; */
@@ -41,8 +43,22 @@
     color: #FFFFFF;
 }
 
-.si__right__content {
+.si__pwd__show {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
 
+    /* identical to box height, or 133% */
+    display: flex;
+    align-items: center;
+    text-align: right;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin-right: 10px !important;
 }
 
 .si__right__title {
@@ -154,6 +170,24 @@
     margin: 0px 13px;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+.MuiInputBase-input-MuiOutlinedInput-input {
     padding: 16px !important;
+}
+
+.si__text__box {
+    /* background: #FFFFFF;
+    border-radius: 5px !important;
+    width: 100% !important; */
+    background: #FFFFFF;
+    border-radius: 8px !important;
+    width: 450px !important;
+    color: #A0A4A8 !important;
+    height: 48px !important;
+    padding: 12px !important;
+}
+
+.si__left__image__logo {
+    position: absolute;
+    top: 32px;
+    left: 60px;
 }

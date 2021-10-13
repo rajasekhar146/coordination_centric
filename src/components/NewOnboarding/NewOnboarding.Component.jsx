@@ -1,25 +1,20 @@
-import * as React from 'react'
-import './AcceptanceCriteria.Component.css'
+import React from 'react'
 import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import TextField from '@mui/material/TextField'
-import headerImage from '../../../assets/images/header_image.png'
+import headerImage from '../../assets/images/header_image.png'
 import Button from '@mui/material/Button'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
-import history from '../../../history'
 
+import './NewOnBoarding.Component.css'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
-const AcceptanceCriteriaComponent = () => {
-  const [activeStep, setActiveStep] = React.useState(0)
+const NewOnboardingComponent = () => {
+  const [activeStep, setActiveStep] = React.useState(1)
 
   const onButtonClick = () => {}
-
-  const handleNext = () => {
-    history.push('/service-level-agreement')
-  }
 
   return (
     <div className="ob__main__section">
@@ -49,7 +44,7 @@ const AcceptanceCriteriaComponent = () => {
                 </div>
                 <div>
                   <div className="ac__form">
-                    <div className="ac__header__text">Admin’s Info</div>
+                    <div className="ac__header__text">Adminâ€™s Info</div>
                     <div>
                       <div className="ac__row">
                         <div className="ac__column">
@@ -77,7 +72,7 @@ const AcceptanceCriteriaComponent = () => {
 
                     <div className="ac__gap__div"></div>
 
-                    <div className="ac__header__text">Organization’s Info</div>
+                    <div className="ac__header__text">Organizationâ€™s Info</div>
                     <div>
                       <div className="ac__row">
                         <div className="ac__column">
@@ -154,17 +149,17 @@ const AcceptanceCriteriaComponent = () => {
                       <div className="ac__gap__div"></div>
 
                       <div className="ac__row">
-                        <div className="ac__column ac__left__action">
-                          <Button color="inherit" className="ac__back__btn">
+                        <div className="ac__column no__left__action">
+                          <Button color="inherit" className="no__back__btn">
                             Back
                           </Button>
                         </div>
 
-                        <div className="ac__column ac__right__action">
-                          <Button className="ac__next__btn" onClick={handleNext}>
+                        <div className="ac__column no__right__action">
+                          <Button className="no__next__btn">
                             Save & Next &nbsp;
                             <ArrowForwardIosRoundedIcon />
-                          </Button>
+                          </Button>{' '}
                         </div>
                       </div>
                     </div>
@@ -180,4 +175,5 @@ const AcceptanceCriteriaComponent = () => {
     </div>
   )
 }
-export default AcceptanceCriteriaComponent
+
+export default NewOnboardingComponent

@@ -1,10 +1,11 @@
 import React from 'react'
 import ServiceLevelAgreementComponent from '../components/Organization/ServiceLevelAgreement/ServiceLevelAgreement.Component'
 
-const ServiceLevelAgreement = () => {
+const ServiceLevelAgreement = props => {
+  console.log('ServiceLevelAgreement >> trigered', props)
   return (
     <div>
-      <ServiceLevelAgreementComponent />
+      <ServiceLevelAgreementComponent onButtonClick={props.onButtonClick} />
     </div>
   )
 }

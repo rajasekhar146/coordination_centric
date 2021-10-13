@@ -32,7 +32,7 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
-
+import CircleIcon from '@mui/icons-material/Circle';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
@@ -40,6 +40,8 @@ import DatePicker from '@mui/lab/DatePicker'
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import AprroveOrganization from '../../pages/approve-model'
+
 
 
 const style = {
@@ -48,6 +50,20 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 420,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
+const approveModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 298,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -112,12 +128,13 @@ const menuList = [
     ],
   },
   {
-    menu: 'pending',
+    menu: 'pending_verification',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Approve', icon: require('../../assets/icons/approve.png').default },
-      { text: 'Reject', icon: require('../../assets/icons/reject.png').default },
+      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
   {
@@ -139,10 +156,17 @@ const menuList = [
   },
   {
     menu: 'invited',
+    // options: [
+    //   { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+    //   // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+    //   { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+    // ],
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
 
@@ -206,6 +230,11 @@ const columns = [
   { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
 ]
 
+const colorcodes = {
+  invited: "#2E90FA",
+  pending_verification: "#F79009"
+}
+
 const createData = (name, code, population, size) => {
   const density = population / size
   return { name, code, population, size, density }
@@ -244,6 +273,9 @@ const OrganizationDashboardComponent = () => {
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
+  const [isRejectClicked, setIsRejectClicked] = useState(false)
+  const [isAcceptClicked, setIsAcceptClicked] = useState(false)
+
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
@@ -332,12 +364,25 @@ const OrganizationDashboardComponent = () => {
     setAddOrganizationClicked(false)
   }
 
+  const closeApproveModel = () => {
+    setIsAcceptClicked(false)
+  }
+
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
   }
 
   const handleMenuAction = action => {
-    console.log('action', action)
+    switch (action) {
+      case 'setIsAcceptClicked':
+        setIsAcceptClicked(true)
+        break;
+      case 'setIsRejectClicked':
+        setIsRejectClicked(true)
+        break;
+      default:
+        return null;
+    }
     setAnchorEl(null)
   }
 
@@ -366,16 +411,15 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__left__section">
           <TextField
-            id=""
-            defaultValue="Search"
-            className="od__serach__text"
             margin="normal"
+            placeholder="Search"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon style={{ color: '#CACCCF' }} />
                 </InputAdornment>
               ),
+              className: 'od__serach__text',
             }}
           />
         </div>
@@ -427,10 +471,10 @@ const OrganizationDashboardComponent = () => {
                 dataLength={rows.length}
                 next={loadMore}
                 hasMore={true}
-                loader={isLoading ? <h4 className="eulaa__label">Loading...</h4>: null}
+                loader={isLoading ? <h4 className="eulaa__label">Loading...</h4> : null}
                 scrollableTarget="scrollableDiv"
               >
-                <Table  stickyHeader aria-label="sticky table">
+                <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>
                       {columns.map(column => (
@@ -440,9 +484,6 @@ const OrganizationDashboardComponent = () => {
                       ))}
                     </TableRow>
                   </TableHead>
-
-
-
                   <TableBody >
                     {rows.map(row => {
                       console.log('value', row)
@@ -453,14 +494,16 @@ const OrganizationDashboardComponent = () => {
                             if (row[column.id]) value = row[column.id]
                             else if (column.id === 'orgName') value = 'John Deo'
                             else if (column.id === 'referedBy') value = 'Sachin Smith'
+
                             return column.id == 'status' ? (
                               <TableCell
                                 key={column.id}
                                 align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10 }}
+                                style={{ paddingBottom: 10, paddingTop: 10, textAlign: "center" }}
                               >
                                 <div className={`od__${value.toLowerCase()}__status`}>
-                                  <div>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
+                                  <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
+                                  <div className={`od__${value.toLowerCase()}__label`}>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
                                 </div>
                               </TableCell>
                             ) : column.id == 'action' ? (
@@ -499,7 +542,7 @@ const OrganizationDashboardComponent = () => {
                                   {menuOptions.map((option, index) => (
                                     <MenuItem
                                       key={option}
-                                      onClick={e => handleMenuAction(`${option.text}`)}
+                                      onClick={e => handleMenuAction(option.fnKey)}
                                       className="od__menu__row od__menu__text"
                                     >
                                       <div className="od__menu__icon__column">
@@ -541,12 +584,32 @@ const OrganizationDashboardComponent = () => {
       </div> */}
       <Modal
         open={IsAddOrganizationClicked}
-        onClose={handleAddOrganizationClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <InviteOrganization clickCloseButton={handleAddOrganizationClose} />
+        </Box>
+      </Modal>
+      <Modal
+        open={isRejectClicked}
+        onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <AprroveOrganization clickCloseButton={closeApproveModel} />
+        </Box>
+      </Modal>
+      <Modal
+        open={isAcceptClicked}
+        onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <AprroveOrganization clickCloseButton={closeApproveModel} />
+
         </Box>
       </Modal>
     </div>

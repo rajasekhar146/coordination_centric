@@ -10,7 +10,7 @@ import OrganizationHomeIcon from '../../assets/icons/organization_home.png'
 import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 // import OrganizationNameIcon from '../../assets/icons/OrganizationName.png'
 // import { useForm } from '../../utils/validator'
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
 import { organizationService } from '../../services'
 
 const InviteOrganizationComponent = props => {
@@ -26,10 +26,9 @@ const InviteOrganizationComponent = props => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
-
-  console.log(errors);
+  console.log(errors)
 
   const customErrorAttribute = {
     className: 'has-error',
@@ -38,25 +37,21 @@ const InviteOrganizationComponent = props => {
 
   // const { values, useInput, isValid } = useForm(defaultValues, customErrorAttribute)
 
-
   const [isSubmit, setIsSubmit] = useState(false)
 
-  const onSubmit = (e) => {
+  const onSubmit = e => {
     setIsSubmit(true)
-    defaultValues.facilityName = watch("facilityName")
-    defaultValues.facilityEmail = watch("facilityEmail")
-    defaultValues.facilityAddress = watch("facilityAddress")
-    defaultValues.facilityPhone = watch("facilityPhone")
-    const res = organizationService.addOrganization(defaultValues);
+    defaultValues.facilityName = watch('facilityName')
+    defaultValues.facilityEmail = watch('facilityEmail')
+    defaultValues.facilityAddress = watch('facilityAddress')
+    defaultValues.facilityPhone = watch('facilityPhone')
+    const res = organizationService.addOrganization(defaultValues)
     res.then(() => {
       props.clickCloseButton()
     })
   }
 
-
-
-
-  const handleInviteOrganization = () => { }
+  const handleInviteOrganization = () => {}
 
   return (
     <div className="io__main__div">
@@ -71,7 +66,6 @@ const InviteOrganizationComponent = props => {
             <TextField
               // {...useInput('facilityName', { isRequired: true })}
               {...register('facilityName', { required: true })}
-              className="od__text__box"
               margin="normal"
               error={errors.facilityName && isSubmit}
               InputProps={{
@@ -80,10 +74,10 @@ const InviteOrganizationComponent = props => {
                     <img src={OrganizationNameIcon} alt="Organization Name" />
                   </InputAdornment>
                 ),
+                className: 'io__text__box',
               }}
             />
-            {errors.facilityName && <p className="ac__required">Organization Name is required.</p>}
-
+            {errors.facilityName && <p className="io__required">Organization Name is required.</p>}
           </div>
 
           <div className="io__row">
@@ -93,13 +87,13 @@ const InviteOrganizationComponent = props => {
             <TextField
               // {...useInput('facilityEmail', { isRequired: true })}
               {...register('facilityEmail', {
-                required: 'Organization email is required.',
+                required: 'Organization Email is required.',
                 pattern: {
-                  value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                   message: 'Please enter a valid email',
-              },
+                },
               })}
-              className="od__text__box"
               margin="normal"
               error={errors.facilityEmail && isSubmit}
               InputProps={{
@@ -108,17 +102,16 @@ const InviteOrganizationComponent = props => {
                     <img src={OrganizationEmailIcon} alt="Organization Email" />
                   </InputAdornment>
                 ),
+                className: 'io__text__box',
               }}
             />
-            {errors.facilityEmail && <p className="ac__required">{errors.facilityEmail.message}</p>}
-
+            {errors.facilityEmail && <p className="io__required">{errors.facilityEmail.message}</p>}
           </div>
 
           <div className="io__row">
             <div className="io__label">Address</div>
             <TextField
               {...register('facilityAddress', {})}
-              className="od__text__box"
               margin="normal"
               InputProps={{
                 startAdornment: (
@@ -126,6 +119,7 @@ const InviteOrganizationComponent = props => {
                     <img src={OrganizationHomeIcon} alt="Organization Home" />
                   </InputAdornment>
                 ),
+                className: 'io__text__box',
               }}
             />
           </div>
@@ -134,7 +128,6 @@ const InviteOrganizationComponent = props => {
             <div className="io__label">Phone Number</div>
             <TextField
               {...register('facilityPhone', {})}
-              className="od__text__box"
               margin="normal"
               type="number"
               InputProps={{
@@ -143,6 +136,7 @@ const InviteOrganizationComponent = props => {
                     <img src={OrganizationPhoneIcon} alt="Organization Phone" />
                   </InputAdornment>
                 ),
+                className: 'io__text__box',
               }}
             />
           </div>

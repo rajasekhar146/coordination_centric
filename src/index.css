@@ -12,6 +12,9 @@ code {
     monospace;
 }
 
+.MuiSvgIcon-fontSizeSmall {
+    font-size: 11px !important;
+}
 
 
 

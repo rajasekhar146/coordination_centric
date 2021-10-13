@@ -40,11 +40,15 @@ export const OnboardingComponent = () => {
 
   const handleNext = () => {
     let newSkipped = skipped
-    
+
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values())
       newSkipped.delete(activeStep)
     }
+
+    // if(activeStep === 2){
+    //   onButtonClick()
+    // }
 
     setActiveStep(prevActiveStep => prevActiveStep + 1)
     setSkipped(newSkipped)
@@ -72,6 +76,8 @@ export const OnboardingComponent = () => {
   const handleReset = () => {
     setActiveStep(0)
   }
+
+  const onButtonClick = () => {}
 
   return (
     <div className="ob__main__section">
