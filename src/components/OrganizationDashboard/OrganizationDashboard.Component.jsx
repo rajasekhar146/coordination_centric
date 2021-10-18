@@ -176,10 +176,11 @@ const menuList = [
     menu: 'pending_verification',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
+     
     ],
   },
   {
@@ -187,8 +188,8 @@ const menuList = [
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+      // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
   {
@@ -200,11 +201,19 @@ const menuList = [
     ],
   },
   {
-    menu: 'invited',
+    menu: 'inactive',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Activate', icon: require('../../assets/icons/suspend.png').default },
+    ],
+  },
+  {
+    menu: 'invited',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
     ],
 
   },
@@ -216,6 +225,24 @@ const menuList = [
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
     ],
+  },
+  {
+    menu: 'verified',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
+    ],
+
+  },
+  {
+    menu: 'pending_acceptance',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', icon: require('../../assets/icons/suspend.png').default },
+    ],
+
   },
 ]
 
