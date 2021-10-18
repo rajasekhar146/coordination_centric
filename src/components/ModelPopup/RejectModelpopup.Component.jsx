@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import RejectOrgIcon from '../../assets/icons/reject_org.png'
+import { organizationService } from '../../services'
 
 
 
@@ -25,10 +26,19 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
+
+
 const RejectModel = props => {
   const {
     selectedOrg
   } = props;
+
+  const handleSubmit = () => {
+    const res = organizationService.updateOrganization(selectedOrg._id, 'declined')
+    res.then(() => {
+      props.clickCloseButton()
+    })
+  }
   const classes = useStyles()
   return (
     <div className="io__main__div">
@@ -67,8 +77,12 @@ const RejectModel = props => {
             </Button>
           </div>
           <div className="io__approve">
-            <Button type="submit" className="io__Approve__btn">
-              Approve
+            <Button
+              type="submit"
+              className="io__Approve__btn"
+              onClick={handleSubmit}
+            >
+              Reject
             </Button>
           </div>
         </div>

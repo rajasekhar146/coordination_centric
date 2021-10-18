@@ -271,7 +271,11 @@ const columns = [
 
 const colorcodes = {
   invited: "#2E90FA",
-  pending_verification: "#F79009"
+  pending_verification: "#F79009",
+  active: "#12B76A",
+  pending_acceptance: "#7A5AF8",
+  declined: "#F04438",
+  inactive: "#A0A4A8"
 }
 
 const createData = (name, code, population, size) => {

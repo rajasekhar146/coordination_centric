@@ -2,16 +2,26 @@ import React, { useState } from 'react'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
 import ApproveOrgIcon from '../../assets/icons/approve_org.png'
+import { organizationService } from '../../services'
 
 
 const ApproveModel = props => {
   const {
     selectedOrg
   } = props;
+
+  const handleSubmit = () => {
+    const res = organizationService.updateOrganization(selectedOrg._id, 'active')
+    res.then(() => {
+      props.clickCloseButton()
+    })
+  }
+
+
   return (
     <div className="io__main__div">
       <div className="io__row io__icon">
-      <img src={ApproveOrgIcon} alt="Approve Org" />
+        <img src={ApproveOrgIcon} alt="Approve Org" />
       </div>
       <div className="io__row io__text__center">
         <label className="io__title">
@@ -31,7 +41,11 @@ const ApproveModel = props => {
             </Button>
           </div>
           <div className="io__approve">
-            <Button type="submit" className="io__Approve__btn">
+            <Button
+              type="submit"
+              className="io__Approve__btn"
+              onClick={handleSubmit}
+            >
               Approve
             </Button>
           </div>
