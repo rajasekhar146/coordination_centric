@@ -112,6 +112,11 @@
 .io__same__line {
     display: flex;
 }
+.io__flex__spcebetween {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
 
 .io__invite__org__btn {
     right: 70px !important;

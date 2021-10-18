@@ -13,10 +13,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
@@ -32,10 +29,10 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
-import CircleIcon from '@mui/icons-material/Circle';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
+import OrganisationItem from './OrganisationItem'
 
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
@@ -180,7 +177,7 @@ const menuList = [
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-     
+
     ],
   },
   {
@@ -346,9 +343,9 @@ const OrganizationDashboardComponent = () => {
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
-
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
+
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
@@ -407,20 +404,7 @@ const OrganizationDashboardComponent = () => {
     )
   }
 
-  const handleClick = (event, status) => {
-    setAnchorEl(event.currentTarget)
-    console.log('status', status, menuOptions)
-    const menus = menuList.filter(m => m.menu === status.toLowerCase())
-    console.log('menus', menus)
-    if (menus.length > 0) setMenuOptions(menus[0].options)
-    else setMenuOptions([])
-
-    console.log('menus[0].options', menus[0].options)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  
 
   // const handleChangePage = async (event, newPage) => {
   //   setPage(newPage)
@@ -440,9 +424,7 @@ const OrganizationDashboardComponent = () => {
     setPage(0)
   }
 
-  const handleAction = organizationId => {
-    setAnchorEl(organizationId)
-  }
+ 
 
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
@@ -458,21 +440,10 @@ const OrganizationDashboardComponent = () => {
     setAddOrganizationClicked(true)
   }
 
-  const handleMenuAction = (action, org) => {
-    switch (action) {
-      case 'setIsAcceptClicked':
-        setIsAcceptClicked(true)
-        break;
-      case 'setIsRejectClicked':
-        setIsRejectClicked(true)
-        break;
-      default:
-        return null;
-    }
+  const handleClose = () => {
     setAnchorEl(null)
-    setSelectedOrg(org)
-
   }
+  
 
   const handlePageChange = (event, value) => {
     setPage(value)
@@ -573,89 +544,24 @@ const OrganizationDashboardComponent = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody >
-                    {rows.map(row => {
-                      console.log('value', row)
-                      return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                          {columns.map(column => {
-                            var value = row[column.id]
-                            if (row[column.id]) value = row[column.id]
-                            else if (column.id === 'orgName') value = 'John Deo'
-                            else if (column.id === 'referedBy') value = 'Sachin Smith'
-
-                            return column.id == 'status' ? (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10, textAlign: "center" }}
-                              >
-                                <div className={`od__${value.toLowerCase()}__status`}>
-                                  <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-                                  <div className={`od__${value.toLowerCase()}__label`}>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
-                                </div>
-                              </TableCell>
-                            ) : column.id == 'action' ? (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10 }}
-                              >
-                                <IconButton
-                                  aria-label="more"
-                                  id="long-button"
-                                  aria-controls="long-menu"
-                                  aria-expanded={open ? 'true' : undefined}
-                                  aria-haspopup="true"
-                                  onClick={e => handleClick(e, `${row['status']}`)}
-                                >
-                                  <MoreVertRoundedIcon />
-                                </IconButton>
-                                <Menu
-                                  MenuListProps={{
-                                    'aria-labelledby': 'long-button',
-                                  }}
-                                  anchorEl={anchorEl}
-                                  open={open}
-                                  onClose={handleClose}
-                                  className={classes.menu}
-                                  PaperProps={{
-                                    style: {
-                                      maxHeight: ITEM_HEIGHT * 4.5,
-                                      width: '20ch',
-                                      boxShadow:
-                                        '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-                                      border: '1px solid #9fa2a3',
-                                      left: '-75px'
-                                    },
-                                  }}
-                                >
-                                  {menuOptions.map((option, index) => (
-                                    <MenuItem
-                                      key={option}
-                                      onClick={e => handleMenuAction(option.fnKey, row)}
-                                      className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
-                                    >
-                                      <div className="od__menu__icon__column">
-                                        <img src={option.icon} alt={option.text} />
-                                      </div>
-                                      <div>{option.text}</div>
-                                    </MenuItem>
-                                  ))}
-                                </Menu>
-                              </TableCell>
-                            ) : (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10 }}
-                              >
-                                {column.format && typeof value === 'number' ? column.format(value) : value}
-                              </TableCell>
-                            )
-                          })}
-                        </TableRow>
-                      )
-                    })}
+                    {rows.map((row, index) => (
+                      <OrganisationItem
+                        row={row}
+                        index={index}
+                        columns={columns}
+                        colorcodes={colorcodes}
+                        open={open}
+                        handleClose={handleClose}
+                        classes={classes}
+                        menuOptions={menuOptions}
+                        setIsRejectClicked={setIsRejectClicked}
+                        setIsAcceptClicked={setIsAcceptClicked}
+                        getTextColor={getTextColor}
+                        setSelectedOrg={setSelectedOrg}
+                        rows={rows}
+                        menuList={menuList}
+                      />
+                    ))}
                   </TableBody>
 
                 </Table>
