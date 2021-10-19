@@ -95,3 +95,52 @@
     margin-bottom: 10px;
     padding-top: 45px;
 }
+.io__conform {
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+}
+.io__Approve__btn {
+    width: 100% !important;
+    background-color: #E42346 !important;
+    height: 44px;
+    border-radius: 12px !important;
+    border: 1px solid #E42346;
+    padding: 10px 18px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+    color: #FFFFFF !important;
+}
+.io__skip__btn {
+    width: 100% !important;
+    height: 44px;
+    border: 1px solid #E42346 !important;
+    border-radius: 12px !important;
+    color: #E42346 !important;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+
+}
+.io__skip{
+    width: 50%;
+    text-align: end;
+    padding-right: 10px !important;
+
+}
+.io__skip button{
+    width: 55% !important;
+}
+.io__ok {
+    width: 50%;
+}
+.io__ok button{
+    width: 80% !important;
+}

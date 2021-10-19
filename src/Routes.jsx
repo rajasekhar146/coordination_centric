@@ -21,6 +21,8 @@ import Signin from './pages/signin'
 import NewOnboarding from './pages/new-onboarding'
 import SAASAgreement from './pages/saasagreement'
 import EULAAgreement from './pages/eula-agreement'
+import EnableTwoFactorAuth from './pages/enable__twofactor__auth'
+import VerificationCodePage from './pages/verificationcode'
 import BankInformationComponent from './components/Organization/BankInformation/BankInformation.Component'
 
 class Routes extends Component {
@@ -42,6 +44,8 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
+          <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />
+          <DefaultLayoutComponentRoute path="/verification" component={VerificationCodePage} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />

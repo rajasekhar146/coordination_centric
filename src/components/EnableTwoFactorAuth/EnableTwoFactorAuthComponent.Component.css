@@ -1,0 +1,129 @@
+.io__two_fa {
+    background-color: #fff;
+    width: 55%;
+    height: 100vh;
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.header__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 34px;
+    /* identical to box height, or 121% */
+    
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.2px;
+    
+    color: #000000;
+}
+.io__two_justify {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.info__label{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #A0A4A8;
+    margin-bottom: 40px;
+}
+.io__tf_query {
+    margin-bottom: 25px;
+    width: 50%;
+}
+.io__query {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 34px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #000000;
+}
+.io__tf__options {
+    display: flex;
+    margin-bottom: 30px;
+    
+}
+.io__nonActive__option {
+    position: relative;
+    width: 135px;
+    height: 173px;
+    left: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 14px 1px rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    margin-left: 25px;
+    border: 1px solid #FFFFFF;
+}
+.io__active__option {
+    position: relative;
+    width: 135px;
+    height: 173px;
+    left: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 14px 1px rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    margin-left: 25px;
+    border: 1px solid #E42346;
+}
+.io__option_icon {
+    padding: 16px;
+    border: 1px solid #E42346;
+    border-radius: 5px;
+    position: absolute;
+    right: 30%;
+    top: 25px;
+}
+.io__continue {
+    width: 30% !important;
+    background-color: #E42346 !important;
+    height: 44px;
+    border-radius: 12px !important;
+    border: 1px solid #E42346;
+    padding: 10px 18px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+    color: #FFFFFF !important;
+}
+.io__nonactive__icon {
+    width: 28px;
+    position: absolute;
+    bottom: 30px;
+    right: 39%;
+}
+.io__active__icon {
+    width: 28px;
+    position: absolute;
+    bottom: 30px;
+    right: 39%;
+}
+.io__text {
+    position: absolute;
+    top: 50%;
+    right: 39%;
+}
