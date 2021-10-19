@@ -13,10 +13,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
@@ -32,15 +29,18 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
-import CircleIcon from '@mui/icons-material/Circle';
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
+import OrganisationItem from './OrganisationItem'
 
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AprroveOrganization from '../../pages/approve-model'
+import RejectOrganization from '../../pages/reject-model'
+import { makeStyles } from '@material-ui/core/styles'
+
 
 
 
@@ -70,6 +70,48 @@ const approveModelStyle = {
   borderRadius: 3,
   p: 4,
 }
+const rejectModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 360,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
+const useStyles = makeStyles(theme => ({
+  menuItem: {
+    fontSize: 14,
+    borderBottom: "1px solid #E8E8E8",
+    paddingTop: 5,
+    paddingBottom: 15
+  },
+  approved: {
+    color: "#03B575"
+  },
+  reject: {
+    color: "#E74F48"
+  },
+  defaultStyle: {
+    color: "#25282B"
+  },
+  menu: {
+    padding: 0,
+    position: "fixed",
+    zIndex: 1300,
+    right: 0,
+    left: -75,
+    top: 0,
+    bottom: 0,
+    paddingTop: 0,
+    paddingBottom: 0
+  }
+}))
 
 const options1 = [
   {
@@ -131,10 +173,11 @@ const menuList = [
     menu: 'pending_verification',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
+
     ],
   },
   {
@@ -142,8 +185,8 @@ const menuList = [
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+      // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
   {
@@ -155,19 +198,21 @@ const menuList = [
     ],
   },
   {
-    menu: 'invited',
-    // options: [
-    //   { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-    //   // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-    //   { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-    // ],
+    menu: 'inactive',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Approve', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-      { text: 'Deactivate', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Activate', icon: require('../../assets/icons/suspend.png').default },
     ],
+  },
+  {
+    menu: 'invited',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
+    ],
+
   },
 
   {
@@ -177,6 +222,24 @@ const menuList = [
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
     ],
+  },
+  {
+    menu: 'verified',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
+    ],
+
+  },
+  {
+    menu: 'pending_acceptance',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', icon: require('../../assets/icons/suspend.png').default },
+    ],
+
   },
 ]
 
@@ -232,7 +295,11 @@ const columns = [
 
 const colorcodes = {
   invited: "#2E90FA",
-  pending_verification: "#F79009"
+  pending_verification: "#F79009",
+  active: "#12B76A",
+  pending_acceptance: "#7A5AF8",
+  declined: "#F04438",
+  inactive: "#A0A4A8"
 }
 
 const createData = (name, code, population, size) => {
@@ -269,26 +336,41 @@ const rows = [
 ]
 
 const OrganizationDashboardComponent = () => {
+  const classes = useStyles()
   const [page, setPage] = React.useState(1)
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
-
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
+
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
   // const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedOrg, setSelectedOrg] = useState(null)
 
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
   // }, [])
+
+  const getTextColor = (text) => {
+    switch (text) {
+      case 'Approve':
+        return 'approved'
+        break;
+      case 'Reject':
+        return 'reject'
+        break;
+      default:
+        return 'defaultStyle';
+    }
+  }
 
   useEffect(() => {
     getOrganization()
@@ -322,20 +404,7 @@ const OrganizationDashboardComponent = () => {
     )
   }
 
-  const handleClick = (event, status) => {
-    setAnchorEl(event.currentTarget)
-    console.log('status', status, menuOptions)
-    const menus = menuList.filter(m => m.menu === status.toLowerCase())
-    console.log('menus', menus)
-    if (menus.length > 0) setMenuOptions(menus[0].options)
-    else setMenuOptions([])
-
-    console.log('menus[0].options', menus[0].options)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
+  
 
   // const handleChangePage = async (event, newPage) => {
   //   setPage(newPage)
@@ -355,9 +424,7 @@ const OrganizationDashboardComponent = () => {
     setPage(0)
   }
 
-  const handleAction = organizationId => {
-    setAnchorEl(organizationId)
-  }
+ 
 
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
@@ -366,25 +433,17 @@ const OrganizationDashboardComponent = () => {
 
   const closeApproveModel = () => {
     setIsAcceptClicked(false)
+    setIsRejectClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
   }
 
-  const handleMenuAction = action => {
-    switch (action) {
-      case 'setIsAcceptClicked':
-        setIsAcceptClicked(true)
-        break;
-      case 'setIsRejectClicked':
-        setIsRejectClicked(true)
-        break;
-      default:
-        return null;
-    }
+  const handleClose = () => {
     setAnchorEl(null)
   }
+  
 
   const handlePageChange = (event, value) => {
     setPage(value)
@@ -485,87 +544,24 @@ const OrganizationDashboardComponent = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody >
-                    {rows.map(row => {
-                      console.log('value', row)
-                      return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                          {columns.map(column => {
-                            var value = row[column.id]
-                            if (row[column.id]) value = row[column.id]
-                            else if (column.id === 'orgName') value = 'John Deo'
-                            else if (column.id === 'referedBy') value = 'Sachin Smith'
-
-                            return column.id == 'status' ? (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10, textAlign: "center" }}
-                              >
-                                <div className={`od__${value.toLowerCase()}__status`}>
-                                  <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-                                  <div className={`od__${value.toLowerCase()}__label`}>{column.format && typeof value === 'number' ? column.format(value) : value}</div>
-                                </div>
-                              </TableCell>
-                            ) : column.id == 'action' ? (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10 }}
-                              >
-                                <IconButton
-                                  aria-label="more"
-                                  id="long-button"
-                                  aria-controls="long-menu"
-                                  aria-expanded={open ? 'true' : undefined}
-                                  aria-haspopup="true"
-                                  onClick={e => handleClick(e, `${row['status']}`)}
-                                >
-                                  <MoreVertRoundedIcon />
-                                </IconButton>
-                                <Menu
-                                  MenuListProps={{
-                                    'aria-labelledby': 'long-button',
-                                  }}
-                                  anchorEl={anchorEl}
-                                  open={open}
-                                  onClose={handleClose}
-                                  PaperProps={{
-                                    style: {
-                                      maxHeight: ITEM_HEIGHT * 4.5,
-                                      width: '20ch',
-                                      boxShadow:
-                                        '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-                                      border: '1px solid #9fa2a3',
-                                    },
-                                  }}
-                                >
-                                  {menuOptions.map((option, index) => (
-                                    <MenuItem
-                                      key={option}
-                                      onClick={e => handleMenuAction(option.fnKey)}
-                                      className="od__menu__row od__menu__text"
-                                    >
-                                      <div className="od__menu__icon__column">
-                                        <img src={option.icon} alt={option.text} />
-                                      </div>
-                                      <div>{option.text}</div>
-                                    </MenuItem>
-                                  ))}
-                                </Menu>
-                              </TableCell>
-                            ) : (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{ paddingBottom: 10, paddingTop: 10 }}
-                              >
-                                {column.format && typeof value === 'number' ? column.format(value) : value}
-                              </TableCell>
-                            )
-                          })}
-                        </TableRow>
-                      )
-                    })}
+                    {rows.map((row, index) => (
+                      <OrganisationItem
+                        row={row}
+                        index={index}
+                        columns={columns}
+                        colorcodes={colorcodes}
+                        open={open}
+                        handleClose={handleClose}
+                        classes={classes}
+                        menuOptions={menuOptions}
+                        setIsRejectClicked={setIsRejectClicked}
+                        setIsAcceptClicked={setIsAcceptClicked}
+                        getTextColor={getTextColor}
+                        setSelectedOrg={setSelectedOrg}
+                        rows={rows}
+                        menuList={menuList}
+                      />
+                    ))}
                   </TableBody>
 
                 </Table>
@@ -593,22 +589,28 @@ const OrganizationDashboardComponent = () => {
       </Modal>
       <Modal
         open={isRejectClicked}
-        onClose={closeApproveModel}
+        // onClose={closeApproveModel}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} />
+        <Box sx={rejectModelStyle}>
+          <RejectOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+          />
         </Box>
       </Modal>
       <Modal
         open={isAcceptClicked}
-        onClose={setIsAcceptClicked}
+        // onClose={setIsAcceptClicked}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} />
+          <AprroveOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+          />
 
         </Box>
       </Modal>

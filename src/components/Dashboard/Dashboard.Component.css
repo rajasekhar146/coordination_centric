@@ -90,3 +90,8 @@
     letter-spacing: 0.1px;
     color: #E42346;
 }
+.io__dashboard__card {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-top: 45px;
+}

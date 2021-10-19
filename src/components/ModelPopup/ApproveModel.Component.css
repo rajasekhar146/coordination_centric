@@ -1,0 +1,82 @@
+.io__cancel {
+    width: 100%;
+}
+.io__approve {
+    width: 100%;
+    text-align: right;
+}
+.io__cancel__btn {
+    width: 95%;
+    height: 44px;
+    border: 1px solid #D0D5DD !important;
+    border-radius: 12px !important;
+    color: #52575C;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+
+}
+.io__Approve__btn {
+    width: 95%;
+    background-color: #E42346 !important;
+    height: 44px;
+    border-radius: 12px !important;
+    border: 1px solid #E42346;
+    padding: 10px 18px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+    color: #FFFFFF !important;
+}
+.io__text__center {
+    text-align: center;
+}
+.io__title {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: 0.2px;
+}
+.io__conform__title {
+    margin-bottom: 20px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+/* or 150% */
+    text-align: center;
+    letter-spacing: 0.1px;
+/* Neutral/Gray */
+    color: #A0A4A8;
+}
+.io__btn {
+    margin-top: 32px !important;
+}
+.io__reason__label{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #52575C;
+    margin-bottom: 6px;
+}
+.io__icon {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.io_input {
+    margin-bottom: 32px;
+}
+
+
