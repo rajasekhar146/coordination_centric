@@ -88,8 +88,8 @@ const useStyles = makeStyles(theme => ({
   menuItem: {
     fontSize: 14,
     borderBottom: "1px solid #E8E8E8",
-    paddingTop: 14,
-    paddingBottom: 21
+    paddingTop: 5,
+    paddingBottom: 15
   },
   approved: {
     color: "#03B575"
