@@ -45,7 +45,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />
-          <DefaultLayoutComponentRoute path="/verification" component={VerificationCodePage} />
+          <DefaultLayoutComponentRoute path="/verification/:method" component={VerificationCodePage} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />

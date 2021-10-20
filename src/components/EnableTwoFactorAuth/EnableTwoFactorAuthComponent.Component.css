@@ -8,6 +8,7 @@
     justify-content: center;
     align-items: center;
     margin: auto;
+    margin-top: 40px;
 }
 .header__label {
     font-family: Lato;
@@ -39,10 +40,10 @@
     text-align: center;
     letter-spacing: 0.1px;
     color: #A0A4A8;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 .io__tf_query {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     width: 50%;
 }
 .io__query {
@@ -65,7 +66,7 @@
 .io__nonActive__option {
     position: relative;
     width: 135px;
-    height: 173px;
+    height: 150px;
     left: 0px;
     top: 0px;
     background: #FFFFFF;
@@ -77,7 +78,7 @@
 .io__active__option {
     position: relative;
     width: 135px;
-    height: 173px;
+    height: 150px;
     left: 0px;
     top: 0px;
     background: #FFFFFF;
@@ -113,17 +114,93 @@
 .io__nonactive__icon {
     width: 28px;
     position: absolute;
-    bottom: 30px;
+    bottom: 10px;
     right: 39%;
 }
 .io__active__icon {
     width: 28px;
     position: absolute;
-    bottom: 30px;
+    bottom: 10px;
     right: 39%;
 }
 .io__text {
     position: absolute;
-    top: 50%;
+    top: 55%;
     right: 39%;
+}
+.io__back__arrow {
+    color: #E42346;
+}
+.io__back__arrow svg{
+    margin-top: 2px;
+    margin-right: 10px;
+    color: #E42346;
+}
+.io__back {
+    display: flex;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: #E42346;
+}
+.io__activate__enable {
+    width: 65%;
+    background-color: #E42346 !important;
+    color: #FFFFFF !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.2px;
+    color: #FFFFFF;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
+    padding: 8px 32px 8px 32px !important;
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+}
+.io__width__100 {
+    width: 100% !important;
+}
+.io__activate__disable {
+    width: 65%;
+    background-color: #DBDDE0 !important;
+    color: #A0A4A8 !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.2px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 8px;
+    padding: 8px 32px 8px 32px !important;
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+    pointer-events: none;
+}
+.io__margin__32 {
+    margin-bottom: 32px;
+}
+.io__resend__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A0A4A8;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
+}
+.io__width__45 {
+    width: 45%;
 }
