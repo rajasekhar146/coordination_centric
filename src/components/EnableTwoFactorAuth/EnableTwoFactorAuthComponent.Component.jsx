@@ -88,7 +88,11 @@ const EnableTwoFactorAuth = () => {
                         type="submit"
                         className={activeTab ? 'io__activate__enable' : 'io__activate__disable'}
                         onClick={() => {
-                            history.push(`/verification/${activeTab}`)
+                            if(activeTab === 'app') {
+                                history.push('/verificationbyapp')
+                            } else {
+                                history.push(`/verification/${activeTab}`)
+                            }
                         }}
                     >
                         Continue

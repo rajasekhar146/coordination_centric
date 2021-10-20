@@ -23,6 +23,7 @@ import SAASAgreement from './pages/saasagreement'
 import EULAAgreement from './pages/eula-agreement'
 import EnableTwoFactorAuth from './pages/enable__twofactor__auth'
 import VerificationCodePage from './pages/verificationcode'
+import VerificationCodeByApp from './pages/verificationcode__by__app'
 import BankInformationComponent from './components/Organization/BankInformation/BankInformation.Component'
 
 class Routes extends Component {
@@ -46,6 +47,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />
           <DefaultLayoutComponentRoute path="/verification/:method" component={VerificationCodePage} />
+          <DefaultLayoutComponentRoute path="/verificationbyapp" component={VerificationCodeByApp} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
