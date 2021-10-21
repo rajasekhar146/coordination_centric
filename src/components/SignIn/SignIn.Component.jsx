@@ -22,6 +22,7 @@ import { get } from 'lodash'
 const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [IsValidUser, setIsValidUser] = useState(true)
 
   const defaultValues = {
     email: 'superadmin@yopmail.com',
@@ -37,7 +38,6 @@ const SignInComponent = () => {
 
   console.log(errors)
 
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   }
@@ -52,6 +52,7 @@ const SignInComponent = () => {
       user => {
         console.log(user)
         const userVerified = get(user, ['data', 'data', 'userVerified'], false)
+        setIsValidUser(true)
         // if (userVerified) {
         //     history.push('/userverification')
         // } else {
@@ -60,10 +61,10 @@ const SignInComponent = () => {
         history.push('/dashboard')
         //const { from } = this.props.location.state || { from: { pathname: "/" } };
         // this.props.history.push(from);
-
       },
       error => {
         console.log(error)
+        setIsValidUser(false)
         //setSubmitting(false);
         //setStatus(error);
         //history.push('/dashboard');
@@ -89,7 +90,6 @@ const SignInComponent = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-
         <div className="si__right__div">
           <div className="si__right__content">
             <div className="si__right__title">Welcome to CoordiNation Centric!</div>
@@ -110,7 +110,6 @@ const SignInComponent = () => {
                 })}
                 margin="normal"
                 placeholder="Email"
-                defaultValue="superadmin@yopmail.com"
                 error={errors.email && isSubmit}
                 InputProps={{ className: 'si__text__box' }}
               />
@@ -128,7 +127,6 @@ const SignInComponent = () => {
                   })}
                   type={showPassword ? 'text' : 'password'}
                   onChange={handleChange()}
-                  defaultValue="Augusta@12"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -161,7 +159,7 @@ const SignInComponent = () => {
               </Button>{' '}
             </div>
             <div className="si__forgot__link"> Forgot Password? </div>
-
+            {!IsValidUser && <p className="ac__required">User does not exists</p>}
           </div>
         </div>
       </form>

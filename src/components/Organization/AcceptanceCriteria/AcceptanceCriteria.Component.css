@@ -84,9 +84,10 @@
     width: 290px !important;
     left: 0px;
     top: 0px;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     /* padding: 8px !important; */
+    height: 45px;
 }
 
 .ac__label {
@@ -127,6 +128,8 @@
 
 .ac__required {
     color: red;
+    font-size: 12px;
+    font-family: Lato;
 }
 
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {

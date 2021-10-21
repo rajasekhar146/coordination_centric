@@ -4,11 +4,12 @@ import headerImage from '../../../assets/images/header_image.png'
 import SignupCompletedImage from '../../../assets/images/signup_completed.png'
 import Button from '@mui/material/Button'
 import './CompleteSignUp.Component.css'
+import history from '../../../history'
 
 export const CompleteSignupComponent = () => {
-
-
-
+  const handleDone = () => {
+    history.push('/dashboard')
+  }
   return (
     <div className="ob__main__section">
       <div className="ob__align__center">
@@ -46,7 +47,9 @@ export const CompleteSignupComponent = () => {
 
                     <div className="ac__row">
                       <div className="ac__column cs__align__center">
-                        <Button className="ac__next__btn">Done</Button>
+                        <Button className="ac__next__btn" onClick={handleDone}>
+                          Done
+                        </Button>
                       </div>
                     </div>
                   </div>

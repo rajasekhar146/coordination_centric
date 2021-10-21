@@ -62,7 +62,7 @@ const menuOptions = [
   },
   {
     name: 'Users',
-    link: '/users',
+    link: '/acceptance-criteria',
     icon: require('../../assets/icons/users.png').default,
   },
   {
@@ -94,7 +94,7 @@ const menuOptions = [
 
 const LeftMenuComponent = () => {
   const classes = useStyles()
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   const handleClick = (pageURL, index) => {
     //setOpen(!open);
@@ -108,11 +108,7 @@ const LeftMenuComponent = () => {
       <List>
         {menuOptions.map((m, index) => {
           return (
-            <ListItem
-              button
-              selected={selectedIndex == index}
-              onClick={event => handleClick(`${m.link}`, `${index}`)}
-            >
+            <ListItem button selected={selectedIndex == index} onClick={event => handleClick(`${m.link}`, `${index}`)}>
               <ListItemIcon>
                 <img src={m.icon} className="lm__menu__icon" />
               </ListItemIcon>

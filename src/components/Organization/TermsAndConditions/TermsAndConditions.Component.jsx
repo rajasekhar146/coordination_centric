@@ -24,22 +24,18 @@ const TermsAndConditionsComponent = () => {
   const [activeStep, setActiveStep] = React.useState(3)
 
   const handleNext = async () => {
-
     const updateFacility = JSON.parse(localStorage.getItem('facility'))
 
     var response = await organizationService.signupOrganization(updateFacility)
 
-    if(response?.data?.data?.success_code === 200) {
-        localStorage.removeItem('facility')
-        history.push('/signup-completed')
-    }
-    else {
+    if (response?.data?.data?.success_code === 200) {
+      localStorage.removeItem('facility')
+      history.push('/signup-completed')
+    } else {
       history.push('/signup-completed')
     }
-    
-    
+
     console.log('response', response)
-    
   }
 
   const handleBack = () => {

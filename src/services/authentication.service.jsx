@@ -26,7 +26,7 @@ export const authenticationService = {
 }
 
 function updateStore(v) {
-  qrImgSubject.next(v);
+  qrImgSubject.next(v)
 }
 
 function login(username, password) {
@@ -88,7 +88,7 @@ function twoFactorByAppAuth(email) {
       //.then(handleResponse)
       .then(data => {
         updateStore(data.data)
-        return data 
+        return data
       })
   )
 }
@@ -120,4 +120,3 @@ function twoFactorAppAuthVerification(data) {
       })
   )
 }
-

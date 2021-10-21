@@ -36,13 +36,10 @@ import OrganisationItem from './OrganisationItem'
 
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component'
 import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
 import { makeStyles } from '@material-ui/core/styles'
-
-
-
 
 const style = {
   position: 'absolute',
@@ -87,30 +84,30 @@ const rejectModelStyle = {
 const useStyles = makeStyles(theme => ({
   menuItem: {
     fontSize: 14,
-    borderBottom: "1px solid #E8E8E8",
+    borderBottom: '1px solid #E8E8E8',
     paddingTop: 5,
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   approved: {
-    color: "#03B575"
+    color: '#03B575',
   },
   reject: {
-    color: "#E74F48"
+    color: '#E74F48',
   },
   defaultStyle: {
-    color: "#25282B"
+    color: '#25282B',
   },
   menu: {
     padding: 0,
-    position: "fixed",
+    position: 'fixed',
     zIndex: 1300,
     right: 0,
     left: -75,
     top: 0,
     bottom: 0,
     paddingTop: 0,
-    paddingBottom: 0
-  }
+    paddingBottom: 0,
+  },
 }))
 
 const options1 = [
@@ -177,7 +174,6 @@ const menuList = [
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-
     ],
   },
   {
@@ -212,7 +208,6 @@ const menuList = [
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
     ],
-
   },
 
   {
@@ -229,15 +224,6 @@ const menuList = [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
     ],
-
-  },
-  {
-    menu: 'unverified',
-    options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
-    ],
-
   },
   {
     menu: 'pending_acceptance',
@@ -247,7 +233,6 @@ const menuList = [
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', icon: require('../../assets/icons/suspend.png').default },
     ],
-
   },
 ]
 
@@ -302,13 +287,12 @@ const columns = [
 ]
 
 const colorcodes = {
-  invited: "#2E90FA",
-  pending_verification: "#F79009",
-  active: "#12B76A",
-  pending_acceptance: "#7A5AF8",
-  declined: "#F04438",
-  inactive: "#A0A4A8",
-  unverified: "#4E5BA6"
+  invited: '#2E90FA',
+  pending_verification: '#F79009',
+  active: '#12B76A',
+  pending_acceptance: '#7A5AF8',
+  declined: '#F04438',
+  inactive: '#A0A4A8',
 }
 
 const createData = (name, code, population, size) => {
@@ -368,27 +352,27 @@ const OrganizationDashboardComponent = () => {
   //   return () => { }
   // }, [])
 
-  const getTextColor = (text) => {
+  const getTextColor = text => {
     switch (text) {
       case 'Approve':
         return 'approved'
-        break;
+        break
       case 'Reject':
         return 'reject'
-        break;
+        break
       default:
-        return 'defaultStyle';
+        return 'defaultStyle'
     }
   }
 
   useEffect(() => {
     getOrganization()
-    return () => { }
+    return () => {}
   }, [skip])
 
   const getOrganization = async () => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10)
+    const allOrganizations = await organizationService.allOrganization(skip, 10, '')
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = allOrganizations?.totalCount
@@ -413,8 +397,6 @@ const OrganizationDashboardComponent = () => {
     )
   }
 
-  
-
   // const handleChangePage = async (event, newPage) => {
   //   setPage(newPage)
   //   const skipRecords = (newPage - 1) * 10
@@ -433,8 +415,6 @@ const OrganizationDashboardComponent = () => {
     setPage(0)
   }
 
- 
-
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
     setAddOrganizationClicked(false)
@@ -452,7 +432,6 @@ const OrganizationDashboardComponent = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  
 
   const handlePageChange = (event, value) => {
     setPage(value)
@@ -462,6 +441,27 @@ const OrganizationDashboardComponent = () => {
   const loadMore = () => {
     setSkip(skip + 10)
     setIsLoading(true)
+  }
+
+  const handleSearch = async event => {
+    var searchText = event.target.value
+    var allOrganizations = []
+    console.log('searchText', searchText)
+    if (searchText.length > 0) {
+      allOrganizations = await organizationService.allOrganization(0, 10, searchText)
+    } else {
+      allOrganizations = await organizationService.allOrganization(0, 10, '')
+    }
+
+    setPage(1)
+    const skipRecords = 0
+    console.log('skipRecords', skipRecords)
+    console.log('skipRecords >> Records', allOrganizations)
+    if (allOrganizations != null) {
+      const totalData = allOrganizations?.totalData
+      console.log('skipRecords >> totalData', totalData)
+      setOrganizations(totalData)
+    }
   }
 
   return (
@@ -481,6 +481,7 @@ const OrganizationDashboardComponent = () => {
           <TextField
             margin="normal"
             placeholder="Search"
+            onChange={e => handleSearch(e)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -532,7 +533,6 @@ const OrganizationDashboardComponent = () => {
 
       <div className="od__row">
         <div className="od__table__org">
-
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
             <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
               <InfiniteScroll
@@ -552,7 +552,7 @@ const OrganizationDashboardComponent = () => {
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody >
+                  <TableBody>
                     {rows.map((row, index) => (
                       <OrganisationItem
                         row={row}
@@ -572,12 +572,10 @@ const OrganizationDashboardComponent = () => {
                       />
                     ))}
                   </TableBody>
-
                 </Table>
               </InfiniteScroll>
             </TableContainer>
           </Paper>
-
         </div>
       </div>
       {/* <div className="od__row">
@@ -603,10 +601,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={rejectModelStyle}>
-          <RejectOrganization
-            clickCloseButton={closeApproveModel}
-            selectedOrg={selectedOrg}
-          />
+          <RejectOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
         </Box>
       </Modal>
       <Modal
@@ -616,11 +611,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <AprroveOrganization
-            clickCloseButton={closeApproveModel}
-            selectedOrg={selectedOrg}
-          />
-
+          <AprroveOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
         </Box>
       </Modal>
     </div>

@@ -14,11 +14,16 @@ export const organizationService = {
   signupOrganization,
 }
 
-function allOrganization(skip, limit) {
+function allOrganization(skip, limit, searchText) {
   console.log('axiosConfig', axiosConfig)
+  console.log('searchText', searchText)
+  var url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
+  if (searchText != null) {
+    url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`
+  }
   return (
     axios
-      .get(`${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`, axiosConfig)
+      .get(url, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         if (data?.data?.data) {
@@ -55,7 +60,6 @@ function updateOrganization(id, status) {
       })
   )
 }
-
 
 function signupOrganization(bodyMsg) {
   console.log('axiosConfig', axiosConfig)

@@ -18,6 +18,8 @@ import jsPDF from 'jspdf'
 import * as htmlToImage from 'html-to-image'
 import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
+import html2canvas from 'html2canvas'
+
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
 const ServiceLevelAgreementComponent = props => {
@@ -30,7 +32,10 @@ const ServiceLevelAgreementComponent = props => {
 
   const [activeStep, setActiveStep] = React.useState(1)
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    let domElement = document.getElementById('my-node')
+    html2canvas(domElement).then(canvas => console.log(canvas.toDataURL()))
+
     var updatedFacility = {
       ...facility,
       business_certificate: 'www.servicelevelagreement.com',
@@ -80,7 +85,7 @@ const ServiceLevelAgreementComponent = props => {
     setFacility(updateFacility)
 
     const planType = localStorage.getItem('plan_type')
-    
+
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
