@@ -135,6 +135,11 @@
     top: 55%;
     right: 39%;
 }
+.io__text_email {
+    position: absolute;
+    top: 55%;
+    right: 36%;
+}
 .io__back__arrow {
     color: #E42346;
 }
@@ -277,7 +282,7 @@
 .io__secret__key__value {
     background: #C11B39;
     border-radius: 8px;
-    width: 332px;
+    width: 82%;
     height: 48px;
     right: 649px;
     bottom: 236px;
@@ -385,8 +390,15 @@
     margin-bottom: 30px;
 }
 .io__goto_dashboard{
-    width: 45%;
-    border: 1px solid #E42346 !important;
     color: #E42346 !important;
-    background-color: #FFFFFF !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    border: 1px solid #E42346 !important;
+}
+.io__mb20 {
+    margin-bottom: 15px;
 }

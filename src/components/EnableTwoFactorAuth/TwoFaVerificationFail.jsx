@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import history from '../../history'
 import CClogo from '../../assets/icons/cc_logo.png'
-import OopsError from '../../assets/icons/oop_error.png'
+import OopsError from '../../assets/icons/oops_error.png'
 import Button from '@mui/material/Button'
 
 

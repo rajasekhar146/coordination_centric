@@ -35,7 +35,7 @@ const EnableTwoFactorAuth = () => {
     return (
         <div className="io__two_fa">
             <div className="io__two_justify">
-                <div>
+                <div className="io__mb20">
                     <label className="header__label">
                         Enable Two Factor Authentication
                     </label>
@@ -82,7 +82,7 @@ const EnableTwoFactorAuth = () => {
                         >
                             <img src={MailIcon} alt="email" />
                         </div>
-                        <label className="io__text">Email</label>
+                        <label className="io__text_email">Email</label>
                         <span className={activeTab === 2 ? 'io__active__icon' : 'io__nonactive__icon'}>
                             <Brightness1OutlinedIcon sx={{ color: (activeTab === "email") ? "#E42346" : "#DCDCDC" }} />
                         </span>
