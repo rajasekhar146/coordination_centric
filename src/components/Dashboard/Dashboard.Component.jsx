@@ -104,9 +104,9 @@ const DashboardComponent = () => {
   const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
 
   useEffect(() => {
-   
+    if (!is_verified) {
       setIsOpen2FA(true)
-   
+    }
   }, [])
 
   const close2FaModel = () => {
