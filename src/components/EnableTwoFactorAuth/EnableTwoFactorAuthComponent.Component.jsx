@@ -7,9 +7,30 @@ import Button from '@mui/material/Button'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined';
 import history from '../../history'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import get from 'lodash.get'
+import { authenticationService } from '../../services'
+
 
 const EnableTwoFactorAuth = () => {
     const [activeTab, setActiveTab] = useState(null)
+    const currentUser = authenticationService.currentUserValue
+    const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+
+    const handleSubmit = () => {
+        if (activeTab === 'email') {
+            const res = authenticationService.twoFactorEmailAuth(currentUserEmail)
+            res.then(() => {
+                history.push(`/verification/${activeTab}`)
+            })
+        }
+    }
+    const handle2FaByApp = () => {
+        const res = authenticationService.twoFactorByAppAuth(currentUserEmail)
+        res.then((data) => {
+            history.push('/verificationbyapp')
+        })
+
+    }
 
     return (
         <div className="io__two_fa">
@@ -88,10 +109,10 @@ const EnableTwoFactorAuth = () => {
                         type="submit"
                         className={activeTab ? 'io__activate__enable' : 'io__activate__disable'}
                         onClick={() => {
-                            if(activeTab === 'app') {
-                                history.push('/verificationbyapp')
+                            if (activeTab === 'app') {
+                                handle2FaByApp()
                             } else {
-                                history.push(`/verification/${activeTab}`)
+                                handleSubmit(activeTab)
                             }
                         }}
                     >

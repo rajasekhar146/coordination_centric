@@ -8,6 +8,9 @@ import Highcharts from 'highcharts'
 import TwoFaModel from './TwoFaModel'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
+
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -97,9 +100,13 @@ const twoFaModelStyle = {
 
 const DashboardComponent = () => {
   const [isOpen2FA, setIsOpen2FA] = useState(false)
+  const currentUser = authenticationService.currentUserValue
+  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
 
   useEffect(() => {
-    setIsOpen2FA(true)
+    if (is_verified) {
+      setIsOpen2FA(true)
+    }
   }, [])
 
   const close2FaModel = () => {

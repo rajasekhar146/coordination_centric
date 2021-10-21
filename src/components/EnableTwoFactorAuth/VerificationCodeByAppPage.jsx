@@ -10,6 +10,8 @@ import AppStoreIcon from '../../assets/icons/app__store.png'
 import GooglePlay from '../../assets/icons/google__play.png'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import { authenticationService } from '../../services'
+import { get } from 'lodash'
 
 
 const useStyles = makeStyles(theme => ({
@@ -34,7 +36,24 @@ const useStyles = makeStyles(theme => ({
 const VerificationCodeByAppPage = (props) => {
     const classes = useStyles()
     const [verificationCode, setVerificationCode] = useState('')
+    const googlePlayURl = 'https://play.google.com/store/search?q=authy&c=apps&hl=en_IN&gl=US'
+    const qrImg = authenticationService.qrImgvalue
+    const currentUser = authenticationService.currentUserValue
+    const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
 
+    const handleSubmit = () => {
+        const dataToSend = {}
+        dataToSend.email = currentUserEmail;
+        dataToSend.token = verificationCode;
+        dataToSend.encoding = 'base32';
+        const res = authenticationService.twoFactorAppAuthVerification(dataToSend)
+        res.then(() => {
+            history.push(`/2faverificationsuccess`)
+        }).catch(() => {
+            history.push(`/2faverificationfail`)
+        })
+    }
+    
     return (
         <div className="io__two_fa__app">
             <div>
@@ -56,7 +75,9 @@ const VerificationCodeByAppPage = (props) => {
                             </label>
                         </div>
                         <div>
-                            <img className="io__google__play" src={GooglePlay} alt="key" />
+                            <a href={googlePlayURl} target="_blank">
+                                <img className="io__google__play" src={GooglePlay} alt="key" />
+                            </a>
                             <img src={AppStoreIcon} alt="key" />
 
                         </div>
@@ -98,9 +119,11 @@ const VerificationCodeByAppPage = (props) => {
                 </div>
                 <div className="io__qr_scanner">
                     <label className="io__scan__label">Scan this QR code</label>
-                    <div className="io__qr_code">
-                        <QRCode size={141} value="hey" />
+
+                    <div className="io__qr_code" dangerouslySetInnerHTML={{ __html: qrImg }}>
+
                     </div>
+
                 </div>
                 <div className="io__tf__app">
                     <div className="io_step">
@@ -130,9 +153,9 @@ const VerificationCodeByAppPage = (props) => {
                             />
                             <Button
                                 onClick={() => {
-
+                                    handleSubmit()
                                 }}
-                                className={verificationCode ? 'io__activate__enable io__width40 io__margin10' : 'io__activate__disable io__width40 io__margin10'}>
+                                className={verificationCode ? 'io__activate__enable io__width40 io__margin25' : 'io__activate__disable io__width40 io__margin25'}>
                                 Activate 2FA
                             </Button>
                         </div>

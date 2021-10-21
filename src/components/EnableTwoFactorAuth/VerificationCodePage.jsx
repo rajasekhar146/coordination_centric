@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import {
     useParams
 } from "react-router-dom";
+import { authenticationService } from '../../services'
+
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -36,16 +38,24 @@ const VerificationCodePage = (props) => {
     const getLabel = () => {
         switch (method) {
             case 'sms':
-              return 'Check your phone and enter the verification code we just sent you.'
-              break;
+                return 'Check your phone and enter the verification code we just sent you.'
+                break;
             case 'email':
-              return 'Check your email and enter the verification code we just sent you.'
-              break;
+                return 'Check your email and enter the verification code we just sent you.'
+                break;
             default:
-              return 'defaultStyle';
-          }
+                return 'defaultStyle';
+        }
     }
 
+    const handleSubmit = () => {
+        const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
+        res.then(() => {
+            history.push(`/2faverificationsuccess`)
+        }).catch(() => {
+            history.push(`/2faverificationfail`)
+        })
+    }
 
     return (
         <div className="io__two_fa">
@@ -75,11 +85,11 @@ const VerificationCodePage = (props) => {
                     />
                 </div>
                 <div className="io__two_justify io__margin__32 io__width__100">
-                    <Button 
-                    onClick={() => {
-
-                    }}
-                    className={verificationCode ? 'io__activate__enable' : 'io__activate__disable'}>
+                    <Button
+                        onClick={() => {
+                            handleSubmit()
+                        }}
+                        className={verificationCode ? 'io__activate__enable' : 'io__activate__disable'}>
                         Activate 2FA
                     </Button>
                 </div>
