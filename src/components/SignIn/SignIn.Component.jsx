@@ -44,7 +44,7 @@ const SignInComponent = () => {
       user => {
         console.log(user)
         const userVerified = get(user, ['data', 'data', 'userVerified'], false)
-        if (!userVerified) {
+        if (userVerified) {
             history.push('/userverification')
         } else {
           history.push('/dashboard')

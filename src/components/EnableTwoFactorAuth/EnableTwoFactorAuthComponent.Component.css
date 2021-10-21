@@ -390,10 +390,14 @@
     margin-bottom: 30px;
 }
 .io__goto_dashboard{
-    width: 45%;
-    border: 1px solid #E42346 !important;
     color: #E42346 !important;
-    background-color: #FFFFFF !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    border: 1px solid #E42346 !important;
 }
 .io__mb20 {
     margin-bottom: 15px;
