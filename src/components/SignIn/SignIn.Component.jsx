@@ -44,11 +44,12 @@ const SignInComponent = () => {
       user => {
         console.log(user)
         const userVerified = get(user, ['data', 'data', 'userVerified'], false)
-        if (!userVerified) {
-            history.push('/userverification')
-        } else {
-          history.push('/dashboard')
-        }
+        // if (userVerified) {
+        //     history.push('/userverification')
+        // } else {
+        //   history.push('/dashboard')
+        // }
+        history.push('/dashboard')
         //const { from } = this.props.location.state || { from: { pathname: "/" } };
         // this.props.history.push(from);
         
