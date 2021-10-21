@@ -209,6 +209,21 @@
     width: fit-content;
     padding: 2px 8px  2px 6px !important;
 }
+.od__unverified__status {
+    background-color: #F2F4FF !important;
+    border-radius: 16px;
+    text-transform: capitalize;
+    line-height: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    width: fit-content;
+    padding: 2px 8px  2px 6px !important;
+}
 
 
 
@@ -360,6 +375,10 @@
     color: #B42318;
 }
 
+.od__unverified__label {
+    padding-left: 6px;
+    color: #363F72;
+}
 .od__pending_verification__label {
     padding-left: 6px;
     color: #B54708;

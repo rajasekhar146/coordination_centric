@@ -30,28 +30,37 @@ const SignInComponent = () => {
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
-  } = useForm(defaultValues)
+    watch,
+  } = useForm()
+
+  console.log(errors)
+
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleLogin = () => {
+  const onSubmit = () => {
     //history.push('/dashboard');
     setIsSubmit(true)
-    authenticationService.login('superadmin@yopmail.com', 'Augusta@12').then(
+    defaultValues.email = watch('email')
+    defaultValues.password = watch('password')
+    // console.log(defaultValues);
+    authenticationService.login(defaultValues.email, defaultValues.password).then(
       user => {
         console.log(user)
         const userVerified = get(user, ['data', 'data', 'userVerified'], false)
-        if (!userVerified) {
-            history.push('/userverification')
-        } else {
-          history.push('/dashboard')
-        }
+        // if (userVerified) {
+        //     history.push('/userverification')
+        // } else {
+        //   history.push('/dashboard')
+        // }
+        history.push('/dashboard')
         //const { from } = this.props.location.state || { from: { pathname: "/" } };
         // this.props.history.push(from);
-        
+
       },
       error => {
         console.log(error)
@@ -79,70 +88,83 @@ const SignInComponent = () => {
           <img src={LeftImageIcon} alt="Login Left Logo" />
         </div>
       </div>
-      <div className="si__right__div">
-        <div className="si__right__content">
-          <div className="si__right__title">Welcome to CoordiNation Centric!</div>
-          <div className="si__right__subtitle">Enter the credentials provided to access our platform</div>
-          <div className="si__right__label">
-            Email &nbsp;<span className="ac__required">*</span>
-          </div>
-          <div>
-            <TextField
-              // {...useInput('facilityName', { isRequired: true })}
-              {...register('email', { required: true })}
-              margin="normal"
-              placeholder="Email"
-              defaultValue="superadmin@yopmail.com"
-              error={errors.email && isSubmit}
-              InputProps={{ className: 'si__text__box' }}
-            />
-            {errors.email && <p className="ac__required">Email is required.</p>}
-          </div>
-          <div className="si__right__label">
-            Password &nbsp;<span className="ac__required">*</span>
-          </div>
-          <div>
-            <FormControl>
-              <OutlinedInput
-                className="si__text__box"
-                {...register('password', { required: true })}
-                type={showPassword ? 'text' : 'password'}
-                onChange={handleChange()}
-                defaultValue="Augusta@12"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      <div className="si__pwd__show">Show</div>
-                    </IconButton>
-                  </InputAdornment>
-                }
+      <form onSubmit={handleSubmit(onSubmit)}>
+
+        <div className="si__right__div">
+          <div className="si__right__content">
+            <div className="si__right__title">Welcome to CoordiNation Centric!</div>
+            <div className="si__right__subtitle">Enter the credentials provided to access our platform</div>
+            <div className="si__right__label">
+              Email &nbsp;<span className="ac__required">*</span>
+            </div>
+            <div>
+              <TextField
+                // {...useInput('facilityName', { isRequired: true })}
+                {...register('email', {
+                  required: 'Email is required.',
+                  pattern: {
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: 'Please enter a valid email',
+                  },
+                })}
+                margin="normal"
+                placeholder="Email"
+                defaultValue="superadmin@yopmail.com"
+                error={errors.email && isSubmit}
+                InputProps={{ className: 'si__text__box' }}
               />
-            </FormControl>
-            {errors.password && <p className="ac__required">Password is required.</p>}
-          </div>
-          <div>
-            {' '}
-            <FormControlLabel
-              control={<Checkbox defaultChecked />}
-              className="si__check__box__text"
-              label="Keep me signed in?"
-            />{' '}
-          </div>
-          <div>
-            {' '}
-            <Button className="si__login__btn" onClick={handleLogin}>
+              {errors.email && <p className="ac__required">{errors.email.message}</p>}
+            </div>
+            <div className="si__right__label">
+              Password &nbsp;<span className="ac__required">*</span>
+            </div>
+            <div>
+              <FormControl>
+                <OutlinedInput
+                  className="si__text__box"
+                  {...register('password', {
+                    required: 'Password is required.',
+                  })}
+                  type={showPassword ? 'text' : 'password'}
+                  onChange={handleChange()}
+                  defaultValue="Augusta@12"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        <div className="si__pwd__show">Show</div>
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              {errors.password && <p className="ac__required">Password is required.</p>}
+            </div>
+            <div>
               {' '}
-              Login{' '}
-            </Button>{' '}
+              <FormControlLabel
+                control={<Checkbox defaultChecked />}
+                className="si__check__box__text"
+                label="Keep me signed in?"
+              />{' '}
+            </div>
+            <div>
+              {' '}
+              <Button type="submit" className="si__login__btn">
+                {' '}
+                Login{' '}
+              </Button>{' '}
+            </div>
+            <div className="si__forgot__link"> Forgot Password? </div>
+
           </div>
-          <div className="si__forgot__link"> Forgot Password? </div>
         </div>
-      </div>
+      </form>
     </div>
   )
 }

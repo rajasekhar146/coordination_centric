@@ -232,6 +232,14 @@ const menuList = [
 
   },
   {
+    menu: 'unverified',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
+    ],
+
+  },
+  {
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
@@ -299,7 +307,8 @@ const colorcodes = {
   active: "#12B76A",
   pending_acceptance: "#7A5AF8",
   declined: "#F04438",
-  inactive: "#A0A4A8"
+  inactive: "#A0A4A8",
+  unverified: "#4E5BA6"
 }
 
 const createData = (name, code, population, size) => {
