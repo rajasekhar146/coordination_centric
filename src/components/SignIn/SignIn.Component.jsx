@@ -17,6 +17,7 @@ import LeftImageIcon from '../../assets/images/left_image_logo.png'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
+import { get } from 'lodash'
 
 const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -41,9 +42,16 @@ const SignInComponent = () => {
     setIsSubmit(true)
     authenticationService.login('superadmin@yopmail.com', 'Augusta@12').then(
       user => {
+        console.log(user)
+        const userVerified = get(user, ['data', 'data', 'userVerified'], false)
+        if (!userVerified) {
+            history.push('/userverification')
+        } else {
+          history.push('/dashboard')
+        }
         //const { from } = this.props.location.state || { from: { pathname: "/" } };
         // this.props.history.push(from);
-        history.push('/dashboard')
+        
       },
       error => {
         console.log(error)

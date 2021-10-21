@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './Dashboard.Component.css'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ReactHighcharts from 'highcharts-react-official'
 import Highcharts from 'highcharts'
+import TwoFaModel from './TwoFaModel'
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
+
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -78,7 +84,37 @@ const options = {
 
 }
 
+const twoFaModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 360,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
 const DashboardComponent = () => {
+  const [isOpen2FA, setIsOpen2FA] = useState(false)
+  const currentUser = authenticationService.currentUserValue
+  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
+
+  useEffect(() => {
+    if (is_verified) {
+      setIsOpen2FA(true)
+    }
+  }, [])
+
+  const close2FaModel = () => {
+    setIsOpen2FA(false)
+  }
+
+
+
   return (
     <div className="db__main__div">
       <div className="io__flex__spcebetween">
@@ -163,7 +199,18 @@ const DashboardComponent = () => {
           </CardContent>
         </Card>
       </div>
-
+      <Modal
+        open={isOpen2FA}
+        // onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={twoFaModelStyle}>
+          <TwoFaModel
+            clickCloseButton={close2FaModel}
+          />
+        </Box>
+      </Modal>
     </div>
   )
 }
