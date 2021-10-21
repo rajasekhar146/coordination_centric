@@ -1,10 +1,10 @@
 import React from 'react'
-import SignupComponent from '../components/Organization/Signup/Signup.Component'
+import { CompleteSignupComponent } from '../components/Organization/CompleteSignUp/CompleteSignup.Component'
 
 const SignupComplete = () => {
   return (
     <div>
-      <SignupComponent />
+      <CompleteSignupComponent />
     </div>
   )
 }

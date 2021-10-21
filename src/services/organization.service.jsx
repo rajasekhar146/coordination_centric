@@ -10,7 +10,8 @@ const axiosConfig = {
 export const organizationService = {
   allOrganization,
   addOrganization,
-  updateOrganization
+  updateOrganization,
+  signupOrganization,
 }
 
 function allOrganization(skip, limit) {
@@ -48,6 +49,19 @@ function updateOrganization(id, status) {
   return (
     axios
       .put(`${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+
+function signupOrganization(bodyMsg) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/facilityList/Signup`, bodyMsg, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

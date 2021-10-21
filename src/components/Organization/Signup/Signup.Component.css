@@ -1,8 +1,6 @@
 .su__main__div {
-    width: 100vw;
-    /* height: 100vh; */
-    display: flex;
-    flex-direction: row;
+    width: 100%;
+    /* padding: 100px; */
 }
 
 .su__left__div {
@@ -86,4 +84,282 @@
     letter-spacing: 0.1px;
 
     color: #696F79;
+}
+
+.su__row {
+    width: 100%;
+    display: flex;
+}
+
+
+
+.su__title {
+    /* H2 - bold 40 (46, 0.2px) */
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 46px;
+
+    /* identical to box height, or 115% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    /* Neutral/Black */
+    color: #25282B;
+
+    text-align: center;
+    width: 100%;
+    margin: 50px 0px 20px 0px;
+}
+
+.su__sub__title {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+
+    /* identical to box height, or 130% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+
+    width: 100%;
+    text-align: center;
+    margin: 20px 0px 50px 0px;
+}
+
+.su__signup__plan {
+    width: 100%;
+    text-align: center;
+}
+
+.su__plan__section {
+    padding: 5% 5% 10% 15%;
+    width: 100%;
+    display: flex;
+}
+
+.su__column {
+    width: 30%;
+    padding: 40px 60px 20px 120px;
+}
+
+.su__plan__amount {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 46px;
+
+    /* identical to box height, or 115% */
+    letter-spacing: 0.2px;
+
+    color: #000000;
+
+    margin: 10px 10px 20px 0px;
+}
+
+.su__free__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 34px;
+
+    /* identical to box height, or 121% */
+    letter-spacing: 0.2px;
+
+    color: #000000;
+
+    margin: 10px 10px 20px 0px;
+}
+
+.su__free__content {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* or 150% */
+    letter-spacing: 0.1px;
+
+    color: #000000;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 12px 0px;
+
+    margin: 10px 10px 20px 0px;
+}
+
+.su__tick__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    color: #000000;
+
+
+}
+
+.su__tick__section {
+    margin-top: 8px;
+}
+
+.su__tick__section > div {
+    padding: 0px 20px 0px 0px;
+}
+
+.su__content{
+    margin-bottom: 25px;
+    line-height: 1.5em;
+}
+
+.su__choose__plan {
+    background: #E42346 !important;
+    border-radius: 50px !important;
+    width: 80%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    color: #FFFFFF !important;
+}
+
+.su__choose__plan__btn {
+    margin-top: 20px;
+}
+
+.su__plan__premium__amount {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 46px;
+
+    /* identical to box height, or 115% */
+    letter-spacing: 0.2px;
+
+    color: #FFFFFF;
+
+    margin: 10px 2px 20px 0px;
+}
+
+.su__plan__premium__amount__month {
+    font-family: Lato;
+    font-style: normal;
+    line-height: 80px;
+
+    /* identical to box height, or 115% */
+    letter-spacing: 0.2px;
+
+    color: #FFFFFF;
+}
+
+
+.su__premiun__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 34px;
+
+    /* identical to box height, or 121% */
+    letter-spacing: 0.2px;
+
+    color: #FFFFFF;
+
+    margin: 10px 10px 20px 0px;
+}
+
+.su__column__premium {
+    width: 22%;
+    padding: 40px 40px 40px 40px !important;
+    background: #E42346;
+    box-shadow: 0px 25px 35px rgba(0, 0, 0, 0.1);
+    border-radius: 26px;
+}
+
+.su__content__premium{
+    margin-bottom: 25px;
+    line-height: 1.5em;
+    color: #FFFFFF !important;
+}
+
+.su__tick__text__premium{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    color: #FFFFFF;
+
+}
+
+.su__choose__plan__premium {
+    background: #FFFFFF !important;
+    border-radius: 50px !important;
+    width: 100%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    color: #E42346 !important;
+}
+
+.su__select__plan {
+    text-align: center !important;
+    width: 100%;
+}
+
+.su__plan__button__active {
+    background: #E42346 !important;
+    border-radius: 30px !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+    width: 10%;
+}
+
+.su__plan__button {
+    width: 10%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 10px;
+    line-height: 12px;
+
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: 0.833333px;
+
+    color: #848199 !important;
 }

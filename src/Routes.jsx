@@ -27,6 +27,8 @@ import VerificationCodeByApp from './pages/verificationcode__by__app'
 import BankInformationComponent from './components/Organization/BankInformation/BankInformation.Component'
 import TwoFaVerificationFail from './pages/twofa_verification_fail'
 import TwoFaVerificationSuccess from './pages/twofa_verification_success'
+import TermsAndConditions from './pages/terms-and-conditions'
+import SignupComplete from './pages/signup-complete'
 
 class Routes extends Component {
   render() {
@@ -36,6 +38,7 @@ class Routes extends Component {
           <Route exact path="/">
             <Redirect to="/signin" />
           </Route>
+          <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
@@ -43,6 +46,8 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/acceptance-criteria" component={AcceptanceCriteria} />
           <DefaultLayoutComponentRoute path="/saas-agreement" component={SAASAgreement} />
           <DefaultLayoutComponentRoute path="/eula-agreement" component={EULAAgreement} />
+          <DefaultLayoutComponentRoute path="/terms-condition" component={TermsAndConditions} />
+          <DefaultLayoutComponentRoute path="/signup-completed" component={SignupComplete} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformationComponent} />
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />

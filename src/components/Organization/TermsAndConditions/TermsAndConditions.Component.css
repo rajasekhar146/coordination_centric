@@ -1,3 +1,7 @@
 .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked, .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
     color: #E42346 !important;
 }
+
+.tp__header__text {
+    margin-bottom: 30px !important;
+}
