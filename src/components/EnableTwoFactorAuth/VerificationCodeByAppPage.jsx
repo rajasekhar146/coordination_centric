@@ -37,9 +37,14 @@ const VerificationCodeByAppPage = (props) => {
     const classes = useStyles()
     const [verificationCode, setVerificationCode] = useState('')
     const googlePlayURl = 'https://play.google.com/store/search?q=authy&c=apps&hl=en_IN&gl=US'
-    const qrImg = authenticationService.qrImgvalue
+    const qrData = authenticationService.qrImgvalue
     const currentUser = authenticationService.currentUserValue
     const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+
+    const {
+        data,
+        secretKey
+    } = qrData
 
     const handleSubmit = () => {
         const dataToSend = {}
@@ -110,7 +115,7 @@ const VerificationCodeByAppPage = (props) => {
                             </label>
                             <div className="io__secret__key__value">
                                 <label>
-                                    sdgsdfsdfshdsdgdgs
+                                    {secretKey}
                                 </label>
                             </div>
                         </div>
@@ -120,7 +125,7 @@ const VerificationCodeByAppPage = (props) => {
                 <div className="io__qr_scanner">
                     <label className="io__scan__label">Scan this QR code</label>
 
-                    <div className="io__qr_code" dangerouslySetInnerHTML={{ __html: qrImg }}>
+                    <div className="io__qr_code" dangerouslySetInnerHTML={{ __html: data }}>
 
                     </div>
 
