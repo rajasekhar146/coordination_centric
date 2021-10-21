@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import './SAASAgreement.Component.css'
 import Box from '@mui/material/Box'
@@ -16,9 +16,10 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import jsPDF from 'jspdf'
 import * as htmlToImage from 'html-to-image'
+import downloadIcon from '../../../assets/icons/download_icon.png'
+import printIcon from '../../../assets/icons/print_icon.png'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
-
 
 const SAASAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
@@ -27,13 +28,31 @@ const SAASAgreementComponent = props => {
 
   const [activeStep, setActiveStep] = React.useState(1)
 
+  const [facility, setFacility] = useState({})
+
   const handleNext = () => {
-    history.push('/bank-info')
+    var updatedFacility = {
+      ...facility,
+      saas_certificate: 'www.saasagrement.com',
+    }
+
+    console.log('updatedFacility', JSON.stringify(updatedFacility))
+    setFacility(updatedFacility)
+
+    localStorage.setItem('facility', JSON.stringify(updatedFacility))
+
+    history.push('/eula-agreement')
   }
 
   const handleBack = () => {
-    history.push('/eula-agreement')
+    history.push('/service-level-agreement')
   }
+
+  useEffect(() => {
+    var updateFacility = JSON.parse(localStorage.getItem('facility'))
+    console.log('Service >> updateFacility', updateFacility)
+    setFacility(updateFacility)
+  }, [])
 
   const captureSignature = () => {
     setSignature({ signatureUrl: sigPad.getTrimmedCanvas().toDataURL('image/png') })
@@ -49,7 +68,7 @@ const SAASAgreementComponent = props => {
         console.log(dataUrl)
         //const pdf = new jsPDF();
         let pdf = new jsPDF('p', 'pt', 'letter')
-        pdf.addImage(dataUrl, 'PNG', 4, 4, 620, 770)
+        pdf.addImage(dataUrl, 'PNG', 20, 20, 580, 700)
         // const reader = new FileReader()
         // reader.readAsDataURL(pdf)
         pdf.save('download.pdf')
@@ -86,8 +105,18 @@ const SAASAgreementComponent = props => {
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
+                <div className="sla__download__print__section">
+                  <div className="sla__download__print">
+                    <div className="sla__download__text" onClick={onButtonClick}>
+                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                    </div>
+                    <div className="sla__download__text">
+                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
+                    </div>
+                  </div>
+                </div>
                 <div>
-                  <div  className="ac__form">
+                  <div className="ac__form">
                     <div id="my-node">
                       <div className="ac__row">
                         <div className="ac__column">
@@ -188,27 +217,21 @@ const SAASAgreementComponent = props => {
                     </div>
                     <div className="ac__gap__div"></div>
 
-                      <div className="ac__row">
-                        <div className="ac__column ac__left__action">
-                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                            Back
-                          </Button>
-                        </div>
-
-                        <div className="ac__column ac__right__action">
-                          <Button className="ac__next__btn" onClick={onButtonClick}>
-                            Download PDF
-                          </Button>{' '}
-                          &nbsp;&nbsp;&nbsp;
-                          <Button className="ac__next__btn" onClick={handleNext}>
-                            Save & Next
-                            <ArrowForwardIosRoundedIcon />
-                          </Button>
-                        </div>
+                    <div className="ac__row">
+                      <div className="ac__column ac__left__action">
+                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                          Back
+                        </Button>
                       </div>
-                  </div>
 
-                  
+                      <div className="ac__column ac__right__action">
+                        <Button className="ac__next__btn" onClick={handleNext}>
+                          Save & Next
+                          <ArrowForwardIosRoundedIcon />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="ac__gap__bottom__div"></div>
                 </div>

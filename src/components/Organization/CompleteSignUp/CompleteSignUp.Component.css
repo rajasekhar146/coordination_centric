@@ -1,0 +1,43 @@
+.cs__align__center {
+    width: 100% !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+
+.cs__signup__completed__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 34px;
+
+    /* identical to box height, or 131% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    color: #000000;
+    padding: 8px !important;
+}
+
+.cs__centent__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* or 150% */
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    color: #000000;
+    padding: 20px !important;
+}
+
+.cs__header__section {
+    padding: 0px !important;
+    text-align: center;
+    padding-top: 20px !important;
+}

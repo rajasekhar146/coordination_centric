@@ -16,17 +16,31 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import jsPDF from 'jspdf'
 import * as htmlToImage from 'html-to-image'
-
+import downloadIcon from '../../../assets/icons/download_icon.png'
+import printIcon from '../../../assets/icons/print_icon.png'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
 const ServiceLevelAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
+  const [processSteps, setProcessSteps] = React.useState(steps)
   var sigPad = {}
+
+  const [facility, setFacility] = useState({})
 
   const [activeStep, setActiveStep] = React.useState(1)
 
   const handleNext = () => {
+    var updatedFacility = {
+      ...facility,
+      business_certificate: 'www.servicelevelagreement.com',
+    }
+
+    console.log('updatedFacility', JSON.stringify(updatedFacility))
+    setFacility(updatedFacility)
+
+    localStorage.setItem('facility', JSON.stringify(updatedFacility))
+
     history.push('/saas-agreement')
   }
 
@@ -48,16 +62,31 @@ const ServiceLevelAgreementComponent = props => {
         console.log(dataUrl)
         //const pdf = new jsPDF();
         let pdf = new jsPDF('p', 'pt', 'letter')
-        pdf.addImage(dataUrl, 'PNG', 4, 4, 620, 770)
-        // const reader = new FileReader()
-        // reader.readAsDataURL(pdf)
+        //pdf.addImage(dataUrl, 'PNG', 20, 20, 580, 700)
+        pdf.addPage(dataUrl, 'PNG', 20, 20, 580, 700)
+        //const reader = new FileReader()
+        //reader.readAsDataURL(pdf)
         pdf.save('download.pdf')
-        // console.log('dataUrl', reader)
+        // console.log('dataUrl', reader.result)
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error)
       })
   }
+
+  useEffect(() => {
+    var updateFacility = JSON.parse(localStorage.getItem('facility'))
+    console.log('Service >> updateFacility', updateFacility)
+    setFacility(updateFacility)
+
+    const planType = localStorage.getItem('plan_type')
+    
+    if (planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
+  }, [])
 
   return (
     <div className="ob__main__section">
@@ -68,7 +97,7 @@ const ServiceLevelAgreementComponent = props => {
         <div className="ob__content__section">
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => {
+              {processSteps.map((label, index) => {
                 const stepProps = {}
                 const labelProps = {}
 
@@ -85,8 +114,18 @@ const ServiceLevelAgreementComponent = props => {
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
+                <div className="sla__download__print__section">
+                  <div className="sla__download__print">
+                    <div className="sla__download__text" onClick={onButtonClick}>
+                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                    </div>
+                    <div className="sla__download__text">
+                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
+                    </div>
+                  </div>
+                </div>
                 <div>
-                  <div  className="ac__form">
+                  <div className="ac__form">
                     <div id="my-node">
                       <div className="ac__row">
                         <div className="ac__column">
@@ -187,28 +226,22 @@ const ServiceLevelAgreementComponent = props => {
                     </div>
                     <div className="ac__gap__div"></div>
 
-                      <div className="ac__row">
-                        <div className="ac__column ac__left__action">
-                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                            Back
-                          </Button>
-                        </div>
-
-                        <div className="ac__column ac__right__action">
-                          <Button className="ac__next__btn" onClick={onButtonClick}>
-                            Download PDF
-                          </Button>{' '}
-                          &nbsp;&nbsp;&nbsp;
-                          <Button className="ac__next__btn" onClick={handleNext}>
-                            Save & Next
-                            <ArrowForwardIosRoundedIcon />
-                          </Button>
-                        </div>
+                    <div className="ac__row">
+                      <div className="ac__column ac__left__action">
+                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                          Back
+                        </Button>
                       </div>
-                      
+
+                      <div className="ac__column ac__right__action">
+                        <Button className="ac__next__btn" onClick={handleNext}>
+                          Save & Next
+                          <ArrowForwardIosRoundedIcon />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
 
-                  
                   <div className="ac__gap__bottom__div"></div>
                 </div>
               </div>
