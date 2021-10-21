@@ -25,7 +25,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: #FFFFFF
+    background-color: #FFFFFF;
+    position: relative;
+    right: -29%;
+    top: 20%;
 }
 
 .si__left__content {
