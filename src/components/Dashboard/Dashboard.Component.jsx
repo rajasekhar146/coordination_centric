@@ -71,8 +71,8 @@ const options = {
   },
   series: [
     {
-      name: 'John',
       data: [5, 3, 4, 7, 2, 5, 3, 4, 7, 2, 0, 2],
+      color: '#E42346'
     },
   ],
 }
