@@ -213,7 +213,8 @@
 .io_email_label {
     font-size: 16px;
     line-height: 24px;
-    font-weight: 600email
+    font-weight: 600;
+    margin-bottom: 30px;
 }
 .io_send_emailbtn {
     margin-top: 30px;
@@ -233,4 +234,17 @@
 }
 .io_trouble_label label{
     cursor: pointer;
+}
+.io_expire_label{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #CACCCF;
+}
+.io_margin_bottom30 {
+    margin-bottom: 30px;
 }
