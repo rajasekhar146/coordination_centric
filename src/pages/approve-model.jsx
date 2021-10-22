@@ -4,7 +4,10 @@ import ApproveModelComponent from '../components/ModelPopup/ApproveModelpopup.Co
 const ApproveModel = props => {
   return (
     <React.Fragment>
-      <ApproveModelComponent clickCloseButton={props.clickCloseButton} selectedOrg={props.selectedOrg} />
+      <ApproveModelComponent 
+      clickCloseButton={props.clickCloseButton} 
+      setSkip={props.setSkip}
+      selectedOrg={props.selectedOrg} />
     </React.Fragment>
   )
 }

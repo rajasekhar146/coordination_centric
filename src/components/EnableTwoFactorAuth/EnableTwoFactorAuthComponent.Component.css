@@ -142,18 +142,23 @@
 }
 .io__back__arrow {
     color: #E42346;
+    cursor: pointer;
 }
 .io__back__arrow svg{
     margin-top: 2px;
     margin-right: 10px;
     color: #E42346;
+    cursor: pointer;
 }
 .io__back {
     display: flex;
     position: absolute;
     top: 30px;
     left: 30px;
-    color: #E42346;
+    color: #E42346;   
+}
+.io__back label {
+    cursor: pointer;
 }
 .io__activate__enable {
     width: 65%;

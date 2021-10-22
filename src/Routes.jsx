@@ -29,6 +29,8 @@ import TwoFaVerificationFail from './pages/twofa_verification_fail'
 import TwoFaVerificationSuccess from './pages/twofa_verification_success'
 import TermsAndConditions from './pages/terms-and-conditions'
 import SignupComplete from './pages/signup-complete'
+import UserVerification from './pages/user_verification'
+import EmailVerificationPage from './pages/email_verification'
 
 class Routes extends Component {
   render() {
@@ -40,6 +42,8 @@ class Routes extends Component {
           </Route>
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
+          <DefaultLayoutComponentRoute path="/userverification" component={UserVerification} />
+          <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />

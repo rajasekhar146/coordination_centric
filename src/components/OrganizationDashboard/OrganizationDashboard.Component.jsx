@@ -33,12 +33,12 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import OrganisationItem from './OrganisationItem'
-
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
+import DeactivateOrganization from '../../pages/deactivate_model'
 import { makeStyles } from '@material-ui/core/styles'
 
 const style = {
@@ -190,7 +190,7 @@ const menuList = [
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
   {
@@ -198,7 +198,7 @@ const menuList = [
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
@@ -226,12 +226,21 @@ const menuList = [
     ],
   },
   {
+    menu: 'unverified',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+    ]
+  },
+  {
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-      { text: 'Reject', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
   },
 ]
@@ -282,7 +291,7 @@ const columns = [
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
   { id: 'referedBy', label: 'Refered by', minWidth: 100, align: 'left' },
-  { id: 'status', label: 'Status', minWidth: 80, align: 'center' },
+  { id: 'status', label: 'Status', minWidth: 145, align: 'center' },
   { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
 ]
 
@@ -336,6 +345,8 @@ const OrganizationDashboardComponent = () => {
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
+  const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
+  const [isActivateClicked, setIsActivateClicked] = useState();
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -366,9 +377,17 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    getOrganization()
-    return () => {}
-  }, [skip])
+    if (!isDeactivateClicked
+      && !isRejectClicked
+      && !isAcceptClicked
+    ) {
+      getOrganization()
+    }
+    return () => { }
+  }, [
+    skip,
+    isDeactivateClicked,
+  ])
 
   const getOrganization = async () => {
     setIsLoading(true)
@@ -423,6 +442,8 @@ const OrganizationDashboardComponent = () => {
   const closeApproveModel = () => {
     setIsAcceptClicked(false)
     setIsRejectClicked(false)
+    setIsDeactivateClicked(false)
+    setIsActivateClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
@@ -565,10 +586,14 @@ const OrganizationDashboardComponent = () => {
                         menuOptions={menuOptions}
                         setIsRejectClicked={setIsRejectClicked}
                         setIsAcceptClicked={setIsAcceptClicked}
+                        setIsDeactivateClicked={setIsDeactivateClicked}
+                        setIsActivateClicked={setIsActivateClicked}
                         getTextColor={getTextColor}
                         setSelectedOrg={setSelectedOrg}
                         rows={rows}
                         menuList={menuList}
+                        setSkip={setSkip}
+                        setOrganizations={setOrganizations}
                       />
                     ))}
                   </TableBody>
@@ -591,7 +616,10 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization clickCloseButton={handleAddOrganizationClose} />
+          <InviteOrganization
+            clickCloseButton={handleAddOrganizationClose}
+            getOrganization={getOrganization}
+          />
         </Box>
       </Modal>
       <Modal
@@ -601,7 +629,12 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={rejectModelStyle}>
-          <RejectOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
+          <RejectOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+            setSkip={setSkip}
+            setOrganizations={setOrganizations}
+          />
         </Box>
       </Modal>
       <Modal
@@ -611,7 +644,27 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
+          <AprroveOrganization
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={isDeactivateClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <DeactivateOrganization
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+          />
         </Box>
       </Modal>
     </div>
