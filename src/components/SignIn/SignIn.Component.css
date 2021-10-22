@@ -194,3 +194,43 @@
     top: 32px;
     left: 60px;
 }
+.io__verification {
+    background-color: #fff;
+    width: 40%;
+    margin: auto;
+    margin-top: 80px
+}
+.io_top_logo {
+    position: absolute;
+    top: 10px;
+}
+.io_sent_logo {
+    margin-top: 100px;
+}
+.io_width60 {
+    width: 60%;
+}
+.io_email_label {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600email
+}
+.io_send_emailbtn {
+    margin-top: 30px;
+}
+.io_trouble_label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 12px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #E42346;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.io_trouble_label label{
+    cursor: pointer;
+}
