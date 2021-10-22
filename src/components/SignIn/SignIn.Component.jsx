@@ -127,6 +127,7 @@ const SignInComponent = () => {
                   })}
                   type={showPassword ? 'text' : 'password'}
                   onChange={handleChange()}
+                  placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
