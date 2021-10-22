@@ -52,6 +52,11 @@ const VerificationCodeByAppPage = props => {
       })
   }
 
+  const {
+    data,
+    secretKey
+  } = qrImg;
+
   return (
     <div className="io__two_fa__app">
       <div>
@@ -95,15 +100,14 @@ const VerificationCodeByAppPage = props => {
             <div>
               <label className="io__secret__key">Secret Key</label>
               <div className="io__secret__key__value">
-                <label>sdgsdfsdfshdsdgdgs</label>
+                <label>{secretKey}</label>
               </div>
             </div>
           </div>
         </div>
         <div className="io__qr_scanner">
           <label className="io__scan__label">Scan this QR code</label>
-
-          <div className="io__qr_code" dangerouslySetInnerHTML={{ __html: qrImg }}></div>
+          <div className="io__qr_code" dangerouslySetInnerHTML={{ __html: data }}></div>
         </div>
         <div className="io__tf__app">
           <div className="io_step">
