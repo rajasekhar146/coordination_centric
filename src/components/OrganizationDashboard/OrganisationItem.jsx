@@ -6,6 +6,8 @@ import IconButton from '@mui/material/IconButton'
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { organizationService } from '../../services'
+
 
 const ITEM_HEIGHT = 60
 
@@ -19,9 +21,13 @@ const OrganisationItem = props => {
     getTextColor,
     setIsAcceptClicked,
     setIsRejectClicked,
+    setIsActivateClicked,
     setSelectedOrg,
     rows,
     menuList,
+    setIsDeactivateClicked,
+    setOrganizations,
+    setSkip
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -42,6 +48,14 @@ const OrganisationItem = props => {
     setAnchorEl(null)
   }
 
+  const handleActivate = (org) => {
+    const res = organizationService.updateOrganization(org._id, 'active')
+    res.then(() => {
+      setOrganizations([])
+      setSkip(1)
+    })
+  }
+
   const handleMenuAction = (action, index) => {
     switch (action) {
       case 'setIsAcceptClicked':
@@ -50,12 +64,47 @@ const OrganisationItem = props => {
       case 'setIsRejectClicked':
         setIsRejectClicked(true)
         break
+      case 'setIsDeactivateClicked':
+        setIsDeactivateClicked(true)
+        break
+      case 'setIsActivateClicked':
+        handleActivate(rows[index])
+        break
       default:
         return null
     }
     setAnchorEl(null)
     setSelectedOrg(rows[index])
   }
+
+  const getValue = (val) => {
+    switch (val) {
+      case 'active':
+        return "Verified"
+        break
+      case 'inactive':
+        return "Suspended"
+        break
+      case 'unverified':
+        return "Unverified"
+        break
+      case 'invited':
+        return "Invited"
+        break
+      case 'pending_verification':
+        return "Pending verification"
+        break
+      case 'pending_acceptance':
+        return "Pending acceptance"
+        break
+
+      default:
+        return null
+    }
+  }
+
+
+
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
       {columns.map(column => {
@@ -75,9 +124,7 @@ const OrganisationItem = props => {
               <div className={`od__${value.toLowerCase()}__label`}>
                 {column.format && typeof value === 'number'
                   ? column.format(value)
-                  : value === 'active'
-                  ? 'verified'
-                  : value}
+                  : getValue(value)}
               </div>
             </div>
           </TableCell>
@@ -101,16 +148,16 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-              // PaperProps={{
-              //     style: {
-              //         maxHeight: ITEM_HEIGHT * 4.5,
-              //         width: '20ch',
-              //         boxShadow:
-              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-              //         border: '1px solid #9fa2a3',
-              //         left: '-75px'
-              //     },
-              // }}
+            // PaperProps={{
+            //     style: {
+            //         maxHeight: ITEM_HEIGHT * 4.5,
+            //         width: '20ch',
+            //         boxShadow:
+            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+            //         border: '1px solid #9fa2a3',
+            //         left: '-75px'
+            //     },
+            // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem

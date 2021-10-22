@@ -38,7 +38,7 @@ const TwoFaModel = props => {
         <img width="200" src={TwoFaImg} alt="TwoFaImg" />
       </div>
       <div className="io__row io__icon">
-        <h5>Two-Facto Authentication</h5>
+        <h5>Two-Factor Authentication</h5>
         <label>would you like to activate the 2 Factor-Authentication</label>
       </div>
       <div className="io__conform">
