@@ -28,7 +28,7 @@ const EmailVerificationFail = props => {
                     <Button
                         className="io__activate__enable"
                         onClick={() => {
-                            history.push('/dashboard')
+                            history.push('/userverification')
                         }}
                     >
                         Try Again
