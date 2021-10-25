@@ -27,6 +27,8 @@ const EULAAgreementComponent = () => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
   var sigPad = {}
+  const [IsDateEntered, setDateEntered] = useState(true)
+  const [IsSigned, setSigned] = useState(true)
 
   const [activeStep, setActiveStep] = React.useState(1)
   const [facility, setFacility] = useState({})
@@ -43,17 +45,22 @@ const EULAAgreementComponent = () => {
     // localStorage.setItem('facility', JSON.stringify(updatedFacility))
 
     // history.push('/bank-info')
-    let domElement = document.getElementById('my-node')
-    html2canvas(domElement).then(canvas => {
-      var base64String = canvas.toDataURL()
-      base64String = base64String.replace('data:image/png;base64,', '')
+    setDateEntered(value != null)
+    setSigned(!sigPad.isEmpty())
 
-      const certificate = {
-        name: base64String,
-        type: 'certificate',
-      }
-      organizationService.uploadCertificate(certificate, 'EULAAgreement')
-     })
+    if (value != null && !sigPad.isEmpty()) {
+      let domElement = document.getElementById('my-node')
+      html2canvas(domElement).then(canvas => {
+        var base64String = canvas.toDataURL()
+        base64String = base64String.replace('data:image/png;base64,', '')
+
+        const certificate = {
+          name: base64String,
+          type: 'certificate',
+        }
+        organizationService.uploadCertificate(certificate, 'EULAAgreement')
+      })
+    }
   }
 
   const handleBack = () => {
@@ -210,6 +217,11 @@ const EULAAgreementComponent = () => {
                               }}
                             />
                           </div>
+                          {!IsSigned && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please sigh here</p>
+                            </div>
+                          )}
                         </div>
 
                         <div className="eulaa__column">
@@ -224,6 +236,11 @@ const EULAAgreementComponent = () => {
                               InputProps={{ className: 'sla__date__section' }}
                             />
                           </LocalizationProvider>
+                          {!IsDateEntered && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please select the date</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

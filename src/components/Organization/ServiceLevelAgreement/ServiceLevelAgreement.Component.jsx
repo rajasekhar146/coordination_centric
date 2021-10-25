@@ -20,6 +20,7 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
+import { useForm } from 'react-hook-form'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
@@ -27,6 +28,8 @@ const ServiceLevelAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
   const [processSteps, setProcessSteps] = React.useState(steps)
+  const [IsDateEntered, setDateEntered] = useState(true)
+  const [IsSigned, setSigned] = useState(true)
   var sigPad = {}
 
   const [facility, setFacility] = useState({})
@@ -34,34 +37,40 @@ const ServiceLevelAgreementComponent = props => {
   const [activeStep, setActiveStep] = React.useState(1)
 
   const handleNext = () => {
-    let domElement = document.getElementById('my-node')
-    html2canvas(domElement).then(canvas => {
-      var base64String = canvas.toDataURL()
-      base64String = base64String.replace('data:image/png;base64,', '')
+    console.log('Date', sigPad.isEmpty())
+    setDateEntered(value != null)
+    setSigned(!sigPad.isEmpty())
 
-      const certificate = {
-        name: base64String,
-        type: 'certificate',
-      }
-      organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
+    if (value != null && !sigPad.isEmpty()) {
+      let domElement = document.getElementById('my-node')
+      html2canvas(domElement).then(canvas => {
+        var base64String = canvas.toDataURL()
+        base64String = base64String.replace('data:image/png;base64,', '')
 
-      // .then(data => {
-      //   console.log('uploadFile >> response', data)
-      //   var updatedFacility = {
-      //     ...facility,
-      //     business_certificate: 'www.servicelevelagreement.com',
-      //   }
+        const certificate = {
+          name: base64String,
+          type: 'certificate',
+        }
+        organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
 
-      //   console.log('updatedFacility', JSON.stringify(updatedFacility))
-      //   setFacility(updatedFacility)
+        // .then(data => {
+        //   console.log('uploadFile >> response', data)
+        //   var updatedFacility = {
+        //     ...facility,
+        //     business_certificate: 'www.servicelevelagreement.com',
+        //   }
 
-      //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
+        //   console.log('updatedFacility', JSON.stringify(updatedFacility))
+        //   setFacility(updatedFacility)
 
-      //   history.push('/saas-agreement')
+        //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
 
-      // })
-      // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
-    })
+        //   history.push('/saas-agreement')
+
+        // })
+        // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
+      })
+    }
   }
 
   const handleBack = () => {
@@ -100,7 +109,7 @@ const ServiceLevelAgreementComponent = props => {
     setFacility(updateFacility)
 
     const planType = localStorage.getItem('plan_type')
-
+    if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
@@ -227,6 +236,11 @@ const ServiceLevelAgreementComponent = props => {
                               }}
                             />
                           </div>
+                          {!IsSigned && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please sigh here</p>
+                            </div>
+                          )}
                         </div>
 
                         <div className="eulaa__column">
@@ -241,6 +255,11 @@ const ServiceLevelAgreementComponent = props => {
                               InputProps={{ className: 'sla__date__section' }}
                             />
                           </LocalizationProvider>
+                          {!IsDateEntered && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please select the date</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

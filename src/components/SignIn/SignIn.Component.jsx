@@ -23,10 +23,13 @@ const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [IsValidUser, setIsValidUser] = useState(true)
+  const [errMsg, setErrMsg] = useState('')
+  const [IsValidEmail, setIsValidEmail] = useState(true)
+  const [IsValidPassword, setIsValidPassword] = useState(true)
 
   const defaultValues = {
-    email: 'superadmin@yopmail.com',
-    password: 'Augusta@12',
+    email: '',
+    password: '',
   }
 
   const {
@@ -47,21 +50,46 @@ const SignInComponent = () => {
     setIsSubmit(true)
     defaultValues.email = watch('email')
     defaultValues.password = watch('password')
+
+    var IsValidUser = false
+
     // console.log(defaultValues);
     authenticationService.login(defaultValues.email, defaultValues.password).then(
       user => {
-        console.log(user)
-        const userVerified = get(user, ['data', 'data', 'is_verified'], false)
-        if (!userVerified) {
-          history.push('/userverification')
+        console.log('logged user', user)
+        setIsValidPassword(true)
+        setIsValidEmail(true)
+        setIsValidUser(true)
+        if (user.status_code === 400) {
+          setIsValidUser(false)
+          IsValidUser = false
+          setErrMsg(user.message)
+          if (user.message.includes('Password')) {
+            setIsValidPassword(false)
+            setIsValidEmail(true)
+          } else if (user.message.includes('email')) {
+            setIsValidPassword(true)
+            setIsValidEmail(false)
+          }
         } else {
-          history.push('/dashboard')
+          const userVerified = get(user, ['data', 'data', 'is_verified'], false)
+          const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)
+          if (!userVerified) history.push('/userverification')
+          else if (twoFactor == 'none') history.push('/dashboard')
+          else if (twoFactor == 'app') {
+            history.push('/2facodeverification')
+          } else if (twoFactor == 'email') {
+            authenticationService.twoFactorEmailAuth(defaultValues.email).then(data => {
+              history.push('/2facodeverification')
+            })
+            .catch(error => {console.log(error)});
+          } else {
+            history.push('/dashboard')
+          }
         }
-        //const { from } = this.props.location.state || { from: { pathname: "/" } };
-        // this.props.history.push(from);
       },
       error => {
-        console.log(error)
+        console.log('error', error)
         setIsValidUser(false)
         //setSubmitting(false);
         //setStatus(error);
@@ -112,6 +140,7 @@ const SignInComponent = () => {
                 InputProps={{ className: 'si__text__box' }}
               />
               {errors.email && <p className="ac__required">{errors.email.message}</p>}
+              {!IsValidEmail && <p className="ac__required">{errMsg}</p>}
             </div>
             <div className="si__right__label">
               Password &nbsp;<span className="ac__required">*</span>
@@ -141,6 +170,7 @@ const SignInComponent = () => {
                 />
               </FormControl>
               {errors.password && <p className="ac__required">Password is required.</p>}
+              {!IsValidPassword && <p className="ac__required">{errMsg}</p>}
             </div>
             <div>
               {' '}
@@ -158,7 +188,6 @@ const SignInComponent = () => {
               </Button>{' '}
             </div>
             <div className="si__forgot__link"> Forgot Password? </div>
-            {!IsValidUser && <p className="ac__required">User does not exists</p>}
           </div>
         </div>
       </form>
