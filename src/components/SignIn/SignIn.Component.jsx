@@ -79,10 +79,14 @@ const SignInComponent = () => {
           else if (twoFactor == 'app') {
             history.push('/2facodeverification')
           } else if (twoFactor == 'email') {
-            authenticationService.twoFactorEmailAuth(defaultValues.email).then(data => {
-              history.push('/2facodeverification')
-            })
-            .catch(error => {console.log(error)});
+            authenticationService
+              .twoFactorEmailAuth(defaultValues.email)
+              .then(data => {
+                history.push('/2facodeverification')
+              })
+              .catch(error => {
+                console.log(error)
+              })
           } else {
             history.push('/dashboard')
           }

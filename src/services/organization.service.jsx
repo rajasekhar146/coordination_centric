@@ -16,16 +16,43 @@ export const organizationService = {
   signupOrganization,
   uploadCertificate,
   resendInvite,
-  cancelIvitation
+  cancelIvitation,
 }
 
-function allOrganization(skip, limit, searchText) {
+function allOrganization(skip, limit, searchText, date, status) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
-  var url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
-  if (searchText != null) {
-    url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`
+
+  //var dateUTC = date + 'T00:00:00.000Z'
+  //date = 'A'
+  var dateUTC = '2021-10-25'
+
+  //status = ''
+  console.log(searchText, date, status)
+  var searchCond = ''
+
+  if (searchText?.length > 0 && date?.length > 0 && status?.length > 0) {
+    console.log('Cond 1')
+    searchCond = `search_text=${searchText}&created_date=${dateUTC}&status=${status}`
+  } else if (searchText?.length > 0 && date?.length > 0 && status?.length == 0) {
+    searchCond = `search_text=${searchText}&created_date=${dateUTC}`
+  } else if (searchText?.length > 0 && date?.length == 0 && status?.length > 0) {
+    searchCond = `search_text=${searchText}&status=${status}`
+  } else if (searchText?.length == 0 && date?.length > 0 && status?.length > 0) {
+    searchCond = `created_date=${dateUTC}&status=${status}`
+  } else if (searchText?.length > 0) {
+    searchCond = `search_text=${searchText}`
+  } else if (date?.length  > 0) {
+    searchCond = `created_date=${dateUTC}`
+  } else if (status?.length > 0) {
+    searchCond = `status=${status}`
   }
+
+  console.log('searchCond', searchCond)
+  var url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&${searchCond}`
+  // if (searchText != null) {
+  //   url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`
+  // }
   return (
     axios
       .get(url, axiosConfig)
@@ -75,13 +102,14 @@ function signupOrganization(bodyMsg) {
       .then(data => {
         return data
       })
+      .catch(err => {console.log(err.response)})
   )
 }
 
 async function uploadCertificate(bodyMsg, certificateType) {
   console.log('axiosConfig', axiosConfig)
   const currentUser = authenticationService?.currentUserValue
-
+  console.log('currentUser', currentUser)
   var myHeaders = new Headers()
   myHeaders.append('x-access-token', `${currentUser.data.token}`)
   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
@@ -121,29 +149,36 @@ async function uploadCertificate(bodyMsg, certificateType) {
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
-      else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
-      else history.push('/bank-info')
+      else if (certificateType == 'SAASAgreement')
+        history.push('/eula-agreement')
+      else if (certificateType == 'EULAAgreement') {
+        const planType = localStorage?.getItem('plan_type')
+        console.log('planType', planType)
+        if (planType === 'F') history.push('/terms-condition')
+        else history.push('/bank-info')
+      } 
+      else
+        history.push('/terms-condition')
     })
     .catch(error => {
       console.log('error', error)
       return error
     })
-  }
+}
 
-  // console.log(updatedFacility)
-  // await axios
-  //     .post(`${apiURL}/files/upload`, null, updatedFacility)
-  //     //.then(handleResponse)
-  //     .then(data => {
-  //       console.log(data)
-  //       return data
-  //     })
-  //     .catch(err => {
-  //       console.log(err)
-  //       return null
-  //     })
+// console.log(updatedFacility)
+// await axios
+//     .post(`${apiURL}/files/upload`, null, updatedFacility)
+//     //.then(handleResponse)
+//     .then(data => {
+//       console.log(data)
+//       return data
+//     })
+//     .catch(err => {
+//       console.log(err)
+//       return null
+//     })
 
-  
 function resendInvite(id) {
   console.log('axiosConfig', axiosConfig)
   return (

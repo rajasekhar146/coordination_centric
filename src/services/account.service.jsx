@@ -41,15 +41,15 @@ async function sendEmailVerificationCode(email, code) {
     email: email,
     code: code,
   }
-  await axios
+  return (await axios
     .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
     //.then(handleResponse)
-    .then(data => {
-      console.log('sendEmailVerificationCode', data)
-      return data
+    .then(response => {
+      console.log('sendEmailVerificationCode', response)
+      return response
     })
     .catch(err => {
-      // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-      return { errorCode: err.status, errorMessage: err.message }
-    })
+      console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
+      return err.response
+    }))
 }

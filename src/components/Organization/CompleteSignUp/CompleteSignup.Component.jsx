@@ -8,7 +8,7 @@ import history from '../../../history'
 
 export const CompleteSignupComponent = () => {
   const handleDone = () => {
-    history.push('/dashboard')
+    history.push('/signin')
   }
   return (
     <div className="ob__main__section">

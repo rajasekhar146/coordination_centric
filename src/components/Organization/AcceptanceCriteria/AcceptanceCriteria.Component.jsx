@@ -24,9 +24,6 @@ const AcceptanceCriteriaComponent = () => {
     handleSubmit,
   } = useForm()
 
-  // console.log('errors', errors)
-  // console.log('register', register)
-
   const onSubmit = data => {
     const admin = {
       fullName: data.fullName,
@@ -45,6 +42,13 @@ const AcceptanceCriteriaComponent = () => {
 
   useEffect(() => {
     const planType = localStorage?.getItem('plan_type')
+
+    if (planType == undefined) localStorage.setItem('plan_type', 'F')
+    if (planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
 
     const updateFacility = localStorage.getItem('facility')
 
@@ -127,7 +131,7 @@ const AcceptanceCriteriaComponent = () => {
                             <TextField
                               {...register('fullName', { required: 'Full Name is required', maxLength: 50 })}
                               margin="normal"
-                              defaultValue={initialValues?.admin?.fullName}
+                              // defaultValue={initialValues?.admin?.fullName}
                               InputProps={{ className: 'ac__text__box' }}
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
@@ -285,7 +289,7 @@ const AcceptanceCriteriaComponent = () => {
                           <div className="ac__column">
                             <div className="ac__label">Tax ID</div>
                             <TextField
-                              {...register('taxId', { required: true, maxLength: 20 })}
+                              {...register('taxId', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               defaultValue={initialValues?.taxId}
@@ -295,7 +299,7 @@ const AcceptanceCriteriaComponent = () => {
                           <div className="ac__column">
                             <div className="ac__label">Medical ID</div>
                             <TextField
-                              {...register('medicalId', { required: true, maxLength: 20 })}
+                              {...register('medicalId', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               defaultValue={initialValues?.medicalId}
@@ -307,7 +311,7 @@ const AcceptanceCriteriaComponent = () => {
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField
-                              {...register('website', { required: true, maxLength: 20 })}
+                              {...register('website', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               defaultValue={initialValues?.medicalId}
@@ -317,7 +321,7 @@ const AcceptanceCriteriaComponent = () => {
                           <div className="ac__column">
                             <div className="ac__label">How did you hear about us?</div>
                             <TextField
-                              {...register('about', { required: true, maxLength: 20 })}
+                              {...register('about', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                             />

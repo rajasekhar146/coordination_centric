@@ -91,12 +91,11 @@ const ServiceLevelAgreementComponent = props => {
         console.log(dataUrl)
         //const pdf = new jsPDF();
         let pdf = new jsPDF('p', 'pt', 'letter')
-        //pdf.addImage(dataUrl, 'PNG', 20, 20, 580, 700)
-        pdf.addPage(dataUrl, 'PNG', 20, 20, 580, 700)
-        //const reader = new FileReader()
-        //reader.readAsDataURL(pdf)
+        pdf.addImage(dataUrl, 'PNG', 20, 20, 580, 700)
+        // const reader = new FileReader()
+        // reader.readAsDataURL(pdf)
         pdf.save('download.pdf')
-        // console.log('dataUrl', reader.result)
+        // console.log('dataUrl', reader)
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error)

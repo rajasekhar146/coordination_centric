@@ -26,6 +26,7 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 const SAASAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
+  const [processSteps, setProcessSteps] = React.useState(steps)
   var sigPad = {}
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
@@ -69,6 +70,16 @@ const SAASAgreementComponent = props => {
 
   useEffect(() => {
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
+
+    const planType = localStorage?.getItem('plan_type')
+
+    if (planType == undefined) localStorage.setItem('plan_type', 'F')
+    if (planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
+
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)
   }, [])
@@ -107,7 +118,7 @@ const SAASAgreementComponent = props => {
         <div className="ob__content__section">
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => {
+              {processSteps.map((label, index) => {
                 const stepProps = {}
                 const labelProps = {}
 

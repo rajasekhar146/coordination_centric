@@ -26,9 +26,11 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 const EULAAgreementComponent = () => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
+  const [planType, setPlanType] = useState('F')
   var sigPad = {}
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
+  const [processSteps, setProcessSteps] = React.useState(steps)
 
   const [activeStep, setActiveStep] = React.useState(1)
   const [facility, setFacility] = useState({})
@@ -73,6 +75,16 @@ const EULAAgreementComponent = () => {
 
   useEffect(() => {
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
+
+    const _planType = localStorage?.getItem('plan_type')
+    setPlanType(_planType)
+    if (_planType == undefined) localStorage.setItem('plan_type', 'F')
+    if (_planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
+
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)
   }, [])
@@ -107,7 +119,7 @@ const EULAAgreementComponent = () => {
         <div className="ob__content__section">
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => {
+              {processSteps.map((label, index) => {
                 const stepProps = {}
                 const labelProps = {}
 

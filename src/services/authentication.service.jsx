@@ -49,13 +49,19 @@ function login(username, password) {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(user))
         currentUserSubject.next(user)
-        console.log(user)
+        // console.log(user)
         return user
       })
+      .catch(err => {
+        console.log('authentication service >> login ', JSON.stringify(err.response))
+        // const errorMessage = {
+        //   error: err.message,
+        //   erroCode: err.code,
+        //   data: err.data,
+        // }
+        return err.response?.data
+      })
   )
-  // .error(err => {
-  //     console.log('authentication service >> login ', err);
-  // });
 }
 
 function logout() {

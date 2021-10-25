@@ -8,8 +8,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { organizationService } from '../../services'
 
-
-
 const ITEM_HEIGHT = 60
 
 const OrganisationItem = props => {
@@ -30,11 +28,13 @@ const OrganisationItem = props => {
     setSkip,
     setOpenFlash,
     setAlertMsg,
-    setIsCancelInviteClicked
+    setIsCancelInviteClicked,
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const [menuOptions, setMenuOptions] = React.useState([])
+
+  console.log('row >> ', row)
 
   const handleClick = (event, status) => {
     setAnchorEl(event.currentTarget)
@@ -61,9 +61,9 @@ const OrganisationItem = props => {
     })
   }
 
-  const handleResend = (org) => {
+  const handleResend = org => {
     const res = organizationService.resendInvite(org._id)
-    res.then((res) => {
+    res.then(res => {
       setOrganizations([])
       setSkip(1)
       setAlertMsg('Re-sended')
@@ -89,7 +89,7 @@ const OrganisationItem = props => {
         handleActivate(rows[index], 'active')
         break
       case 'setIsResendClicked':
-        handleResend(rows[index], "resend")
+        handleResend(rows[index], 'resend')
         break
 
       default:
@@ -135,7 +135,7 @@ const OrganisationItem = props => {
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
-        else if (column.id === 'orgName') value = 'John Deo'
+        // else if (column.id === 'orgName') value = 'John Deo'
         else if (column.id === 'referedBy') value = 'Sachin Smith'
 
         return column.id == 'status' ? (
@@ -144,9 +144,9 @@ const OrganisationItem = props => {
             align={column.align}
             style={{ paddingBottom: 10, paddingTop: 10, textAlign: 'center' }}
           >
-            <div className={`od__${value.toLowerCase()}__status`}>
+            <div className={`od__${value?.toLowerCase()}__status`}>
               <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-              <div className={`od__${value.toLowerCase()}__label`}>
+              <div className={`od__${value?.toLowerCase()}__label`}>
                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
               </div>
             </div>
@@ -171,16 +171,16 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-            // PaperProps={{
-            //     style: {
-            //         maxHeight: ITEM_HEIGHT * 4.5,
-            //         width: '20ch',
-            //         boxShadow:
-            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-            //         border: '1px solid #9fa2a3',
-            //         left: '-75px'
-            //     },
-            // }}
+              // PaperProps={{
+              //     style: {
+              //         maxHeight: ITEM_HEIGHT * 4.5,
+              //         width: '20ch',
+              //         boxShadow:
+              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+              //         border: '1px solid #9fa2a3',
+              //         left: '-75px'
+              //     },
+              // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem
@@ -191,7 +191,7 @@ const OrganisationItem = props => {
                   <div className="od__menu__icon__column">
                     <img src={option.icon} alt={option.text} />
                   </div>
-                  <div>{option.text}</div>
+                  <div className="od__menu__text__column">{option.text}</div>
                 </MenuItem>
               ))}
             </Menu>

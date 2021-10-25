@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -20,6 +20,7 @@ const TermsAndConditionsComponent = () => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
   var sigPad = {}
+  const [processSteps, setProcessSteps] = React.useState(steps)
 
   const [activeStep, setActiveStep] = React.useState(3)
 
@@ -31,7 +32,7 @@ const TermsAndConditionsComponent = () => {
     if (response?.status === 200) {
       localStorage.removeItem('facility')
       history.push('/signup-completed')
-    } 
+    }
     // else {
     //   history.push('/signup-completed')
     // }
@@ -43,6 +44,16 @@ const TermsAndConditionsComponent = () => {
     history.push('/bank-info')
   }
 
+  useEffect(() => {
+    const planType = localStorage.getItem('plan_type')
+    if (planType == undefined) localStorage.setItem('plan_type', 'F')
+    if (planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
+  }, [])
+
   return (
     <div className="ob__main__section">
       <div className="ob__align__center">
@@ -52,7 +63,7 @@ const TermsAndConditionsComponent = () => {
         <div className="ob__content__section">
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => {
+              {processSteps.map((label, index) => {
                 const stepProps = {}
                 const labelProps = {}
 

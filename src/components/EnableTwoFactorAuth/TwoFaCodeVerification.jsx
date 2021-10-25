@@ -7,7 +7,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import TextField from '@mui/material/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 
-
 const useStyles = makeStyles(theme => ({
   textField: {
     width: '100%',
@@ -98,10 +97,10 @@ const TwoFaEnabled = props => {
           </Button>
         </div>
         <div className="io__width100 io_mt_30">
-            <label className="io_resend_label io_mr_20">Enter backup code </label>
-            <label className="io_resend_label io_mr_20">or </label>
-            <label className="io_resend_label io_mr_20">Choose another authentication method</label>
-          </div>
+          <label className="io_resend_label io_mr_20">Enter backup code </label>
+          <label className="io_resend_label io_mr_20">or </label>
+          <label className="io_resend_label io_mr_20">Choose another authentication method</label>
+        </div>
 
         <div
           className="io__back"

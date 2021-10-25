@@ -41,11 +41,10 @@ import RejectOrganization from '../../pages/reject-model'
 import DeactivateOrganization from '../../pages/deactivate_model'
 import CancelInviteModel from '../ModelPopup/CancelInviteModel'
 import { makeStyles } from '@material-ui/core/styles'
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Snackbar from '@mui/material/Snackbar'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
-
 
 const style = {
   position: 'absolute',
@@ -220,8 +219,16 @@ const menuList = [
     menu: 'invited',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Resend Invitation', fnKey: 'setIsResendClicked', icon: require('../../assets/icons/resent_invitation.png').default },
-      { text: 'Cancel Invite', fnKey: 'setIsCancelInviteClicked', icon: require('../../assets/icons/suspend.png').default },
+      {
+        text: 'Resend Invitation',
+        fnKey: 'setIsResendClicked',
+        icon: require('../../assets/icons/resent_invitation.png').default,
+      },
+      {
+        text: 'Cancel Invite',
+        fnKey: 'setIsCancelInviteClicked',
+        icon: require('../../assets/icons/suspend.png').default,
+      },
     ],
   },
 
@@ -247,7 +254,7 @@ const menuList = [
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-    ]
+    ],
   },
   {
     menu: 'pending_acceptance',
@@ -262,11 +269,14 @@ const menuList = [
     menu: 'cancelled',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Resend Invitation', fnKey: 'setIsResendClicked', icon: require('../../assets/icons/resent_invitation.png').default },
+      {
+        text: 'Resend Invitation',
+        fnKey: 'setIsResendClicked',
+        icon: require('../../assets/icons/resent_invitation.png').default,
+      },
       { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
-
 ]
 
 const ITEM_HEIGHT = 60
@@ -281,7 +291,17 @@ const MenuProps = {
   },
 }
 
-const statusNames = ['All Status', 'Active', 'Pending', 'Declined', 'Approve', 'Reject', 'Suspended', 'Sent']
+const statusNames = [
+  'All Status',
+  'Verified',
+  'Pending Verification',
+  'Declined',
+  'Pending Acceptance',
+  'Unverified',
+  'Suspended',
+  'Invited',
+  'Cancelled',
+]
 
 const columns1 = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -326,7 +346,7 @@ const colorcodes = {
   pending_acceptance: '#7A5AF8',
   cancelled: '#757500',
   inactive: '#A0A4A8',
-  declined: '#B42318'
+  declined: '#B42318',
 }
 
 const createData = (name, code, population, size) => {
@@ -382,10 +402,12 @@ const OrganizationDashboardComponent = () => {
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
-  const [openflash, setOpenFlash] = React.useState(false);
-  const [alertMsg, setAlertMsg] = React.useState('');
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
 
-
+  const [searchText, setSearchText] = React.useState('')
+  const [searchDate, setSearchDate] = React.useState('')
+  const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
@@ -405,39 +427,54 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked
-      && !isRejectClicked
-      && !isAcceptClicked
-    ) {
+    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
       getOrganization()
     }
-    return () => { }
-  }, [
-    skip,
-    isDeactivateClicked,
-  ])
-
-
+    return () => {}
+  }, [skip, isDeactivateClicked])
 
   const handleCloseFlash = (event, reason) => {
-    setOpenFlash(false);
-  };
-
-
+    setOpenFlash(false)
+  }
 
   const getOrganization = async () => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, '')
+    const allOrganizations = await organizationService.allOrganization(skip, 10, '', '', '')
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = allOrganizations?.totalCount
-      const totalData = allOrganizations?.totalData
+      var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
+      var data = []
+      
       // console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
       // setTotalPage(totalPage)
-      setOrganizations([...rows, ...totalData])
+
+      totalData.map(r => {
+        var admin = r.admin
+        console.log(admin)
+
+       
+        var fullName = ''
+        if(admin?.length > 0)
+          fullName = admin[0].fullName
+        var record = {
+          facilityName: r.facilityName,
+          orgName: fullName,
+          facilityAddress: r.facilityAddress,
+          referedBy: r.referedBy,
+          status: r.status,
+          action: ''
+        }
+
+        data.push(record)
+      })
+
+      console.log('new totalData', data)
+
+      setOrganizations([...rows, ...data])
     }
     setIsLoading(false)
   }
@@ -500,15 +537,30 @@ const OrganizationDashboardComponent = () => {
     setIsLoading(true)
   }
 
-  const handleSearch = async event => {
-    var searchText = event.target.value
-    var allOrganizations = []
-    console.log('searchText', searchText)
-    if (searchText.length > 0) {
-      allOrganizations = await organizationService.allOrganization(0, 10, searchText)
-    } else {
-      allOrganizations = await organizationService.allOrganization(0, 10, '')
-    }
+  const handleSearchText = e => {
+    setSearchText(e.target.value)
+    handleSearch(e.target.value, searchDate, searchStatus)
+  }
+
+  const handleSearchDate = e => {
+    setSearchDate(e.target.value)
+    handleSearch(searchText, e.target.value, searchStatus)
+  }
+
+  const handleSearchStatus = e => {
+    setSearchStatus(e.target.value)
+    handleSearch(searchText, searchDate, e.target.value)
+  }
+
+  const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
+    console.log(nsearchText, nsearchDate, nsearchStatus)
+
+    var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
+
+    // if (searchText.length > 0) {
+    //    } else {
+    //   allOrganizations = await organizationService.allOrganization(0, 10, '')
+    // }
 
     setPage(1)
     const skipRecords = 0
@@ -538,7 +590,7 @@ const OrganizationDashboardComponent = () => {
           <TextField
             margin="normal"
             placeholder="Search"
-            onChange={e => handleSearch(e)}
+            onChange={e => handleSearchText(e)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -554,9 +606,7 @@ const OrganizationDashboardComponent = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 value={value}
-                onChange={newValue => {
-                  setValue(newValue)
-                }}
+                onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
               />
@@ -570,7 +620,7 @@ const OrganizationDashboardComponent = () => {
                 id="demo-multiple-checkbox"
                 multiple
                 value={selectedStatus}
-                onChange={handleChange}
+                onChange={e => handleSearchStatus(e)}
                 input={<OutlinedInput />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -603,7 +653,7 @@ const OrganizationDashboardComponent = () => {
                   <TableHead>
                     <TableRow>
                       {columns.map(column => (
-                        <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                        <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14}}>
                           {column.label}
                         </TableCell>
                       ))}
@@ -654,10 +704,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization
-            clickCloseButton={handleAddOrganizationClose}
-            getOrganization={getOrganization}
-          />
+          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
         </Box>
       </Modal>
       <Modal
@@ -726,12 +773,7 @@ const OrganizationDashboardComponent = () => {
           />
         </Box>
       </Modal>
-      <Alert
-        handleCloseFlash={handleCloseFlash}
-        alertMsg={alertMsg}
-        openflash={openflash}
-      />
-
+      <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
     </div>
   )
 }

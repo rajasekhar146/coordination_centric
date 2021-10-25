@@ -61,11 +61,24 @@ const EmailVerificationPage = props => {
 
   const handleVarification = async () => {
     console.log('currentUserEmail', currentUserEmail)
-    var response = await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode)
-    console.log('handleSendEmail', response)
-    if (response != null) {
-      history.push('/emailverification-success')
-    } else history.push('/emailverification-failed')
+    await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode)
+    .then(data => {
+      console.log('handleSendEmail >> ', data)
+      if (data?.status == 200) history.push('/emailverification-success')
+      else history.push('/emailverification-failed')
+    })
+    
+
+    // var response = await organizationService.signupOrganization(updateFacility)
+    // .then(data => {
+    //   console.log('handleSendEmail', data)
+    //   if (data.status == 200) {
+    //     history.push('/emailverification-success')
+    //   } else history.push('/emailverification-failed')
+    //   })
+    // .catch(error => {
+    //   history.push('/emailverification-failed')
+    // })
   }
 
   return (
