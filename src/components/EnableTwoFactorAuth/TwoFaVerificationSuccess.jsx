@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import history from '../../history'
 import CClogo from '../../assets/icons/cc_logo.png'
@@ -6,6 +6,11 @@ import SuccessIcon from '../../assets/icons/success_icon.png'
 import Button from '@mui/material/Button'
 
 const TwoFaVerificationSuccess = props => {
+
+  useEffect(() => {
+    
+  }, [])
+
   return (
     <div>
       <div className="io__sidebar">

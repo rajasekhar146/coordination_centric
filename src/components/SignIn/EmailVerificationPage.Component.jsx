@@ -110,7 +110,7 @@ const EmailVerificationPage = props => {
         </div>
         <div className="io_email_label">
           <label className="evp__label__time">
-            <p>{`{This code will expire in 3/5minutes}`}</p>{' '}
+            <p>{`{This code will expire in 3 minutes}`}</p>{' '}
           </label>
         </div>
         <div className="evp__action__section">

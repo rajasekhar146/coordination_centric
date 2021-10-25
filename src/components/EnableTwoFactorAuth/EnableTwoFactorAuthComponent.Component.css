@@ -30,6 +30,7 @@
     letter-spacing: 0.2px;
     
     color: #000000;
+    margin-bottom: 10px;
 }
 .io__two_justify {
     display: flex;
@@ -68,7 +69,7 @@
 .io__tf__options {
     display: flex;
     margin-bottom: 30px;
-    
+    text-align: center;
 }
 .io__nonActive__option {
     position: relative;

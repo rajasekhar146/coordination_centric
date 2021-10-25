@@ -11,7 +11,7 @@ import get from 'lodash.get'
 import { authenticationService } from '../../services'
 
 const EnableTwoFactorAuth = () => {
-  const [activeTab, setActiveTab] = useState(null)
+  const [activeTab, setActiveTab] = useState('email')
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
 

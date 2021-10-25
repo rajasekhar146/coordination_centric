@@ -71,6 +71,9 @@ const SignInComponent = () => {
             setIsValidPassword(true)
             setIsValidEmail(false)
           }
+          else if(user.message.includes('Two Factor Authentication')){
+            history.push('/2facodeverification')
+          }
         } else {
           const userVerified = get(user, ['data', 'data', 'is_verified'], false)
           const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)

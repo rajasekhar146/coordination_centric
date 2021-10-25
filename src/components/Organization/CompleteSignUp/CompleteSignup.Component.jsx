@@ -38,7 +38,7 @@ export const CompleteSignupComponent = () => {
                     <div className="ac__row">
                       <div className="ac__column cs__align__center">
                         <div className="cs__centent__text">
-                          Congratulations, you finished the registration proccess. Now you’ll have to wait for our team
+                          Congratulations, you finished the registration proccess. Now you'll have to wait for our team
                           to review and process all the data and approve your account. We will notify you by email as
                           soon as possible.
                         </div>
