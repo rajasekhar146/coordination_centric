@@ -19,7 +19,6 @@ const UserVerificationPage = props => {
       console.log('Mail already verified')
       history.push('/emailverification')
     } else history.push('/emailverification')
-    
   }
 
   return (

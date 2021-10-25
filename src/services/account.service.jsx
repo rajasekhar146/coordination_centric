@@ -11,7 +11,7 @@ const axiosConfig = {
 export const accountService = {
   getAll,
   sendEmailWithVerificationCode,
-  sendEmailVerificationCode
+  sendEmailVerificationCode,
 }
 
 function getAll() {
@@ -35,12 +35,11 @@ async function sendEmailWithVerificationCode(email) {
     })
 }
 
-
 async function sendEmailVerificationCode(email, code) {
   console.log('axiosConfig', axiosConfig)
   var bodyMsg = {
     email: email,
-    code: code
+    code: code,
   }
   await axios
     .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)

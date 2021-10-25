@@ -29,11 +29,10 @@ import TwoFaVerificationFail from './pages/twofa_verification_fail'
 import TwoFaVerificationSuccess from './pages/twofa_verification_success'
 import TermsAndConditions from './pages/terms-and-conditions'
 import SignupComplete from './pages/signup-complete'
-import UserVerification from './pages/user_verification'
-import EmailVerificationPage from './pages/email_verification'
-import EmailVerificationSuccess from './pages/email_verification_success'
-import EmailVerificationFail from './pages/email_verification_fail'
-
+import UserVerificationPage from './components/SignIn/UserVerification.Component'
+import EmailVerificationPage from './components/SignIn/EmailVerificationPage.Component'
+import EmailVerificationSuccess from './components/SignIn/EmailVerificationSuccess.Component'
+import EmailVerificationFailed from './components/SignIn/EmailVerificationFail.Component'
 class Routes extends Component {
   render() {
     return (
@@ -44,10 +43,6 @@ class Routes extends Component {
           </Route>
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
-          <DefaultLayoutComponentRoute path="/userverification" component={UserVerification} />
-          <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
-          <DefaultLayoutComponentRoute path="/emailverificationsuccess" component={EmailVerificationSuccess} />
-          <DefaultLayoutComponentRoute path="/emailverificationfail" component={EmailVerificationFail} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
@@ -58,6 +53,10 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/signup-completed" component={SignupComplete} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformationComponent} />
           <DefaultLayoutComponentRoute path="/signup" component={Signup} />
+          <DefaultLayoutComponentRoute path="/userverification" component={UserVerificationPage} />
+          <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
+          <DefaultLayoutComponentRoute path="/emailverification-success" component={EmailVerificationSuccess} />
+          <DefaultLayoutComponentRoute path="/emailverification-failed" component={EmailVerificationFailed} />
           <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />

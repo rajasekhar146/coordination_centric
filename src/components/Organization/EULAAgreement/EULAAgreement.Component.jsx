@@ -18,6 +18,8 @@ import jsPDF from 'jspdf'
 import * as htmlToImage from 'html-to-image'
 import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
+import html2canvas from 'html2canvas'
+import { organizationService } from '../../../services'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
@@ -30,17 +32,28 @@ const EULAAgreementComponent = () => {
   const [facility, setFacility] = useState({})
 
   const handleNext = () => {
-    var updatedFacility = {
-      ...facility,
-      eula_certificate: 'www.aulaagreement.com',
-    }
+    // var updatedFacility = {
+    //   ...facility,
+    //   eula_certificate: 'www.aulaagreement.com',
+    // }
 
-    console.log('updatedFacility', JSON.stringify(updatedFacility))
-    setFacility(updatedFacility)
+    // console.log('updatedFacility', JSON.stringify(updatedFacility))
+    // setFacility(updatedFacility)
 
-    localStorage.setItem('facility', JSON.stringify(updatedFacility))
+    // localStorage.setItem('facility', JSON.stringify(updatedFacility))
 
-    history.push('/bank-info')
+    // history.push('/bank-info')
+    let domElement = document.getElementById('my-node')
+    html2canvas(domElement).then(canvas => {
+      var base64String = canvas.toDataURL()
+      base64String = base64String.replace('data:image/png;base64,', '')
+
+      const certificate = {
+        name: base64String,
+        type: 'certificate',
+      }
+      organizationService.uploadCertificate(certificate, 'EULAAgreement')
+     })
   }
 
   const handleBack = () => {

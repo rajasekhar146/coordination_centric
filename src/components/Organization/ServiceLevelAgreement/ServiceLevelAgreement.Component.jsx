@@ -19,6 +19,7 @@ import * as htmlToImage from 'html-to-image'
 import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
+import { organizationService } from '../../../services'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
@@ -32,21 +33,35 @@ const ServiceLevelAgreementComponent = props => {
 
   const [activeStep, setActiveStep] = React.useState(1)
 
-  const handleNext = async () => {
+  const handleNext = () => {
     let domElement = document.getElementById('my-node')
-    html2canvas(domElement).then(canvas => console.log(canvas.toDataURL()))
+    html2canvas(domElement).then(canvas => {
+      var base64String = canvas.toDataURL()
+      base64String = base64String.replace('data:image/png;base64,', '')
 
-    var updatedFacility = {
-      ...facility,
-      business_certificate: 'www.servicelevelagreement.com',
-    }
+      const certificate = {
+        name: base64String,
+        type: 'certificate',
+      }
+      organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
 
-    console.log('updatedFacility', JSON.stringify(updatedFacility))
-    setFacility(updatedFacility)
+      // .then(data => {
+      //   console.log('uploadFile >> response', data)
+      //   var updatedFacility = {
+      //     ...facility,
+      //     business_certificate: 'www.servicelevelagreement.com',
+      //   }
 
-    localStorage.setItem('facility', JSON.stringify(updatedFacility))
+      //   console.log('updatedFacility', JSON.stringify(updatedFacility))
+      //   setFacility(updatedFacility)
 
-    history.push('/saas-agreement')
+      //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
+
+      //   history.push('/saas-agreement')
+
+      // })
+      // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
+    })
   }
 
   const handleBack = () => {
