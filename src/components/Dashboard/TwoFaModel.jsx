@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TwoFaImg from '../../assets/icons/TowFaAuthentication.png'
 import { organizationService } from '../../services'
 import history from '../../history'
+import CloseIcon from '../../assets/icons/close.png'
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -35,6 +36,10 @@ const TwoFaModel = props => {
   return (
     <div>
       <div className="io__row io__icon">
+        <span className="io_close">
+        <img onClick={() => props.clickCloseButton()} src={CloseIcon} alt="close" />
+        </span>
+
         <img width="200" src={TwoFaImg} alt="TwoFaImg" />
       </div>
       <div className="io__row io__icon">
