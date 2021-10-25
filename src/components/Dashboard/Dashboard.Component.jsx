@@ -92,14 +92,14 @@ const twoFaModelStyle = {
 }
 
 const DashboardComponent = () => {
-  const [isOpen2FA, setIsOpen2FA] = useState(false)
+  const [isOpen2FA, setIsOpen2FA] = useState(true)
   const currentUser = authenticationService.currentUserValue
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
 
   useEffect(() => {
-    if (!twoFactor_auth_type === "none") {
+    // if (twoFactor_auth_type === "none") {
       setIsOpen2FA(true)
-    }
+    // }
   }, [])
 
   const close2FaModel = () => {
