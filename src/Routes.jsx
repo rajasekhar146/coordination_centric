@@ -33,6 +33,7 @@ import UserVerificationPage from './components/SignIn/UserVerification.Component
 import EmailVerificationPage from './components/SignIn/EmailVerificationPage.Component'
 import EmailVerificationSuccess from './components/SignIn/EmailVerificationSuccess.Component'
 import EmailVerificationFailed from './components/SignIn/EmailVerificationFail.Component'
+import TwoFaCodeVerification from './components/EnableTwoFactorAuth/TwoFaCodeVerification'
 class Routes extends Component {
   render() {
     return (
@@ -64,6 +65,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/verificationbyapp" component={VerificationCodeByApp} />
           <DefaultLayoutComponentRoute path="/2faverificationsuccess" component={TwoFaVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
+          <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />

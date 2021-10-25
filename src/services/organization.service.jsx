@@ -15,6 +15,8 @@ export const organizationService = {
   updateOrganization,
   signupOrganization,
   uploadCertificate,
+  resendInvite,
+  cancelIvitation
 }
 
 function allOrganization(skip, limit, searchText) {
@@ -126,6 +128,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
       console.log('error', error)
       return error
     })
+  }
 
   // console.log(updatedFacility)
   // await axios
@@ -139,4 +142,28 @@ async function uploadCertificate(bodyMsg, certificateType) {
   //       console.log(err)
   //       return null
   //     })
+
+  
+function resendInvite(id) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .get(`${apiURL}/facilityList/resendInvite/${id}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function cancelIvitation(id) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .put(`${apiURL}/facilityList/cancelInvite/${id}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
 }

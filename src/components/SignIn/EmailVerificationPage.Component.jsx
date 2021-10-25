@@ -38,7 +38,6 @@ const EmailVerificationPage = props => {
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
 
-  const [timeOut, setTime] = useState()
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
   useEffect(() => {
@@ -83,9 +82,6 @@ const EmailVerificationPage = props => {
         </div>
         <div className="io_apologize_label io_width60">
           <label>Enter below the code that was sent to your email address:</label>
-        </div>
-        <div className="io_email_label">
-          <label>{currentUserEmail}</label>
         </div>
         <div className="io__two_justify">
           <TextField

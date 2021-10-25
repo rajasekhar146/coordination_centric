@@ -8,6 +8,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { organizationService } from '../../services'
 
+
+
 const ITEM_HEIGHT = 60
 
 const OrganisationItem = props => {
@@ -20,13 +22,15 @@ const OrganisationItem = props => {
     getTextColor,
     setIsAcceptClicked,
     setIsRejectClicked,
-    setIsActivateClicked,
     setSelectedOrg,
     rows,
     menuList,
     setIsDeactivateClicked,
     setOrganizations,
     setSkip,
+    setOpenFlash,
+    setAlertMsg,
+    setIsCancelInviteClicked
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -52,6 +56,18 @@ const OrganisationItem = props => {
     res.then(() => {
       setOrganizations([])
       setSkip(1)
+      setAlertMsg('Activated')
+      setOpenFlash(true)
+    })
+  }
+
+  const handleResend = (org) => {
+    const res = organizationService.resendInvite(org._id)
+    res.then((res) => {
+      setOrganizations([])
+      setSkip(1)
+      setAlertMsg('Re-sended')
+      setOpenFlash(true)
     })
   }
 
@@ -66,9 +82,16 @@ const OrganisationItem = props => {
       case 'setIsDeactivateClicked':
         setIsDeactivateClicked(true)
         break
-      case 'setIsActivateClicked':
-        handleActivate(rows[index])
+      case 'setIsCancelInviteClicked':
+        setIsCancelInviteClicked(true)
         break
+      case 'setIsActivateClicked':
+        handleActivate(rows[index], 'active')
+        break
+      case 'setIsResendClicked':
+        handleResend(rows[index], "resend")
+        break
+
       default:
         return null
     }
@@ -143,16 +166,16 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-              // PaperProps={{
-              //     style: {
-              //         maxHeight: ITEM_HEIGHT * 4.5,
-              //         width: '20ch',
-              //         boxShadow:
-              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-              //         border: '1px solid #9fa2a3',
-              //         left: '-75px'
-              //     },
-              // }}
+            // PaperProps={{
+            //     style: {
+            //         maxHeight: ITEM_HEIGHT * 4.5,
+            //         width: '20ch',
+            //         boxShadow:
+            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+            //         border: '1px solid #9fa2a3',
+            //         left: '-75px'
+            //     },
+            // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem

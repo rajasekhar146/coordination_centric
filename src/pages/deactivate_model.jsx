@@ -4,12 +4,14 @@ import DeactivateModelComponent from '../components/ModelPopup/DeactivateModelPo
 const DeactivateModel = props => {
   return (
     <React.Fragment>
-      <DeactivateModelComponent
-        clickCloseButton={props.clickCloseButton}
-        selectedOrg={props.selectedOrg}
-        setSkip={props.setSkip}
-        setOrganizations={props.setOrganizations}
-      />
+      <DeactivateModelComponent 
+      clickCloseButton={props.clickCloseButton} 
+      selectedOrg={props.selectedOrg}
+      setSkip={props.setSkip}
+      setOrganizations={props.setOrganizations}
+      setOpenFlash={props.setOpenFlash}
+      setAlertMsg={props.setAlertMsg}
+    />
     </React.Fragment>
   )
 }
