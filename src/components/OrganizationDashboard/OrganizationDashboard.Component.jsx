@@ -39,7 +39,13 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
 import DeactivateOrganization from '../../pages/deactivate_model'
+import CancelInviteModel from '../ModelPopup/CancelInviteModel'
 import { makeStyles } from '@material-ui/core/styles'
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '../Alert/Alert.component'
+
 
 const style = {
   position: 'absolute',
@@ -205,8 +211,8 @@ const menuList = [
     menu: 'invited',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Resend Invitation', fnKey: 'setIsResendClicked', icon: require('../../assets/icons/resent_invitation.png').default },
+      { text: 'Cancel Invite', fnKey: 'setIsCancelInviteClicked', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
 
@@ -232,7 +238,7 @@ const menuList = [
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-    ],
+    ]
   },
   {
     menu: 'pending_acceptance',
@@ -243,6 +249,15 @@ const menuList = [
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
   },
+  {
+    menu: 'cancelled',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Resend Invitation', fnKey: 'setIsResendClicked', icon: require('../../assets/icons/resent_invitation.png').default },
+      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
+    ],
+  },
+
 ]
 
 const ITEM_HEIGHT = 60
@@ -346,7 +361,7 @@ const OrganizationDashboardComponent = () => {
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
-  const [isActivateClicked, setIsActivateClicked] = useState()
+  const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -357,6 +372,9 @@ const OrganizationDashboardComponent = () => {
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
+  const [openflash, setOpenFlash] = React.useState(false);
+  const [alertMsg, setAlertMsg] = React.useState('');
+
 
   // useEffect(() => {
   //   getOrganization()
@@ -377,11 +395,25 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
+    if (!isDeactivateClicked
+      && !isRejectClicked
+      && !isAcceptClicked
+    ) {
       getOrganization()
     }
-    return () => {}
-  }, [skip, isDeactivateClicked])
+    return () => { }
+  }, [
+    skip,
+    isDeactivateClicked,
+  ])
+
+
+
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false);
+  };
+
+
 
   const getOrganization = async () => {
     setIsLoading(true)
@@ -437,7 +469,6 @@ const OrganizationDashboardComponent = () => {
     setIsAcceptClicked(false)
     setIsRejectClicked(false)
     setIsDeactivateClicked(false)
-    setIsActivateClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
@@ -581,13 +612,15 @@ const OrganizationDashboardComponent = () => {
                         setIsRejectClicked={setIsRejectClicked}
                         setIsAcceptClicked={setIsAcceptClicked}
                         setIsDeactivateClicked={setIsDeactivateClicked}
-                        setIsActivateClicked={setIsActivateClicked}
                         getTextColor={getTextColor}
                         setSelectedOrg={setSelectedOrg}
                         rows={rows}
                         menuList={menuList}
                         setSkip={setSkip}
                         setOrganizations={setOrganizations}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setIsCancelInviteClicked={setIsCancelInviteClicked}
                       />
                     ))}
                   </TableBody>
@@ -610,7 +643,10 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
+          <InviteOrganization
+            clickCloseButton={handleAddOrganizationClose}
+            getOrganization={getOrganization}
+          />
         </Box>
       </Modal>
       <Modal
@@ -625,6 +661,7 @@ const OrganizationDashboardComponent = () => {
             selectedOrg={selectedOrg}
             setSkip={setSkip}
             setOrganizations={setOrganizations}
+            setAlertMsg={setAlertMsg}
           />
         </Box>
       </Modal>
@@ -640,6 +677,7 @@ const OrganizationDashboardComponent = () => {
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setAlertMsg={setAlertMsg}
           />
         </Box>
       </Modal>
@@ -655,9 +693,34 @@ const OrganizationDashboardComponent = () => {
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
           />
         </Box>
       </Modal>
+      <Modal
+        open={isDeactivateClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <DeactivateOrganization
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+          />
+        </Box>
+      </Modal>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+      />
+
     </div>
   )
 }

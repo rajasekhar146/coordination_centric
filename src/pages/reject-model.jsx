@@ -4,7 +4,11 @@ import RejectModelComponent from '../components/ModelPopup/RejectModelpopup.Comp
 const RejectModel = props => {
   return (
     <React.Fragment>
-      <RejectModelComponent clickCloseButton={props.clickCloseButton} selectedOrg={props.selectedOrg} />
+      <RejectModelComponent 
+      clickCloseButton={props.clickCloseButton} 
+      selectedOrg={props.selectedOrg} 
+      setAlertMsg={props.setAlertMsg}
+      />
     </React.Fragment>
   )
 }
