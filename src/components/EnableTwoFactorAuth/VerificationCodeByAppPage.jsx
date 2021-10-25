@@ -52,10 +52,7 @@ const VerificationCodeByAppPage = props => {
       })
   }
 
-  const {
-    data,
-    secretKey
-  } = qrImg;
+  const { data, secretKey } = qrImg
 
   return (
     <div className="io__two_fa__app">

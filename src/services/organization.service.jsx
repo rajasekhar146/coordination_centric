@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { authHeader, handleResponse } from '../helpers'
+import { authenticationService } from '../services'
+import history from '../history'
 
 const apiURL = 'https://api.csuite.health'
 
@@ -12,6 +14,7 @@ export const organizationService = {
   addOrganization,
   updateOrganization,
   signupOrganization,
+  uploadCertificate,
 }
 
 function allOrganization(skip, limit, searchText) {
@@ -71,4 +74,69 @@ function signupOrganization(bodyMsg) {
         return data
       })
   )
+}
+
+async function uploadCertificate(bodyMsg, certificateType) {
+  console.log('axiosConfig', axiosConfig)
+  const currentUser = authenticationService?.currentUserValue
+
+  var myHeaders = new Headers()
+  myHeaders.append('x-access-token', `${currentUser.data.token}`)
+  myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+
+  var urlencoded = new URLSearchParams()
+  urlencoded.append('name', bodyMsg.name)
+  urlencoded.append('type', bodyMsg.type)
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: urlencoded,
+    redirect: 'follow',
+  }
+
+  fetch(`${apiURL}/files/upload`, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+      var response = JSON.parse(result)
+      var facility = JSON.parse(localStorage.getItem('facility'))
+
+      if (certificateType == 'ServiceLevelAgreement') {
+        var updatedFacility = {
+          ...facility,
+          business_certificate: response.data,
+        }
+      } else if (certificateType == 'SAASAgreement') {
+        var updatedFacility = {
+          ...facility,
+          saas_certificate: response.data,
+        }
+      } else {
+        var updatedFacility = {
+          ...facility,
+          eula_certificate: response.data,
+        }
+      }
+      localStorage.setItem('facility', JSON.stringify(updatedFacility))
+      if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
+      else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
+      else history.push('/bank-info')
+    })
+    .catch(error => {
+      console.log('error', error)
+      return error
+    })
+
+  // console.log(updatedFacility)
+  // await axios
+  //     .post(`${apiURL}/files/upload`, null, updatedFacility)
+  //     //.then(handleResponse)
+  //     .then(data => {
+  //       console.log(data)
+  //       return data
+  //     })
+  //     .catch(err => {
+  //       console.log(err)
+  //       return null
+  //     })
 }

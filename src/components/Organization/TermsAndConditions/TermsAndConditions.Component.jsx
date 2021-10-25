@@ -28,12 +28,13 @@ const TermsAndConditionsComponent = () => {
 
     var response = await organizationService.signupOrganization(updateFacility)
 
-    if (response?.data?.data?.success_code === 200) {
+    if (response?.status === 200) {
       localStorage.removeItem('facility')
       history.push('/signup-completed')
-    } else {
-      history.push('/signup-completed')
-    }
+    } 
+    // else {
+    //   history.push('/signup-completed')
+    // }
 
     console.log('response', response)
   }
@@ -106,7 +107,6 @@ const TermsAndConditionsComponent = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="ac__gap__bottom__div"></div>
                 </div>
               </div>

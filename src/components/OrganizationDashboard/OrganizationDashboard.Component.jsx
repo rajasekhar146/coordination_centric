@@ -232,7 +232,7 @@ const menuList = [
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-    ]
+    ],
   },
   {
     menu: 'pending_acceptance',
@@ -346,7 +346,7 @@ const OrganizationDashboardComponent = () => {
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
-  const [isActivateClicked, setIsActivateClicked] = useState();
+  const [isActivateClicked, setIsActivateClicked] = useState()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -377,17 +377,11 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked
-      && !isRejectClicked
-      && !isAcceptClicked
-    ) {
+    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
       getOrganization()
     }
-    return () => { }
-  }, [
-    skip,
-    isDeactivateClicked,
-  ])
+    return () => {}
+  }, [skip, isDeactivateClicked])
 
   const getOrganization = async () => {
     setIsLoading(true)
@@ -616,10 +610,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization
-            clickCloseButton={handleAddOrganizationClose}
-            getOrganization={getOrganization}
-          />
+          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
         </Box>
       </Modal>
       <Modal

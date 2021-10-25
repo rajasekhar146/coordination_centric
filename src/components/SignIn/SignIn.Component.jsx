@@ -51,9 +51,9 @@ const SignInComponent = () => {
     authenticationService.login(defaultValues.email, defaultValues.password).then(
       user => {
         console.log(user)
-        const userVerified = get(user, ['data', 'data', 'userVerified'], false)
+        const userVerified = get(user, ['data', 'data', 'is_verified'], false)
         if (!userVerified) {
-            history.push('/userverification')
+          history.push('/userverification')
         } else {
           history.push('/dashboard')
         }
