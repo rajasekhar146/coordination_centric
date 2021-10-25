@@ -119,7 +119,12 @@ const OrganisationItem = props => {
       case 'pending_acceptance':
         return 'Pending acceptance'
         break
-
+      case 'cancelled':
+        return 'cancelled'
+        break
+      case 'declined':
+        return 'declined'
+        break
       default:
         return null
     }
