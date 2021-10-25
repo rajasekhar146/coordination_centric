@@ -144,3 +144,9 @@
 .io__ok button{
     width: 80% !important;
 }
+.io_close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
