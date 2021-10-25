@@ -479,6 +479,7 @@ const OrganizationDashboardComponent = () => {
     setIsAcceptClicked(false)
     setIsRejectClicked(false)
     setIsDeactivateClicked(false)
+    setIsCancelInviteClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
@@ -709,13 +710,13 @@ const OrganizationDashboardComponent = () => {
         </Box>
       </Modal>
       <Modal
-        open={isDeactivateClicked}
+        open={isCalcelInviteClicked}
         // onClose={setIsAcceptClicked}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <DeactivateOrganization
+          <CancelInviteModel
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}

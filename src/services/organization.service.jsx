@@ -160,7 +160,7 @@ function cancelIvitation(id) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .put(`${apiURL}/facilityList/cancelInvite/${id}`, axiosConfig)
+      .put(`${apiURL}/facilityList/cancelInvite/${id}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
