@@ -94,10 +94,10 @@ const twoFaModelStyle = {
 const DashboardComponent = () => {
   const [isOpen2FA, setIsOpen2FA] = useState(false)
   const currentUser = authenticationService.currentUserValue
-  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
 
   useEffect(() => {
-    if (is_verified) {
+    if (!twoFactor_auth_type === "none") {
       setIsOpen2FA(true)
     }
   }, [])

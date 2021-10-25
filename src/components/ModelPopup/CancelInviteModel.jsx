@@ -20,7 +20,7 @@ const CancelInviteModel = props => {
             setOrganizations([])
             setSkip(1)
             setOpenFlash(true)
-            setAlertMsg('Cancelled')
+            setAlertMsg('Canceled')
             props.clickCloseButton()
         })
     }

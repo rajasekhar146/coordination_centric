@@ -183,6 +183,15 @@ const menuList = [
     ],
   },
   {
+    menu: 'cancelled',
+    options: [
+      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+      // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+    ],
+  },
+  {
     menu: 'declined',
     options: [
       { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
@@ -315,8 +324,9 @@ const colorcodes = {
   pending_verification: '#F79009',
   active: '#12B76A',
   pending_acceptance: '#7A5AF8',
-  declined: '#F04438',
+  cancelled: '#757500',
   inactive: '#A0A4A8',
+  declined: '#B42318'
 }
 
 const createData = (name, code, population, size) => {
@@ -469,6 +479,7 @@ const OrganizationDashboardComponent = () => {
     setIsAcceptClicked(false)
     setIsRejectClicked(false)
     setIsDeactivateClicked(false)
+    setIsCancelInviteClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
@@ -699,13 +710,13 @@ const OrganizationDashboardComponent = () => {
         </Box>
       </Modal>
       <Modal
-        open={isDeactivateClicked}
+        open={isCalcelInviteClicked}
         // onClose={setIsAcceptClicked}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <DeactivateOrganization
+          <CancelInviteModel
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
