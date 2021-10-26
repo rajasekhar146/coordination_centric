@@ -13,6 +13,7 @@ export const organizationService = {
   allOrganization,
   addOrganization,
   updateOrganization,
+  getOrganizationDetails,
   signupOrganization,
   uploadCertificate,
   resendInvite,
@@ -42,7 +43,7 @@ function allOrganization(skip, limit, searchText, date, status) {
     searchCond = `created_date=${dateUTC}&status=${status}`
   } else if (searchText?.length > 0) {
     searchCond = `search_text=${searchText}`
-  } else if (date?.length  > 0) {
+  } else if (date?.length > 0) {
     searchCond = `created_date=${dateUTC}`
   } else if (status?.length > 0) {
     searchCond = `status=${status}`
@@ -93,6 +94,23 @@ function updateOrganization(id, status) {
   )
 }
 
+function getOrganizationDetails(orgId) {
+  return (
+    axios
+      .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${orgId}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('getOrganizationDetails - ', data)
+        if (data?.data?.data) {
+          const res = data.data.data
+          console.log('Result >> ', res)
+          return res
+        } else {
+          return null
+        }
+      })
+  )
+}
 function signupOrganization(bodyMsg) {
   console.log('axiosConfig', axiosConfig)
   return (
@@ -102,7 +120,9 @@ function signupOrganization(bodyMsg) {
       .then(data => {
         return data
       })
-      .catch(err => {console.log(err.response)})
+      .catch(err => {
+        console.log(err.response)
+      })
   )
 }
 
@@ -149,16 +169,13 @@ async function uploadCertificate(bodyMsg, certificateType) {
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
-      else if (certificateType == 'SAASAgreement')
-        history.push('/eula-agreement')
+      else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
       else if (certificateType == 'EULAAgreement') {
         const planType = localStorage?.getItem('plan_type')
         console.log('planType', planType)
         if (planType === 'F') history.push('/terms-condition')
         else history.push('/bank-info')
-      } 
-      else
-        history.push('/terms-condition')
+      } else history.push('/terms-condition')
     })
     .catch(error => {
       console.log('error', error)

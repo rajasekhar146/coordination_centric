@@ -6,11 +6,13 @@ import IconButton from '@mui/material/IconButton'
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { useHistory } from 'react-router-dom'
 import { organizationService } from '../../services'
 
 const ITEM_HEIGHT = 60
 
 const OrganisationItem = props => {
+  const history = useHistory()
   const {
     row,
     index,
@@ -34,11 +36,8 @@ const OrganisationItem = props => {
   const open = Boolean(anchorEl)
   const [menuOptions, setMenuOptions] = React.useState([])
 
-  console.log('row >> ', row)
-
   const handleClick = (event, status) => {
     setAnchorEl(event.currentTarget)
-    console.log('status', status, menuOptions)
     const menus = menuList.filter(m => m.menu === status.toLowerCase())
     console.log('menus', menus)
     if (menus.length > 0) setMenuOptions(menus[0].options)
@@ -71,7 +70,8 @@ const OrganisationItem = props => {
     })
   }
 
-  const handleMenuAction = (action, index) => {
+  const handleMenuAction = (action, index, orgId) => {
+    console.log('orgId', orgId)
     switch (action) {
       case 'setIsAcceptClicked':
         setIsAcceptClicked(true)
@@ -91,6 +91,8 @@ const OrganisationItem = props => {
       case 'setIsResendClicked':
         handleResend(rows[index], 'resend')
         break
+      case 'viewdetails':
+        routeDirect(orgId)
 
       default:
         return null
@@ -130,6 +132,9 @@ const OrganisationItem = props => {
     }
   }
 
+  function routeDirect(orgId) {
+    history.push(`/organization-view/${orgId}`)
+  }
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
       {columns.map(column => {
@@ -185,7 +190,7 @@ const OrganisationItem = props => {
               {menuOptions.map((option, idx) => (
                 <MenuItem
                   key={option}
-                  onClick={e => handleMenuAction(option.fnKey, index)}
+                  onClick={e => handleMenuAction(option.fnKey, index, row._id)}
                   className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                 >
                   <div className="od__menu__icon__column">

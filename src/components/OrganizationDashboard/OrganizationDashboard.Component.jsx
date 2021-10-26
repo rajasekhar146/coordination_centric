@@ -174,7 +174,7 @@ const menuList = [
   {
     menu: 'pending_verification',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
@@ -184,7 +184,7 @@ const menuList = [
   {
     menu: 'cancelled',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
       // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
@@ -193,7 +193,7 @@ const menuList = [
   {
     menu: 'declined',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
       // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
@@ -202,7 +202,7 @@ const menuList = [
   {
     menu: 'active',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
     ],
@@ -210,7 +210,7 @@ const menuList = [
   {
     menu: 'inactive',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
     ],
@@ -218,7 +218,7 @@ const menuList = [
   {
     menu: 'invited',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       {
         text: 'Resend Invitation',
         fnKey: 'setIsResendClicked',
@@ -235,7 +235,7 @@ const menuList = [
   {
     menu: 'suspended',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
     ],
@@ -243,14 +243,14 @@ const menuList = [
   {
     menu: 'verified',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
     ],
   },
   {
     menu: 'unverified',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -259,7 +259,7 @@ const menuList = [
   {
     menu: 'pending_acceptance',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -268,7 +268,7 @@ const menuList = [
   {
     menu: 'cancelled',
     options: [
-      { text: 'View Details', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       {
         text: 'Resend Invitation',
         fnKey: 'setIsResendClicked',
@@ -446,7 +446,7 @@ const OrganizationDashboardComponent = () => {
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
-      
+
       // console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
@@ -456,17 +456,16 @@ const OrganizationDashboardComponent = () => {
         var admin = r.admin
         console.log(admin)
 
-       
         var fullName = ''
-        if(admin?.length > 0)
-          fullName = admin[0].fullName
+        if (admin?.length > 0) fullName = admin[0].fullName
         var record = {
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
           referedBy: r.referedBy,
           status: r.status,
-          action: ''
+          action: '',
+          _id: r._id,
         }
 
         data.push(record)
@@ -653,7 +652,11 @@ const OrganizationDashboardComponent = () => {
                   <TableHead>
                     <TableRow>
                       {columns.map(column => (
-                        <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14}}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14 }}
+                        >
                           {column.label}
                         </TableCell>
                       ))}

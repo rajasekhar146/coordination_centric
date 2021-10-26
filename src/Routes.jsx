@@ -11,6 +11,7 @@ import BankInformation from './pages/bank-information'
 import Dashboard from './pages/dashboard'
 import NavBarComponent from './components/NavBar/NavBar.Component'
 import OrganizationDashboard from './pages/organization-dashboard'
+import OrganizationView from './pages/organization-view'
 import Appointments from './pages/appointments'
 import Users from './pages/users'
 import Patients from './pages/patients'
@@ -68,6 +69,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
+          <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
           <MasterLayoutWithLefuMenuComponent path="/users" component={Users} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
