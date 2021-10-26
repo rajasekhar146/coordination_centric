@@ -62,7 +62,7 @@ const menuOptions = [
   },
   {
     name: 'Users',
-    link: '/acceptance-criteria',
+    link: '/users',
     icon: require('../../assets/icons/users.png').default,
   },
   {
@@ -76,8 +76,8 @@ const menuOptions = [
     icon: require('../../assets/icons/patients.png').default,
   },
   {
-    name: 'Vaccinations',
-    link: '/vaccinations',
+    name: 'Inventory',
+    link: '/inventory',
     icon: require('../../assets/icons/vaccinations.png').default,
   },
   {

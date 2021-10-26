@@ -5,3 +5,25 @@
 .tp__header__text {
     margin-bottom: 30px !important;
 }
+.ac__next__btn_disable {
+    background-color: #DBDDE0 !important;
+    color: #A0A4A8 !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 30px !important;
+    border-radius: 8px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.2px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 0px;
+    width: 180px !important;
+    pointer-events: none;
+}
