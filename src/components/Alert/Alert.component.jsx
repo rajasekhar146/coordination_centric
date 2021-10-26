@@ -18,6 +18,12 @@ const Alert = (props) => {
 
     useEffect(() => {
         switch (alertMsg) {
+            case 'Verified':
+                setSubLabel('This account was successfully verified.')
+                break
+            case 'Rejected':
+                setSubLabel('This account was successfully rejected, and is now disabled.')
+                break
             case 'Activated':
                 setSubLabel('This account was successfully activated.')
                 break
@@ -29,7 +35,7 @@ const Alert = (props) => {
             case 'Deactivated':
                 setSubLabel('This account was deactivated, users no longer have access.')
                 break
-                case 'Canceled':
+            case 'Canceled':
                 setSubLabel('The invitation was canceled')
                 break
             default:

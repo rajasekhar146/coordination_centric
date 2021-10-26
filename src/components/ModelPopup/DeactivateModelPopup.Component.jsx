@@ -8,16 +8,16 @@ import get from 'lodash.get'
 const DeactivateModel = props => {
   const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
 
-  const handleSubmit = () => {
-    const res = organizationService.updateOrganization(selectedOrg.id, 'inacitive')
-    res.then(res => {
-      setOrganizations([])
-      setSkip(1)
-      setOpenFlash(true)
-      setAlertMsg('Deactivated')
-      props.clickCloseButton()
-    })
-  }
+    const handleSubmit = () => {
+        const res = organizationService.updateOrganization(selectedOrg.id, 'inactive')
+        res.then((res) => {
+            setOrganizations([])
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Deactivated')
+            props.clickCloseButton()
+        })
+    }
 
   return (
     <div className="io__main__div">
