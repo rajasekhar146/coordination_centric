@@ -10,7 +10,8 @@ const axiosConfig = {
 export const organizationService = {
   allOrganization,
   addOrganization,
-  updateOrganization
+  updateOrganization,
+  getOrganizationDetails,
 }
 
 function allOrganization(skip, limit) {
@@ -51,6 +52,24 @@ function updateOrganization(id, status) {
       //.then(handleResponse)
       .then(data => {
         return data
+      })
+  )
+}
+
+function getOrganizationDetails(orgId) {
+  return (
+    axios
+      .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${orgId}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('getOrganizationDetails - ', data)
+        if (data?.data?.data) {
+          const res = data.data.data
+          console.log('Result >> ', res)
+          return res
+        } else {
+          return null
+        }
       })
   )
 }
