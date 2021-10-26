@@ -8,12 +8,21 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import IconButton from '@mui/material/IconButton'
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 
 
 const columns = [
   // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
   { id: 'AppointmentType', label: 'Appointment Type', minWidth: 200, align: 'left' },
   { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
+]
+
+const rows = [
+  { type: "Clinical Visit" },
+  { type: "Immediate Care Clinic" },
+  { type: "In-home Visit" },
+  { type: "New Care CC1" }
 ]
 
 const AppointmentsComponent = () => {
@@ -36,14 +45,40 @@ const AppointmentsComponent = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    {columns.map(column => (
-                      <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14 }}>
-                        {column.label}
-                      </TableCell>
-                    ))}
+                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>
+                      Appointment Type
+                    </TableCell>
+                    <TableCell align={'right'} style={{ fontWeight: 'bold', fontSize: 14 }}>
+                      Action
+                    </TableCell>
                   </TableRow>
                 </TableHead>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      <TableCell
+                        key={index}
+                      >
+                        {row.type}
+                      </TableCell>
+                      <TableCell
+                        key={index}
+                        align={'right'}
+                      >
+                        <IconButton
+                          aria-label="more"
+                          id="long-button"
+                          aria-controls="long-menu"
+                          aria-haspopup="true"
 
+                        >
+                          <MoreVertRoundedIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+
+                  ))}
+                </TableBody>
               </Table>
             </TableContainer>
           </Paper>
