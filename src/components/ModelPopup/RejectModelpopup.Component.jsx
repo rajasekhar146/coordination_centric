@@ -24,13 +24,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const RejectModel = props => {
-  const { 
-    selectedOrg,
-    setAlertMsg,
-   } = props
+  const { selectedOrg, setAlertMsg } = props
 
   const handleSubmit = () => {
-    const res = organizationService.updateOrganization(selectedOrg._id, 'declined')
+    const res = organizationService.updateOrganization(selectedOrg.id, 'declined')
     res.then(() => {
       setAlertMsg()
       props.clickCloseButton()
@@ -43,14 +40,14 @@ const RejectModel = props => {
         <img src={RejectOrgIcon} alt="Approve Org" />
       </div>
       <div className="io__row io__text__center">
-        <label className="io__title">Reject Organisation</label>
+        <label className="io__title">Reject Organization</label>
       </div>
       <div className="io__row io__text__center io__conform__title">
-        <label>Are you sure you want to reject this organisation?</label>
+        <label>Are you sure you want to reject this organization?</label>
       </div>
 
       <div className="io__row io_input">
-        <div className="io__reason__label">reason (Optional)</div>
+        <div className="io__reason__label">Reason (Optional)</div>
         <TextField
           margin="normal"
           type="text"

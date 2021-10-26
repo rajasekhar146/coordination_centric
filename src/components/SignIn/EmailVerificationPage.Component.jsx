@@ -81,6 +81,18 @@ const EmailVerificationPage = props => {
     // })
   }
 
+  const handleResend = async () => {
+    var response = await accountService.sendEmailWithVerificationCode(currentUserEmail)
+    response.then(() => {
+
+    }).catch(() => {
+
+    })
+  }
+
+
+
+
   return (
     <div className="io__verification">
       <div className="io__two_justify">
@@ -114,7 +126,7 @@ const EmailVerificationPage = props => {
           </label>
         </div>
         <div className="evp__action__section">
-          <Button className="evp__resend__verification__code" onClick={e => history.push('/userverification')}>
+          <Button className="evp__resend__verification__code" onClick={() => handleResend()}>
             Resend Verification Code
           </Button>
           &nbsp; &nbsp;&nbsp; &nbsp;

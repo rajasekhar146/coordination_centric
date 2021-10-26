@@ -8,7 +8,7 @@ const ApproveModel = props => {
   const { selectedOrg } = props
 
   const handleSubmit = () => {
-    const res = organizationService.updateOrganization(selectedOrg._id, 'active')
+    const res = organizationService.updateOrganization(selectedOrg.id, 'active')
     res.then(() => {
       props.clickCloseButton()
     })
@@ -20,10 +20,10 @@ const ApproveModel = props => {
         <img src={ApproveOrgIcon} alt="Approve Org" />
       </div>
       <div className="io__row io__text__center">
-        <label className="io__title">Approve Organisation</label>
+        <label className="io__title">Approve Organization</label>
       </div>
       <div className="io__row io__text__center">
-        <label className="io__conform__title">Are you sure you want to approve this organisation?</label>
+        <label className="io__conform__title">Are you sure you want to approve this organization?</label>
       </div>
       <div className="io__row io__btn">
         <div className="io__same__line">

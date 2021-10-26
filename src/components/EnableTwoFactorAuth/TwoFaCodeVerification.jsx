@@ -6,6 +6,9 @@ import Button from '@mui/material/Button'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import TextField from '@mui/material/TextField'
 import { makeStyles } from '@material-ui/core/styles'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
+
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -31,6 +34,8 @@ const useStyles = makeStyles(theme => ({
 
 const TwoFaEnabled = props => {
   const classes = useStyles()
+  const currentUser = authenticationService.currentUserValue
+  const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
 
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
@@ -54,6 +59,15 @@ const TwoFaEnabled = props => {
       clearInterval(myInterval)
     }
   }, [minutes, seconds])
+
+  const handleResend =  async () => {
+    var response = await authenticationService.twoFactorEmailAuth(currentUserEmail)
+    response.then(() => {
+
+    }).catch(() => {
+      
+    })
+  }
 
   return (
     <div className="io__verification">
@@ -85,7 +99,9 @@ const TwoFaEnabled = props => {
             />
           </div>
           <div className="io_resend_label io__margin_bottom30">
-            <label>Didn’t receive? Resend OTP</label>
+            <label onClick={() => {
+              handleResend()
+            }}>Didn’t receive? Resend OTP</label>
           </div>
           <Button className="evp__verify__btn">
             Verify &nbsp;{' '}

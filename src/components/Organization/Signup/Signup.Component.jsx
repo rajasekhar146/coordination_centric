@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Signup.Component.css'
 import tickIcon from '../../../assets/icons/tick_icon.png'
 import Button from '@mui/material/Button'
 import tickPremiumIcon from '../../../assets/icons/tick__premium__icon.png'
 import history from '../../../history'
+import { useParams } from 'react-router-dom'
 
 const SignupComponent = () => {
   const [selectedPlan, setSelectedPlan] = useState('M')
+  const { referredby } = useParams()
+  const { invitetoken } = useParams()
 
   const handleFreePlan = planType => {
     localStorage.setItem('plan_type', planType)
-    history.push('/acceptance-criteria')
+    history.push(`/acceptance-criteria/${invitetoken}/${referredby}`)
   }
+
+  useEffect(() => {
+    console.log('referredBy', referredby, 'inviteToken', invitetoken)
+  }, [])
 
   return (
     <div className="su__main__div">

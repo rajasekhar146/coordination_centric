@@ -6,10 +6,7 @@ import SuccessIcon from '../../assets/icons/success_icon.png'
 import Button from '@mui/material/Button'
 
 const TwoFaVerificationSuccess = props => {
-
-  useEffect(() => {
-    
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <div>
@@ -20,7 +17,9 @@ const TwoFaVerificationSuccess = props => {
         <div className="io__two_justify">
           <img src={SuccessIcon} alt="success_logo" />
           <div className="io_error_label">
-            <label>Two-Factor Authentication <span style={{color: '#1ae0a5'}}>Enabled</span></label>
+            <label>
+              Two-Factor Authentication <span style={{ color: '#1ae0a5' }}>Enabled</span>
+            </label>
           </div>
           <div className="io_apologize_label">
             <label>Your account is extra secured now</label>
