@@ -97,9 +97,10 @@ const DashboardComponent = () => {
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
 
   useEffect(() => {
-
-    if (twoFactor_auth_type === "none") {
+    var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
+    if (IsShow2FAPopup === null && twoFactor_auth_type === 'none') {
       setIsOpen2FA(true)
+      localStorage.setItem('IsShow2FAPopup', false)
     }
   }, [])
 

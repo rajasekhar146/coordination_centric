@@ -330,13 +330,13 @@ const columns1 = [
 ]
 
 const columns = [
-  // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
-  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
-  { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
-  { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
-  { id: 'referedBy', label: 'Referred by', minWidth: 100, align: 'left' },
-  { id: 'status', label: 'Status', minWidth: 145, align: 'center' },
-  { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
+  { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false},
+  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left', visible: true },
+  { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
+  { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
+  { id: 'referredBy', label: 'Referred by', minWidth: 100, align: 'left', visible: true },
+  { id: 'status', label: 'Status', minWidth: 145, align: 'center', visible: true },
+  { id: 'action', label: 'Action', minWidth: 50, align: 'center', visible: true },
 ]
 
 const colorcodes = {
@@ -459,13 +459,13 @@ const OrganizationDashboardComponent = () => {
         var fullName = ''
         if (admin?.length > 0) fullName = admin[0].fullName
         var record = {
+          id: r._id,
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referedBy: r.referedBy,
+          referredBy: r.referred_by,
           status: r.status,
           action: '',
-          _id: r._id,
         }
 
         data.push(record)
@@ -509,6 +509,7 @@ const OrganizationDashboardComponent = () => {
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
     setAddOrganizationClicked(false)
+    getOrganization()
   }
 
   const closeApproveModel = () => {
@@ -516,10 +517,12 @@ const OrganizationDashboardComponent = () => {
     setIsRejectClicked(false)
     setIsDeactivateClicked(false)
     setIsCancelInviteClicked(false)
+    getOrganization()
   }
 
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
+    getOrganization()
   }
 
   const handleClose = () => {
@@ -567,11 +570,36 @@ const OrganizationDashboardComponent = () => {
     console.log('skipRecords >> Records', allOrganizations)
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
-      console.log('skipRecords >> totalData', totalData)
-      setOrganizations(totalData)
-    }
-  }
+     
+      var data = []
 
+      // console.log('totalPage', totalPage)
+      // console.log('totalCount', totalCount?.count)
+      // console.log('totalData', totalData)
+      // setTotalPage(totalPage)
+
+      totalData.map(r => {
+        var admin = r.admin
+        console.log(admin)
+
+        var fullName = ''
+        if (admin?.length > 0) fullName = admin[0].fullName
+        var record = {
+          id: r._id,
+          facilityName: r.facilityName,
+          orgName: fullName,
+          facilityAddress: r.facilityAddress,
+          referredBy: r.referred_by,
+          status: r.status,
+          action: '',
+        }
+
+        data.push(record)
+
+      setOrganizations(data)
+    })
+  }
+  }
   return (
     <div className="od__main__div">
       <div className="od__row">
@@ -652,13 +680,14 @@ const OrganizationDashboardComponent = () => {
                   <TableHead>
                     <TableRow>
                       {columns.map(column => (
-                        <TableCell
+                        column.visible ? (<TableCell
                           key={column.id}
                           align={column.align}
-                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14 }}
+                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14, visibility: column.visible ? 'visible': 'hidden' }}
                         >
                           {column.label}
-                        </TableCell>
+                        </TableCell>) 
+                        : null                         
                       ))}
                     </TableRow>
                   </TableHead>

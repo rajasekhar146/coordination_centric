@@ -43,7 +43,10 @@ const TermsAndConditionsComponent = () => {
   }
 
   const handleBack = () => {
-    history.push('/bank-info')
+    const planType = localStorage?.getItem('plan_type')
+    if (planType === 'F') history.push('/eula-agreement')
+    else history.push('/bank-info')
+  
   }
 
   useEffect(() => {

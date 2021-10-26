@@ -37,7 +37,7 @@ const TwoFaModel = props => {
     <div>
       <div className="io__row io__icon">
         <span className="io_close">
-        <img onClick={() => props.clickCloseButton()} src={CloseIcon} alt="close" />
+          <img onClick={() => props.clickCloseButton()} src={CloseIcon} alt="close" />
         </span>
 
         <img width="200" src={TwoFaImg} alt="TwoFaImg" />

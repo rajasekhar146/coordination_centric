@@ -43,18 +43,17 @@ class Routes extends Component {
           <Route exact path="/">
             <Redirect to="/signin" />
           </Route>
-          <DefaultLayoutComponentRoute path="/signup" component={Signup} />
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
-          <DefaultLayoutComponentRoute path="/acceptance-criteria" component={AcceptanceCriteria} />
+          <DefaultLayoutComponentRoute path="/acceptance-criteria/:invitetoken/:referredby" component={AcceptanceCriteria} />
           <DefaultLayoutComponentRoute path="/saas-agreement" component={SAASAgreement} />
           <DefaultLayoutComponentRoute path="/eula-agreement" component={EULAAgreement} />
           <DefaultLayoutComponentRoute path="/terms-condition" component={TermsAndConditions} />
           <DefaultLayoutComponentRoute path="/signup-completed" component={SignupComplete} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformationComponent} />
-          <DefaultLayoutComponentRoute path="/signup" component={Signup} />
+          <DefaultLayoutComponentRoute path="/signup/:invitetoken/:referredby" component={Signup} />
           <DefaultLayoutComponentRoute path="/userverification" component={UserVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification-success" component={EmailVerificationSuccess} />

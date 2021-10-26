@@ -44,12 +44,12 @@ const VerificationCodeByAppPage = props => {
     dataToSend.encoding = 'base32'
     const res = authenticationService.twoFactorAppAuthVerification(dataToSend)
     res
-      .then((res) => {
-          const isValid = get(res, ['data', 'valid'], false)
-        if(isValid) {
-            history.push(`/2faverificationsuccess`)
+      .then(res => {
+        const isValid = get(res, ['data', 'valid'], false)
+        if (isValid) {
+          history.push(`/2faverificationsuccess`)
         } else {
-            history.push(`/2faverificationfail`)
+          history.push(`/2faverificationfail`)
         }
       })
       .catch(() => {

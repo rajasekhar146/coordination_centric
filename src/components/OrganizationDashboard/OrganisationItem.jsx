@@ -141,8 +141,8 @@ const OrganisationItem = props => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
         // else if (column.id === 'orgName') value = 'John Deo'
-        else if (column.id === 'referedBy') value = 'Sachin Smith'
-
+        // else if (column.id === 'referedBy') value = 'Sachin Smith'
+        
         return column.id == 'status' ? (
           <TableCell
             key={column.id}
@@ -190,7 +190,7 @@ const OrganisationItem = props => {
               {menuOptions.map((option, idx) => (
                 <MenuItem
                   key={option}
-                  onClick={e => handleMenuAction(option.fnKey, index, row._id)}
+                  onClick={e => handleMenuAction(option.fnKey, index, row.id)}
                   className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                 >
                   <div className="od__menu__icon__column">
@@ -201,6 +201,8 @@ const OrganisationItem = props => {
               ))}
             </Menu>
           </TableCell>
+          ) : column.id == 'id' ? (
+            null
         ) : (
           <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
             {column.format && typeof value === 'number' ? column.format(value) : value}
