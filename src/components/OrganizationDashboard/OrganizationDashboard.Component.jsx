@@ -45,6 +45,7 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
+import get from 'lodash.get'
 
 const style = {
   position: 'absolute',
@@ -396,7 +397,6 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
-  const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
@@ -407,7 +407,8 @@ const OrganizationDashboardComponent = () => {
 
   const [searchText, setSearchText] = React.useState('')
   const [searchDate, setSearchDate] = React.useState('')
-  const [searchStatus, setSearchStatus] = React.useState('')
+  const [count, setCount] = React.useState(null)
+  // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
@@ -427,22 +428,34 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
-      getOrganization()
+    if (
+      !isDeactivateClicked
+      && !isRejectClicked
+      && !isAcceptClicked
+    ) {
+      getOrganization(searchText, searchDate, selectedStatus)
     }
-    return () => {}
-  }, [skip, isDeactivateClicked])
+    return () => { }
+  }, [
+    skip,
+    isDeactivateClicked,
+    searchText,
+    searchDate,
+    selectedStatus,
+    selectedStatus.length,
+  ])
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
   }
 
-  const getOrganization = async () => {
+  const getOrganization = async (nsearchText, nsearchDate, nsearchStatus) => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, '', '', '')
+    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = allOrganizations?.totalCount
+      const totalCount = get(allOrganizations, ['totalCount', '0', 'count'], null)
+      setCount(totalCount)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
@@ -535,24 +548,33 @@ const OrganizationDashboardComponent = () => {
   }
 
   const loadMore = () => {
-    setSkip(skip + 10)
-    setIsLoading(true)
+    if (rows.length !== count) {
+      setSkip(skip + 10)
+      setIsLoading(true)
+    }
   }
 
   const handleSearchText = e => {
     setSearchText(e.target.value)
-    handleSearch(e.target.value, searchDate, searchStatus)
+    // getOrganization(e.target.value, searchDate, searchStatus)
   }
 
   const handleSearchDate = e => {
-    setSearchDate(e.target.value)
-    handleSearch(searchText, e.target.value, searchStatus)
+    setSearchDate(e)
+    setOrganizations([])
+    // getOrganization(searchText, e, searchStatus)
   }
 
   const handleSearchStatus = e => {
-    setSearchStatus(e.target.value)
-    handleSearch(searchText, searchDate, e.target.value)
+    if (e.target.value.indexOf('All Status') > -1) {
+      setSelectedStatus([...statusNames])
+    } else {
+      setSelectedStatus(e.target.value)
+    }
+    // setSearchStatus(e.target.value)
+    // getOrganization(searchText, searchDate, e.target.value)
   }
+
 
   const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
     console.log(nsearchText, nsearchDate, nsearchStatus)
@@ -600,6 +622,7 @@ const OrganizationDashboardComponent = () => {
       })
     }
   }
+
   return (
     <div className="od__main__div">
       <div className="od__row">
@@ -632,7 +655,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                value={value}
+                value={searchDate}
                 onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
@@ -655,7 +678,18 @@ const OrganizationDashboardComponent = () => {
               >
                 {statusNames.map(name => (
                   <MenuItem key={name} value={name}>
-                    <Checkbox checked={selectedStatus.indexOf(name) > -1} />
+                    <Checkbox
+                      checked={selectedStatus.indexOf(name) > -1}
+                      onChange={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        if(!e.target.checked) {
+                          selectedStatus.splice(selectedStatus.indexOf('All Status'), 1)
+                          selectedStatus.splice(selectedStatus.indexOf(name), 1)
+                          setSelectedStatus(selectedStatus)
+                        }
+                      }}
+                    />
                     <ListItemText primary={name} />
                   </MenuItem>
                 ))}
@@ -746,9 +780,10 @@ const OrganizationDashboardComponent = () => {
         <Box sx={rejectModelStyle}>
           <RejectOrganization
             clickCloseButton={closeApproveModel}
-            selectedOrg={selectedOrg}
             setSkip={setSkip}
+            selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>
@@ -765,6 +800,7 @@ const OrganizationDashboardComponent = () => {
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>

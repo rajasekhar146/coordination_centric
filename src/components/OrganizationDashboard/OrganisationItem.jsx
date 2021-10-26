@@ -51,7 +51,7 @@ const OrganisationItem = props => {
   }
 
   const handleActivate = org => {
-    const res = organizationService.updateOrganization(org._id, 'active')
+    const res = organizationService.updateOrganization(org.id, 'active')
     res.then(() => {
       setOrganizations([])
       setSkip(1)
@@ -61,7 +61,7 @@ const OrganisationItem = props => {
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org._id)
+    const res = organizationService.resendInvite(org.id)
     res.then(res => {
       setOrganizations([])
       setSkip(1)
