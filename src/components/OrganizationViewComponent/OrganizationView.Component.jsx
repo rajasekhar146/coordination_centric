@@ -187,7 +187,36 @@ const OrganizationViewComponent = () => {
           <Typography>Organization's Banking Info</Typography>
         </AccordionSummary>
         <AccordionDetails className="modAccDetails">
-          <Typography>----</Typography>
+          <div className="detailWrapper">
+            <Typography
+              variant="subtitle2"
+              display="block"
+              style={{ flex: 0.6, textTransform: 'none' }}
+              gutterBottom
+              component="div"
+            >
+              Bank Account Number
+            </Typography>
+            <Typography variant="overline" display="block" style={{ flex: 1.4, textTransform: 'none' }} gutterBottom>
+              ---
+            </Typography>
+          </div>
+          <div className="detailWrapper">
+            <Typography variant="subtitle2" display="block" style={{ flex: 0.6, textTransform: 'none' }} gutterBottom>
+              Routing Number
+            </Typography>
+            <Typography variant="overline" display="block" style={{ flex: 1.4, textTransform: 'none' }} gutterBottom>
+              ---
+            </Typography>
+          </div>
+          <div className="detailWrapper">
+            <Typography variant="subtitle2" display="block" style={{ flex: 0.6, textTransform: 'none' }} gutterBottom>
+              Name Associated with Bank Account
+            </Typography>
+            <Typography variant="overline" display="block" style={{ flex: 1.4, textTransform: 'none' }} gutterBottom>
+              ---
+            </Typography>
+          </div>
         </AccordionDetails>
       </Accordion>
     </div>
