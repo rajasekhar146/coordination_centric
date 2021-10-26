@@ -46,6 +46,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
+import { authenticationService } from '../../services'
 
 const style = {
   position: 'absolute',
@@ -414,6 +415,14 @@ const OrganizationDashboardComponent = () => {
   //   return () => { }
   // }, [])
 
+  const currentUser = authenticationService.currentUserValue
+  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
+
+  const planType = get(currentUser, ['data', 'data', 'planType'], 'free')
+
+
+
+
   const getTextColor = text => {
     switch (text) {
       case 'Approve':
@@ -562,6 +571,7 @@ const OrganizationDashboardComponent = () => {
   const handleSearchDate = e => {
     setSearchDate(e)
     setOrganizations([])
+    setSkip(1)
     // getOrganization(searchText, e, searchStatus)
   }
 
@@ -581,7 +591,7 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__title__text">Organizations</div>
         <div className="od__btn__div od__align__right">
-          {1 === 1 ? (
+          {is_verified && (planType === "free") ? (
             <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
