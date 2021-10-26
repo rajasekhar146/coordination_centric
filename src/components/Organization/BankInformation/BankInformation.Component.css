@@ -128,6 +128,7 @@
 
 .bi__content__center{
     padding-top: 50px !important;
+    position: relative;
 }
 
 .bi__left__section {
@@ -199,4 +200,17 @@
     flex-grow: 0;
     margin: 0px 13px;
     width: 500px;
+}
+.continue_btn {
+    position: absolute !important;
+    top: 559px;
+    left: 508px;
+}
+.continue_creditcard_btn {
+    position: absolute !important;
+    top: 641px;
+    left: 508px;
+}
+.ml_15 {
+    margin-left: 15px;
 }
