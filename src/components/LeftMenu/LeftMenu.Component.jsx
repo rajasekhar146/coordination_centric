@@ -76,8 +76,8 @@ const menuOptions = [
     icon: require('../../assets/icons/patients.png').default,
   },
   {
-    name: 'Vaccinations',
-    link: '/vaccinations',
+    name: 'Inventory',
+    link: '/inventory',
     icon: require('../../assets/icons/vaccinations.png').default,
   },
   {

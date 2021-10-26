@@ -23,6 +23,8 @@ const TermsAndConditionsComponent = () => {
   const [processSteps, setProcessSteps] = React.useState(steps)
 
   const [activeStep, setActiveStep] = React.useState(3)
+  const [readTermsAndCondtions, setReadTermsAndConditions] = React.useState(false)
+  const [readPrivacyPolicy, setReadPrivacyPolicy] = React.useState(false)
 
   const handleNext = async () => {
     const updateFacility = JSON.parse(localStorage.getItem('facility'))
@@ -88,13 +90,21 @@ const TermsAndConditionsComponent = () => {
                         <FormGroup>
                           <div className="ac__column">
                             <FormControlLabel
-                              control={<Checkbox defaultChecked />}
+                              control={<Checkbox
+                                onChange={(e) => {
+                                  setReadTermsAndConditions(e.target.checked)
+                                }}
+                              />}
                               label="I have read and agree with the terms and conditions"
                             />
                           </div>
                           <div className="ac__column">
                             <FormControlLabel
-                              control={<Checkbox defaultChecked />}
+                              control={<Checkbox
+                                onChange={(e) => {
+                                  setReadPrivacyPolicy(e.target.checked)
+                                }}
+                              />}
                               label="I have read and agree with the Privacy Policy"
                             />
                           </div>
