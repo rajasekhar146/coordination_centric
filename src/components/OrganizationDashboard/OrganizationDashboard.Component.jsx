@@ -334,7 +334,7 @@ const columns = [
   { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
-  { id: 'referedBy', label: 'Refered by', minWidth: 100, align: 'left' },
+  { id: 'referedBy', label: 'Referred by', minWidth: 100, align: 'left' },
   { id: 'status', label: 'Status', minWidth: 145, align: 'center' },
   { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
 ]
