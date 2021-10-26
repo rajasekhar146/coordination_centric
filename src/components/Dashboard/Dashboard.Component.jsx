@@ -97,8 +97,7 @@ const DashboardComponent = () => {
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
 
   useEffect(() => {
-
-    if (twoFactor_auth_type === "none") {
+    if (twoFactor_auth_type !== "none") {
       setIsOpen2FA(true)
     }
   }, [])

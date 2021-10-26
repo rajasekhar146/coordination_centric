@@ -45,6 +45,7 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
+import get from 'lodash.get'
 
 const style = {
   position: 'absolute',
@@ -396,7 +397,6 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
-  const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
   // const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
@@ -407,7 +407,8 @@ const OrganizationDashboardComponent = () => {
 
   const [searchText, setSearchText] = React.useState('')
   const [searchDate, setSearchDate] = React.useState('')
-  const [searchStatus, setSearchStatus] = React.useState('')
+  const [count, setCount] = React.useState(null)
+  // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
@@ -427,22 +428,34 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
-      getOrganization()
+    if (
+      !isDeactivateClicked
+      && !isRejectClicked
+      && !isAcceptClicked
+    ) {
+      getOrganization(searchText, searchDate, selectedStatus)
     }
-    return () => {}
-  }, [skip, isDeactivateClicked])
+    return () => { }
+  }, [
+    skip,
+    isDeactivateClicked,
+    searchText,
+    searchDate,
+    selectedStatus,
+    selectedStatus.length,
+  ])
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
   }
 
-  const getOrganization = async () => {
+  const getOrganization = async (nsearchText, nsearchDate, nsearchStatus) => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, '', '', '')
+    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = allOrganizations?.totalCount
+      const totalCount = get(allOrganizations, ['totalCount', '0', 'count'], null)
+      setCount(totalCount)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
@@ -532,45 +545,50 @@ const OrganizationDashboardComponent = () => {
   }
 
   const loadMore = () => {
-    setSkip(skip + 10)
-    setIsLoading(true)
+    if (rows.length !== count) {
+      setSkip(skip + 10)
+      setIsLoading(true)
+    }
   }
 
   const handleSearchText = e => {
     setSearchText(e.target.value)
-    handleSearch(e.target.value, searchDate, searchStatus)
+    // getOrganization(e.target.value, searchDate, searchStatus)
   }
 
   const handleSearchDate = e => {
-    setSearchDate(e.target.value)
-    handleSearch(searchText, e.target.value, searchStatus)
+    setSearchDate(e)
+    setOrganizations([])
+    // getOrganization(searchText, e, searchStatus)
   }
 
   const handleSearchStatus = e => {
-    setSearchStatus(e.target.value)
-    handleSearch(searchText, searchDate, e.target.value)
+    setSelectedStatus(e.target.value)
+    // setSearchStatus(e.target.value)
+    setOrganizations([])
+    // getOrganization(searchText, searchDate, e.target.value)
   }
 
-  const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
-    console.log(nsearchText, nsearchDate, nsearchStatus)
+  // const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
+  //   console.log(nsearchText, nsearchDate, nsearchStatus)
 
-    var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
+  //   var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
 
-    // if (searchText.length > 0) {
-    //    } else {
-    //   allOrganizations = await organizationService.allOrganization(0, 10, '')
-    // }
+  //   // if (searchText.length > 0) {
+  //   //    } else {
+  //   //   allOrganizations = await organizationService.allOrganization(0, 10, '')
+  //   // }
 
-    setPage(1)
-    const skipRecords = 0
-    console.log('skipRecords', skipRecords)
-    console.log('skipRecords >> Records', allOrganizations)
-    if (allOrganizations != null) {
-      const totalData = allOrganizations?.totalData
-      console.log('skipRecords >> totalData', totalData)
-      setOrganizations(totalData)
-    }
-  }
+  //   setPage(1)
+  //   const skipRecords = 0
+  //   console.log('skipRecords', skipRecords)
+  //   console.log('skipRecords >> Records', allOrganizations)
+  //   if (allOrganizations != null) {
+  //     const totalData = allOrganizations?.totalData
+  //     console.log('skipRecords >> totalData', totalData)
+  //     setOrganizations(totalData)
+  //   }
+  // }
 
   return (
     <div className="od__main__div">
@@ -604,7 +622,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                value={value}
+                value={searchDate}
                 onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
