@@ -121,7 +121,10 @@ const TermsAndConditionsComponent = () => {
                       </div>
 
                       <div className="ac__column ac__right__action">
-                        <Button className="ac__next__btn" onClick={handleNext}>
+                        <Button
+                          className={(readTermsAndCondtions && readPrivacyPolicy) ?
+                            'ac__next__btn' : 'ac__next__btn_disable'}
+                          onClick={handleNext}>
                           Submit
                           <ArrowForwardIosRoundedIcon />
                         </Button>
