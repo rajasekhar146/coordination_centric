@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton'
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import CircleIcon from '@mui/icons-material/Circle'
 
-
 const columns = [
   // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
   { id: 'AppointmentType', label: 'Appointment Type', minWidth: 200, align: 'left' },
@@ -20,11 +19,11 @@ const columns = [
 ]
 
 const rows = [
-  { name: "Rajasekhar", email: "raj@gmail.com", date: "05-10-2021" },
-  { name: "Raj", email: "raju@gmail.com", date: "05-10-2021" },
-  { name: "Jhon", email: "jhon@gmail.com", date: "05-10-2021" },
-  { name: "Virat", email: "virat@gmail.com", date: "05-10-2021" },
-  { name: "Rohit", email: "rohit@gmail.com", date: "05-10-2021" },
+  { name: 'Rajasekhar', email: 'raj@gmail.com', date: '05-10-2021' },
+  { name: 'Raj', email: 'raju@gmail.com', date: '05-10-2021' },
+  { name: 'Jhon', email: 'jhon@gmail.com', date: '05-10-2021' },
+  { name: 'Virat', email: 'virat@gmail.com', date: '05-10-2021' },
+  { name: 'Rohit', email: 'rohit@gmail.com', date: '05-10-2021' },
 ]
 
 const PatientsComponent = () => {
@@ -47,18 +46,10 @@ const PatientsComponent = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>
-                      Name
-                    </TableCell>
-                    <TableCell  style={{ fontWeight: 'bold', fontSize: 14 }}>
-                      Email
-                    </TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>
-                      Date Joined
-                    </TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>
-                      Status
-                    </TableCell>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Name</TableCell>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Email</TableCell>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Date Joined</TableCell>
+                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Status</TableCell>
                     <TableCell align={'right'} style={{ fontWeight: 'bold', fontSize: 14 }}>
                       Action
                     </TableCell>
@@ -67,44 +58,21 @@ const PatientsComponent = () => {
                 <TableBody>
                   {rows.map((row, index) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      <TableCell
-                        key={index}
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell
-                        key={index}
-                      >
-                        {row.email}
-                      </TableCell>
-                      <TableCell
-                        key={index}
-                      >
-                        {row.date}
-                      </TableCell>
+                      <TableCell key={index}>{row.name}</TableCell>
+                      <TableCell key={index}>{row.email}</TableCell>
+                      <TableCell key={index}>{row.date}</TableCell>
                       <TableCell
                         key={index}
                         // align={'center'}
                       >
-                        <CircleIcon fontSize="small" sx={{ color: "#027A48" }} />
-
+                        <CircleIcon fontSize="small" sx={{ color: '#027A48' }} />
                       </TableCell>
-                      <TableCell
-                        key={index}
-                        align={'right'}
-                      >
-                        <IconButton
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls="long-menu"
-                          aria-haspopup="true"
-
-                        >
+                      <TableCell key={index} align={'right'}>
+                        <IconButton aria-label="more" id="long-button" aria-controls="long-menu" aria-haspopup="true">
                           <MoreVertRoundedIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
-
                   ))}
                 </TableBody>
               </Table>

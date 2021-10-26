@@ -46,7 +46,6 @@ const TermsAndConditionsComponent = () => {
     const planType = localStorage?.getItem('plan_type')
     if (planType === 'F') history.push('/eula-agreement')
     else history.push('/bank-info')
-  
   }
 
   useEffect(() => {
@@ -93,21 +92,25 @@ const TermsAndConditionsComponent = () => {
                         <FormGroup>
                           <div className="ac__column">
                             <FormControlLabel
-                              control={<Checkbox
-                                onChange={(e) => {
-                                  setReadTermsAndConditions(e.target.checked)
-                                }}
-                              />}
+                              control={
+                                <Checkbox
+                                  onChange={e => {
+                                    setReadTermsAndConditions(e.target.checked)
+                                  }}
+                                />
+                              }
                               label="I have read and agree with the terms and conditions"
                             />
                           </div>
                           <div className="ac__column">
                             <FormControlLabel
-                              control={<Checkbox
-                                onChange={(e) => {
-                                  setReadPrivacyPolicy(e.target.checked)
-                                }}
-                              />}
+                              control={
+                                <Checkbox
+                                  onChange={e => {
+                                    setReadPrivacyPolicy(e.target.checked)
+                                  }}
+                                />
+                              }
                               label="I have read and agree with the Privacy Policy"
                             />
                           </div>
@@ -125,9 +128,11 @@ const TermsAndConditionsComponent = () => {
 
                       <div className="ac__column ac__right__action">
                         <Button
-                          className={(readTermsAndCondtions && readPrivacyPolicy) ?
-                            'ac__next__btn' : 'ac__next__btn_disable'}
-                          onClick={handleNext}>
+                          className={
+                            readTermsAndCondtions && readPrivacyPolicy ? 'ac__next__btn' : 'ac__next__btn_disable'
+                          }
+                          onClick={handleNext}
+                        >
                           Submit
                           <ArrowForwardIosRoundedIcon />
                         </Button>

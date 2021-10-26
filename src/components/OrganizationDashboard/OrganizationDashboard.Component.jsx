@@ -330,7 +330,7 @@ const columns1 = [
 ]
 
 const columns = [
-  { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false},
+  { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false },
   { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left', visible: true },
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
@@ -398,7 +398,7 @@ const OrganizationDashboardComponent = () => {
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [value, setValue] = React.useState(null)
   const [rows, setOrganizations] = React.useState([])
-  // const [totalPage, setTotalPage] = React.useState(0)
+  const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
@@ -450,7 +450,7 @@ const OrganizationDashboardComponent = () => {
       // console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
-      // setTotalPage(totalPage)
+      setTotalPage(totalPage)
 
       totalData.map(r => {
         var admin = r.admin
@@ -488,18 +488,18 @@ const OrganizationDashboardComponent = () => {
     )
   }
 
-  // const handleChangePage = async (event, newPage) => {
-  //   setPage(newPage)
-  //   const skipRecords = (newPage - 1) * 10
-  //   console.log('skipRecords', skipRecords)
-  //   const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
-  //   console.log('skipRecords >> Records', allOrganizations)
-  //   if (allOrganizations != null) {
-  //     const totalData = allOrganizations?.totalData
-  //     console.log('skipRecords >> totalData', totalData)
-  //     setOrganizations(totalData)
-  //   }
-  // }
+  const handleChangePage = async (event, newPage) => {
+    setPage(newPage)
+    const skipRecords = (newPage - 1) * 10
+    console.log('skipRecords', skipRecords)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+    console.log('skipRecords >> Records', allOrganizations)
+    if (allOrganizations != null) {
+      const totalData = allOrganizations?.totalData
+      console.log('skipRecords >> totalData', totalData)
+      setOrganizations(totalData)
+    }
+  }
 
   const handleChangeRowsPerPage = event => {
     // setRowsPerPage(+event.target.value)
@@ -570,7 +570,7 @@ const OrganizationDashboardComponent = () => {
     console.log('skipRecords >> Records', allOrganizations)
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
-     
+
       var data = []
 
       // console.log('totalPage', totalPage)
@@ -596,9 +596,9 @@ const OrganizationDashboardComponent = () => {
 
         data.push(record)
 
-      setOrganizations(data)
-    })
-  }
+        setOrganizations(data)
+      })
+    }
   }
   return (
     <div className="od__main__div">
@@ -668,27 +668,26 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
-              <InfiniteScroll
-                dataLength={rows.length}
-                next={loadMore}
-                hasMore={true}
-                loader={isLoading ? <h4 className="eulaa__label">Loading...</h4> : null}
-                scrollableTarget="scrollableDiv"
-              >
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>              
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>
-                      {columns.map(column => (
-                        column.visible ? (<TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14, visibility: column.visible ? 'visible': 'hidden' }}
-                        >
-                          {column.label}
-                        </TableCell>) 
-                        : null                         
-                      ))}
+                      {columns.map(column =>
+                        column.visible ? (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{
+                              minWidth: column.minWidth,
+                              fontWeight: 'bold',
+                              fontSize: 14,
+                              visibility: column.visible ? 'visible' : 'hidden',
+                            }}
+                          >
+                            {column.label}
+                          </TableCell>
+                        ) : null
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -717,19 +716,18 @@ const OrganizationDashboardComponent = () => {
                       />
                     ))}
                   </TableBody>
-                </Table>
-              </InfiniteScroll>
+                </Table>             
             </TableContainer>
           </Paper>
         </div>
       </div>
-      {/* <div className="od__row">
+      <div className="od__row">
         <div className="od__pagination__section">
           <Stack spacing={2}>
             <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
           </Stack>
         </div>
-      </div> */}
+      </div> 
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"
