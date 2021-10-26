@@ -62,7 +62,7 @@ const menuOptions = [
   },
   {
     name: 'Users',
-    link: '/acceptance-criteria',
+    link: '/users',
     icon: require('../../assets/icons/users.png').default,
   },
   {
