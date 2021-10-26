@@ -14,12 +14,6 @@ import CircleIcon from '@mui/icons-material/Circle'
 import Checkbox from '@mui/material/Checkbox'
 
 
-const columns = [
-  // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
-  { id: 'AppointmentType', label: 'Appointment Type', minWidth: 200, align: 'left' },
-  { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
-]
-
 const rows = [
   { note: "notfy me",  date: "05-10-2021" },
   { note: "notify test",  date: "05-10-2021" },
