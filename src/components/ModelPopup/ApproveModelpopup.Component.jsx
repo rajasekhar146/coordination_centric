@@ -5,11 +5,15 @@ import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
 const ApproveModel = props => {
-  const { selectedOrg } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg.id, 'active')
     res.then(() => {
+      setOrganizations([])
+      setSkip(1)
+      setOpenFlash(true)
+      setAlertMsg('Verified')
       props.clickCloseButton()
     })
   }

@@ -24,12 +24,15 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const RejectModel = props => {
-  const { selectedOrg, setAlertMsg } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg.id, 'declined')
     res.then(() => {
-      setAlertMsg()
+      setOrganizations([])
+      setSkip(1)
+      setOpenFlash(true)
+      setAlertMsg('Rejected')
       props.clickCloseButton()
     })
   }

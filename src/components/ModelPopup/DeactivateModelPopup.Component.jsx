@@ -9,7 +9,7 @@ const DeactivateModel = props => {
   const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
 
     const handleSubmit = () => {
-        const res = organizationService.updateOrganization(selectedOrg._id, 'inactive')
+        const res = organizationService.updateOrganization(selectedOrg.id, 'inactive')
         res.then((res) => {
             setOrganizations([])
             setSkip(1)

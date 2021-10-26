@@ -735,9 +735,10 @@ const OrganizationDashboardComponent = () => {
         <Box sx={rejectModelStyle}>
           <RejectOrganization
             clickCloseButton={closeApproveModel}
-            selectedOrg={selectedOrg}
             setSkip={setSkip}
+            selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>
@@ -754,6 +755,7 @@ const OrganizationDashboardComponent = () => {
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>
