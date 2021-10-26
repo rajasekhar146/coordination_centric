@@ -27,9 +27,14 @@ const OrganizationViewComponent = () => {
   return (
     <div>
       <div className="headerCont">
-        <Button variant="outlined" color="error" className="backBtn" onClick={()=>{
+        <Button
+          variant="outlined"
+          color="error"
+          className="backBtn"
+          onClick={() => {
             history.push('/organizations')
-        }}>
+          }}
+        >
           Back
         </Button>
         <h5>{orgDet && orgDet.facilityName}</h5>
@@ -169,10 +174,7 @@ const OrganizationViewComponent = () => {
           <Typography>Agreements</Typography>
         </AccordionSummary>
         <AccordionDetails className="modAccDetails">
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit
-            leo lobortis eget.
-          </Typography>
+          <Typography>----</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -185,10 +187,7 @@ const OrganizationViewComponent = () => {
           <Typography>Organization's Banking Info</Typography>
         </AccordionSummary>
         <AccordionDetails className="modAccDetails">
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit
-            leo lobortis eget.
-          </Typography>
+          <Typography>----</Typography>
         </AccordionDetails>
       </Accordion>
     </div>
