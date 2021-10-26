@@ -7,6 +7,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useHistory } from 'react-router-dom'
+import { organizationService } from '../../services'
 
 const ITEM_HEIGHT = 60
 
@@ -24,6 +25,12 @@ const OrganisationItem = props => {
     setSelectedOrg,
     rows,
     menuList,
+    setIsDeactivateClicked,
+    setOrganizations,
+    setSkip,
+    setOpenFlash,
+    setAlertMsg,
+    setIsCancelInviteClicked,
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -31,7 +38,6 @@ const OrganisationItem = props => {
 
   const handleClick = (event, status) => {
     setAnchorEl(event.currentTarget)
-    console.log('status', status, menuOptions)
     const menus = menuList.filter(m => m.menu === status.toLowerCase())
     console.log('menus', menus)
     if (menus.length > 0) setMenuOptions(menus[0].options)
@@ -44,8 +50,28 @@ const OrganisationItem = props => {
     setAnchorEl(null)
   }
 
+  const handleActivate = org => {
+    const res = organizationService.updateOrganization(org._id, 'active')
+    res.then(() => {
+      setOrganizations([])
+      setSkip(1)
+      setAlertMsg('Activated')
+      setOpenFlash(true)
+    })
+  }
+
+  const handleResend = org => {
+    const res = organizationService.resendInvite(org._id)
+    res.then(res => {
+      setOrganizations([])
+      setSkip(1)
+      setAlertMsg('Re-sended')
+      setOpenFlash(true)
+    })
+  }
+
   const handleMenuAction = (action, index, orgId) => {
-    console.log(action, orgId)
+    console.log('orgId', orgId)
     switch (action) {
       case 'setIsAcceptClicked':
         setIsAcceptClicked(true)
@@ -53,25 +79,68 @@ const OrganisationItem = props => {
       case 'setIsRejectClicked':
         setIsRejectClicked(true)
         break
+      case 'setIsDeactivateClicked':
+        setIsDeactivateClicked(true)
+        break
+      case 'setIsCancelInviteClicked':
+        setIsCancelInviteClicked(true)
+        break
+      case 'setIsActivateClicked':
+        handleActivate(rows[index], 'active')
+        break
+      case 'setIsResendClicked':
+        handleResend(rows[index], 'resend')
+        break
       case 'viewdetails':
         routeDirect(orgId)
-        break
+
       default:
         return null
     }
     setAnchorEl(null)
     setSelectedOrg(rows[index])
+  }
 
-    function routeDirect(orgId) {
-      history.push(`/organization-view/${orgId}`)
+  const getValue = val => {
+    switch (val) {
+      case 'active':
+        return 'Verified'
+        break
+      case 'inactive':
+        return 'Suspended'
+        break
+      case 'unverified':
+        return 'Unverified'
+        break
+      case 'invited':
+        return 'Invited'
+        break
+      case 'pending_verification':
+        return 'Pending verification'
+        break
+      case 'pending_acceptance':
+        return 'Pending acceptance'
+        break
+      case 'cancelled':
+        return 'cancelled'
+        break
+      case 'declined':
+        return 'declined'
+        break
+      default:
+        return null
     }
+  }
+
+  function routeDirect(orgId) {
+    history.push(`/organization-view/${orgId}`)
   }
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
-        else if (column.id === 'orgName') value = 'John Deo'
+        // else if (column.id === 'orgName') value = 'John Deo'
         else if (column.id === 'referedBy') value = 'Sachin Smith'
 
         return column.id == 'status' ? (
@@ -80,14 +149,10 @@ const OrganisationItem = props => {
             align={column.align}
             style={{ paddingBottom: 10, paddingTop: 10, textAlign: 'center' }}
           >
-            <div className={`od__${value.toLowerCase()}__status`}>
+            <div className={`od__${value?.toLowerCase()}__status`}>
               <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-              <div className={`od__${value.toLowerCase()}__label`}>
-                {column.format && typeof value === 'number'
-                  ? column.format(value)
-                  : value === 'active'
-                  ? 'verified'
-                  : value}
+              <div className={`od__${value?.toLowerCase()}__label`}>
+                {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
               </div>
             </div>
           </TableCell>
@@ -131,7 +196,7 @@ const OrganisationItem = props => {
                   <div className="od__menu__icon__column">
                     <img src={option.icon} alt={option.text} />
                   </div>
-                  <div>{option.text}</div>
+                  <div className="od__menu__text__column">{option.text}</div>
                 </MenuItem>
               ))}
             </Menu>

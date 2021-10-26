@@ -33,13 +33,18 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import OrganisationItem from './OrganisationItem'
-
 import EditIcon from '../../assets/icons/edit_icon.png'
 import { organizationService } from '../../services'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
+import DeactivateOrganization from '../../pages/deactivate_model'
+import CancelInviteModel from '../ModelPopup/CancelInviteModel'
 import { makeStyles } from '@material-ui/core/styles'
+import Snackbar from '@mui/material/Snackbar'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
+import Alert from '../Alert/Alert.component'
 
 const style = {
   position: 'absolute',
@@ -177,6 +182,15 @@ const menuList = [
     ],
   },
   {
+    menu: 'cancelled',
+    options: [
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+      // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+      // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+    ],
+  },
+  {
     menu: 'declined',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
@@ -190,7 +204,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
   {
@@ -198,15 +212,23 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
     menu: 'invited',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
+      {
+        text: 'Resend Invitation',
+        fnKey: 'setIsResendClicked',
+        icon: require('../../assets/icons/resent_invitation.png').default,
+      },
+      {
+        text: 'Cancel Invite',
+        fnKey: 'setIsCancelInviteClicked',
+        icon: require('../../assets/icons/suspend.png').default,
+      },
     ],
   },
 
@@ -226,12 +248,33 @@ const menuList = [
     ],
   },
   {
+    menu: 'unverified',
+    options: [
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+    ],
+  },
+  {
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-      { text: 'Reject', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+    ],
+  },
+  {
+    menu: 'cancelled',
+    options: [
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+      {
+        text: 'Resend Invitation',
+        fnKey: 'setIsResendClicked',
+        icon: require('../../assets/icons/resent_invitation.png').default,
+      },
+      { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
     ],
   },
 ]
@@ -248,7 +291,17 @@ const MenuProps = {
   },
 }
 
-const statusNames = ['All Status', 'Active', 'Pending', 'Declined', 'Approve', 'Reject', 'Suspended', 'Sent']
+const statusNames = [
+  'All Status',
+  'Verified',
+  'Pending Verification',
+  'Declined',
+  'Pending Acceptance',
+  'Unverified',
+  'Suspended',
+  'Invited',
+  'Cancelled',
+]
 
 const columns1 = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -282,7 +335,7 @@ const columns = [
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
   { id: 'referedBy', label: 'Refered by', minWidth: 100, align: 'left' },
-  { id: 'status', label: 'Status', minWidth: 80, align: 'center' },
+  { id: 'status', label: 'Status', minWidth: 145, align: 'center' },
   { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
 ]
 
@@ -291,8 +344,9 @@ const colorcodes = {
   pending_verification: '#F79009',
   active: '#12B76A',
   pending_acceptance: '#7A5AF8',
-  declined: '#F04438',
+  cancelled: '#757500',
   inactive: '#A0A4A8',
+  declined: '#B42318',
 }
 
 const createData = (name, code, population, size) => {
@@ -336,6 +390,8 @@ const OrganizationDashboardComponent = () => {
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
+  const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
+  const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -346,7 +402,12 @@ const OrganizationDashboardComponent = () => {
   const [skip, setSkip] = React.useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
 
+  const [searchText, setSearchText] = React.useState('')
+  const [searchDate, setSearchDate] = React.useState('')
+  const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
@@ -366,23 +427,53 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    getOrganization()
+    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
+      getOrganization()
+    }
     return () => {}
-  }, [skip])
+  }, [skip, isDeactivateClicked])
+
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
 
   const getOrganization = async () => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10)
+    const allOrganizations = await organizationService.allOrganization(skip, 10, '', '', '')
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = allOrganizations?.totalCount
-      const totalData = allOrganizations?.totalData
+      var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
+      var data = []
+
       // console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
       // setTotalPage(totalPage)
-      setOrganizations([...rows, ...totalData])
+
+      totalData.map(r => {
+        var admin = r.admin
+        console.log(admin)
+
+        var fullName = ''
+        if (admin?.length > 0) fullName = admin[0].fullName
+        var record = {
+          facilityName: r.facilityName,
+          orgName: fullName,
+          facilityAddress: r.facilityAddress,
+          referedBy: r.referedBy,
+          status: r.status,
+          action: '',
+          _id: r._id,
+        }
+
+        data.push(record)
+      })
+
+      console.log('new totalData', data)
+
+      setOrganizations([...rows, ...data])
     }
     setIsLoading(false)
   }
@@ -423,6 +514,8 @@ const OrganizationDashboardComponent = () => {
   const closeApproveModel = () => {
     setIsAcceptClicked(false)
     setIsRejectClicked(false)
+    setIsDeactivateClicked(false)
+    setIsCancelInviteClicked(false)
   }
 
   const handleAddOrganizationOpen = () => {
@@ -443,6 +536,42 @@ const OrganizationDashboardComponent = () => {
     setIsLoading(true)
   }
 
+  const handleSearchText = e => {
+    setSearchText(e.target.value)
+    handleSearch(e.target.value, searchDate, searchStatus)
+  }
+
+  const handleSearchDate = e => {
+    setSearchDate(e.target.value)
+    handleSearch(searchText, e.target.value, searchStatus)
+  }
+
+  const handleSearchStatus = e => {
+    setSearchStatus(e.target.value)
+    handleSearch(searchText, searchDate, e.target.value)
+  }
+
+  const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
+    console.log(nsearchText, nsearchDate, nsearchStatus)
+
+    var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
+
+    // if (searchText.length > 0) {
+    //    } else {
+    //   allOrganizations = await organizationService.allOrganization(0, 10, '')
+    // }
+
+    setPage(1)
+    const skipRecords = 0
+    console.log('skipRecords', skipRecords)
+    console.log('skipRecords >> Records', allOrganizations)
+    if (allOrganizations != null) {
+      const totalData = allOrganizations?.totalData
+      console.log('skipRecords >> totalData', totalData)
+      setOrganizations(totalData)
+    }
+  }
+
   return (
     <div className="od__main__div">
       <div className="od__row">
@@ -460,6 +589,7 @@ const OrganizationDashboardComponent = () => {
           <TextField
             margin="normal"
             placeholder="Search"
+            onChange={e => handleSearchText(e)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -475,9 +605,7 @@ const OrganizationDashboardComponent = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 value={value}
-                onChange={newValue => {
-                  setValue(newValue)
-                }}
+                onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
               />
@@ -491,7 +619,7 @@ const OrganizationDashboardComponent = () => {
                 id="demo-multiple-checkbox"
                 multiple
                 value={selectedStatus}
-                onChange={handleChange}
+                onChange={e => handleSearchStatus(e)}
                 input={<OutlinedInput />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -524,7 +652,11 @@ const OrganizationDashboardComponent = () => {
                   <TableHead>
                     <TableRow>
                       {columns.map(column => (
-                        <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14 }}
+                        >
                           {column.label}
                         </TableCell>
                       ))}
@@ -543,10 +675,16 @@ const OrganizationDashboardComponent = () => {
                         menuOptions={menuOptions}
                         setIsRejectClicked={setIsRejectClicked}
                         setIsAcceptClicked={setIsAcceptClicked}
+                        setIsDeactivateClicked={setIsDeactivateClicked}
                         getTextColor={getTextColor}
                         setSelectedOrg={setSelectedOrg}
                         rows={rows}
                         menuList={menuList}
+                        setSkip={setSkip}
+                        setOrganizations={setOrganizations}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setIsCancelInviteClicked={setIsCancelInviteClicked}
                       />
                     ))}
                   </TableBody>
@@ -569,7 +707,7 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization clickCloseButton={handleAddOrganizationClose} />
+          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
         </Box>
       </Modal>
       <Modal
@@ -579,7 +717,13 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={rejectModelStyle}>
-          <RejectOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
+          <RejectOrganization
+            clickCloseButton={closeApproveModel}
+            selectedOrg={selectedOrg}
+            setSkip={setSkip}
+            setOrganizations={setOrganizations}
+            setAlertMsg={setAlertMsg}
+          />
         </Box>
       </Modal>
       <Modal
@@ -589,9 +733,50 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={approveModelStyle}>
-          <AprroveOrganization clickCloseButton={closeApproveModel} selectedOrg={selectedOrg} />
+          <AprroveOrganization
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setAlertMsg={setAlertMsg}
+          />
         </Box>
       </Modal>
+      <Modal
+        open={isDeactivateClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <DeactivateOrganization
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={isCalcelInviteClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={approveModelStyle}>
+          <CancelInviteModel
+            clickCloseButton={closeApproveModel}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+          />
+        </Box>
+      </Modal>
+      <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
     </div>
   )
 }

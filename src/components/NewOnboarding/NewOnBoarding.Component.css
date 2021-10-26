@@ -83,9 +83,10 @@
     width: 290px !important;
     left: 0px;
     top: 0px;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     /* padding: 8px !important; */
+    height: 45px;
 }
 
 .ac__label {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import headerImage from '../../assets/images/header_image.png'
 import './NavBar.Component.css'
 import EventNoteIcon from '@mui/icons-material/EventNote'
@@ -70,9 +70,13 @@ const StyledMenu = styled(props => (
 const NavBarComponent = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
+  const [name, setName] = React.useState('')
+  const [role, setRole] = React.useState()
+
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = action => {
     setAnchorEl(null)
     console.log('action', action)
@@ -81,6 +85,25 @@ const NavBarComponent = () => {
       history.push('/signin')
     }
   }
+
+  const toCamelCase = str =>
+    str.replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()).replace(/^\w/, c => c.toLowerCase())
+
+  useEffect(() => {
+    console.log('current user', authenticationService.currentUserValue.data.data)
+    var data = authenticationService?.currentUserValue?.data?.data
+    var fullName = ''
+    var roleName = ''
+    if (data != null) {
+      console.log('data?.last_name', data?.last_name)
+      if (data?.last_name != undefined) fullName = data.first_name + ' ' + data?.last_name
+      else fullName = data.first_name
+
+      roleName = data.role
+    }
+    setName(fullName)
+    setRole(roleName)
+  }, [])
 
   return (
     <div className="nb__main_div">
@@ -116,8 +139,8 @@ const NavBarComponent = () => {
                 <img src={ProfileImage} alt="Profile" className="nb__profile__image" />
               </div>
               <div className="nb__profile__content">
-                <div className="nb__profile__name">John Doe</div>
-                <div className="nb__profile__role">Super Admin</div>
+                <div className="nb__profile__name">{name}</div>
+                <div className="nb__profile__role">{role}</div>
               </div>
             </div>
           </Button>

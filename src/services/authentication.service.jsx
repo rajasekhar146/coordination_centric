@@ -6,14 +6,27 @@ import { authHeader, handleResponse } from '../helpers'
 const apiURL = 'https://api.csuite.health'
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')))
+const qrImgSubject = new BehaviorSubject()
 
 export const authenticationService = {
   login,
   logout,
+  twoFactorEmailAuth,
+  twoFactorByAppAuth,
+  twoFactorEmailAuthVerification,
+  twoFactorAppAuthVerification,
   currentUser: currentUserSubject.asObservable(),
+  qrImg: qrImgSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value
   },
+  get qrImgvalue() {
+    return qrImgSubject.value
+  },
+}
+
+function updateStore(v) {
+  qrImgSubject.next(v)
 }
 
 function login(username, password) {
@@ -36,17 +49,80 @@ function login(username, password) {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(user))
         currentUserSubject.next(user)
-        console.log(user)
+        // console.log(user)
         return user
       })
+      .catch(err => {
+        console.log('authentication service >> login ', JSON.stringify(err.response))
+        // const errorMessage = {
+        //   error: err.message,
+        //   erroCode: err.code,
+        //   data: err.data,
+        // }
+        return err.response?.data
+      })
   )
-  // .error(err => {
-  //     console.log('authentication service >> login ', err);
-  // });
 }
 
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser')
   currentUserSubject.next(null)
+}
+
+function twoFactorEmailAuth(email) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFactorEmailAuthentication/${email}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function twoFactorByAppAuth(email) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFactorAuthentication/${email}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        updateStore(data.data)
+        return data
+      })
+  )
+}
+
+function twoFactorEmailAuthVerification(code) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFactorEmailAuthenticationVerification/${code}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function twoFactorAppAuthVerification(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFactorAuthenticationVerification`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
 }

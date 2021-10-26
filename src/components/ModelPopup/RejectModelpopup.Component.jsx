@@ -6,8 +6,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import RejectOrgIcon from '../../assets/icons/reject_org.png'
 import { organizationService } from '../../services'
 
-
-
 const useStyles = makeStyles(theme => ({
   textField: {
     width: '100%',
@@ -17,25 +15,24 @@ const useStyles = makeStyles(theme => ({
     marginTop: 0,
     fontWeight: 500,
     background: '#FFFFFF',
-    borderRadius: 12
+    borderRadius: 12,
   },
   input: {
-    color: "#838486",
-    height: "44px",
-  }
+    color: '#838486',
+    height: '44px',
+  },
 }))
 
-
-
-
 const RejectModel = props => {
-  const {
-    selectedOrg
-  } = props;
+  const { 
+    selectedOrg,
+    setAlertMsg,
+   } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg._id, 'declined')
     res.then(() => {
+      setAlertMsg()
       props.clickCloseButton()
     })
   }
@@ -46,14 +43,10 @@ const RejectModel = props => {
         <img src={RejectOrgIcon} alt="Approve Org" />
       </div>
       <div className="io__row io__text__center">
-        <label className="io__title">
-          Reject Organisation
-        </label>
+        <label className="io__title">Reject Organisation</label>
       </div>
       <div className="io__row io__text__center io__conform__title">
-        <label >
-          Are you sure you want to reject this organisation?
-        </label>
+        <label>Are you sure you want to reject this organisation?</label>
       </div>
 
       <div className="io__row io_input">
@@ -61,7 +54,7 @@ const RejectModel = props => {
         <TextField
           margin="normal"
           type="text"
-          placeholder={"e.g. Website design"}
+          placeholder={'e.g. Website design'}
           className={classes.textField}
           InputProps={{
             className: classes.input,
@@ -77,11 +70,7 @@ const RejectModel = props => {
             </Button>
           </div>
           <div className="io__approve">
-            <Button
-              type="submit"
-              className="io__Approve__btn"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
               Reject
             </Button>
           </div>

@@ -16,18 +16,61 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import jsPDF from 'jspdf'
 import * as htmlToImage from 'html-to-image'
+import downloadIcon from '../../../assets/icons/download_icon.png'
+import printIcon from '../../../assets/icons/print_icon.png'
+import html2canvas from 'html2canvas'
+import { organizationService } from '../../../services'
+import { useForm } from 'react-hook-form'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
 const ServiceLevelAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
   const [value, setValue] = useState(null)
+  const [processSteps, setProcessSteps] = React.useState(steps)
+  const [IsDateEntered, setDateEntered] = useState(true)
+  const [IsSigned, setSigned] = useState(true)
   var sigPad = {}
+
+  const [facility, setFacility] = useState({})
 
   const [activeStep, setActiveStep] = React.useState(1)
 
   const handleNext = () => {
-    history.push('/saas-agreement')
+    console.log('Date', sigPad.isEmpty())
+    setDateEntered(value != null)
+    setSigned(!sigPad.isEmpty())
+
+    if (value != null && !sigPad.isEmpty()) {
+      let domElement = document.getElementById('my-node')
+      html2canvas(domElement).then(canvas => {
+        var base64String = canvas.toDataURL()
+        base64String = base64String.replace('data:image/png;base64,', '')
+
+        const certificate = {
+          name: base64String,
+          type: 'certificate',
+        }
+        organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
+
+        // .then(data => {
+        //   console.log('uploadFile >> response', data)
+        //   var updatedFacility = {
+        //     ...facility,
+        //     business_certificate: 'www.servicelevelagreement.com',
+        //   }
+
+        //   console.log('updatedFacility', JSON.stringify(updatedFacility))
+        //   setFacility(updatedFacility)
+
+        //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
+
+        //   history.push('/saas-agreement')
+
+        // })
+        // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
+      })
+    }
   }
 
   const handleBack = () => {
@@ -48,7 +91,7 @@ const ServiceLevelAgreementComponent = props => {
         console.log(dataUrl)
         //const pdf = new jsPDF();
         let pdf = new jsPDF('p', 'pt', 'letter')
-        pdf.addImage(dataUrl, 'PNG', 4, 4, 620, 770)
+        pdf.addImage(dataUrl, 'PNG', 20, 20, 580, 700)
         // const reader = new FileReader()
         // reader.readAsDataURL(pdf)
         pdf.save('download.pdf')
@@ -59,6 +102,20 @@ const ServiceLevelAgreementComponent = props => {
       })
   }
 
+  useEffect(() => {
+    var updateFacility = JSON.parse(localStorage.getItem('facility'))
+    console.log('Service >> updateFacility', updateFacility)
+    setFacility(updateFacility)
+
+    const planType = localStorage.getItem('plan_type')
+    if (planType == undefined) localStorage.setItem('plan_type', 'F')
+    if (planType?.trim().toLocaleUpperCase() === 'F') {
+      const newSteps = steps.filter((step, i) => i != 2)
+      setProcessSteps(newSteps)
+      console.log('newSteps', newSteps)
+    }
+  }, [])
+
   return (
     <div className="ob__main__section">
       <div className="ob__align__center">
@@ -68,7 +125,7 @@ const ServiceLevelAgreementComponent = props => {
         <div className="ob__content__section">
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label, index) => {
+              {processSteps.map((label, index) => {
                 const stepProps = {}
                 const labelProps = {}
 
@@ -85,8 +142,18 @@ const ServiceLevelAgreementComponent = props => {
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
+                <div className="sla__download__print__section">
+                  <div className="sla__download__print">
+                    <div className="sla__download__text" onClick={onButtonClick}>
+                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                    </div>
+                    <div className="sla__download__text">
+                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
+                    </div>
+                  </div>
+                </div>
                 <div>
-                  <div  className="ac__form">
+                  <div className="ac__form">
                     <div id="my-node">
                       <div className="ac__row">
                         <div className="ac__column">
@@ -168,6 +235,11 @@ const ServiceLevelAgreementComponent = props => {
                               }}
                             />
                           </div>
+                          {!IsSigned && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please sigh here</p>
+                            </div>
+                          )}
                         </div>
 
                         <div className="eulaa__column">
@@ -182,33 +254,32 @@ const ServiceLevelAgreementComponent = props => {
                               InputProps={{ className: 'sla__date__section' }}
                             />
                           </LocalizationProvider>
+                          {!IsDateEntered && (
+                            <div className="sla__text__align__center">
+                              <p className="ac__required">Please select the date</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className="ac__gap__div"></div>
 
-                      <div className="ac__row">
-                        <div className="ac__column ac__left__action">
-                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                            Back
-                          </Button>
-                        </div>
-
-                        <div className="ac__column ac__right__action">
-                          <Button className="ac__next__btn" onClick={onButtonClick}>
-                            Download PDF
-                          </Button>{' '}
-                          &nbsp;&nbsp;&nbsp;
-                          <Button className="ac__next__btn" onClick={handleNext}>
-                            Save & Next
-                            <ArrowForwardIosRoundedIcon />
-                          </Button>
-                        </div>
+                    <div className="ac__row">
+                      <div className="ac__column ac__left__action">
+                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                          Back
+                        </Button>
                       </div>
-                      
+
+                      <div className="ac__column ac__right__action">
+                        <Button className="ac__next__btn" onClick={handleNext}>
+                          Save & Next
+                          <ArrowForwardIosRoundedIcon />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
 
-                  
                   <div className="ac__gap__bottom__div"></div>
                 </div>
               </div>

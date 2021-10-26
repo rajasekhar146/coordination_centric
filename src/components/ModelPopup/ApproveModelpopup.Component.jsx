@@ -4,11 +4,8 @@ import Button from '@mui/material/Button'
 import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
-
 const ApproveModel = props => {
-  const {
-    selectedOrg
-  } = props;
+  const { selectedOrg } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg._id, 'active')
@@ -17,21 +14,16 @@ const ApproveModel = props => {
     })
   }
 
-
   return (
     <div className="io__main__div">
       <div className="io__row io__icon">
         <img src={ApproveOrgIcon} alt="Approve Org" />
       </div>
       <div className="io__row io__text__center">
-        <label className="io__title">
-          Approve Organisation
-        </label>
+        <label className="io__title">Approve Organisation</label>
       </div>
       <div className="io__row io__text__center">
-        <label className="io__conform__title">
-          Are you sure you want to approve this organisation?
-        </label>
+        <label className="io__conform__title">Are you sure you want to approve this organisation?</label>
       </div>
       <div className="io__row io__btn">
         <div className="io__same__line">
@@ -41,11 +33,7 @@ const ApproveModel = props => {
             </Button>
           </div>
           <div className="io__approve">
-            <Button
-              type="submit"
-              className="io__Approve__btn"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
               Approve
             </Button>
           </div>

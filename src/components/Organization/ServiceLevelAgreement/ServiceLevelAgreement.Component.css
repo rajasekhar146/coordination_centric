@@ -1,7 +1,7 @@
 
 .sla__row {
-    width: 100%;
-    display: flex;
+  width: 100%;
+  display: flex;
     /* background-color: #A0A4A8; */
 }
 
@@ -74,4 +74,49 @@
 
   .sla__date__section {
     margin-top: 50px !important;
+  }
+
+  .sla__download__text{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    letter-spacing: 0.1px;
+
+    color: #E42346;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
+  }
+
+  .sla__download__print__section {
+    width: 100% !important;
+    display: flex;
+    align-items: right !important;
+    justify-content: end !important; 
+    margin-top: 15px;   
+  }
+
+  .sla__download__print__section > div {
+    align-items: center !important;
+    display: flex;
+    /* padding: 5px; */
+  }
+
+  .sla__download__text {
+    align-items: center !important;
+    display: flex;
+    margin-right: 20px !important;
+    cursor: pointer;
+  }
+
+  .sla__text__align__center{
+    text-align: center;
   }
