@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useHistory } from 'react-router'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -13,6 +13,7 @@ import { organizationService } from '../../services'
 
 const OrganizationViewComponent = () => {
   const { orgId } = useParams()
+  const history = useHistory()
   const [orgDet, setOrgDetails] = useState({})
 
   useEffect(() => {
@@ -26,7 +27,9 @@ const OrganizationViewComponent = () => {
   return (
     <div>
       <div className="headerCont">
-        <Button variant="outlined" color="error" className="backBtn">
+        <Button variant="outlined" color="error" className="backBtn" onClick={()=>{
+            history.push('/organizations')
+        }}>
           Back
         </Button>
         <h5>{orgDet && orgDet.facilityName}</h5>
