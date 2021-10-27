@@ -25,7 +25,7 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 
 const SAASAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
-  const [value, setValue] = useState(null)
+  const [value, setValue] = useState(new Date())
   const [processSteps, setProcessSteps] = React.useState(steps)
   var sigPad = {}
   const [IsDateEntered, setDateEntered] = useState(true)
@@ -243,6 +243,8 @@ const SAASAgreementComponent = props => {
                               onChange={newValue => {
                                 setValue(newValue)
                               }}
+                              minDate={new Date()}
+                              maxDate={new Date()}
                               renderInput={params => <TextField {...params} variant="standard" />}
                               InputProps={{ className: 'sla__date__section' }}
                             />

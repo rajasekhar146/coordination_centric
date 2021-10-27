@@ -353,7 +353,7 @@ const columns1 = [
 
 const columns = [
   { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false },
-  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left', visible: true },
+  { id: 'facilityName', label: 'Organization Name', minWidth: 180, align: 'left', visible: true },
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
   { id: 'referredBy', label: 'Referred by', minWidth: 110, align: 'left', visible: true },

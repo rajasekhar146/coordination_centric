@@ -37,10 +37,14 @@ const EmailVerificationPage = props => {
 
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const userVerified = get(currentUser, ['data', 'data', 'is_verified'], false)
 
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
   useEffect(() => {
+    if (userVerified) {
+      history.push('/dashboard')
+    }
     let myInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1)

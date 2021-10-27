@@ -82,6 +82,7 @@ const NavBarComponent = () => {
     console.log('action', action)
     if (action.toLowerCase() === 'logout') {
       authenticationService.logout()
+      localStorage.removeItem('IsShow2FAPopup')
       history.push('/signin')
     }
   }

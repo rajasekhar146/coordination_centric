@@ -25,7 +25,7 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 
 const EULAAgreementComponent = () => {
   const [signatureUrl, setSignature] = useState({})
-  const [value, setValue] = useState(null)
+  const [value, setValue] = useState(new Date())
   const [planType, setPlanType] = useState('F')
   var sigPad = {}
   const [IsDateEntered, setDateEntered] = useState(true)
@@ -244,6 +244,8 @@ const EULAAgreementComponent = () => {
                               onChange={newValue => {
                                 setValue(newValue)
                               }}
+                              minDate={new Date()}
+                              maxDate={new Date()}
                               renderInput={params => <TextField {...params} variant="standard" />}
                               InputProps={{ className: 'sla__date__section' }}
                             />
