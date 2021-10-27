@@ -73,7 +73,7 @@
     flex-grow: 0;
     margin: 0px 8px;
 
-    padding: 8px 32px 8px 32px !important;
+    padding: 8px 32px 8px 24px !important;
     border-radius: 5px !important;
     text-transform: uppercase !important;
 }
@@ -110,6 +110,7 @@
 }
 
 .io__same__line {
+    margin-top: 50px !important;
     display: flex;
 }
 .io__flex__spcebetween {
@@ -130,7 +131,7 @@
     background: #FFFFFF;
     border-radius: 8px !important;
     width: 380px !important;
-    color: #A0A4A8 !important;
+    /* color: #A0A4A8 !important; */
     height: 48px !important;
 }
 
@@ -143,3 +144,4 @@
     font-family: Lato;
     font-size: 12px !important;
 }
+

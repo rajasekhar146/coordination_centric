@@ -47,7 +47,10 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
-          <DefaultLayoutComponentRoute path="/acceptance-criteria/:invitetoken/:referredby" component={AcceptanceCriteria} />
+          <DefaultLayoutComponentRoute
+            path="/acceptance-criteria/:invitetoken/:referredby"
+            component={AcceptanceCriteria}
+          />
           <DefaultLayoutComponentRoute path="/saas-agreement" component={SAASAgreement} />
           <DefaultLayoutComponentRoute path="/eula-agreement" component={EULAAgreement} />
           <DefaultLayoutComponentRoute path="/terms-condition" component={TermsAndConditions} />

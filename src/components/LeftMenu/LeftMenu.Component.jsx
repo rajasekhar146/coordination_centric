@@ -66,22 +66,22 @@ const menuOptions = [
   },
   {
     name: 'Users',
-    link: '/acceptance-criteria',
+    link: '/users',
     icon: require('../../assets/icons/users.png').default,
     items: [
       {
         name: 'Staff',
-        link: '/acceptance-criteria',
+        link: '/users',
         icon: require('../../assets/icons/users.png').default,
       },
       {
         name: 'Collaborators',
-        link: '/acceptance-criteria',
+        link: '/users',
         icon: require('../../assets/icons/users.png').default,
       },
       {
         name: 'Patients',
-        link: '/acceptance-criteria',
+        link: '/users',
         icon: require('../../assets/icons/users.png').default,
       },
     ],
@@ -100,7 +100,7 @@ const menuOptions = [
   },
   {
     name: 'Inventory',
-    link: '/vaccinations',
+    link: '/inventory',
     icon: require('../../assets/icons/vaccinations.png').default,
     items: [],
   },

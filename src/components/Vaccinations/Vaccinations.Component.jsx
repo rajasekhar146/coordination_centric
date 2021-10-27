@@ -1,7 +1,7 @@
 import React from 'react'
 
 const VaccinationsComponent = () => {
-  return <div>Vaccinations Component</div>
+  return <div>Inventory Component</div>
 }
 
 export default VaccinationsComponent

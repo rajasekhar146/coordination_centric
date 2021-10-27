@@ -127,16 +127,22 @@ const InviteOrganizationComponent = props => {
           <div className="io__row">
             <div className="io__label">Phone Number</div>
             <TextField
-              {...register('facilityPhone', {})}
+              {...register('facilityPhone', {
+                required: 'Facility Number is required',                
+                pattern: {
+                  value: /\d+/,
+                  message: 'This input is number only.',
+                },
+              })}
               margin="normal"
-              type="number"
+              style={{width: '100%', height: '10px'}}
               InputProps={{
+                maxLength: 15,
                 startAdornment: (
                   <InputAdornment position="start">
                     <img src={OrganizationPhoneIcon} alt="Organization Phone" />
                   </InputAdornment>
                 ),
-                className: 'io__text__box',
               }}
             />
           </div>
