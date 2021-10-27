@@ -80,7 +80,7 @@ const menuOptions = [
         icon: require('../../assets/icons/users.png').default,
       },
       {
-        name: 'Patients',
+        name: 'Patient Records',
         link: '/users',
         icon: require('../../assets/icons/users.png').default,
       },
@@ -92,12 +92,12 @@ const menuOptions = [
     icon: require('../../assets/icons/organizations.png').default,
     items: [],
   },
-  {
-    name: 'Patient Records',
-    link: '/patients',
-    icon: require('../../assets/icons/patients.png').default,
-    items: [],
-  },
+  // {
+  //   name: 'Patient Records',
+  //   link: '/patients',
+  //   icon: require('../../assets/icons/patients.png').default,
+  //   items: [],
+  // },
   {
     name: 'Inventory',
     link: '/inventory',

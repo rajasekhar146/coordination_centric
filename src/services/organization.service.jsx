@@ -25,9 +25,11 @@ function allOrganization(skip, limit, searchText, date, status) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
+
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
   const dateUTC = moment.utc(date).local().format('YYYY-MM-DD');
+  // const statusvalues = status.join()
 
   //status = ''
   // console.log(searchText, date, status)
@@ -62,9 +64,13 @@ function allOrganization(skip, limit, searchText, date, status) {
   if (date) {
     url += `&created_date=${dateUTC}`
   }
-  // if (status) {
-  //   url += `&status=${status}`
+  // if (statusvalues) {
+  //   url += `&status=${statusvalues}`
   // }
+
+  console.log(status)
+
+
   
   return (
     axios

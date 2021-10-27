@@ -12,8 +12,16 @@ import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 // import { useForm } from '../../utils/validator'
 import { useForm } from 'react-hook-form'
 import { organizationService } from '../../services'
+import get from 'lodash.get'
 
 const InviteOrganizationComponent = props => {
+  const {
+    setOpenFlash,
+    setAlertMsg,
+    clickCloseButton
+  } = props;
+
+
   const defaultValues = {
     facilityName: '',
     facilityEmail: '',
@@ -38,6 +46,7 @@ const InviteOrganizationComponent = props => {
   // const { values, useInput, isValid } = useForm(defaultValues, customErrorAttribute)
 
   const [isSubmit, setIsSubmit] = useState(false)
+  const [isExist, setIsExist] = useState('')
 
   const onSubmit = e => {
     setIsSubmit(true)
@@ -46,12 +55,19 @@ const InviteOrganizationComponent = props => {
     defaultValues.facilityAddress = watch('facilityAddress')
     defaultValues.facilityPhone = watch('facilityPhone')
     const res = organizationService.addOrganization(defaultValues)
-    res.then(() => {
-      props.clickCloseButton()
+    res.then((response) => {
+      setOpenFlash(true)
+      setAlertMsg('Invitation Sent')
+      clickCloseButton()
+    }).catch((error) => {
+      console.log(error.response)
+      if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
+        setIsExist('Email Already Registered')
+      }
     })
   }
 
-  const handleInviteOrganization = () => {}
+  const handleInviteOrganization = () => { }
 
   return (
     <div className="io__main__div">
@@ -106,6 +122,7 @@ const InviteOrganizationComponent = props => {
               }}
             />
             {errors.facilityEmail && <p className="io__required">{errors.facilityEmail.message}</p>}
+            {isExist && <p className="io__required">{isExist}</p>}
           </div>
 
           <div className="io__row">
@@ -128,14 +145,14 @@ const InviteOrganizationComponent = props => {
             <div className="io__label">Phone Number</div>
             <TextField
               {...register('facilityPhone', {
-                required: 'Facility Number is required',                
+                required: 'Facility Number is required',
                 pattern: {
                   value: /\d+/,
                   message: 'This input is number only.',
                 },
               })}
               margin="normal"
-              style={{width: '100%', height: '10px'}}
+              style={{ width: '100%', height: '10px' }}
               InputProps={{
                 maxLength: 15,
                 startAdornment: (
