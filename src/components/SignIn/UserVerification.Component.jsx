@@ -48,7 +48,11 @@ const UserVerificationPage = props => {
           <label>Trouble Verifying? Contact Us</label>
         </div>
       </div>
-      <div className="io__back" onClick={handleSendEmail}>
+      <div className="io__back"
+        onClick={() => {
+          history.push('/signin')
+        }}
+      >
         <span className="io__back__arrow">
           <ArrowBackIosNewIcon fontSize="sm" />
         </span>

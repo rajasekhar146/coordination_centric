@@ -309,7 +309,6 @@
 }
 
 .od__menu__icon__column {
-    width: 15%;
     display: flex;
     align-items: left !important;
     justify-content: center;
@@ -428,12 +427,19 @@
     border-radius: 5px !important;
 }
 
-.MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
     opacity: 1;
     transform: none;
     transition: opacity 203ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 135ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     top: 225px;
-    left: 1075px !important;
-    width: 18% !important;
+    left: 1100px !important;
+    width: 16% !important;
     transform-origin: 85px 0px;
+}
+
+.od_status {
+    display: flex;
+    flex-direction: row-reverse;
+    position: relative;
+    top: 4px;
 }
