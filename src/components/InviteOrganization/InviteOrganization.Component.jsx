@@ -57,7 +57,7 @@ const InviteOrganizationComponent = props => {
     const res = organizationService.addOrganization(defaultValues)
     res.then((response) => {
       setOpenFlash(true)
-      setAlertMsg('Invitation Sent')
+      setAlertMsg('Invitation Sent Successfully')
       clickCloseButton()
     }).catch((error) => {
       console.log(error.response)
@@ -145,14 +145,12 @@ const InviteOrganizationComponent = props => {
             <div className="io__label">Phone Number</div>
             <TextField
               {...register('facilityPhone', {
-                required: 'Facility Number is required',
                 pattern: {
                   value: /\d+/,
                   message: 'This input is number only.',
                 },
               })}
               margin="normal"
-              style={{ width: '100%', height: '10px' }}
               InputProps={{
                 maxLength: 15,
                 startAdornment: (
@@ -160,18 +158,19 @@ const InviteOrganizationComponent = props => {
                     <img src={OrganizationPhoneIcon} alt="Organization Phone" />
                   </InputAdornment>
                 ),
+                className: 'io__text__box',
               }}
             />
           </div>
 
           <div className="io__row">
-            <div className="io__same__line">
+            <div style={{ marginTop: "50px"}} className="io__same__line">
               <div className="io__column">
                 <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
                   Close
                 </Button>
               </div>
-              <div className="io__column io__invite__org__btn">
+              <div style={{ marginLeft: "15px"}} className="io__column io__invite__org__btn">
                 <Button type="submit" className="io__add__organization__btn">
                   Invite Organization
                 </Button>

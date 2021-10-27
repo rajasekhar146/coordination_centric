@@ -21,16 +21,27 @@ import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import { useForm } from 'react-hook-form'
+import { makeStyles } from '@material-ui/core/styles'
+
+
+const useStyles = makeStyles(theme => ({
+  datefield: {
+    top: '22px',
+    borderBottom: "1px solid #000000"
+  }
+}))
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
 const ServiceLevelAgreementComponent = props => {
+  const classes = useStyles()
+
   const [signatureUrl, setSignature] = useState({})
-  const [value, setValue] = useState(null)
+  const [value, setValue] = useState(new Date())
   const [processSteps, setProcessSteps] = React.useState(steps)
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
-  
+
   var sigPad = {}
 
   const [facility, setFacility] = useState({})
@@ -257,15 +268,17 @@ const ServiceLevelAgreementComponent = props => {
                               onChange={newValue => {
                                 setValue(newValue)
                               }}
+                              minDate={new Date()}
+                              maxDate={new Date()}
                               renderInput={params => <TextField {...params} variant="standard" />}
                               InputProps={{ className: 'sla__date__section' }}
                             />
                           </LocalizationProvider>
-                          {!IsDateEntered && (
+                          {/* {!IsDateEntered && (
                             <div className="sla__text__align__center">
                               <p className="ac__required">Please select the date</p>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>

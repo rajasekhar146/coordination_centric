@@ -37,10 +37,14 @@ const EmailVerificationPage = props => {
 
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const userVerified = get(currentUser, ['data', 'data', 'is_verified'], false)
 
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
   useEffect(() => {
+    if (userVerified) {
+      history.push('/dashboard')
+    }
     let myInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1)
@@ -141,7 +145,11 @@ const EmailVerificationPage = props => {
           <label>Trouble Verifying? Contact Us</label>
         </div>
       </div>
-      <div className="io__back" onClick={handleVarification}>
+      <div className="io__back"
+        onClick={() => {
+          history.push('/userverification')
+        }}
+      >
         <span className="io__back__arrow">
           <ArrowBackIosNewIcon fontSize="sm" />
         </span>
