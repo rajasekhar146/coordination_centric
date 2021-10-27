@@ -377,11 +377,11 @@ const rows1 = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ]
 
-const rows = [
-  createRowData(1, 'Saint Barnabas Medical Center', '3891 Ranchview Dr. Richardson, California 62639', 'Active', null),
-  createRowData(2, 'St. Francis Hospital', '6391 Elgin St. Celina, Delaware 10299', 'Declined', null),
-  createRowData(3, 'Montefiore Medical Center', '2118 Thornridge Cir. Syracuse, Connecticut 35624', 'Pending', null),
-]
+// const rows = [
+//   createRowData(1, 'Saint Barnabas Medical Center', '3891 Ranchview Dr. Richardson, California 62639', 'Active', null),
+//   createRowData(2, 'St. Francis Hospital', '6391 Elgin St. Celina, Delaware 10299', 'Declined', null),
+//   createRowData(3, 'Montefiore Medical Center', '2118 Thornridge Cir. Syracuse, Connecticut 35624', 'Pending', null),
+// ]
 
 const OrganizationDashboardComponent = () => {
   const classes = useStyles()
@@ -399,7 +399,7 @@ const OrganizationDashboardComponent = () => {
   const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
-  const [skip, setSkip] = React.useState(1)
+  const [skip, setSkip] = React.useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
   const [openflash, setOpenFlash] = React.useState(false)
@@ -454,13 +454,14 @@ const OrganizationDashboardComponent = () => {
     const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = get(allOrganizations, ['totalCount', '0', 'count'], null)
+      const totalCount = get(allOrganizations, 'totalCount',  'count', null)
+      console.log('totalCount', totalCount)
       setCount(totalCount)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
 
-      // console.log('totalPage', totalPage)
+      console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
       setTotalPage(totalPage)
@@ -486,7 +487,7 @@ const OrganizationDashboardComponent = () => {
 
       console.log('new totalData', data)
 
-      setOrganizations([...rows, ...data])
+      setOrganizations(data)
     }
     setIsLoading(false)
   }
