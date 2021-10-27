@@ -19,9 +19,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
 
-
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
-
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -45,7 +43,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-
 const BankInformationComponent = () => {
   const classes = useStyles()
 
@@ -54,9 +51,7 @@ const BankInformationComponent = () => {
   const [cardSection, setCardSection] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
 
-
   var sigPad = {}
-
 
   const {
     register,
@@ -82,7 +77,6 @@ const BankInformationComponent = () => {
   const handleCardSection = () => {
     setCardSection(!cardSection)
   }
-
 
   return (
     <div className="ob__main__section">
@@ -134,8 +128,9 @@ const BankInformationComponent = () => {
                                       // },
                                     })}
                                   />
-                                  {errors.nameOnCard && <p className="ac__required ml_15">{errors.nameOnCard.message}</p>}
-
+                                  {errors.nameOnCard && (
+                                    <p className="ac__required ml_15">{errors.nameOnCard.message}</p>
+                                  )}
                                 </div>
                                 <div className="ac__row">
                                   <div className="ac__label">Card number</div>
@@ -153,7 +148,9 @@ const BankInformationComponent = () => {
                                       // },
                                     })}
                                   />
-                                  {errors.cardNumber && <p className="ac__required ml_15">{errors.cardNumber.message}</p>}
+                                  {errors.cardNumber && (
+                                    <p className="ac__required ml_15">{errors.cardNumber.message}</p>
+                                  )}
                                 </div>
                                 <div className="ac__row">
                                   <div className="ac__label bi__space__expiry">Expiry</div>
@@ -174,7 +171,6 @@ const BankInformationComponent = () => {
                                       })}
                                     />
                                     {errors.expiry && <p className="ac__required ml_15">{errors.expiry.message}</p>}
-
                                   </div>
                                   <div className="bi__expiry__text__box">
                                     <TextField
@@ -211,7 +207,8 @@ const BankInformationComponent = () => {
                                     // onChange={(e) => {
                                     //   e.target.value
                                     // }}
-                                    id="demo-simple-select-helper">
+                                    id="demo-simple-select-helper"
+                                  >
                                     <MenuItem value=""></MenuItem>
                                     <MenuItem className="bi__menu__text" value={10}>
                                       India
@@ -225,14 +222,12 @@ const BankInformationComponent = () => {
                                   </Select>
                                 </div>
                                 {errors.country && <p className="ac__required ml_15">{errors.country.message}</p>}
-
                               </div>
                               <Button type="submit" id="continue" className="ac__next__btn continue_creditcard_btn">
                                 Pay & Continue
                                 <ArrowForwardIosRoundedIcon />
                               </Button>
                             </form>
-
                           ) : (
                             <form onSubmit={handleSubmit(handleNext)}>
                               <div id="div_dc">
@@ -253,9 +248,9 @@ const BankInformationComponent = () => {
                                     })}
                                     error={errors.accountNo && isSubmit}
                                     className={classes.textField}
-                                    margin="normal" />
+                                    margin="normal"
+                                  />
                                   {errors.accountNo && <p className="ac__required ml_15">{errors.accountNo.message}</p>}
-
                                 </div>
                                 <div className="ac__row">
                                   <div className="ac__label">
@@ -274,9 +269,9 @@ const BankInformationComponent = () => {
                                     })}
                                     error={errors.routingNo && isSubmit}
                                     className={classes.textField}
-                                    margin="normal" />
+                                    margin="normal"
+                                  />
                                   {errors.routingNo && <p className="ac__required ml_15">{errors.routingNo.message}</p>}
-
                                 </div>
                                 <div className="ac__row">
                                   <div className="ac__label">
@@ -295,15 +290,14 @@ const BankInformationComponent = () => {
                                     })}
                                     className={classes.textField}
                                     error={errors.name && isSubmit}
-                                    margin="normal" />
+                                    margin="normal"
+                                  />
                                   {errors.name && <p className="ac__required ml_15">{errors.name.message}</p>}
-
                                 </div>
                                 <Button type="submit" id="continue" className="ac__next__btn continue_btn">
                                   Pay & Continue
                                   <ArrowForwardIosRoundedIcon />
                                 </Button>
-
                               </div>
                             </form>
                           )}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AcceptanceCriteria.Component.css'
 import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
@@ -10,20 +10,51 @@ import Button from '@mui/material/Button'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 import { useForm } from 'react-hook-form'
 import history from '../../../history'
+import { useParams } from 'react-router-dom'
+import {
+  makeStyles
+} from "@material-ui/core"
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
-const AcceptanceCriteriaComponent = () => {
-  const [activeStep, setActiveStep] = React.useState(0)
-  const [planType, setPlanType] = React.useState('')
-  const [processSteps, setProcessSteps] = React.useState(steps)
-  const [initialValues, setInitialFormData] = React.useState(null)
 
-  const {
+const useStyles = makeStyles({
+  root: {
+    height: 14
+  }
+});
+
+const AcceptanceCriteriaComponent = (props) => {
+  const classes = useStyles();
+  const [activeStep, setActiveStep] = useState(0)
+  const [planType, setPlanType] = useState('')
+  const [processSteps, setProcessSteps] = useState(steps)
+  const [initialValues, setInitialFormData] = useState(props.props)
+  const { referredby } = useParams()
+  const { invitetoken } = useParams()
+ 
+  // const [fullName, setFullName] = useState(null)
+  // const [email, setEmail] = useState(null)
+  // const [phoneNumber, setPhoneNumber] = useState(null)
+  // const [facilityName, setFacilityName] = useState(null)
+  // const [facilityEmail, setFacilityEmail] = useState(null)
+  // const [facilityPhone, setFacilityPhone] = useState(null)
+  // const [faxNumber, setFaxNumber] = useState(null)
+  // const [facilityAddress, setFacilityAddress] = useState(null)
+  // const [taxId, setTaxId] = useState(null)
+  // const [nip, setNIP] = useState(null)
+  // const [medicalId, setMedicalId] = useState(null)
+  // const [website, setWebsite] = useState(null)
+  // const [about, setAbout] = useState(null)
+ 
+  // console.log('props >> AC', props.props)
+
+  var {
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
-  } = useForm({defaultValues: initialValues})
+  } = useForm()
 
   const onSubmit = data => {
     const admin = {
@@ -36,14 +67,40 @@ const AcceptanceCriteriaComponent = () => {
 
     data.admin = [admin]
 
+    data.referred_by = referredby
+
+    data.inviteToken = invitetoken
+
     localStorage.setItem('facility', JSON.stringify(data))
 
     history.push('/service-level-agreement')
   }
 
   useEffect(() => {
-    const planType = localStorage?.getItem('plan_type')
+    console.log('New AC -- >> ', props.props)
 
+    var uFacility = localStorage.getItem('facility')
+
+    if(uFacility != null) {
+      var data = JSON.parse(uFacility)
+      setValue('fullName', data.fullName)
+      setValue('email', data.email)
+      setValue('phoneNumber', data.phoneNumber)
+      setValue('facilityName', data.facilityName)
+      setValue('facilityEmail', data.facilityEmail)
+      setValue('facilityPhone', data.facilityPhone)
+      setValue('faxNumber', data.faxNumber)
+      setValue('facilityAddress', data.facilityAddress)
+      setValue('taxId', data.taxId)
+      setValue('nip', data.nip)
+      setValue('medicalId', data.medicalId)
+      setValue('website', data.website)
+      setValue('about', data.about)
+    }   
+
+
+    const planType = localStorage?.getItem('plan_type')
+    console.log('referredBy 1 ', referredby, 'inviteToken 1 ', invitetoken)
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
@@ -51,16 +108,16 @@ const AcceptanceCriteriaComponent = () => {
       console.log('newSteps', newSteps)
     }
 
-    const updateFacility = localStorage.getItem('facility')
+    // const updateFacility = localStorage.getItem('facility')
 
-    if (updateFacility != null) {
-      const newFacility = JSON.parse(updateFacility)
-      console.log('updateFacility', newFacility)
-      setInitialFormData(newFacility)
-      
-    } else {
-      setInitialFormData(null)
-    }
+    // if (updateFacility != null) {
+    //   const newFacility = JSON.parse(updateFacility)
+    //   console.log('updateFacility', newFacility)
+    //   setInitialFormData(newFacility)
+    // } else {
+    //   console.log('Else')
+    //   setInitialFormData(null)
+    // }
 
     setPlanType('F')
 
@@ -73,6 +130,10 @@ const AcceptanceCriteriaComponent = () => {
     if (planType === '') setPlanType('F')
     else setPlanType(planType)
   }, [])
+
+  const handleBack = () => {
+    history.push('/signup/1/2')
+  }
 
   return (
     <div className="ob__main__section">
@@ -113,10 +174,10 @@ const AcceptanceCriteriaComponent = () => {
                             <TextField
                               {...register('fullName', { required: 'Full Name is required', maxLength: 50 })}
                               margin="normal"
-                              // defaultValue={initialValues?.admin?.fullName}
+                              // defaultValue={initialValues ? initialValues.fullName : null}
                               InputProps={{ className: 'ac__text__box' }}
-                              value={initialValues ? initialValues.fullName : ''}
-                              name='fullName'
+                              // value={fullName}
+                              // name="fullName"
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
                           </div>
@@ -136,7 +197,9 @@ const AcceptanceCriteriaComponent = () => {
                               })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.email : ''}
+                              // value={email}
+                              // name="email"
+                              // value={initialValues ? initialValues.email : ''}
                             />
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
@@ -154,9 +217,12 @@ const AcceptanceCriteriaComponent = () => {
                                   message: 'This input is number only.',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box' }}
+                              inputProps={{ className: classes.root, maxLength: 15}}
+                              style={{width: '290px'}}
                               margin="normal"
-                              value={initialValues ? initialValues.phoneNumber : ''}
+                              // value={phoneNumber}
+                              // name="phoneNumber"
+                              // value={initialValues ? initialValues.phoneNumber : ''}
                             />
                             {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
                           </div>
@@ -179,7 +245,9 @@ const AcceptanceCriteriaComponent = () => {
                               })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.facilityName : ''}
+                              // value={facilityName}
+                              // name="facilityName"
+                              // value={initialValues ? initialValues.facilityName : ''}
                             />
                             {errors.facilityName && <p className="ac__required">{errors.facilityName.message}</p>}
                           </div>
@@ -200,7 +268,9 @@ const AcceptanceCriteriaComponent = () => {
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               type="email"
-                              value={initialValues ? initialValues.facilityEmail : ''}
+                              // value={facilityEmail}
+                              // name="facilityEmail"
+                              // value={initialValues ? initialValues.facilityEmail : ''}
                             />
                             {errors.facilityEmail && <p className="ac__required">{errors.facilityEmail.message}</p>}
                           </div>
@@ -220,9 +290,12 @@ const AcceptanceCriteriaComponent = () => {
                                   message: 'This input is number only.',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box' }}
+                              inputProps={{ className: classes.root, maxLength: 15 }}
+                              style={{width: '290px', minHeight: '24px'}}
                               margin="normal"
-                              value={initialValues ? initialValues.facilityPhone : ''}
+                              // value={facilityPhone}
+                              // name="facilityPhone"
+                              // value={initialValues ? initialValues.facilityPhone : ''}
                             />
                             {errors.facilityPhone && <p className="ac__required">{errors.facilityPhone.message}</p>}
                           </div>
@@ -235,7 +308,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('faxNumber', { required: 'Fax Number is required' })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.faxNumber : ''}
+                              // value={faxNumber}
+                              // name="faxNumber"
+                              // value={initialValues ? initialValues.faxNumber : ''}
                             />
                             {errors.faxNumber && <p className="ac__required">{errors.faxNumber.message}</p>}
                           </div>
@@ -248,9 +323,11 @@ const AcceptanceCriteriaComponent = () => {
                             </div>
                             <TextField
                               {...register('facilityAddress', { required: 'Address is required' })}
-                              InputProps={{ className: 'ac__text__box' }}
+                              InputProps={{ className: 'ac__address__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.facilityAddress : ''}
+                              // value={facilityAddress}
+                              // name="facilityAddress"
+                              // value={initialValues ? initialValues.facilityAddress : ''}
                             />
                             {errors.facilityAddress && <p className="ac__required">{errors.facilityAddress.message}</p>}
                           </div>
@@ -265,7 +342,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('nip', { required: 'NIP is required ', maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.nip : ''}
+                              // value={nip}
+                              // name="nip"
+                              // value={initialValues ? initialValues.nip : ''}
                             />
                             {errors.nip && <p className="ac__required">{errors.nip.message}</p>}
                           </div>
@@ -276,7 +355,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('taxId', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.taxId : ''}
+                              // value={taxId}
+                              // name="taxId"
+                              // value={initialValues ? initialValues.taxId : ''}
                             />
                           </div>
 
@@ -286,7 +367,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('medicalId', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.medicalId : ''}
+                              // value={medicalId}
+                              // name="medicalId"
+                              // value={initialValues ? initialValues.medicalId : ''}
                             />
                           </div>
                         </div>
@@ -298,7 +381,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('website', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.website : ''}
+                              // value={website}
+                              // name="website"
+                              // value={initialValues ? initialValues.website : ''}
                             />
                           </div>
 
@@ -308,7 +393,9 @@ const AcceptanceCriteriaComponent = () => {
                               {...register('about', { maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                              value={initialValues ? initialValues.about : ''}
+                              // value={about}
+                              // name="about"
+                              // value={initialValues ? initialValues.about : ''}
                             />
                           </div>
                         </div>
@@ -317,7 +404,7 @@ const AcceptanceCriteriaComponent = () => {
 
                         <div className="ac__row">
                           <div className="ac__column ac__left__action">
-                            <Button color="inherit" className="ac__back__btn">
+                            <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
                               Back
                             </Button>
                           </div>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { authHeader, handleResponse } from '../helpers'
 import { authenticationService } from '../services'
 import history from '../history'
+import moment from 'moment'
 
 const apiURL = 'https://api.csuite.health'
 
@@ -24,36 +25,53 @@ function allOrganization(skip, limit, searchText, date, status) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
+
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
-  var dateUTC = '2021-10-25'
+  const dateUTC = moment.utc(date).local().format('YYYY-MM-DD');
+  // const statusvalues = status.join()
 
   //status = ''
-  console.log(searchText, date, status)
-  var searchCond = ''
+  // console.log(searchText, date, status)
+  // var searchCond = ''
 
-  if (searchText?.length > 0 && date?.length > 0 && status?.length > 0) {
-    console.log('Cond 1')
-    searchCond = `search_text=${searchText}&created_date=${dateUTC}&status=${status}`
-  } else if (searchText?.length > 0 && date?.length > 0 && status?.length == 0) {
-    searchCond = `search_text=${searchText}&created_date=${dateUTC}`
-  } else if (searchText?.length > 0 && date?.length == 0 && status?.length > 0) {
-    searchCond = `search_text=${searchText}&status=${status}`
-  } else if (searchText?.length == 0 && date?.length > 0 && status?.length > 0) {
-    searchCond = `created_date=${dateUTC}&status=${status}`
-  } else if (searchText?.length > 0) {
-    searchCond = `search_text=${searchText}`
-  } else if (date?.length > 0) {
-    searchCond = `created_date=${dateUTC}`
-  } else if (status?.length > 0) {
-    searchCond = `status=${status}`
-  }
+  // if (searchText?.length > 0 && date?.length > 0 && status?.length > 0) {
+  //   console.log('Cond 1')
+  //   searchCond = `search_text=${searchText}&created_date=${dateUTC}&status=${status}`
+  // } else if (searchText?.length > 0 && date?.length > 0 && status?.length == 0) {
+  //   searchCond = `search_text=${searchText}&created_date=${dateUTC}`
+  // } else if (searchText?.length > 0 && date?.length == 0 && status?.length > 0) {
+  //   searchCond = `search_text=${searchText}&status=${status}`
+  // } else if (searchText?.length == 0 && date?.length > 0 && status?.length > 0) {
+  //   searchCond = `created_date=${dateUTC}&status=${status}`
+  // } else if (searchText?.length > 0) {
+  //   searchCond = `search_text=${searchText}`
+  // } else if (date?.length > 0) {
+  //   searchCond = `created_date=${dateUTC}`
+  // } else if (status?.length > 0) {
+  //   searchCond = `status=${status}`
+  // }
 
-  console.log('searchCond', searchCond)
-  var url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&${searchCond}`
+  // console.log('searchCond', searchCond)
+  let url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
   // if (searchText != null) {
   //   url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`
   // }
+
+  if (searchText) {
+    url += `&search_text=${searchText}`
+  }
+  if (date) {
+    url += `&created_date=${dateUTC}`
+  }
+  // if (statusvalues) {
+  //   url += `&status=${statusvalues}`
+  // }
+
+  console.log(status)
+
+
+  
   return (
     axios
       .get(url, axiosConfig)

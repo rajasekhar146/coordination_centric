@@ -61,13 +61,11 @@ const EmailVerificationPage = props => {
 
   const handleVarification = async () => {
     console.log('currentUserEmail', currentUserEmail)
-    await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode)
-    .then(data => {
+    await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
       console.log('handleSendEmail >> ', data)
       if (data?.status == 200) history.push('/emailverification-success')
       else history.push('/emailverification-failed')
     })
-    
 
     // var response = await organizationService.signupOrganization(updateFacility)
     // .then(data => {
@@ -80,6 +78,18 @@ const EmailVerificationPage = props => {
     //   history.push('/emailverification-failed')
     // })
   }
+
+  const handleResend = async () => {
+    var response = await accountService.sendEmailWithVerificationCode(currentUserEmail)
+    response.then(() => {
+
+    }).catch(() => {
+
+    })
+  }
+
+
+
 
   return (
     <div className="io__verification">
@@ -114,7 +124,7 @@ const EmailVerificationPage = props => {
           </label>
         </div>
         <div className="evp__action__section">
-          <Button className="evp__resend__verification__code" onClick={e => history.push('/userverification')}>
+          <Button className="evp__resend__verification__code" onClick={() => handleResend()}>
             Resend Verification Code
           </Button>
           &nbsp; &nbsp;&nbsp; &nbsp;

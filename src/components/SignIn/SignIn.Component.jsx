@@ -70,8 +70,7 @@ const SignInComponent = () => {
           } else if (user.message.includes('email')) {
             setIsValidPassword(true)
             setIsValidEmail(false)
-          }
-          else if(user.message.includes('Two Factor Authentication')){
+          } else if (user.message.includes('Two Factor Authentication')) {
             history.push('/2facodeverification')
           }
         } else {

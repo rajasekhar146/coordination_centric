@@ -29,17 +29,14 @@ const TwoFaModel = props => {
   const { selectedOrg } = props
 
   const handleOK = () => {
-    props.clickCloseButton()
+    //props.clickCloseButton()
     history.push('/enable2fa')
   }
   const classes = useStyles()
   return (
     <div>
       <div className="io__row io__icon">
-        <span className="io_close">
-        <img onClick={() => props.clickCloseButton()} src={CloseIcon} alt="close" />
-        </span>
-
+       
         <img width="200" src={TwoFaImg} alt="TwoFaImg" />
       </div>
       <div className="io__row io__icon">

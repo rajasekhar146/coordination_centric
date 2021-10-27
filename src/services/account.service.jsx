@@ -41,7 +41,7 @@ async function sendEmailVerificationCode(email, code) {
     email: email,
     code: code,
   }
-  return (await axios
+  return await axios
     .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
     //.then(handleResponse)
     .then(response => {
@@ -51,5 +51,5 @@ async function sendEmailVerificationCode(email, code) {
     .catch(err => {
       console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
       return err.response
-    }))
+    })
 }

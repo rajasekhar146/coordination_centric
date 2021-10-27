@@ -30,6 +30,7 @@ const ServiceLevelAgreementComponent = props => {
   const [processSteps, setProcessSteps] = React.useState(steps)
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
+  
   var sigPad = {}
 
   const [facility, setFacility] = useState({})
@@ -74,7 +75,13 @@ const ServiceLevelAgreementComponent = props => {
   }
 
   const handleBack = () => {
-    history.push('/acceptance-criteria')
+    var nfacility = JSON.parse(localStorage.getItem('facility'))
+
+    console.log('facility', nfacility)
+    var referredBy = nfacility?.referred_by
+    var inviteToken = nfacility?.inviteToken
+
+    history.push(`/acceptance-criteria/${inviteToken}/${referredBy}`)
   }
 
   const captureSignature = () => {

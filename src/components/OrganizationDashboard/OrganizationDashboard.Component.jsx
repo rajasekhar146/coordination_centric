@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import './OrganizationDashboard.Component.css'
 import Button from '@mui/material/Button'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
@@ -28,7 +28,6 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
-import Checkbox from '@mui/material/Checkbox'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
@@ -45,6 +44,9 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
+import get from 'lodash.get'
+import { authenticationService } from '../../services'
+import MenuItemComponent from "./MenuItemComponent";
 
 const style = {
   position: 'absolute',
@@ -292,15 +294,33 @@ const MenuProps = {
 }
 
 const statusNames = [
-  'All Status',
-  'Verified',
-  'Pending Verification',
-  'Declined',
-  'Pending Acceptance',
-  'Unverified',
-  'Suspended',
-  'Invited',
-  'Cancelled',
+  {
+    name: 'All Status', value: "all"
+  },
+  {
+    name: 'Verified', value: "verified"
+  },
+  {
+    name: 'Pending Verification', value: "pending_verification"
+  },
+  {
+    name: 'Declined', value: "declined"
+  },
+  {
+    name: 'Pending Acceptance', value: "pending_acceptance"
+  },
+  {
+    name: 'Unverified', value: "unverified"
+  },
+  {
+    name: 'Suspended', value: "suspended"
+  },
+  {
+    name: 'Invited', value: "invited"
+  },
+  {
+    name: 'Cancelled', value: "cancelled"
+  }
 ]
 
 const columns1 = [
@@ -330,13 +350,13 @@ const columns1 = [
 ]
 
 const columns = [
-  // { id: '_id', label: 'ID', minWidth: 20, align: 'left' },
-  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left' },
-  { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left' },
-  { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left' },
-  { id: 'referedBy', label: 'Referred by', minWidth: 100, align: 'left' },
-  { id: 'status', label: 'Status', minWidth: 145, align: 'center' },
-  { id: 'action', label: 'Action', minWidth: 50, align: 'center' },
+  { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false },
+  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left', visible: true },
+  { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
+  { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
+  { id: 'referredBy', label: 'Referred by', minWidth: 100, align: 'left', visible: true },
+  { id: 'status', label: 'Status', minWidth: 145, align: 'center', visible: true },
+  { id: 'action', label: 'Action', minWidth: 50, align: 'center', visible: true },
 ]
 
 const colorcodes = {
@@ -376,11 +396,11 @@ const rows1 = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ]
 
-const rows = [
-  createRowData(1, 'Saint Barnabas Medical Center', '3891 Ranchview Dr. Richardson, California 62639', 'Active', null),
-  createRowData(2, 'St. Francis Hospital', '6391 Elgin St. Celina, Delaware 10299', 'Declined', null),
-  createRowData(3, 'Montefiore Medical Center', '2118 Thornridge Cir. Syracuse, Connecticut 35624', 'Pending', null),
-]
+// const rows = [
+//   createRowData(1, 'Saint Barnabas Medical Center', '3891 Ranchview Dr. Richardson, California 62639', 'Active', null),
+//   createRowData(2, 'St. Francis Hospital', '6391 Elgin St. Celina, Delaware 10299', 'Declined', null),
+//   createRowData(3, 'Montefiore Medical Center', '2118 Thornridge Cir. Syracuse, Connecticut 35624', 'Pending', null),
+// ]
 
 const OrganizationDashboardComponent = () => {
   const classes = useStyles()
@@ -395,23 +415,45 @@ const OrganizationDashboardComponent = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
-  const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
-  const [value, setValue] = React.useState(null)
+  const [selectedStatus, setSelectedStatus] = React.useState([
+    'All Status',
+    'Verified',
+    'Pending Verification',
+    'Declined',
+    'Pending Acceptance',
+    'Unverified',
+    'Suspended',
+    'Invited',
+    'Cancelled',
+  ])
   const [rows, setOrganizations] = React.useState([])
-  // const [totalPage, setTotalPage] = React.useState(0)
-  const [skip, setSkip] = React.useState(1)
+  const [totalPage, setTotalPage] = React.useState(0)
+  const [skip, setSkip] = React.useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrg, setSelectedOrg] = useState(null)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
-
+  const [isStatusFieldsChanged, setIsStatusFieldsChanged] = React.useState(false)
   const [searchText, setSearchText] = React.useState('')
   const [searchDate, setSearchDate] = React.useState('')
-  const [searchStatus, setSearchStatus] = React.useState('')
+  const [count, setCount] = React.useState(null)
+  // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
   //   return () => { }
   // }, [])
+
+  const currentUser = authenticationService.currentUserValue
+  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
+
+  const planType = get(currentUser, ['data', 'data', 'planType'], 'free')
+
+
+  // const memoizedStateList = useMemo(() => {
+  //   setSelectedStatus()
+  // }, [selectedStatus]);
+
+
 
   const getTextColor = text => {
     switch (text) {
@@ -427,30 +469,52 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (!isDeactivateClicked && !isRejectClicked && !isAcceptClicked) {
-      getOrganization()
+    if (
+      !isDeactivateClicked
+      && !isRejectClicked
+      && !isAcceptClicked
+    ) {
+      getOrganization(searchText, searchDate, selectedStatus)
     }
-    return () => {}
-  }, [skip, isDeactivateClicked])
+    return () => { }
+  }, [
+    skip,
+    isDeactivateClicked,
+    searchText,
+    searchDate,
+    selectedStatus,
+  ])
+
+  useEffect(() => {
+    if (isStatusFieldsChanged) {
+      getOrganization(searchText, searchDate, selectedStatus)
+    }
+  }, [isStatusFieldsChanged])
+
+
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
   }
 
-  const getOrganization = async () => {
+
+
+  const getOrganization = async (nsearchText, nsearchDate, nsearchStatus) => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, '', '', '')
+    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = allOrganizations?.totalCount
+      const totalCount = get(allOrganizations, 'totalCount',  'count', null)
+      console.log('totalCount', totalCount)
+      setCount(totalCount)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
 
-      // console.log('totalPage', totalPage)
+      console.log('totalPage', totalPage)
       // console.log('totalCount', totalCount?.count)
       // console.log('totalData', totalData)
-      // setTotalPage(totalPage)
+      setTotalPage(totalPage)
 
       totalData.map(r => {
         var admin = r.admin
@@ -459,13 +523,13 @@ const OrganizationDashboardComponent = () => {
         var fullName = ''
         if (admin?.length > 0) fullName = admin[0].fullName
         var record = {
+          id: r._id,
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referedBy: r.referedBy,
+          referredBy: r.referred_by,
           status: r.status,
           action: '',
-          _id: r._id,
         }
 
         data.push(record)
@@ -473,7 +537,7 @@ const OrganizationDashboardComponent = () => {
 
       console.log('new totalData', data)
 
-      setOrganizations([...rows, ...data])
+      setOrganizations(data)
     }
     setIsLoading(false)
   }
@@ -488,18 +552,18 @@ const OrganizationDashboardComponent = () => {
     )
   }
 
-  // const handleChangePage = async (event, newPage) => {
-  //   setPage(newPage)
-  //   const skipRecords = (newPage - 1) * 10
-  //   console.log('skipRecords', skipRecords)
-  //   const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
-  //   console.log('skipRecords >> Records', allOrganizations)
-  //   if (allOrganizations != null) {
-  //     const totalData = allOrganizations?.totalData
-  //     console.log('skipRecords >> totalData', totalData)
-  //     setOrganizations(totalData)
-  //   }
-  // }
+  const handleChangePage = async (event, newPage) => {
+    setPage(newPage)
+    const skipRecords = (newPage - 1) * 10
+    console.log('skipRecords', skipRecords)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+    console.log('skipRecords >> Records', allOrganizations)
+    if (allOrganizations != null) {
+      const totalData = allOrganizations?.totalData
+      console.log('skipRecords >> totalData', totalData)
+      setOrganizations(totalData)
+    }
+  }
 
   const handleChangeRowsPerPage = event => {
     // setRowsPerPage(+event.target.value)
@@ -509,6 +573,7 @@ const OrganizationDashboardComponent = () => {
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
     setAddOrganizationClicked(false)
+    getOrganization()
   }
 
   const closeApproveModel = () => {
@@ -516,10 +581,12 @@ const OrganizationDashboardComponent = () => {
     setIsRejectClicked(false)
     setIsDeactivateClicked(false)
     setIsCancelInviteClicked(false)
+    getOrganization()
   }
 
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
+    getOrganization()
   }
 
   const handleClose = () => {
@@ -532,52 +599,41 @@ const OrganizationDashboardComponent = () => {
   }
 
   const loadMore = () => {
-    setSkip(skip + 10)
-    setIsLoading(true)
+    if (rows.length !== count) {
+      setSkip(skip + 10)
+      setIsLoading(true)
+    }
   }
 
   const handleSearchText = e => {
     setSearchText(e.target.value)
-    handleSearch(e.target.value, searchDate, searchStatus)
+    // getOrganization(e.target.value, searchDate, searchStatus)
   }
 
   const handleSearchDate = e => {
-    setSearchDate(e.target.value)
-    handleSearch(searchText, e.target.value, searchStatus)
+    setSearchDate(e)
+    setOrganizations([])
+    setSkip(1)
+    // getOrganization(searchText, e, searchStatus)
   }
 
   const handleSearchStatus = e => {
-    setSearchStatus(e.target.value)
-    handleSearch(searchText, searchDate, e.target.value)
-  }
-
-  const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
-    console.log(nsearchText, nsearchDate, nsearchStatus)
-
-    var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
-
-    // if (searchText.length > 0) {
-    //    } else {
-    //   allOrganizations = await organizationService.allOrganization(0, 10, '')
-    // }
-
-    setPage(1)
-    const skipRecords = 0
-    console.log('skipRecords', skipRecords)
-    console.log('skipRecords >> Records', allOrganizations)
-    if (allOrganizations != null) {
-      const totalData = allOrganizations?.totalData
-      console.log('skipRecords >> totalData', totalData)
-      setOrganizations(totalData)
+    if (e.target.value.indexOf('All Status') > -1) {
+      setSelectedStatus([...statusNames])
+    } else {
+      setSelectedStatus(e.target.value)
     }
+    // setSearchStatus(e.target.value)
+    // getOrganization(searchText, searchDate, e.target.value)
   }
+
 
   return (
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">Organizations</div>
         <div className="od__btn__div od__align__right">
-          {1 === 1 ? (
+          {true ? (
             <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
@@ -604,7 +660,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                value={value}
+                value={searchDate}
                 onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
@@ -619,17 +675,20 @@ const OrganizationDashboardComponent = () => {
                 id="demo-multiple-checkbox"
                 multiple
                 value={selectedStatus}
-                onChange={e => handleSearchStatus(e)}
+                // onChange={e => handleSearchStatus(e)}
                 input={<OutlinedInput />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
                 className="od__date__field"
               >
-                {statusNames.map(name => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox checked={selectedStatus.indexOf(name) > -1} />
-                    <ListItemText primary={name} />
-                  </MenuItem>
+                {statusNames.map(status => (
+                  <MenuItemComponent
+                    selectedStatus={selectedStatus}
+                    status={status}
+                    setSelectedStatus={setSelectedStatus}
+                    statusNames={statusNames}
+                    setIsStatusFieldsChanged={setIsStatusFieldsChanged}
+                  />
                 ))}
               </Select>
             </FormControl>
@@ -640,26 +699,26 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
-              <InfiniteScroll
-                dataLength={rows.length}
-                next={loadMore}
-                hasMore={true}
-                loader={isLoading ? <h4 className="eulaa__label">Loading...</h4> : null}
-                scrollableTarget="scrollableDiv"
-              >
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>              
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>
-                      {columns.map(column => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth, fontWeight: 'bold', fontSize: 14 }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
+                      {columns.map(column =>
+                        column.visible ? (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{
+                              minWidth: column.minWidth,
+                              fontWeight: 'bold',
+                              fontSize: 14,
+                              visibility: column.visible ? 'visible' : 'hidden',
+                            }}
+                          >
+                            {column.label}
+                          </TableCell>
+                        ) : null
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -688,26 +747,30 @@ const OrganizationDashboardComponent = () => {
                       />
                     ))}
                   </TableBody>
-                </Table>
-              </InfiniteScroll>
+                </Table>             
             </TableContainer>
           </Paper>
         </div>
       </div>
-      {/* <div className="od__row">
+      <div className="od__row">
         <div className="od__pagination__section">
           <Stack spacing={2}>
             <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
           </Stack>
         </div>
-      </div> */}
+      </div> 
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
+          <InviteOrganization
+            clickCloseButton={handleAddOrganizationClose} 
+            getOrganization={getOrganization} 
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+          />
         </Box>
       </Modal>
       <Modal
@@ -719,9 +782,10 @@ const OrganizationDashboardComponent = () => {
         <Box sx={rejectModelStyle}>
           <RejectOrganization
             clickCloseButton={closeApproveModel}
-            selectedOrg={selectedOrg}
             setSkip={setSkip}
+            selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>
@@ -738,6 +802,7 @@ const OrganizationDashboardComponent = () => {
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />
         </Box>

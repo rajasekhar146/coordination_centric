@@ -4,7 +4,11 @@ import InviteOrganizationComponent from '../components/InviteOrganization/Invite
 const InviteOrganization = props => {
   return (
     <div>
-      <InviteOrganizationComponent clickCloseButton={props.clickCloseButton} />
+      <InviteOrganizationComponent
+        clickCloseButton={props.clickCloseButton}
+        setOpenFlash={props.setOpenFlash}
+        setAlertMsg={props.setAlertMsg}
+      />
     </div>
   )
 }

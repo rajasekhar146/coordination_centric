@@ -9,7 +9,9 @@ import ListItemText from '@mui/material/ListItemText'
 import MuiListItem from '@material-ui/core/ListItem'
 
 import history from '../../history'
-
+import Collapse from '@material-ui/core/Collapse'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -54,70 +56,162 @@ const menuOptions = [
     name: 'Dashboard',
     link: '/dashboard',
     icon: require('../../assets/icons/dashboard.png').default,
+    items: [],
   },
   {
     name: 'Appointments',
     link: '/appointments',
     icon: require('../../assets/icons/appointments.png').default,
+    items: [],
   },
   {
     name: 'Users',
     link: '/users',
     icon: require('../../assets/icons/users.png').default,
+    items: [
+      {
+        name: 'Staff',
+        link: '/users',
+        icon: require('../../assets/icons/users.png').default,
+      },
+      {
+        name: 'Collaborators',
+        link: '/users',
+        icon: require('../../assets/icons/users.png').default,
+      },
+      {
+        name: 'Patient Records',
+        link: '/users',
+        icon: require('../../assets/icons/users.png').default,
+      },
+    ],
   },
   {
     name: 'Organizations',
     link: '/organizations',
     icon: require('../../assets/icons/organizations.png').default,
+    items: [],
   },
-  {
-    name: 'Patient Records',
-    link: '/patients',
-    icon: require('../../assets/icons/patients.png').default,
-  },
+  // {
+  //   name: 'Patient Records',
+  //   link: '/patients',
+  //   icon: require('../../assets/icons/patients.png').default,
+  //   items: [],
+  // },
   {
     name: 'Inventory',
     link: '/inventory',
     icon: require('../../assets/icons/vaccinations.png').default,
+    items: [],
   },
   {
     name: 'Notifications',
     link: '/notifications',
     icon: require('../../assets/icons/notifications.png').default,
+    items: [],
   },
   {
     name: 'Payments',
     link: '/payments',
     icon: require('../../assets/icons/payments.png').default,
+    items: [],
   },
 ]
 
 const LeftMenuComponent = () => {
   const classes = useStyles()
+
+  return menuOptions.map((item, key, index) => <MenuItem key={key} item={item} index={index} />)
+
+  // return (
+  //   <div div className={classes.root}>
+  //     <List>
+  //       {menuOptions.map((m, index) => {
+  //         return (
+  //           <ListItem button selected={selectedIndex == index} onClick={event => handleClick(`${m.link}`, `${index}`)}>
+  //             <ListItemIcon>
+  //               <img src={m.icon} className="lm__menu__icon" />
+  //             </ListItemIcon>
+  //             <ListItemText primary={m.name} className="lm__menu__text" />
+  //           </ListItem>
+  //         )
+  //       })}
+  //     </List>
+  //   </div>
+  // )
+}
+
+const hasChildren = item => {
+  const { items: children } = item
+
+  if (children === undefined) {
+    return false
+  }
+
+  if (children.constructor !== Array) {
+    return false
+  }
+
+  if (children.length === 0) {
+    return false
+  }
+
+  return true
+}
+
+const MenuItem = ({ item, index }) => {
+  const Component = hasChildren(item) ? MultiLevel : SingleLevel
+  return <Component item={item} index={index} />
+}
+
+const SingleLevel = ({ item, index }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
-  const handleClick = (pageURL, index) => {
+  const handleSelectedMenu = (pageURL, idx) => {
     //setOpen(!open);
-    setSelectedIndex(index)
-    console.log(pageURL, index)
+    setSelectedIndex(idx)
+    console.log(pageURL, idx)
     history.push(pageURL)
+  }
+  return (
+    <ListItem
+      button
+      selected={selectedIndex == index}
+      onClick={event => handleSelectedMenu(`${item.link}`, `${index}`)}
+    >
+      <ListItemIcon>
+        <img src={item.icon} className="lm__menu__icon" />
+      </ListItemIcon>
+      <ListItemText primary={item.name} />
+    </ListItem>
+  )
+}
+
+const MultiLevel = ({ item }) => {
+  const { items: children } = item
+  const [open, setOpen] = useState(false)
+
+  const handleClick = () => {
+    setOpen(prev => !prev)
   }
 
   return (
-    <div div className={classes.root}>
-      <List>
-        {menuOptions.map((m, index) => {
-          return (
-            <ListItem button selected={selectedIndex == index} onClick={event => handleClick(`${m.link}`, `${index}`)}>
-              <ListItemIcon>
-                <img src={m.icon} className="lm__menu__icon" />
-              </ListItemIcon>
-              <ListItemText primary={m.name} className="lm__menu__text" />
-            </ListItem>
-          )
-        })}
-      </List>
-    </div>
+    <React.Fragment>
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>
+          <img src={item.icon} className="lm__menu__icon" />
+        </ListItemIcon>
+        <ListItemText primary={item.name} />
+        {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" style={{ marginLeft: '20px' }} disablePadding>
+          {children.map((child, key, index) => (
+            <MenuItem key={key} item={child} index={index} />
+          ))}
+        </List>
+      </Collapse>
+    </React.Fragment>
   )
 }
 

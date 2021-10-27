@@ -51,7 +51,7 @@ const OrganisationItem = props => {
   }
 
   const handleActivate = org => {
-    const res = organizationService.updateOrganization(org._id, 'active')
+    const res = organizationService.updateOrganization(org.id, 'active')
     res.then(() => {
       setOrganizations([])
       setSkip(1)
@@ -61,7 +61,7 @@ const OrganisationItem = props => {
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org._id)
+    const res = organizationService.resendInvite(org.id)
     res.then(res => {
       setOrganizations([])
       setSkip(1)
@@ -136,18 +136,18 @@ const OrganisationItem = props => {
     history.push(`/organization-view/${orgId}`)
   }
   return (
-    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+    <TableRow hover role="checkbox" style={{width: '100%'}} tabIndex={-1} key={row.id}>
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
         // else if (column.id === 'orgName') value = 'John Deo'
-        else if (column.id === 'referedBy') value = 'Sachin Smith'
+        // else if (column.id === 'referedBy') value = 'Sachin Smith'
 
         return column.id == 'status' ? (
           <TableCell
             key={column.id}
             align={column.align}
-            style={{ paddingBottom: 10, paddingTop: 10, textAlign: 'center' }}
+            style={{ paddingBottom: 10, paddingTop: 10, textAlign: 'center', alignItems: 'center', justifyContent: 'center'}}
           >
             <div className={`od__${value?.toLowerCase()}__status`}>
               <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
@@ -190,7 +190,7 @@ const OrganisationItem = props => {
               {menuOptions.map((option, idx) => (
                 <MenuItem
                   key={option}
-                  onClick={e => handleMenuAction(option.fnKey, index, row._id)}
+                  onClick={e => handleMenuAction(option.fnKey, index, row.id)}
                   className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                 >
                   <div className="od__menu__icon__column">
@@ -201,7 +201,7 @@ const OrganisationItem = props => {
               ))}
             </Menu>
           </TableCell>
-        ) : (
+        ) : column.id == 'id' ? null : (
           <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
             {column.format && typeof value === 'number' ? column.format(value) : value}
           </TableCell>
