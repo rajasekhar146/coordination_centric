@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import './OrganizationDashboard.Component.css'
 import Button from '@mui/material/Button'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
@@ -28,7 +28,6 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
-import Checkbox from '@mui/material/Checkbox'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
@@ -47,6 +46,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
 import { authenticationService } from '../../services'
+import MenuItemComponent from "./MenuItemComponent";
 
 const style = {
   position: 'absolute',
@@ -294,15 +294,33 @@ const MenuProps = {
 }
 
 const statusNames = [
-  'All Status',
-  'Verified',
-  'Pending Verification',
-  'Declined',
-  'Pending Acceptance',
-  'Unverified',
-  'Suspended',
-  'Invited',
-  'Cancelled',
+  {
+    name: 'All Status', value: "all"
+  },
+  {
+    name: 'Verified', value: "verified"
+  },
+  {
+    name: 'Pending Verification', value: "pending_verification"
+  },
+  {
+    name: 'Declined', value: "declined"
+  },
+  {
+    name: 'Pending Acceptance', value: "pending_acceptance"
+  },
+  {
+    name: 'Unverified', value: "unverified"
+  },
+  {
+    name: 'Suspended', value: "suspended"
+  },
+  {
+    name: 'Invited', value: "invited"
+  },
+  {
+    name: 'Cancelled', value: "cancelled"
+  }
 ]
 
 const columns1 = [
@@ -397,7 +415,17 @@ const OrganizationDashboardComponent = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
-  const [selectedStatus, setSelectedStatus] = React.useState(['All Status'])
+  const [selectedStatus, setSelectedStatus] = React.useState([
+    'All Status',
+    'Verified',
+    'Pending Verification',
+    'Declined',
+    'Pending Acceptance',
+    'Unverified',
+    'Suspended',
+    'Invited',
+    'Cancelled',
+  ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(1)
@@ -405,7 +433,7 @@ const OrganizationDashboardComponent = () => {
   const [selectedOrg, setSelectedOrg] = useState(null)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
-
+  const [isStatusFieldsChanged, setIsStatusFieldsChanged] = React.useState(false)
   const [searchText, setSearchText] = React.useState('')
   const [searchDate, setSearchDate] = React.useState('')
   const [count, setCount] = React.useState(null)
@@ -420,6 +448,10 @@ const OrganizationDashboardComponent = () => {
 
   const planType = get(currentUser, ['data', 'data', 'planType'], 'free')
 
+
+  // const memoizedStateList = useMemo(() => {
+  //   setSelectedStatus()
+  // }, [selectedStatus]);
 
 
 
@@ -451,12 +483,21 @@ const OrganizationDashboardComponent = () => {
     searchText,
     searchDate,
     selectedStatus,
-    selectedStatus.length,
   ])
+
+  useEffect(() => {
+    if (isStatusFieldsChanged) {
+      getOrganization(searchText, searchDate, selectedStatus)
+    }
+  }, [isStatusFieldsChanged])
+
+
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
   }
+
+
 
   const getOrganization = async (nsearchText, nsearchDate, nsearchStatus) => {
     setIsLoading(true)
@@ -586,59 +627,12 @@ const OrganizationDashboardComponent = () => {
   }
 
 
-  const handleSearch = async (nsearchText, nsearchDate, nsearchStatus) => {
-    console.log(nsearchText, nsearchDate, nsearchStatus)
-
-    var allOrganizations = await organizationService.allOrganization(0, 10, nsearchText, nsearchDate, nsearchStatus)
-
-    // if (searchText.length > 0) {
-    //    } else {
-    //   allOrganizations = await organizationService.allOrganization(0, 10, '')
-    // }
-
-    setPage(1)
-    const skipRecords = 0
-    console.log('skipRecords', skipRecords)
-    console.log('skipRecords >> Records', allOrganizations)
-    if (allOrganizations != null) {
-      const totalData = allOrganizations?.totalData
-
-      var data = []
-
-      // console.log('totalPage', totalPage)
-      // console.log('totalCount', totalCount?.count)
-      // console.log('totalData', totalData)
-      // setTotalPage(totalPage)
-
-      totalData.map(r => {
-        var admin = r.admin
-        console.log(admin)
-
-        var fullName = ''
-        if (admin?.length > 0) fullName = admin[0].fullName
-        var record = {
-          id: r._id,
-          facilityName: r.facilityName,
-          orgName: fullName,
-          facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by,
-          status: r.status,
-          action: '',
-        }
-
-        data.push(record)
-
-        setOrganizations(data)
-      })
-    }
-  }
-
   return (
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">Organizations</div>
         <div className="od__btn__div od__align__right">
-          {is_verified && (planType === "free") ? (
+          {true ? (
             <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
@@ -680,28 +674,20 @@ const OrganizationDashboardComponent = () => {
                 id="demo-multiple-checkbox"
                 multiple
                 value={selectedStatus}
-                onChange={e => handleSearchStatus(e)}
+                // onChange={e => handleSearchStatus(e)}
                 input={<OutlinedInput />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
                 className="od__date__field"
               >
-                {statusNames.map(name => (
-                  <MenuItem key={name} value={name}>
-                    <Checkbox
-                      checked={selectedStatus.indexOf(name) > -1}
-                      onChange={(e) => {
-                        e.stopPropagation()
-                        e.preventDefault()
-                        if(!e.target.checked) {
-                          selectedStatus.splice(selectedStatus.indexOf('All Status'), 1)
-                          selectedStatus.splice(selectedStatus.indexOf(name), 1)
-                          setSelectedStatus(selectedStatus)
-                        }
-                      }}
-                    />
-                    <ListItemText primary={name} />
-                  </MenuItem>
+                {statusNames.map(status => (
+                  <MenuItemComponent
+                    selectedStatus={selectedStatus}
+                    status={status}
+                    setSelectedStatus={setSelectedStatus}
+                    statusNames={statusNames}
+                    setIsStatusFieldsChanged={setIsStatusFieldsChanged}
+                  />
                 ))}
               </Select>
             </FormControl>
@@ -778,7 +764,12 @@ const OrganizationDashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InviteOrganization clickCloseButton={handleAddOrganizationClose} getOrganization={getOrganization} />
+          <InviteOrganization
+            clickCloseButton={handleAddOrganizationClose} 
+            getOrganization={getOrganization} 
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+          />
         </Box>
       </Modal>
       <Modal
