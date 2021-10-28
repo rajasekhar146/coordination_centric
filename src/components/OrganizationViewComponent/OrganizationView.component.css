@@ -6,6 +6,7 @@
 }
 .acc-wrapper {
   width: 94% !important;
+  margin-bottom: 6px;
 }
 .acc-title {
   font-family: Lato;
@@ -18,7 +19,7 @@
   margin: 0 !important;
 }
 .modAccDetails {
-  background-color: #f5f5f5 !important;
+  background-color: #E5E5E5 !important;
   /* display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,6 +68,9 @@
   font-size: 12px;
   color: #344054;
 }
+.det-valContainer {
+  flex: 1.4;
+}
 .det-value {
   flex: 1.4;
   text-transform: none !important;
@@ -75,6 +79,24 @@
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
+}
+.block-container {
+  display: flex;
+  flex-direction: row;
+}
+.block-container .det-value {
+  margin-left: 10px;
+}
+.subTitle-block {
+  margin: 20px 40px 0 0;
+  flex: 1;
+}
+.det-subtitle {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #344054;
 }
 .agreeContainer {
   flex: 1.4;

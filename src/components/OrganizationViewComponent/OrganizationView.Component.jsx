@@ -210,9 +210,48 @@ const OrganizationViewComponent = () => {
             <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
               Address
             </Typography>
-            <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              {orgDet && orgDet.facilityAddress}
-            </Typography>
+            <div className="det-valContainer">
+              <div>
+                <div className="det-subtitle">Address Line</div>
+                <Typography
+                  variant="subtitle2"
+                  display="block"
+                  className="det-value"
+                  style={{ marginLeft: 10 }}
+                  gutterBottom
+                >
+                  {orgDet && orgDet.facilityAddress}
+                </Typography>
+              </div>
+              <div className="block-container">
+                <div className="subTitle-block">
+                  <div className="det-subtitle">Country</div>
+                  <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+                    {orgDet && orgDet.country && orgDet.country}
+                  </Typography>
+                </div>
+                <div className="subTitle-block">
+                  <div className="det-subtitle">State</div>
+                  <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+                    {orgDet && orgDet.state && orgDet.state}
+                  </Typography>
+                </div>
+              </div>
+              <div className="block-container">
+                <div className="subTitle-block">
+                  <div className="det-subtitle">City</div>
+                  <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+                    {orgDet && orgDet.city && orgDet.city}
+                  </Typography>
+                </div>
+                <div className="subTitle-block">
+                  <div className="det-subtitle">Zip code</div>
+                  <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+                    {orgDet && orgDet.facilityAddress}
+                  </Typography>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="detailWrapper">
             <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
@@ -348,7 +387,7 @@ const OrganizationViewComponent = () => {
               Bank Account Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              ---
+              Citi bank
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -356,7 +395,7 @@ const OrganizationViewComponent = () => {
               Routing Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              ---
+              12507106598
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -364,7 +403,7 @@ const OrganizationViewComponent = () => {
               Name Associated with Bank Account
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              ---
+              James
             </Typography>
           </div>
         </AccordionDetails>
