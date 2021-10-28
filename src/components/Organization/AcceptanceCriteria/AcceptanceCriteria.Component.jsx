@@ -87,7 +87,7 @@ const AcceptanceCriteriaComponent = (props) => {
       setValue('faxNumber', data.faxNumber)
       setValue('facilityAddress', data.facilityAddress)
       setValue('taxId', data.taxId)
-      setValue('nip', data.nip)
+      setValue('npi', data.npi)
       setValue('medicalId', data.medicalId)
       setValue('website', data.website)
       setValue('about', data.about)
@@ -376,17 +376,17 @@ const AcceptanceCriteriaComponent = (props) => {
 
                           <div className="ac__column">
                             <div className="ac__label">
-                              NIP <span className="ac__required">*</span>
+                              NPI <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('nip', { required: 'NIP is required ', maxLength: 20 })}
+                              {...register('npi', { required: 'NPI is required ', maxLength: 20 })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                             // value={nip}
                             // name="nip"
                             // value={initialValues ? initialValues.nip : ''}
                             />
-                            {errors.nip && <p className="ac__required">{errors.nip.message}</p>}
+                            {errors.npi && <p className="ac__required">{errors.npi.message}</p>}
                           </div>
 
                           <div className="ac__column">
