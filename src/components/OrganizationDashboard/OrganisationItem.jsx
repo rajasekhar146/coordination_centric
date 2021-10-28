@@ -147,7 +147,7 @@ const OrganisationItem = props => {
           <TableCell
             key={column.id}
             align={column.align}
-            style={{ paddingBottom: 10, paddingTop: 10, textAlign: 'center', alignItems: 'center', justifyContent: 'center'}}
+            style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center'}}
           >
             <div className={`od__${value?.toLowerCase()}__status`}>
               <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
@@ -194,7 +194,7 @@ const OrganisationItem = props => {
                   className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                 >
                   <div className="od__menu__icon__column">
-                    <img src={option.icon} alt={option.text} />
+                    <img width={18} src={option.icon} alt={option.text} />
                   </div>
                   <div className="od__menu__text__column">{option.text}</div>
                 </MenuItem>

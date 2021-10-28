@@ -4,7 +4,7 @@ import SmsIcon from '../../assets/icons/typing.png'
 import DeviceIcon from '../../assets/icons/mobile.png'
 import MailIcon from '../../assets/icons/mail.png'
 import Button from '@mui/material/Button'
-import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
+import CircleIcon from '@mui/icons-material/Circle';
 import history from '../../history'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import get from 'lodash.get'
@@ -58,7 +58,7 @@ const EnableTwoFactorAuth = () => {
             </div>
             <label className="io__text">SMS</label>
             <span className={activeTab === 1 ? 'io__active__icon' : 'io__nonactive__icon'}>
-              <Brightness1OutlinedIcon sx={{ color: activeTab === 'sms' ? '#E42346' : '#DCDCDC' }} />
+              <CircleIcon sx={{ color: activeTab === 'sms' ? '#E42346' : '#DCDCDC' }} />
             </span>
           </div>
           <div
@@ -72,7 +72,7 @@ const EnableTwoFactorAuth = () => {
             </div>
             <label className="io__text">Email</label>
             <span className={activeTab === 2 ? 'io__active__icon' : 'io__nonactive__icon'}>
-              <Brightness1OutlinedIcon sx={{ color: activeTab === 'email' ? '#E42346' : '#DCDCDC' }} />
+              <CircleIcon sx={{ color: activeTab === 'email' ? '#E42346' : '#DCDCDC' }} />
             </span>
           </div>
           <div
@@ -86,7 +86,7 @@ const EnableTwoFactorAuth = () => {
             </div>
             <label className="io__text">App</label>
             <span className={activeTab === 3 ? 'io__active__icon' : 'io__nonactive__icon'}>
-              <Brightness1OutlinedIcon sx={{ color: activeTab === 'app' ? '#E42346' : '#DCDCDC' }} />
+              <CircleIcon sx={{ color: activeTab === 'app' ? '#E42346' : '#DCDCDC' }} />
             </span>
           </div>
         </div>

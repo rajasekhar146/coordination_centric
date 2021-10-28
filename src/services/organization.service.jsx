@@ -29,7 +29,7 @@ function allOrganization(skip, limit, searchText, date, status) {
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
   const dateUTC = moment.utc(date).local().format('YYYY-MM-DD');
-  // const statusvalues = status.join()
+  const statusvalues = status.join()
 
   //status = ''
   // console.log(searchText, date, status)
@@ -64,9 +64,9 @@ function allOrganization(skip, limit, searchText, date, status) {
   if (date) {
     url += `&created_date=${dateUTC}`
   }
-  // if (statusvalues) {
-  //   url += `&status=${statusvalues}`
-  // }
+  if (statusvalues && status.indexOf('all') === -1) {
+    url += `&status=${statusvalues}`
+  }
 
   console.log(status)
 

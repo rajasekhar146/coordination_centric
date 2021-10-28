@@ -1,6 +1,7 @@
 .eulaa__row {
     width: 100%;
     display: flex;
+    position: relative;
     /* background-color: #A0A4A8; */
 }
 
@@ -37,4 +38,7 @@
 
 .eulaa__column {
     padding-right: 30px;
+    position: absolute;
+    right: 20%;
+    top: 22px !important;
 }

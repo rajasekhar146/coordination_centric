@@ -94,6 +94,8 @@ const useStyles = makeStyles(theme => ({
     borderBottom: '1px solid #E8E8E8',
     paddingTop: 5,
     paddingBottom: 15,
+    display: 'flex',
+    justifyContent: "space-between"
   },
   approved: {
     color: '#03B575',
@@ -298,7 +300,7 @@ const statusNames = [
     name: 'All Status', value: "all"
   },
   {
-    name: 'Verified', value: "verified"
+    name: 'Verified', value: "active"
   },
   {
     name: 'Pending Verification', value: "pending_verification"
@@ -313,7 +315,7 @@ const statusNames = [
     name: 'Unverified', value: "unverified"
   },
   {
-    name: 'Suspended', value: "suspended"
+    name: 'Suspended', value: "inactive"
   },
   {
     name: 'Invited', value: "invited"
@@ -351,12 +353,12 @@ const columns1 = [
 
 const columns = [
   { id: 'id', label: 'ID', minWidth: 0, align: 'left', visible: false },
-  { id: 'facilityName', label: 'Organization Name', minWidth: 200, align: 'left', visible: true },
+  { id: 'facilityName', label: 'Organization Name', minWidth: 180, align: 'left', visible: true },
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
-  { id: 'referredBy', label: 'Referred by', minWidth: 100, align: 'left', visible: true },
-  { id: 'status', label: 'Status', minWidth: 145, align: 'center', visible: true },
-  { id: 'action', label: 'Action', minWidth: 50, align: 'center', visible: true },
+  { id: 'referredBy', label: 'Referred by', minWidth: 110, align: 'left', visible: true },
+  { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
+  { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
 
 const colorcodes = {
@@ -416,15 +418,15 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState([
-    'All Status',
-    'Verified',
-    'Pending Verification',
-    'Declined',
-    'Pending Acceptance',
-    'Unverified',
-    'Suspended',
-    'Invited',
-    'Cancelled',
+    'all',
+    'active',
+    'pending_verification',
+    'declined',
+    'pending_acceptance',
+    'unverified',
+    'inactive',
+    'invited',
+    'cancelled',
   ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
@@ -435,7 +437,7 @@ const OrganizationDashboardComponent = () => {
   const [alertMsg, setAlertMsg] = React.useState('')
   const [isStatusFieldsChanged, setIsStatusFieldsChanged] = React.useState(false)
   const [searchText, setSearchText] = React.useState('')
-  const [searchDate, setSearchDate] = React.useState('')
+  const [searchDate, setSearchDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
@@ -504,7 +506,7 @@ const OrganizationDashboardComponent = () => {
     const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = get(allOrganizations, 'totalCount',  'count', null)
+      const totalCount = get(allOrganizations, 'totalCount', 'count', null)
       console.log('totalCount', totalCount)
       setCount(totalCount)
       var totalData = allOrganizations?.totalData
@@ -556,7 +558,7 @@ const OrganizationDashboardComponent = () => {
     setPage(newPage)
     const skipRecords = (newPage - 1) * 10
     console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchDate, selectedStatus)
     console.log('skipRecords >> Records', allOrganizations)
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
@@ -631,7 +633,7 @@ const OrganizationDashboardComponent = () => {
   return (
     <div className="od__main__div">
       <div className="od__row">
-        <div className="od__title__text">Organizations</div>
+        <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
           {true ? (
             <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
@@ -656,18 +658,8 @@ const OrganizationDashboardComponent = () => {
             }}
           />
         </div>
-        <div className="od__right__section">
-          <div className="od__btn__div">
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                value={searchDate}
-                onChange={e => handleSearchDate(e)}
-                renderInput={params => <TextField {...params} />}
-                InputProps={{ className: 'od__date__field' }}
-              />
-            </LocalizationProvider>
-          </div>
-          <div className="od__btn__div">
+        <div className="od__right__section od_status">
+          <div style={{ width: "162px" }} className="od__btn__div">
             <FormControl sx={{ m: 1, width: 200 }}>
               <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
               <Select
@@ -693,61 +685,72 @@ const OrganizationDashboardComponent = () => {
               </Select>
             </FormControl>
           </div>
+          <div className="od__btn__div">
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                value={searchDate}
+                onChange={e => handleSearchDate(e)}
+                renderInput={params => <TextField {...params} />}
+                InputProps={{ className: 'od__date__field' }}
+              />
+            </LocalizationProvider>
+          </div>
+
         </div>
       </div>
 
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>              
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {columns.map(column =>
-                        column.visible ? (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{
-                              minWidth: column.minWidth,
-                              fontWeight: 'bold',
-                              fontSize: 14,
-                              visibility: column.visible ? 'visible' : 'hidden',
-                            }}
-                          >
-                            {column.label}
-                          </TableCell>
-                        ) : null
-                      )}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row, index) => (
-                      <OrganisationItem
-                        row={row}
-                        index={index}
-                        columns={columns}
-                        colorcodes={colorcodes}
-                        open={open}
-                        handleClose={handleClose}
-                        classes={classes}
-                        menuOptions={menuOptions}
-                        setIsRejectClicked={setIsRejectClicked}
-                        setIsAcceptClicked={setIsAcceptClicked}
-                        setIsDeactivateClicked={setIsDeactivateClicked}
-                        getTextColor={getTextColor}
-                        setSelectedOrg={setSelectedOrg}
-                        rows={rows}
-                        menuList={menuList}
-                        setSkip={setSkip}
-                        setOrganizations={setOrganizations}
-                        setOpenFlash={setOpenFlash}
-                        setAlertMsg={setAlertMsg}
-                        setIsCancelInviteClicked={setIsCancelInviteClicked}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>             
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map(column =>
+                      column.visible ? (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{
+                            minWidth: column.minWidth,
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            visibility: column.visible ? 'visible' : 'hidden',
+                          }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ) : null
+                    )}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <OrganisationItem
+                      row={row}
+                      index={index}
+                      columns={columns}
+                      colorcodes={colorcodes}
+                      open={open}
+                      handleClose={handleClose}
+                      classes={classes}
+                      menuOptions={menuOptions}
+                      setIsRejectClicked={setIsRejectClicked}
+                      setIsAcceptClicked={setIsAcceptClicked}
+                      setIsDeactivateClicked={setIsDeactivateClicked}
+                      getTextColor={getTextColor}
+                      setSelectedOrg={setSelectedOrg}
+                      rows={rows}
+                      menuList={menuList}
+                      setSkip={setSkip}
+                      setOrganizations={setOrganizations}
+                      setOpenFlash={setOpenFlash}
+                      setAlertMsg={setAlertMsg}
+                      setIsCancelInviteClicked={setIsCancelInviteClicked}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
             </TableContainer>
           </Paper>
         </div>
@@ -758,7 +761,7 @@ const OrganizationDashboardComponent = () => {
             <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
           </Stack>
         </div>
-      </div> 
+      </div>
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"
@@ -766,8 +769,8 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={style}>
           <InviteOrganization
-            clickCloseButton={handleAddOrganizationClose} 
-            getOrganization={getOrganization} 
+            clickCloseButton={handleAddOrganizationClose}
+            getOrganization={getOrganization}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
           />

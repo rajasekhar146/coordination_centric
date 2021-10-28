@@ -56,33 +56,39 @@ const menuOptions = [
     name: 'Dashboard',
     link: '/dashboard',
     icon: require('../../assets/icons/dashboard.png').default,
+    activeIcon: require('../../assets/icons/active_dashboard.png').default,
     items: [],
   },
   {
     name: 'Appointments',
     link: '/appointments',
     icon: require('../../assets/icons/appointments.png').default,
+    activeIcon: require('../../assets/icons/appointments.png').default,
     items: [],
   },
   {
     name: 'Users',
     link: '/users',
     icon: require('../../assets/icons/users.png').default,
+    activeIcon: require('../../assets/icons/users.png').default,
     items: [
       {
         name: 'Staff',
         link: '/users',
         icon: require('../../assets/icons/users.png').default,
+        activeIcon: require('../../assets/icons/users.png').default,
       },
       {
         name: 'Collaborators',
         link: '/users',
         icon: require('../../assets/icons/users.png').default,
+        activeIcon: require('../../assets/icons/users.png').default,
       },
       {
         name: 'Patient Records',
         link: '/users',
         icon: require('../../assets/icons/users.png').default,
+        activeIcon: require('../../assets/icons/users.png').default,
       },
     ],
   },
@@ -90,6 +96,7 @@ const menuOptions = [
     name: 'Organizations',
     link: '/organizations',
     icon: require('../../assets/icons/organizations.png').default,
+    activeIcon: require('../../assets/icons/sitemap_active.png').default,
     items: [],
   },
   // {
@@ -102,18 +109,21 @@ const menuOptions = [
     name: 'Inventory',
     link: '/inventory',
     icon: require('../../assets/icons/vaccinations.png').default,
+    activeIcon: require('../../assets/icons/vaccinations.png').default,
     items: [],
   },
   {
     name: 'Notifications',
     link: '/notifications',
     icon: require('../../assets/icons/notifications.png').default,
+    activeIcon: require('../../assets/icons/notifications.png').default,
     items: [],
   },
   {
     name: 'Payments',
     link: '/payments',
     icon: require('../../assets/icons/payments.png').default,
+    activeIcon: require('../../assets/icons/payments.png').default,
     items: [],
   },
 ]
@@ -121,7 +131,7 @@ const menuOptions = [
 const LeftMenuComponent = () => {
   const classes = useStyles()
 
-  return menuOptions.map((item, key, index) => <MenuItem key={key} item={item} index={index} />)
+  return menuOptions.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
 
   // return (
   //   <div div className={classes.root}>
@@ -180,7 +190,7 @@ const SingleLevel = ({ item, index }) => {
       onClick={event => handleSelectedMenu(`${item.link}`, `${index}`)}
     >
       <ListItemIcon>
-        <img src={item.icon} className="lm__menu__icon" />
+        <img src={selectedIndex == index ? item.activeIcon : item.icon} className="lm__menu__icon" />
       </ListItemIcon>
       <ListItemText primary={item.name} />
     </ListItem>

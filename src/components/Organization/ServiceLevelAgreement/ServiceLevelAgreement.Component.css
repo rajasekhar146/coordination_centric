@@ -75,6 +75,9 @@
   .sla__date__section {
     margin-top: 50px !important;
   }
+  .sla__date__section_nosign {
+    margin-top: 50px !important;
+  }
 
   .sla__download__text{
     font-family: Lato;
@@ -120,3 +123,10 @@
   .sla__text__align__center{
     text-align: center;
   }
+  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
+      
+  }
+  .css-1480iag-MuiInputBase-root-MuiInput-root:before{
+    border-bottom: 1px solid #252B42 !important;
+  }
+  
