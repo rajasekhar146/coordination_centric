@@ -729,6 +729,7 @@ const OrganizationDashboardComponent = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 value={searchDate}
+                maxDate={new Date()}
                 onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
