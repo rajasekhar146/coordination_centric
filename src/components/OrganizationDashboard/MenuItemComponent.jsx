@@ -26,7 +26,7 @@ const OrganisationItem = props => {
                     e.stopPropagation()
                     e.preventDefault()
                     if (!e.target.checked) {
-                        if(status.value === "All Status") {
+                        if(status.value === "all") {
                             selectedStatus.splice(selectedStatus.indexOf('all'), 1)
                         } else {
                             selectedStatus.splice(selectedStatus.indexOf(status.value), 1)
@@ -40,17 +40,17 @@ const OrganisationItem = props => {
                         if (status.value === "all") {
                             setSelectedStatus([
                                 'all',
-                                'verified',
+                                'active',
                                 'pending_verification',
                                 'declined',
-                                'Pending Acceptance',
-                                'Unverified',
-                                'Suspended',
-                                'Invited',
-                                'Cancelled',
+                                'pending_acceptance',
+                                'unverified',
+                                'inactive',
+                                'invited',
+                                'cancelled',
                             ])
                         } else {
-                            selectedStatus.push(status.name)
+                            selectedStatus.push(status.value)
                             setSelectedStatus([...selectedStatus])
                             
                         }
