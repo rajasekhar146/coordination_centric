@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './BankInformation.Component.css'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
@@ -18,6 +18,10 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
+import { loadStripe } from '@stripe/stripe-js/pure'
+
+import get from 'lodash.get'
+import { paymentService } from '../../../services'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
 
@@ -43,18 +47,26 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const stripe = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx')
+
 const BankInformationComponent = () => {
   const classes = useStyles()
 
   const [signatureUrl, setSignature] = useState({})
-  const [value, setValue] = useState(null)
+  // const [value, setValue] = useState(null)
   const [cardSection, setCardSection] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
+  const [cardName, setCardName] = useState(null)
+  const [cardNumber, setCardNumber] = useState(null)
+  const [cardExpiry, setCardExpiry] = useState(null)
+  const [cardCVV, setCardCVV] = useState(null)
+  const [country, setCountry] = useState(null)
 
   var sigPad = {}
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
     watch,
@@ -62,8 +74,10 @@ const BankInformationComponent = () => {
 
   const [activeStep, setActiveStep] = React.useState(2)
 
-  const handleNext = () => {
-    history.push('/terms-condition')
+  const onSubmit = data => {
+    console.log('card data', data)
+    getCardDetail(data)
+    //history.push('/terms-condition')
   }
 
   const handleBack = () => {
@@ -77,6 +91,125 @@ const BankInformationComponent = () => {
   const handleCardSection = () => {
     setCardSection(!cardSection)
   }
+
+  const getCardDetail = async data => {
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))                   
+    const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+   
+    if (cardSection) {
+      const ncardExpiry = data.expiry.split('/')
+      const cardDetail = {
+        card: { number: data.cardNumber, 
+          exp_year: ncardExpiry[1], 
+          exp_month: ncardExpiry[0], 
+          cvc: data.cvv 
+        },
+      }
+    
+      await paymentService
+        .generateToken(cardDetail)
+        .then(response => {         
+          const customerId = get(response, ['data', 'data', 'card', 'id'], '')
+          const tokenId = get(response, ['data', 'data', 'id'], '')
+          const saveDetail = {
+            email: currentUserEmail,
+            token: tokenId,
+            type: 'card',
+            customerId: '',
+            default: false
+          }
+          console.log(saveDetail)
+          paymentService.savePaymentMethod(saveDetail)
+          .then(response => {
+            console.log('success', response)
+            history.push('/terms-condition')
+          })
+          .catch(err => {
+            console.log('Save Card Detail >> Err Response', err)
+          })
+        })
+        .catch(err => {
+          console.log('Card Detail >> Err Response', err)
+        })
+    } else {
+      const bankDetail = { bank_account :  
+          { 
+            country : "US", 
+            currency : "usd", 
+            account_holder_name : data.name, 
+            account_holder_type : "individual", 
+            routing_number : data.routingNo, 
+            account_number : data.accountNo 
+          } 
+        }      
+
+      console.log('Bank Detail', bankDetail)
+
+      await paymentService
+        .generateBankToken(bankDetail)
+        .then(response => {     
+          console.log('Bank Token', response)    
+          const  customerId = get(response, ['data', 'data', 'bank_account', 'id'], '')
+          const tokenId = get(response, ['data', 'data', 'id'], '')
+          const saveDetail = {
+            email: currentUserEmail,
+            token: tokenId,
+            type: 'account',
+            customerId: '',
+            default: false
+          }
+          
+          paymentService.savePaymentMethod(saveDetail)
+          .then(response => {
+            console.log('success', response)
+            history.push('/terms-condition')
+          })
+          .catch(err => {
+            console.log('Save Card Detail >> Err Response', err)
+          })
+        })
+        .catch(err => {
+          console.log('Card Detail >> Err Response', err)
+        })
+
+    }
+
+    //const response = paymentService.generateToken()
+  }
+  // const createToken = async () => {
+  //   const accountResult = await stripe.createToken('account', {
+  //     business_type: 'company',
+  //     company: {
+  //       name: 'ABC Hospital',//document.querySelector('.inp-company-name').value,
+  //       address: {
+  //         line1: 'Address1',//document.querySelector('.inp-company-street-address1').value,
+  //         city: 'Salem', //document.querySelector('.inp-company-city').value,
+  //         state: 'TN', ///document.querySelector('.inp-company-state').value,
+  //         postal_code: '235689' //document.querySelector('.inp-company-zip').value,
+  //       },
+  //     },
+  //     tos_shown_and_accepted: true,
+  //   });
+  // }
+  // const loadError = (onError) => {
+  //   console.error(`Failed ${onError.target.src} didn't load correctly`);
+  // }
+  useEffect(() => {
+    //loadStripe.setLoadParameters({advancedFraudSignals: false});
+    //createToken()
+    // const LoadExternalScript = () => {
+    //   const externalScript = document.createElement("script");
+    //   externalScript.onerror = loadError;
+    //   externalScript.id = "external";
+    //   externalScript.async = true;
+    //   externalScript.type = "text/javascript";
+    //   externalScript.setAttribute("crossorigin", "*");
+    //   document.body.appendChild(externalScript);
+    //   externalScript.src = `https://js.stripe.com/v3/`;
+    // };
+    // LoadExternalScript();
+  })
 
   return (
     <div className="ob__main__section">
@@ -110,7 +243,7 @@ const BankInformationComponent = () => {
                         <div className="bi__left__section"></div>
                         <div className="bi__content__center">
                           {cardSection ? (
-                            <form onSubmit={handleSubmit(handleNext)}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
                               <div id="div_cc">
                                 <div className="ac__row">
                                   <div className="ac__label">Name on card</div>
@@ -139,6 +272,7 @@ const BankInformationComponent = () => {
                                   <TextField
                                     className="bi__text__box"
                                     margin="normal"
+                                    onChange={e => setCardNumber(e.target.value)}
                                     {...register('cardNumber', {
                                       required: 'Card number is required.',
                                       // pattern: {
@@ -161,6 +295,7 @@ const BankInformationComponent = () => {
                                     <TextField
                                       margin="normal"
                                       placeholder="MM/YY"
+                                      onChange={e => setCardCVV(e.target.value)}
                                       {...register('expiry', {
                                         required: 'expiry is required.',
                                         // pattern: {
@@ -178,6 +313,7 @@ const BankInformationComponent = () => {
                                       type="password"
                                       defaultValue="123"
                                       margin="normal"
+                                      onChange={e => setCardExpiry(e.target.value)}
                                       {...register('cvv', {
                                         required: 'cvv is required.',
                                         // pattern: {
@@ -229,7 +365,7 @@ const BankInformationComponent = () => {
                               </Button>
                             </form>
                           ) : (
-                            <form onSubmit={handleSubmit(handleNext)}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
                               <div id="div_dc">
                                 <div className="ac__row">
                                   <div className="ac__label">

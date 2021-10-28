@@ -29,7 +29,7 @@ function allOrganization(skip, limit, searchText, date, status = []) {
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
   const dateUTC = moment.utc(date).local().format('YYYY-MM-DD');
-  const statusvalues = status.join()
+  const statusvalues = status?.join()
 
   //status = ''
   // console.log(searchText, date, status)
@@ -88,11 +88,18 @@ function allOrganization(skip, limit, searchText, date, status = []) {
   )
 }
 
-function addOrganization(bodyMsg) {
+function addOrganization(bodyMsg, role) {
   console.log('axiosConfig', axiosConfig)
+ 
+  var url = `${apiURL}/facilityList/inviteFacility`
+
+  if(role === 'superadmin') {
+    url = `${apiURL}/facilityList/addFacility`
+  }
+  
   return (
     axios
-      .post(`${apiURL}/facilityList/addFacility`, bodyMsg, axiosConfig)
+      .post(url, bodyMsg, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
