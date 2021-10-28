@@ -414,6 +414,7 @@ const OrganizationDashboardComponent = () => {
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
+  const [isAcivated, setIsActivateClicked] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -481,6 +482,7 @@ const OrganizationDashboardComponent = () => {
       !isDeactivateClicked
       && !isRejectClicked
       && !isAcceptClicked
+      && !isAcivated
     ) {
       getOrganization(searchText, searchDate, selectedStatus)
     }
@@ -491,6 +493,7 @@ const OrganizationDashboardComponent = () => {
     searchText,
     searchDate,
     selectedStatus,
+    isAcivated
   ])
 
   useEffect(() => {
@@ -786,6 +789,7 @@ const OrganizationDashboardComponent = () => {
                         setAlertMsg={setAlertMsg}
                         setIsCancelInviteClicked={setIsCancelInviteClicked}
                         setSubLabel={setSubLabel}
+                        setIsActivateClicked={setIsActivateClicked}
                       />
                     ))
                     : null
