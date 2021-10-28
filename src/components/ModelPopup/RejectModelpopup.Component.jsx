@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const RejectModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg.id, 'declined')
@@ -33,6 +33,7 @@ const RejectModel = props => {
       setSkip(1)
       setOpenFlash(true)
       setAlertMsg('Rejected')
+      setSubLabel('This account was successfully rejected, and is now disabled.')
       props.clickCloseButton()
     })
   }

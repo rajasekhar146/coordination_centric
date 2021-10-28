@@ -28,7 +28,7 @@ const SignupComponent = () => {
         <div className="su__title">Simple, transparent pricing</div>
       </div>
       <div className="su__row">
-        <div className="su__sub__title">Lorem ipsum dolor sit amet, consectetur</div>
+        <div className="su__sub__title">Coordination Centric</div>
       </div>
       <div className="su__row">
         {' '}
@@ -54,7 +54,7 @@ const SignupComponent = () => {
       </div>
       <div className="su__row">
         <div className="su__plan__section">
-          <div className="su__column">
+          <div className="su__column__free">
             <div className="su__plan__amount">$0</div>
             <div className="su__free__text">Free</div>
             <div className="su__content">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut</div>

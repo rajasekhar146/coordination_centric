@@ -414,6 +414,7 @@ const OrganizationDashboardComponent = () => {
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
+  const [isAcivated, setIsActivateClicked] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -439,6 +440,9 @@ const OrganizationDashboardComponent = () => {
   const [searchText, setSearchText] = React.useState('')
   const [searchDate, setSearchDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
+  const [subLebel, setSubLabel] = useState('')
+
+
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
   //   getOrganization()
@@ -446,9 +450,12 @@ const OrganizationDashboardComponent = () => {
   // }, [])
 
   const currentUser = authenticationService.currentUserValue
-  const is_verified = get(currentUser, ['data', 'data', 'is_verified'], false)
+  const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
+  const role = get(currentUser, ['data', 'data', 'role'], false)
 
-  const planType = get(currentUser, ['data', 'data', 'planType'], 'free')
+  const planType = get(currentUser, ['data', 'planType'], '')
+
+
 
 
   // const memoizedStateList = useMemo(() => {
@@ -475,6 +482,7 @@ const OrganizationDashboardComponent = () => {
       !isDeactivateClicked
       && !isRejectClicked
       && !isAcceptClicked
+      && !isAcivated
     ) {
       getOrganization(searchText, searchDate, selectedStatus)
     }
@@ -485,6 +493,7 @@ const OrganizationDashboardComponent = () => {
     searchText,
     searchDate,
     selectedStatus,
+    isAcivated
   ])
 
   useEffect(() => {
@@ -560,10 +569,41 @@ const OrganizationDashboardComponent = () => {
     console.log('skipRecords', skipRecords)
     const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchDate, selectedStatus)
     console.log('skipRecords >> Records', allOrganizations)
+    const totalCount = get(allOrganizations, 'totalCount', 'count', null)
+    console.log('totalCount', totalCount)
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
       console.log('skipRecords >> totalData', totalData)
-      setOrganizations(totalData)
+      setCount(totalCount)
+      const totalPage = Math.ceil(totalCount?.count / 10)
+      var data = []
+      console.log('totalPage', totalPage)
+      // console.log('totalCount', totalCount?.count)
+      // console.log('totalData', totalData)
+      setTotalPage(totalPage)
+
+      totalData.map(r => {
+        var admin = r.admin
+        console.log(admin)
+
+        var fullName = ''
+        if (admin?.length > 0) fullName = admin[0].fullName
+        var record = {
+          id: r._id,
+          facilityName: r.facilityName,
+          orgName: fullName,
+          facilityAddress: r.facilityAddress,
+          referredBy: r.referred_by,
+          status: r.status,
+          action: '',
+        }
+
+        data.push(record)
+      })
+
+      console.log('new totalData', data)
+
+      setOrganizations(data)
     }
   }
 
@@ -635,8 +675,8 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
-          {true ? (
-            <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
+          {role === "superadmin" || (planType === "premium") ? (
+            <Button className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"} onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
           ) : null}
@@ -725,43 +765,53 @@ const OrganizationDashboardComponent = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
-                    <OrganisationItem
-                      row={row}
-                      index={index}
-                      columns={columns}
-                      colorcodes={colorcodes}
-                      open={open}
-                      handleClose={handleClose}
-                      classes={classes}
-                      menuOptions={menuOptions}
-                      setIsRejectClicked={setIsRejectClicked}
-                      setIsAcceptClicked={setIsAcceptClicked}
-                      setIsDeactivateClicked={setIsDeactivateClicked}
-                      getTextColor={getTextColor}
-                      setSelectedOrg={setSelectedOrg}
-                      rows={rows}
-                      menuList={menuList}
-                      setSkip={setSkip}
-                      setOrganizations={setOrganizations}
-                      setOpenFlash={setOpenFlash}
-                      setAlertMsg={setAlertMsg}
-                      setIsCancelInviteClicked={setIsCancelInviteClicked}
-                    />
-                  ))}
+                  {(planType === "premium") || (role === "superadmin")
+                    ? rows.map((row, index) => (
+                      <OrganisationItem
+                        row={row}
+                        index={index}
+                        columns={columns}
+                        colorcodes={colorcodes}
+                        open={open}
+                        handleClose={handleClose}
+                        classes={classes}
+                        menuOptions={menuOptions}
+                        setIsRejectClicked={setIsRejectClicked}
+                        setIsAcceptClicked={setIsAcceptClicked}
+                        setIsDeactivateClicked={setIsDeactivateClicked}
+                        getTextColor={getTextColor}
+                        setSelectedOrg={setSelectedOrg}
+                        rows={rows}
+                        menuList={menuList}
+                        setSkip={setSkip}
+                        setOrganizations={setOrganizations}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setIsCancelInviteClicked={setIsCancelInviteClicked}
+                        setSubLabel={setSubLabel}
+                        setIsActivateClicked={setIsActivateClicked}
+                      />
+                    ))
+                    : null
+                  }
+
                 </TableBody>
               </Table>
             </TableContainer>
           </Paper>
         </div>
       </div>
-      <div className="od__row">
-        <div className="od__pagination__section">
-          <Stack spacing={2}>
-            <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
-          </Stack>
+      {(planType === "premium") || (role === "superadmin")
+        ?
+        <div className="od__row">
+          <div className="od__pagination__section">
+            <Stack spacing={2}>
+              <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
+            </Stack>
+          </div>
         </div>
-      </div>
+        : null
+      }
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"
@@ -773,6 +823,7 @@ const OrganizationDashboardComponent = () => {
             getOrganization={getOrganization}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>
@@ -790,6 +841,7 @@ const OrganizationDashboardComponent = () => {
             setOrganizations={setOrganizations}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>
@@ -807,6 +859,7 @@ const OrganizationDashboardComponent = () => {
             setOrganizations={setOrganizations}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>
@@ -824,6 +877,7 @@ const OrganizationDashboardComponent = () => {
             setOrganizations={setOrganizations}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>
@@ -841,10 +895,16 @@ const OrganizationDashboardComponent = () => {
             setOrganizations={setOrganizations}
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>
-      <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+      />
     </div>
   )
 }

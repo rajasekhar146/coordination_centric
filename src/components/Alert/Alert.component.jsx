@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
     alert: {
         width: '300px',
-
+        
     }
 }))
 
@@ -24,37 +24,9 @@ const Alert = (props) => {
     const {
         handleCloseFlash,
         alertMsg,
-        openflash
+        openflash,
+        subLebel
     } = props
-
-    const [subLebel, setSubLabel] = useState('')
-
-    useEffect(() => {
-        switch (alertMsg) {
-            case 'Verified':
-                setSubLabel('This account was successfully verified.')
-                break
-            case 'Rejected':
-                setSubLabel('This account was successfully rejected, and is now disabled.')
-                break
-            case 'Activated':
-                setSubLabel('This account was successfully activated.')
-                break
-            case 'Re-sended':
-                setSubLabel('Another invitation was sended to this organization.')
-                break
-            case 'Another invitation was sended to this organization.':
-                break
-            case 'Deactivated':
-                setSubLabel('This account was deactivated, users no longer have access.')
-                break
-            case 'Cancelled':
-                setSubLabel('The invitation was cancelled')
-                break
-            default:
-                return null
-        }
-    }, [alertMsg])
 
 
     return (
@@ -69,7 +41,7 @@ const Alert = (props) => {
                 onClose={handleCloseFlash}
             >
                 <AlertMui onClose={handleCloseFlash} severity="success" sx={{ width: '300' }}>
-                    <h1>{alertMsg}</h1>
+                    <h4>{alertMsg}</h4>
                     <label>
                         {subLebel}
                     </label>

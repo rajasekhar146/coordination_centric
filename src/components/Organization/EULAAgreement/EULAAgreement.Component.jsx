@@ -220,7 +220,7 @@ const EULAAgreementComponent = () => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          <div className="eulaa__label">Sign Here</div>
+                          
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
@@ -229,6 +229,7 @@ const EULAAgreementComponent = () => {
                               }}
                             />
                           </div>
+                          <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
                             <div className="sla__text__align__center">
                               <p className="ac__required">Please sigh here</p>
@@ -237,7 +238,7 @@ const EULAAgreementComponent = () => {
                         </div>
 
                         <div className="eulaa__column">
-                          <div className="eulaa__label">Date</div>
+                         
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -250,6 +251,7 @@ const EULAAgreementComponent = () => {
                               InputProps={{ className: 'sla__date__section' }}
                             />
                           </LocalizationProvider>
+                          <div className="eulaa__label">Date</div>
                           {!IsDateEntered && (
                             <div className="sla__text__align__center">
                               <p className="ac__required">Please select the date</p>

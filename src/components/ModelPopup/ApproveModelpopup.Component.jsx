@@ -5,7 +5,7 @@ import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
 const ApproveModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg.id, 'active')
@@ -14,6 +14,7 @@ const ApproveModel = props => {
       setSkip(1)
       setOpenFlash(true)
       setAlertMsg('Verified')
+      setSubLabel('This account was successfully verified.')
       props.clickCloseButton()
     })
   }

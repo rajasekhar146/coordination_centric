@@ -6,7 +6,7 @@ import { organizationService } from '../../services'
 import get from 'lodash.get'
 
 const DeactivateModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
 
     const handleSubmit = () => {
         const res = organizationService.updateOrganization(selectedOrg.id, 'inactive')
@@ -15,6 +15,7 @@ const DeactivateModel = props => {
             setSkip(1)
             setOpenFlash(true)
             setAlertMsg('Deactivated')
+            setSubLabel('This account was deactivated, users no longer have access.')
             props.clickCloseButton()
         })
     }

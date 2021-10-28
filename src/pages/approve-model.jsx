@@ -11,6 +11,7 @@ const ApproveModel = props => {
       setAlertMsg={props.setAlertMsg}
       setOrganizations={props.setOrganizations}
       setOpenFlash={props.setOpenFlash}
+      setSubLabel={props.setSubLabel}
       />
     </React.Fragment>
   )
