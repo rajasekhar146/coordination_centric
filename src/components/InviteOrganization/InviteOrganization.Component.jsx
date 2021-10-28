@@ -18,7 +18,8 @@ const InviteOrganizationComponent = props => {
   const {
     setOpenFlash,
     setAlertMsg,
-    clickCloseButton
+    clickCloseButton,
+    setSubLabel
   } = props;
 
 

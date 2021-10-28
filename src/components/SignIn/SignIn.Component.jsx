@@ -18,6 +18,8 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { get } from 'lodash'
+import Alert from '../Alert/Alert.component'
+
 
 const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -26,6 +28,14 @@ const SignInComponent = () => {
   const [errMsg, setErrMsg] = useState('')
   const [IsValidEmail, setIsValidEmail] = useState(true)
   const [IsValidPassword, setIsValidPassword] = useState(true)
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
+
+
+
+  const handleCloseFlash = () => {
+    setOpenFlash(false)
+  }
 
   const defaultValues = {
     email: '',
@@ -63,6 +73,8 @@ const SignInComponent = () => {
         if (user.status_code === 400) {
           setIsValidUser(false)
           IsValidUser = false
+          setAlertMsg(get(user, ['message'], ''))
+          setOpenFlash(true)
           setErrMsg(user.message)
           if (user.message.includes('Password')) {
             setIsValidPassword(false)
@@ -196,6 +208,10 @@ const SignInComponent = () => {
             <div className="si__forgot__link"> Forgot Password? </div>
           </div>
         </div>
+        <Alert
+          handleCloseFlash={handleCloseFlash}
+          alertMsg={alertMsg}
+          openflash={openflash} />
       </form>
     </div>
   )

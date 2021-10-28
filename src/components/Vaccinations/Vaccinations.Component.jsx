@@ -6,10 +6,10 @@ const VaccinationsComponent = () => {
     <div style={{
       display: "flex",
       alignItems: "center",
-      flexDirection: "column"
-    
+      flexDirection: "column",
+      marginTop: "72px"
     }}>
-     <img width={400} src={Inventory} alt="inventory" />
+      <img width={250} src={Inventory} alt="inventory" />
     </div>
   )
 }

@@ -31,6 +31,7 @@ const OrganisationItem = props => {
     setOpenFlash,
     setAlertMsg,
     setIsCancelInviteClicked,
+    setSubLabel
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -56,6 +57,7 @@ const OrganisationItem = props => {
       setOrganizations([])
       setSkip(1)
       setAlertMsg('Activated')
+      setSubLabel('This account was successfully activated.')
       setOpenFlash(true)
     })
   }
@@ -66,6 +68,7 @@ const OrganisationItem = props => {
       setOrganizations([])
       setSkip(1)
       setAlertMsg('Re-sended')
+      setSubLabel('Another invitation was sended to this organization.')
       setOpenFlash(true)
     })
   }
@@ -86,10 +89,10 @@ const OrganisationItem = props => {
         setIsCancelInviteClicked(true)
         break
       case 'setIsActivateClicked':
-        handleActivate(rows[index], 'active')
+        handleActivate(row, 'active')
         break
       case 'setIsResendClicked':
-        handleResend(rows[index], 'resend')
+        handleResend(row, 'resend')
         break
       case 'viewdetails':
         routeDirect(orgId)
@@ -98,7 +101,7 @@ const OrganisationItem = props => {
         return null
     }
     setAnchorEl(null)
-    setSelectedOrg(rows[index])
+    setSelectedOrg(row)
   }
 
   const getValue = val => {

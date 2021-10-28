@@ -21,7 +21,7 @@ export const organizationService = {
   cancelIvitation,
 }
 
-function allOrganization(skip, limit, searchText, date, status) {
+function allOrganization(skip, limit, searchText, date, status = []) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 

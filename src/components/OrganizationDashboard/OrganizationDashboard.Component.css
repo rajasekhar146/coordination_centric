@@ -64,6 +64,25 @@
     border-radius: 3px !important;
     width: 220px !important;
 }
+.od__add__organization__btn_disabled {
+    background-color: #DBDDE0 !important;
+    color: #A0A4A8 !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 8px;
+    padding: 8px 32px 8px 32px !important;
+    border-radius: 3px !important;
+    width: 220px !important;
+    pointer-events: none;
+}
 
 .od__add__organization__btn__text {
     font-family: Montserrat;
