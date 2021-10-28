@@ -23,7 +23,6 @@ import { organizationService } from '../../../services'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
 
-
 const useStyles = makeStyles(theme => ({
   datefield: {
     top: '22px',
@@ -41,6 +40,7 @@ const ServiceLevelAgreementComponent = props => {
   const [processSteps, setProcessSteps] = React.useState(steps)
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
+
 
   var sigPad = {}
 
@@ -91,8 +91,9 @@ const ServiceLevelAgreementComponent = props => {
     console.log('facility', nfacility)
     var referredBy = nfacility?.referred_by
     var inviteToken = nfacility?.inviteToken
+    var invitedBy = nfacility?.invited_by
 
-    history.push(`/acceptance-criteria/${inviteToken}/${referredBy}`)
+    history.push(`/acceptance-criteria/${inviteToken}/${referredBy}/${invitedBy}`)
   }
 
   const captureSignature = () => {

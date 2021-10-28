@@ -61,7 +61,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification-success" component={EmailVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/emailverification-failed" component={EmailVerificationFailed} />
-          <DefaultLayoutComponentRoute path="/service-level-agreement" component={ServiceLevelAgreement} />
+          <DefaultLayoutComponentRoute path="/service-level-agreement/:invitetoken/:referredby/:invitedBy" component={ServiceLevelAgreement} />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />
           <DefaultLayoutComponentRoute path="/verification/:method" component={VerificationCodePage} />
