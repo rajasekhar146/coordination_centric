@@ -65,7 +65,13 @@ const SAASAgreementComponent = props => {
   }
 
   const handleBack = () => {
-    history.push('/service-level-agreement')
+    var nfacility = JSON.parse(localStorage.getItem('facility'))
+
+    console.log('facility', nfacility)
+    var referredBy = nfacility?.referred_by
+    var inviteToken = nfacility?.inviteToken
+    var invitedBy = nfacility?.invited_by
+    history.push(`/service-level-agreement/${inviteToken}/${referredBy}/${invitedBy}`)
   }
 
   useEffect(() => {

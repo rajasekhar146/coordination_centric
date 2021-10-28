@@ -48,7 +48,7 @@ const TermsAndConditionsComponent = () => {
     else history.push('/bank-info')
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     const planType = localStorage.getItem('plan_type')
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {

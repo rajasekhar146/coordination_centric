@@ -67,8 +67,8 @@ const AcceptanceCriteriaComponent = (props) => {
     data.invited_by = invitedBy
 
     localStorage.setItem('facility', JSON.stringify(data))
-
-    history.push('/service-level-agreement')
+   
+    history.push(`/service-level-agreement/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   useEffect(() => {
@@ -91,6 +91,9 @@ const AcceptanceCriteriaComponent = (props) => {
       setValue('medicalId', data.medicalId)
       setValue('website', data.website)
       setValue('about', data.about)
+      setValue('city', data.city)
+      setValue('state', data.state)
+      setValue('zipcode', data.zipcode)
     }
 
 
@@ -127,7 +130,7 @@ const AcceptanceCriteriaComponent = (props) => {
   }, [])
 
   const handleBack = () => {
-    history.push('/signup/1/2')
+    history.push(`/signup/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   return (
