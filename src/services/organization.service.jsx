@@ -156,7 +156,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
   const currentUser = authenticationService?.currentUserValue
   console.log('currentUser', currentUser)
   var myHeaders = new Headers()
-  myHeaders.append('x-access-token', `${currentUser.data.token}`)
+  myHeaders.append('x-access-token', `${currentUser?.data?.token}`)
   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
 
   var urlencoded = new URLSearchParams()

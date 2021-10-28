@@ -71,6 +71,13 @@ const SAASAgreementComponent = props => {
     var referredBy = nfacility?.referred_by
     var inviteToken = nfacility?.inviteToken
     var invitedBy = nfacility?.invited_by
+
+    if(referredBy === undefined || referredBy === null)
+      referredBy = 0
+  
+    if(invitedBy === undefined || invitedBy === null)  
+      invitedBy = 0
+
     history.push(`/service-level-agreement/${inviteToken}/${referredBy}/${invitedBy}`)
   }
 

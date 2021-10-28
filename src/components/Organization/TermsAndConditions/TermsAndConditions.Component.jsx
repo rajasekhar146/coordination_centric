@@ -28,7 +28,7 @@ const TermsAndConditionsComponent = () => {
 
   const handleNext = async () => {
     const updateFacility = JSON.parse(localStorage.getItem('facility'))
-
+    console.log('facility', updateFacility)
     var response = await organizationService.signupOrganization(updateFacility)
 
     if (response?.status === 200) {

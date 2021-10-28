@@ -93,6 +93,12 @@ const ServiceLevelAgreementComponent = props => {
     var inviteToken = nfacility?.inviteToken
     var invitedBy = nfacility?.invited_by
 
+    if(referredBy === undefined || referredBy === null)
+      referredBy = 0
+    
+    if(invitedBy === undefined || invitedBy === null)  
+      invitedBy = 0
+
     history.push(`/acceptance-criteria/${inviteToken}/${referredBy}/${invitedBy}`)
   }
 

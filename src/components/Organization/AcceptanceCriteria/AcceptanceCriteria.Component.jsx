@@ -132,6 +132,12 @@ const AcceptanceCriteriaComponent = (props) => {
   }, [])
 
   const handleBack = () => {
+    if(referredby === undefined || referredby === null)
+      referredby = 0
+  
+    if(invitedBy === undefined || invitedBy === null)  
+      invitedBy = 0
+
     history.push(`/signup/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
