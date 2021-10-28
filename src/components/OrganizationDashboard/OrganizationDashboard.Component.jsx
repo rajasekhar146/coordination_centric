@@ -538,7 +538,7 @@ const OrganizationDashboardComponent = () => {
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by,
+          referredBy: r.referred_by == "0" ? '' : r.referred_by,
           status: r.status,
           action: '',
         }
@@ -593,7 +593,7 @@ const OrganizationDashboardComponent = () => {
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by,
+          referredBy: r.referred_by == "0" ? '' : r.referred_by,
           status: r.status,
           action: '',
         }
@@ -801,7 +801,7 @@ const OrganizationDashboardComponent = () => {
           </Paper>
         </div>
       </div>
-      {(planType === "premium") || (role === "superadmin")
+      {(planType === "premium" && rows.length >= 10) || (role === "superadmin" && rows.length >= 10)
         ?
         <div className="od__row">
           <div className="od__pagination__section">
