@@ -54,7 +54,31 @@ const InviteOrganizationComponent = props => {
     defaultValues.facilityEmail = watch('facilityEmail')
     defaultValues.facilityAddress = watch('facilityAddress')
     defaultValues.facilityPhone = watch('facilityPhone')
-    const res = organizationService.addOrganization(defaultValues)
+    
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))                   
+    const currentUserRole = get(currentUser, ['data', 'data', 'role'], '')
+    const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+
+    var orgDetail = {
+      facilityName: defaultValues.facilityName,
+      facilityEmail: defaultValues.facilityEmail,
+      facilityAddress: defaultValues.facilityAddress,
+      facilityPhone: defaultValues.facilityPhone
+    }
+
+    if(currentUserRole === 'admin') {
+      orgDetail = {
+        adminEmail: currentUserEmail,
+        newFacilityEmail: defaultValues.facilityEmail,
+        newFacilityName: defaultValues.facilityName,
+        facilityAddress: defaultValues.facilityAddress,
+        facilityPhone: defaultValues.facilityPhone
+      }
+    }
+
+    console.log('orgDetail', orgDetail)
+    
+    const res = organizationService.addOrganization(orgDetail, currentUserRole)
     res.then((response) => {
       setOpenFlash(true)
       setAlertMsg('Invitation Sent Successfully')

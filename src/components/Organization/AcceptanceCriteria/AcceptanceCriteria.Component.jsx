@@ -24,6 +24,7 @@ const AcceptanceCriteriaComponent = (props) => {
   const [initialValues, setInitialFormData] = useState(props.props)
   const { referredby } = useParams()
   const { invitetoken } = useParams()
+  const { invitedBy } = useParams()
 
   // const [fullName, setFullName] = useState(null)
   // const [email, setEmail] = useState(null)
@@ -62,6 +63,8 @@ const AcceptanceCriteriaComponent = (props) => {
     data.referred_by = referredby
 
     data.inviteToken = invitetoken
+    
+    data.invited_by = invitedBy
 
     localStorage.setItem('facility', JSON.stringify(data))
 

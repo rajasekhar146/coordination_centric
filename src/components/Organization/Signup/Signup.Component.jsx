@@ -10,10 +10,11 @@ const SignupComponent = () => {
   const [selectedPlan, setSelectedPlan] = useState('M')
   const { referredby } = useParams()
   const { invitetoken } = useParams()
+  const { invitedBy } = useParams()
 
   const handleFreePlan = planType => {
     localStorage.setItem('plan_type', planType)
-    history.push(`/acceptance-criteria/${invitetoken}/${referredby}`)
+    history.push(`/acceptance-criteria/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   useEffect(() => {

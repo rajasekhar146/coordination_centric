@@ -48,7 +48,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />
           <DefaultLayoutComponentRoute
-            path="/acceptance-criteria/:invitetoken/:referredby"
+            path="/acceptance-criteria/:invitetoken/:referredby/:invitedBy"
             component={AcceptanceCriteria}
           />
           <DefaultLayoutComponentRoute path="/saas-agreement" component={SAASAgreement} />
@@ -56,7 +56,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/terms-condition" component={TermsAndConditions} />
           <DefaultLayoutComponentRoute path="/signup-completed" component={SignupComplete} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformationComponent} />
-          <DefaultLayoutComponentRoute path="/signup/:invitetoken/:referredby" component={Signup} />
+          <DefaultLayoutComponentRoute path="/signup/:invitetoken/:referredby/:invitedBy" component={Signup} />
           <DefaultLayoutComponentRoute path="/userverification" component={UserVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification-success" component={EmailVerificationSuccess} />
