@@ -300,7 +300,7 @@ const statusNames = [
     name: 'All Status', value: "all"
   },
   {
-    name: 'Verified', value: "verified"
+    name: 'Verified', value: "active"
   },
   {
     name: 'Pending Verification', value: "pending_verification"
@@ -315,7 +315,7 @@ const statusNames = [
     name: 'Unverified', value: "unverified"
   },
   {
-    name: 'Suspended', value: "suspended"
+    name: 'Suspended', value: "inactive"
   },
   {
     name: 'Invited', value: "invited"
@@ -418,15 +418,15 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState([
-    'All Status',
-    'Verified',
-    'Pending Verification',
-    'Declined',
-    'Pending Acceptance',
-    'Unverified',
-    'Suspended',
-    'Invited',
-    'Cancelled',
+    'all',
+    'active',
+    'pending_verification',
+    'declined',
+    'pending_acceptance',
+    'unverified',
+    'inactive',
+    'invited',
+    'cancelled',
   ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
@@ -506,7 +506,7 @@ const OrganizationDashboardComponent = () => {
     const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
-      const totalCount = get(allOrganizations, 'totalCount',  'count', null)
+      const totalCount = get(allOrganizations, 'totalCount', 'count', null)
       console.log('totalCount', totalCount)
       setCount(totalCount)
       var totalData = allOrganizations?.totalData
@@ -558,7 +558,7 @@ const OrganizationDashboardComponent = () => {
     setPage(newPage)
     const skipRecords = (newPage - 1) * 10
     console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchDate, selectedStatus)
     console.log('skipRecords >> Records', allOrganizations)
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
@@ -659,7 +659,7 @@ const OrganizationDashboardComponent = () => {
           />
         </div>
         <div className="od__right__section od_status">
-          <div style={{ width: "162px"}} className="od__btn__div">
+          <div style={{ width: "162px" }} className="od__btn__div">
             <FormControl sx={{ m: 1, width: 200 }}>
               <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
               <Select
