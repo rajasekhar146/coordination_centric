@@ -19,17 +19,17 @@ const OrganisationItem = props => {
 
 
     return (
-        <MenuItem key={status.value} value={status.value}>
+        <MenuItem key={status.key} value={status.key}>
             <Checkbox
-                checked={selectedStatus.indexOf(status.value) > -1}
+                checked={selectedStatus.indexOf(status.key) > -1}
                 onChange={(e) => {
                     e.stopPropagation()
                     e.preventDefault()
                     if (!e.target.checked) {
-                        if(status.value === "all") {
+                        if(status.key === "all") {
                             selectedStatus.splice(selectedStatus.indexOf('all'), 1)
                         } else {
-                            selectedStatus.splice(selectedStatus.indexOf(status.value), 1)
+                            selectedStatus.splice(selectedStatus.indexOf(status.key), 1)
                             selectedStatus.splice(selectedStatus.indexOf('all'), 1)
 
                         }
@@ -37,7 +37,7 @@ const OrganisationItem = props => {
                         setIsStatusFieldsChanged(true)
                     }
                     if (e.target.checked) {
-                        if (status.value === "all") {
+                        if (status.key === "all") {
                             setSelectedStatus([
                                 'all',
                                 'active',
@@ -50,7 +50,7 @@ const OrganisationItem = props => {
                                 'cancelled',
                             ])
                         } else {
-                            selectedStatus.push(status.value)
+                            selectedStatus.push(status.key)
                             setSelectedStatus([...selectedStatus])
                             
                         }

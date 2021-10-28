@@ -297,31 +297,31 @@ const MenuProps = {
 
 const statusNames = [
   {
-    name: 'All Status', value: "all"
+    name: 'All Status', value: "All Status", key: "all"
   },
   {
-    name: 'Verified', value: "active"
+    name: 'Verified', value: "Verified",  key: "active"
   },
   {
-    name: 'Pending Verification', value: "pending_verification"
+    name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
   },
   {
-    name: 'Declined', value: "declined"
+    name: 'Declined', value: "Declined", key: "declined"
   },
   {
-    name: 'Pending Acceptance', value: "pending_acceptance"
+    name: 'Pending Acceptance', value: "Pending Acceptance", key: "pending_acceptance"
   },
   {
-    name: 'Unverified', value: "unverified"
+    name: 'Unverified', value: "Unverified", key: "unverified"
   },
   {
-    name: 'Suspended', value: "inactive"
+    name: 'Suspended', value: "Suspended", key: "inactive"
   },
   {
-    name: 'Invited', value: "invited"
+    name: 'Invited', value: "Invited", key: "invited"
   },
   {
-    name: 'Cancelled', value: "cancelled"
+    name: 'Cancelled', value: "Cancelled", value: "cancelled"
   }
 ]
 
@@ -419,15 +419,7 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState([
-    'all',
-    'active',
-    'pending_verification',
-    'declined',
-    'pending_acceptance',
-    'unverified',
-    'inactive',
-    'invited',
-    'cancelled',
+    
   ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
