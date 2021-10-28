@@ -60,11 +60,13 @@ const AcceptanceCriteriaComponent = (props) => {
 
     data.admin = [admin]
 
-    data.referred_by = referredby
+    if(referredby != "0")
+      data.referred_by = referredby
 
     data.inviteToken = invitetoken
-    
-    data.invited_by = invitedBy
+
+    if(invitedBy != "0")
+      data.invited_by = invitedBy
 
     localStorage.setItem('facility', JSON.stringify(data))
    

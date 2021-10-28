@@ -84,11 +84,13 @@ const InviteOrganizationComponent = props => {
       setOpenFlash(true)
       setAlertMsg('Invitation Sent Successfully')
       clickCloseButton()
+      localStorage.removeItem('facility')
     }).catch((error) => {
       console.log(error.response)
       if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
         setIsExist('Email Already Registered')
       }
+      localStorage.removeItem('facility')
     })
   }
 
