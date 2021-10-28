@@ -297,31 +297,31 @@ const MenuProps = {
 
 const statusNames = [
   {
-    name: 'All Status', value: "all"
+    name: 'All Status', value: "All Status", key: "all"
   },
   {
-    name: 'Verified', value: "active"
+    name: 'Verified', value: "Verified",  key: "active"
   },
   {
-    name: 'Pending Verification', value: "pending_verification"
+    name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
   },
   {
-    name: 'Declined', value: "declined"
+    name: 'Declined', value: "Declined", key: "declined"
   },
   {
-    name: 'Pending Acceptance', value: "pending_acceptance"
+    name: 'Pending Acceptance', value: "Pending Acceptance", key: "pending_acceptance"
   },
   {
-    name: 'Unverified', value: "unverified"
+    name: 'Unverified', value: "Unverified", key: "unverified"
   },
   {
-    name: 'Suspended', value: "inactive"
+    name: 'Suspended', value: "Suspended", key: "inactive"
   },
   {
-    name: 'Invited', value: "invited"
+    name: 'Invited', value: "Invited", key: "invited"
   },
   {
-    name: 'Cancelled', value: "cancelled"
+    name: 'Cancelled', value: "Cancelled", value: "cancelled"
   }
 ]
 
@@ -419,15 +419,7 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState([
-    'all',
-    'active',
-    'pending_verification',
-    'declined',
-    'pending_acceptance',
-    'unverified',
-    'inactive',
-    'invited',
-    'cancelled',
+    
   ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
@@ -538,7 +530,7 @@ const OrganizationDashboardComponent = () => {
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by,
+          referredBy: r.referred_by == "0" ? '' : r.referred_by,
           status: r.status,
           action: '',
         }
@@ -593,7 +585,7 @@ const OrganizationDashboardComponent = () => {
           facilityName: r.facilityName,
           orgName: fullName,
           facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by,
+          referredBy: r.referred_by == "0" ? '' : r.referred_by,
           status: r.status,
           action: '',
         }
@@ -729,6 +721,7 @@ const OrganizationDashboardComponent = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 value={searchDate}
+                maxDate={new Date()}
                 onChange={e => handleSearchDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
@@ -801,7 +794,7 @@ const OrganizationDashboardComponent = () => {
           </Paper>
         </div>
       </div>
-      {(planType === "premium") || (role === "superadmin")
+      {(planType === "premium" && rows.length >= 10) || (role === "superadmin" && rows.length >= 10)
         ?
         <div className="od__row">
           <div className="od__pagination__section">
