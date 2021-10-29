@@ -8,6 +8,8 @@ import TextField from '@mui/material/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
+import useStore from '../../hooks/use-store';
+import SigninStore from '../../stores/signinstore'
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +42,16 @@ const TwoFaEnabled = props => {
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
+  const twofaActive = authenticationService.twofaActive
+
+  const [signinStoreData] = useStore(SigninStore);
+
+  const {
+    email,
+  } = signinStoreData;
+
+
+  console.log(email)
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -60,12 +72,23 @@ const TwoFaEnabled = props => {
     }
   }, [minutes, seconds])
 
-  const handleResend =  async () => {
-    var response = await authenticationService.twoFactorEmailAuth(currentUserEmail)
+  const handleSubmit = () => {
+    const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
+    res
+      .then(() => {
+        history.push(`/2faverificationsuccess`)
+      })
+      .catch(() => {
+        history.push(`/2faverificationfail`)
+      })
+  }
+
+  const handleResend = async () => {
+    var response = authenticationService.twoFactorEmailAuth(email)
     response.then(() => {
 
     }).catch(() => {
-      
+
     })
   }
 
@@ -103,7 +126,11 @@ const TwoFaEnabled = props => {
               handleResend()
             }}>Didn’t receive? Resend OTP</label>
           </div>
-          <Button className="evp__verify__btn">
+          <Button
+            onClick={() => {
+              handleSubmit()
+            }}
+            className="evp__verify__btn">
             Verify &nbsp;{' '}
             {
               <label>
@@ -121,7 +148,7 @@ const TwoFaEnabled = props => {
         <div
           className="io__back"
           onClick={() => {
-            history.push('/enable2fa')
+            history.push('/signin')
           }}
         >
           <span className="io__back__arrow">

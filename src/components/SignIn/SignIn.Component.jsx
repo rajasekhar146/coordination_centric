@@ -19,6 +19,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { get } from 'lodash'
 import Alert from '../Alert/Alert.component'
+import SigninStore from '../../stores/signinstore'
 
 
 const SignInComponent = () => {
@@ -58,6 +59,7 @@ const SignInComponent = () => {
   const onSubmit = () => {
     //history.push('/dashboard');
     setIsSubmit(true)
+    SigninStore.set({ email: watch('email') })
     defaultValues.email = watch('email')
     defaultValues.password = watch('password')
 
@@ -83,13 +85,21 @@ const SignInComponent = () => {
             setIsValidPassword(true)
             setIsValidEmail(false)
           } else if (user.message.includes('Two Factor Authentication')) {
+            authenticationService
+              .twoFactorEmailAuth(defaultValues.email)
+              .then(data => {
+                history.push('/2facodeverification')
+              })
+              .catch(error => {
+                console.log(error)
+              })
             history.push('/2facodeverification')
           }
         } else {
           const userVerified = get(user, ['data', 'data', 'is_verified'], false)
           const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)
           if (!userVerified) history.push('/userverification')
-          else if (twoFactor == 'none') history.push('/dashboard')
+          else if (twoFactor == 'none') window.location.href = "dashboard";
           else if (twoFactor == 'app') {
             history.push('/2facodeverification')
           } else if (twoFactor == 'email') {
@@ -102,7 +112,8 @@ const SignInComponent = () => {
                 console.log(error)
               })
           } else {
-            history.push('/dashboard')
+            window.location.href = "dashboard";
+            // history.push('/dashboard')
           }
         }
       },

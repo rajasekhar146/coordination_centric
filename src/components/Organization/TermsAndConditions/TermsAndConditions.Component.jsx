@@ -86,7 +86,7 @@ const TermsAndConditionsComponent = () => {
                 </div>
                 <div>
                   <div className="ac__form">
-                    <div className="ac__header__text tp__header__text">T&C and Pocicies</div>
+                    <div className="ac__header__text tp__header__text">T&C and Privacy Policy</div>
                     <div id="my-node">
                       <div className="ac__row">
                         <FormGroup>
@@ -99,7 +99,7 @@ const TermsAndConditionsComponent = () => {
                                   }}
                                 />
                               }
-                              label="I have read and agree with the terms and conditions"
+                              label="I have read and agree with the Terms and Conditions"
                             />
                           </div>
                           <div className="ac__column">
