@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { BehaviorSubject } from 'rxjs'
+import get from 'lodash.get'
 
 // import config from 'config';
 import { authHeader, handleResponse } from '../helpers'
@@ -7,6 +8,7 @@ const apiURL = 'https://api.csuite.health'
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')))
 const qrImgSubject = new BehaviorSubject()
+const is2FaActiveSubject = new BehaviorSubject()
 
 export const authenticationService = {
   login,
@@ -17,15 +19,25 @@ export const authenticationService = {
   twoFactorAppAuthVerification,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
+  is2faActive: is2FaActiveSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value
   },
   get qrImgvalue() {
     return qrImgSubject.value
   },
+  get twofaActive() {
+    return is2FaActiveSubject.value
+  },
 }
 
-function updateStore(v) {
+function updateQr(v) {
+  qrImgSubject.next(v)
+}
+function update2fa(v) {
+  is2FaActiveSubject.next(v)
+}
+function updateUser(v) {
   qrImgSubject.next(v)
 }
 
@@ -59,6 +71,11 @@ function login(username, password) {
         //   erroCode: err.code,
         //   data: err.data,
         // }
+
+        if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')){
+          update2fa(true)
+        }
+
         return err.response?.data
       })
   )
@@ -93,7 +110,7 @@ function twoFactorByAppAuth(email) {
       .post(`${apiURL}/users/twoFactorAuthentication/${email}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
-        updateStore(data.data)
+        updateQr(data.data)
         return data
       })
   )
@@ -108,6 +125,8 @@ function twoFactorEmailAuthVerification(code) {
       .post(`${apiURL}/users/twoFactorEmailAuthenticationVerification/${code}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
+        localStorage.setItem('currentUser', JSON.stringify(data))
+        currentUserSubject.next(data)
         return data
       })
   )

@@ -39,6 +39,8 @@ const OrganisationItem = props => {
   const [menuOptions, setMenuOptions] = React.useState([])
 
   const handleClick = (event, status) => {
+    event.preventDefault()
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
     const menus = menuList.filter(m => m.menu === status.toLowerCase())
     console.log('menus', menus)
@@ -75,7 +77,9 @@ const OrganisationItem = props => {
     })
   }
 
-  const handleMenuAction = (action, index, orgId) => {
+  const handleMenuAction = (e, action, index, orgId) => {
+    e.preventDefault()
+    e.stopPropagation()
     console.log('orgId', orgId)
     switch (action) {
       case 'setIsAcceptClicked':
@@ -100,7 +104,7 @@ const OrganisationItem = props => {
       //   handleActivate()
       case 'viewdetails':
         routeDirect(orgId)
-        
+
       default:
         return null
     }
@@ -143,7 +147,13 @@ const OrganisationItem = props => {
     history.push(`/organization-view/${orgId}`)
   }
   return (
-    <TableRow hover role="checkbox" style={{width: '100%'}} tabIndex={-1} key={row.id}>
+    <TableRow
+      onClick={() => {
+        routeDirect(row.id)
+      }}
+      hover
+      role="checkbox"
+      style={{ width: '100%' }} tabIndex={-1} key={row.id}>
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
@@ -154,7 +164,7 @@ const OrganisationItem = props => {
           <TableCell
             key={column.id}
             align={column.align}
-            style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center'}}
+            style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
           >
             <div className={`od__${value?.toLowerCase()}__status`}>
               <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
@@ -183,21 +193,21 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-              // PaperProps={{
-              //     style: {
-              //         maxHeight: ITEM_HEIGHT * 4.5,
-              //         width: '20ch',
-              //         boxShadow:
-              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-              //         border: '1px solid #9fa2a3',
-              //         left: '-75px'
-              //     },
-              // }}
+            // PaperProps={{
+            //     style: {
+            //         maxHeight: ITEM_HEIGHT * 4.5,
+            //         width: '20ch',
+            //         boxShadow:
+            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+            //         border: '1px solid #9fa2a3',
+            //         left: '-75px'
+            //     },
+            // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem
                   key={option}
-                  onClick={e => handleMenuAction(option.fnKey, index, row.id)}
+                  onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
                   className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
                 >
                   <div className="od__menu__icon__column">
