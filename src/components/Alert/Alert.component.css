@@ -6,3 +6,12 @@
     bottom: 65px;
     left: 6px;
 }
+.io_header {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 51px;
+    letter-spacing: -0.035em;
+    color: #FFFFFF;
+}

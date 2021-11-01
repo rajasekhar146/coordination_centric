@@ -38,6 +38,8 @@ const TwoFaEnabled = props => {
   const classes = useStyles()
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+
 
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
@@ -50,8 +52,12 @@ const TwoFaEnabled = props => {
     email,
   } = signinStoreData;
 
+  useEffect(() => {
+    if (twoFactor_auth_type !== null) {
+      history.push(`/dashboard`)
+    }
+  }, [])
 
-  console.log(email)
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -121,10 +127,12 @@ const TwoFaEnabled = props => {
               }}
             />
           </div>
-          <div className="io_resend_label io__margin_bottom30">
-            <label onClick={() => {
-              handleResend()
-            }}>Didn’t receive? Resend OTP</label>
+          <div
+          onClick={() => {
+            handleResend()
+          }}
+           className="io_resend_label io__margin_bottom30">
+            <label >Didn’t receive? Resend OTP</label>
           </div>
           <Button
             onClick={() => {

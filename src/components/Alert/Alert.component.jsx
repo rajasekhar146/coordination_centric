@@ -2,20 +2,48 @@ import React, { useEffect, useState } from 'react'
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { makeStyles } from '@material-ui/core/styles'
-import successIcon from '../../assets/icons/success.png'
+import SuccessIcon from '../../assets/icons/success.png'
+import UnionSuccess from '../../assets/icons/green_bobbles.png'
 import SnackbarContent from '@mui/material/SnackbarContent';
 
 
 const useStyles = makeStyles(theme => ({
     root: {
         backgroundColor: "#03A65A",
-        width: '350px',
+        width: '438px',
+        height: '132px',
+        borderRadius: '32px'
     },
     icon: {
         position: "absolute",
-        bottom: "75px"
+        bottom: "110px"
+    },
+    union: {
+        position: "absolute",
+        bottom: 0,
+        borderBottomLeftRadius: '32px',
+        left: 0,
+    },
+    header: {
+       fontWeight: 500,
+    //    fontFamily: 'Poppins',
+       fontSize: '40px',
+       lineHeight: '51px',
+       letterSpacing: '-0.035em',
+       color: '#ffffff',
+       paddingLeft: "120px",
+       position: 'absolute',
+       top: 0
+    },
+    subText: {
+       fontSize: '19px',
+       lineHeight: '23px',
+       letterSpacing: '0.02em',
+       color: '#ffffff',
+       paddingLeft: "120px",
+       position: 'absolute',
+       bottom: '23px'
     }
-
 }))
 
 
@@ -53,11 +81,13 @@ const Alert = (props) => {
                     className={classes.root}
                     message={
                         <span>
-                            <img className={classes.icon} src={successIcon} alt="success_icon" />
-                            <h4>{alertMsg}</h4>
-                            <label>
+                            <img className={classes.icon} src={SuccessIcon} alt="success_icon" />
+                            <h1 className={classes.header}>{alertMsg}</h1>
+                            <label className={classes.subText}>
                                 {subLebel}
                             </label>
+                            <img className={classes.union} src={UnionSuccess} alt="success_icon" />
+
                         </span>
 
                     }

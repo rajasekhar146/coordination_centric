@@ -19,10 +19,11 @@ function getAll() {
   return fetch(`${apiURL}/users`, requestOptions).then(handleResponse)
 }
 
-async function sendEmailWithVerificationCode(email) {
+function sendEmailWithVerificationCode(email) {
   console.log('axiosConfig', axiosConfig)
 
-  await axios
+  return (
+    axios
     .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
     //.then(handleResponse)
     .then(data => {
@@ -33,6 +34,7 @@ async function sendEmailWithVerificationCode(email) {
       // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
       return { errorCode: err.status, errorMessage: err.message }
     })
+  )
 }
 
 async function sendEmailVerificationCode(email, code) {

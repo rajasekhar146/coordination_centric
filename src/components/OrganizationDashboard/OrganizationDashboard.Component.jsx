@@ -664,7 +664,7 @@ const OrganizationDashboardComponent = () => {
 
   return (
     <div className="od__main__div">
-      <div className="od__row">
+      <div className="od__row od_flex_space_between">
         <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
           {role === "superadmin" || (planType === "premium") ? (
