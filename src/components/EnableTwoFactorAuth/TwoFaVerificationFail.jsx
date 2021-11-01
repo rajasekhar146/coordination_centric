@@ -4,8 +4,16 @@ import history from '../../history'
 import CClogo from '../../assets/icons/cc_logo.png'
 import OopsError from '../../assets/icons/oops_error.png'
 import Button from '@mui/material/Button'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
 
 const TwoFaVerificationFail = props => {
+  const currentUser = authenticationService?.currentUserValue
+  const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+
+
+
   return (
     <div>
       <div className="io__sidebar">
@@ -32,15 +40,22 @@ const TwoFaVerificationFail = props => {
             <Button
               className="io__activate__enable io__margin25 io__width40"
               onClick={() => {
-                history.push('/enable2fa')
-              }}
+                if (twoFactor_auth_type === null) {
+                  history.push('/2facodeverification')
+                } else if (twoFactor_auth_type === 'email') {
+                  history.push(`/verification/${twoFactor_auth_type}`)
+                } else if (twoFactor_auth_type === 'app') {
+                  history.push(`/verificationbyapp`)
+                }
+              }
+              }
             >
               Try Again
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

@@ -352,7 +352,6 @@
     justify-content: right !important;
     display: flex !important;
     align-items:center !important;
-    position: absolute !important;
 }
 
 .MuiFormControl-root, .MuiFormControl-root {
@@ -461,4 +460,8 @@
     flex-direction: row-reverse;
     position: relative;
     top: 4px;
+}
+.od_flex_space_between {
+    display: flex;
+    justify-content: space-between;
 }

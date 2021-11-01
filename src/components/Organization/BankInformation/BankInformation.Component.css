@@ -200,13 +200,13 @@
 }
 .continue_btn {
     position: absolute !important;
-    top: 559px;
-    left: 508px;
+    left: 588px;
+    bottom: -75px;
 }
 .continue_creditcard_btn {
     position: absolute !important;
-    top: 641px;
-    left: 508px;
+    left: 588px;
+    bottom: -75px;
 }
 .ml_15 {
     margin-left: 15px;

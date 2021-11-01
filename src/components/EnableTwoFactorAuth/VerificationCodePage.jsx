@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import history from '../../history'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import KeyIcon from '../../assets/icons/key_icon.png'
@@ -7,6 +7,9 @@ import Button from '@mui/material/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router-dom'
 import { authenticationService } from '../../services'
+import Alert from '../Alert/Alert.component'
+import get from 'lodash.get'
+
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -27,9 +30,24 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const VerificationCodePage = props => {
+  const currentUser = authenticationService?.currentUserValue
+  const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const { method } = useParams()
   const classes = useStyles()
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLebel, setSubLabel] = useState('')
+
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+
+
   const [verificationCode, setVerificationCode] = useState('')
+
+  useEffect(() => {
+    if (twoFactor_auth_type !== null) {
+      history.push(`/dashboard`)
+    }
+  }, [])
 
   const getLabel = () => {
     switch (method) {
@@ -53,6 +71,22 @@ const VerificationCodePage = props => {
       .catch(() => {
         history.push(`/2faverificationfail`)
       })
+  }
+
+  const handleResend = async () => {
+    var response = authenticationService.twoFactorEmailAuth(currentUserEmail)
+    if (response !== undefined) {
+      response.then((res) => {
+        setOpenFlash(true)
+        setSubLabel(get(res, ['data', 'message'], ''));
+      }).catch(() => {
+      })
+    } else {
+
+    }
+  }
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
   }
 
   return (
@@ -91,7 +125,10 @@ const VerificationCodePage = props => {
           </Button>
         </div>
         <div className="io__two_justify io__width__100">
-          <label style={{ width: '70%' }} className="io__resend__label">
+          <label
+            style={{ width: '70%' }}
+            onClick={() => handleResend()}
+            className="io__resend__label">
             Didn't recieve? Resend OTP
           </label>
         </div>
@@ -106,6 +143,12 @@ const VerificationCodePage = props => {
           <ArrowBackIosNewIcon fontSize="sm" />
         </span>
         <label className="io__same__line"> Back</label>
+        <Alert
+          handleCloseFlash={handleCloseFlash}
+          alertMsg={alertMsg}
+          openflash={openflash}
+          subLebel={subLebel}
+        />
       </div>
     </div>
   )

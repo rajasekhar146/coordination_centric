@@ -7,6 +7,7 @@ import { authenticationService, accountService } from '../../services'
 import get from 'lodash.get'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import Alert from '../Alert/Alert.component'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -38,9 +39,16 @@ const EmailVerificationPage = props => {
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const userVerified = get(currentUser, ['data', 'data', 'is_verified'], false)
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLebel, setSubLabel] = useState('')
 
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
+
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
   useEffect(() => {
     if (userVerified) {
       history.push('/dashboard')
@@ -67,7 +75,7 @@ const EmailVerificationPage = props => {
     console.log('currentUserEmail', currentUserEmail)
     await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
       console.log('handleSendEmail >> ', data)
-      if (data?.status == 200) history.push('/emailverification-success')
+      if (data?.status == 200) window.location.href = "emailverification-success";
       else history.push('/emailverification-failed')
     })
 
@@ -84,12 +92,16 @@ const EmailVerificationPage = props => {
   }
 
   const handleResend = async () => {
-    var response = await accountService.sendEmailWithVerificationCode(currentUserEmail)
-    response.then(() => {
+    var response = accountService.sendEmailWithVerificationCode(currentUserEmail)
+    if (response !== undefined) {
+      response.then((res) => {
+        setOpenFlash(true)
+        setSubLabel(get(res, ['data', 'message'], ''));
+      }).catch(() => {
+      })
+    } else {
 
-    }).catch(() => {
-
-    })
+    }
   }
 
 
@@ -155,6 +167,12 @@ const EmailVerificationPage = props => {
         </span>
         <label> Back</label>
       </div>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+      />
     </div>
   )
 }
