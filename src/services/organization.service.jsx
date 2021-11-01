@@ -21,14 +21,15 @@ export const organizationService = {
   cancelIvitation,
 }
 
-function allOrganization(skip, limit, searchText, date, status = []) {
+function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
 
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
-  const dateUTC = moment.utc(date).local().format('YYYY-MM-DD');
+  const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD');
+  const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD');
   const statusvalues = status?.join()
 
   //status = ''
@@ -61,8 +62,11 @@ function allOrganization(skip, limit, searchText, date, status = []) {
   if (searchText) {
     url += `&search_text=${searchText}`
   }
-  if (date) {
-    url += `&created_date=${dateUTC}`
+  if (sdate) {
+    url += `&start_date=${sdateUTC}`
+  }
+  if (edate) {
+    url += `&end_date=${edateUTC}`
   }
   if (statusvalues && status.indexOf('all') === -1) {
     url += `&status=${statusvalues}`

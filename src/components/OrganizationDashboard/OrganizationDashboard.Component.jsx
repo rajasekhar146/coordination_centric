@@ -430,7 +430,8 @@ const OrganizationDashboardComponent = () => {
   const [alertMsg, setAlertMsg] = React.useState('')
   const [isStatusFieldsChanged, setIsStatusFieldsChanged] = React.useState(false)
   const [searchText, setSearchText] = React.useState('')
-  const [searchDate, setSearchDate] = React.useState(null)
+  const [searchStartDate, setSearchStartDate] = React.useState(null)
+  const [searchEndDate, setSearchEndDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
   const [subLebel, setSubLabel] = useState('')
 
@@ -476,21 +477,22 @@ const OrganizationDashboardComponent = () => {
       && !isAcceptClicked
       && !isAcivated
     ) {
-      getOrganization(searchText, searchDate, selectedStatus)
+      getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
     }
     return () => { }
   }, [
     skip,
     isDeactivateClicked,
     searchText,
-    searchDate,
+    searchStartDate,
+    searchEndDate,
     selectedStatus,
     isAcivated
   ])
 
   useEffect(() => {
     if (isStatusFieldsChanged) {
-      getOrganization(searchText, searchDate, selectedStatus)
+      getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
     }
   }, [isStatusFieldsChanged])
 
@@ -502,9 +504,9 @@ const OrganizationDashboardComponent = () => {
 
 
 
-  const getOrganization = async (nsearchText, nsearchDate, nsearchStatus) => {
+  const getOrganization = async (nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus) => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchDate, nsearchStatus)
+    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus)
     console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = get(allOrganizations, 'totalCount', 'count', null)
@@ -559,7 +561,7 @@ const OrganizationDashboardComponent = () => {
     setPage(newPage)
     const skipRecords = (newPage - 1) * 10
     console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchDate, selectedStatus)
+    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchStartDate, searchEndDate, selectedStatus)
     console.log('skipRecords >> Records', allOrganizations)
     const totalCount = get(allOrganizations, 'totalCount', 'count', null)
     console.log('totalCount', totalCount)
@@ -644,8 +646,17 @@ const OrganizationDashboardComponent = () => {
     // getOrganization(e.target.value, searchDate, searchStatus)
   }
 
-  const handleSearchDate = e => {
-    setSearchDate(e)
+  const handleSearchStartDate = e => {
+    console.log('start Date', e)
+    setSearchStartDate(e)
+    setOrganizations([])
+    setSkip(1)
+    // getOrganization(searchText, e, searchStatus)
+  }
+
+  const handleSearchEndDate = e => {
+    console.log('end Date', e)
+    setSearchEndDate(e)
     setOrganizations([])
     setSkip(1)
     // getOrganization(searchText, e, searchStatus)
@@ -718,16 +729,28 @@ const OrganizationDashboardComponent = () => {
             </FormControl>
           </div>
           <div className="od__btn__div">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              value={searchEndDate}
+              maxDate={new Date()}
+              onChange={e => handleSearchEndDate(e)}
+              renderInput={params => <TextField {...params} />}
+              InputProps={{ className: 'od__date__field' }}
+            />
+          </LocalizationProvider>
+        </div>
+          <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                value={searchDate}
+                value={searchStartDate}
                 maxDate={new Date()}
-                onChange={e => handleSearchDate(e)}
+                onChange={e => handleSearchStartDate(e)}
                 renderInput={params => <TextField {...params} />}
                 InputProps={{ className: 'od__date__field' }}
               />
             </LocalizationProvider>
           </div>
+         
 
         </div>
       </div>
