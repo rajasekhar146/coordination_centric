@@ -20,8 +20,11 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
+import useStore from '../../../hooks/use-store';
+import SigninStore from '../../../stores/signinstore'
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const EULAAgreementComponent = () => {
   const [signatureUrl, setSignature] = useState({})
@@ -34,6 +37,13 @@ const EULAAgreementComponent = () => {
 
   const [activeStep, setActiveStep] = React.useState(1)
   const [facility, setFacility] = useState({})
+
+
+  const [signinStoreData] = useStore(SigninStore);
+
+  const {
+    organisationName,
+  } = signinStoreData;
 
   const handleNext = () => {
     // var updatedFacility = {
@@ -259,6 +269,12 @@ const EULAAgreementComponent = () => {
                           )}
                         </div>
                       </div>
+                    </div>
+                    <div style={{ position: "relative",  marginBottom: "33px", }}>
+                      <h4 style={{
+                        position: "absolute",
+                        left: "5%"
+                      }}>{organisationName}</h4>
                     </div>
                     <div className="ac__gap__div"></div>
 

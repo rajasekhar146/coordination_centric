@@ -23,7 +23,7 @@ import { loadStripe } from '@stripe/stripe-js/pure'
 import get from 'lodash.get'
 import { paymentService } from '../../../services'
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const useStyles = makeStyles(theme => ({
   textField: {

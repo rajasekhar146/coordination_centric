@@ -11,7 +11,7 @@ import CheckedIcon from '../../assets/icons/checked.png'
 import UncheckedIcon from '../../assets/icons/unchecked.png'
 import { get } from 'lodash'
 import SignInStore from '../../stores/signinstore'
-import KeyIcon from '../../assets/icons/key_icon.png'
+import SuccessTick from '../../assets/icons/success_tick.png'
 import ArrowLeft from '../../assets/icons/arrow-left.png'
 import { isUpperCase } from "is-upper-case";
 import { isLowerCase } from "is-lower-case";
@@ -74,25 +74,7 @@ const ResetPasswordPage = props => {
     const handleSubmit = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (password === conformPassword) {
-            setIsSubmit(true)
-            const resetData = {};
-            resetData.temporaryPassword = password;
-            resetData.token = token;
-            resetData.email = email;
-            SignInStore.load('ResetPassword', {
-                resetData,
-                successCallback: (data) => {
-                    history.push('/signin')
-                },
-                errorCallback: (err) => {
-    
-                }
-            })
-        } else {
-            setErrMsg('The password confirmation doesn’t match.')
-        }
-        
+        history.push('/signin')
     }
 
 
@@ -107,27 +89,31 @@ const ResetPasswordPage = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="si__right__div si_top_zero">
+                <div className="si__right__div">
                     <div className="si__right__content si_width75">
                         <div className="si__right__forgot">
-                            <img src={KeyIcon} alt="key" />
+                            <img src={SuccessTick} alt="key" />
                         </div>
                         <div className="si__right__forgot">Success</div>
                         <div className="si__right__subtitle io_margin_bottom30">
-                        Your password has been successfully reset. Click below to log in.
+                            Your password has been successfully reset. Click below to log in.
                         </div>
-                       
-                       
+                        {errMsg && <p className="ac__required">{errMsg}</p>}
                         <div className="io__icon">
                             {' '}
                             <Button
+                                className="si__login__btn"
                                 type="submit">
                                 {' '}
-                                Reset password
+                                Continue
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div className="si__forgot__link">
+                        <div
+                            onClick={() => {
+                                history.push('/signin')
+                            }}
+                            className="si__forgot__link">
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in

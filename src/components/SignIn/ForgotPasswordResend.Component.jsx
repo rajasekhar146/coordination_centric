@@ -66,7 +66,7 @@ const ForgotPasswordResend = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="si__right__div si_left270">
+                <div className="si__right__div si_left270">
                     <div className="si__right__content ">
                         <div className="si__right__forgot">
                             <img src={MsgIcon} alt="key" />
@@ -78,7 +78,7 @@ const ForgotPasswordResend = props => {
                         <div className="si__right__subtitle io_margin_bottom30">
                             {email}
                         </div>
-                      
+
                         {/* <div className="io__icon">
                             <TextField
                                 // {...useInput('facilityName', { isRequired: true })}
@@ -98,7 +98,7 @@ const ForgotPasswordResend = props => {
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                             {!IsValidEmail && <p className="ac__required">{errMsg}</p>}
                         </div> */}
-                        
+
                         <div className="io__icon">
                             {' '}
                             <Button type="submit" className="si__login__btn">
@@ -108,9 +108,13 @@ const ForgotPasswordResend = props => {
                             </Button>{' '}
                         </div>
                         <div className="si__right__subtitle  io_margin_bottom30">
-                        Didn’t receive the email? Click to resend
+                            Didn’t receive the email? Click to resend
                         </div>
-                        <div className="si__forgot__link">
+                        <div
+                            onClick={() => {
+                                history.push('/signin')
+                            }}
+                            className="si__forgot__link">
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in

@@ -23,7 +23,7 @@ const steps = [
   'SAAS Agreement',
   'EULA Agreement',
   'Banking Information',
-  'T&C and Policies',
+  'T&C and Privacy Policy',
 ]
 
 export const OnboardingComponent = () => {

@@ -280,6 +280,14 @@
     color: #fff !important;
     padding: 10px !important;
 }
+.evp__verify__btn_disabled {
+    width: 180px !important;
+    background-color: #DBDDE0 !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+    padding: 10px !important;
+    pointer-events: none;
+}
 
 .evp__label__time {
     font-family: Lato;

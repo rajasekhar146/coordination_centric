@@ -14,7 +14,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import history from '../../../history'
 import { organizationService } from '../../../services'
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const TermsAndConditionsComponent = () => {
   const [signatureUrl, setSignature] = useState({})
@@ -80,7 +80,7 @@ const TermsAndConditionsComponent = () => {
             </Stepper>
             {
               <div className="ac__main__div">
-                <div className="ac__title__text">T&C and Policies</div>
+                <div className="ac__title__text">T&C and Privacy Policy</div>
                 <div className="ac__subtitle__text">
                   Please read carefully our terms and conditions and policies to finalize your registration
                 </div>

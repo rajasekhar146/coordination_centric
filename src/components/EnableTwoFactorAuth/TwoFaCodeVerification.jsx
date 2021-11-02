@@ -53,7 +53,7 @@ const TwoFaEnabled = props => {
   } = signinStoreData;
 
   useEffect(() => {
-    if (twoFactor_auth_type !== null) {
+    if (twoFactor_auth_type !== 'none') {
       history.push(`/dashboard`)
     }
   }, [])
@@ -92,7 +92,7 @@ const TwoFaEnabled = props => {
   const handleResend = async () => {
     var response = authenticationService.twoFactorEmailAuth(email)
     response.then(() => {
-
+      setMinutes(3)
     }).catch(() => {
 
     })
@@ -138,7 +138,7 @@ const TwoFaEnabled = props => {
             onClick={() => {
               handleSubmit()
             }}
-            className="evp__verify__btn">
+            className={(minutes === 0 & seconds === 0) ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}>
             Verify &nbsp;{' '}
             {
               <label>

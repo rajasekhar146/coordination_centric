@@ -96,6 +96,7 @@ const EmailVerificationPage = props => {
     if (response !== undefined) {
       response.then((res) => {
         setOpenFlash(true)
+        setMinutes(3)
         setSubLabel(get(res, ['data', 'message'], ''));
       }).catch(() => {
       })
@@ -140,11 +141,15 @@ const EmailVerificationPage = props => {
           </label>
         </div>
         <div className="evp__action__section">
-          <Button className="evp__resend__verification__code" onClick={() => handleResend()}>
+          <Button className="evp__resend__verification__code"
+            onClick={() => handleResend()}
+          >
             Resend Verification Code
           </Button>
           &nbsp; &nbsp;&nbsp; &nbsp;
-          <Button className="evp__verify__btn" onClick={handleVarification}>
+          <Button
+            className={(minutes === 0 & seconds === 0) ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}
+            onClick={handleVarification}>
             Verify &nbsp;{' '}
             {
               <label>
@@ -152,6 +157,7 @@ const EmailVerificationPage = props => {
               </label>
             }
           </Button>
+
         </div>
         <div className="io_trouble_label">
           <label>Trouble Verifying? Contact Us</label>

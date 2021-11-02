@@ -112,6 +112,9 @@
     align-items: center !important;
     display: flex;
     /* padding: 5px; */
+    position: absolute;
+    right: 9%;
+    
   }
 
   .sla__download__text {

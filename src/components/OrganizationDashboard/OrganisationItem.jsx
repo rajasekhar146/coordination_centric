@@ -96,6 +96,7 @@ const OrganisationItem = props => {
         break
       case 'setIsActivateClicked':
         handleActivate(row, 'active')
+        setIsActivateClicked(true)
         break
       case 'setIsResendClicked':
         handleResend(row, 'resend')

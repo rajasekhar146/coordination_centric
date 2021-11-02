@@ -38,6 +38,7 @@ import TwoFaCodeVerification from './components/EnableTwoFactorAuth/TwoFaCodeVer
 import ForgotPassword from './components/SignIn/ForgotPassword.Component'
 import ForgotPasswordResend from './components/SignIn/ForgotPasswordResend.Component'
 import ResetPassword from './components/SignIn/ResetPassword.Component'
+import ResetPasswordSuccess from './components/SignIn/ResetPasswordSuccess.Component'
 
 class Routes extends Component {
   render() {
@@ -51,7 +52,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/forgotpassword" component={ForgotPassword} />
           <DefaultLayoutComponentRoute path="/forgotpasswordresend" component={ForgotPasswordResend} />
           <DefaultLayoutComponentRoute path="/reset-password" component={ResetPassword} />
-          <DefaultLayoutComponentRoute path="/resetpasswordsuccess" component={ResetPassword} />
+          <DefaultLayoutComponentRoute path="/resetpasswordsuccess" component={ResetPasswordSuccess} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />

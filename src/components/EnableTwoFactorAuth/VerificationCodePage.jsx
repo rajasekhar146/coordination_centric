@@ -44,7 +44,7 @@ const VerificationCodePage = props => {
   const [verificationCode, setVerificationCode] = useState('')
 
   useEffect(() => {
-    if (twoFactor_auth_type !== null) {
+    if (twoFactor_auth_type !== 'none') {
       history.push(`/dashboard`)
     }
   }, [])

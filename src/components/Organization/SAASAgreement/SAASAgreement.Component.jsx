@@ -20,8 +20,10 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
+import useStore from '../../../hooks/use-store';
+import SigninStore from '../../../stores/signinstore'
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const SAASAgreementComponent = props => {
   const [signatureUrl, setSignature] = useState({})
@@ -31,6 +33,11 @@ const SAASAgreementComponent = props => {
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
   const [activeStep, setActiveStep] = React.useState(1)
+  const [signinStoreData] = useStore(SigninStore);
+
+  const {
+    organisationName,
+  } = signinStoreData;
 
   const [facility, setFacility] = useState({})
 
@@ -271,6 +278,12 @@ const SAASAgreementComponent = props => {
                           )}
                         </div>
                       </div>
+                    </div>
+                    <div style={{ position: "relative",  marginBottom: "33px", }}>
+                      <h4 style={{
+                        position: "absolute",
+                        left: "5%"
+                      }}>{organisationName}</h4>
                     </div>
                     <div className="ac__gap__div"></div>
 
