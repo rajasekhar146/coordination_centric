@@ -114,9 +114,9 @@ function addOrganization(bodyMsg, role) {
 function updateOrganization(id, status, reason = null) {
   console.log('axiosConfig', axiosConfig)
   let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`;
-  if (status === 'declined') {
+  // if (status === 'declined') {
     url += `/${reason}`
-  }
+  // }
   return (
     axios
       .put(url, null, axiosConfig)
