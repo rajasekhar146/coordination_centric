@@ -111,11 +111,15 @@ function addOrganization(bodyMsg, role) {
   )
 }
 
-function updateOrganization(id, status) {
+function updateOrganization(id, status, reason = null) {
   console.log('axiosConfig', axiosConfig)
+  let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`;
+  // if (status === 'declined') {
+    url += `/${reason}`
+  // }
   return (
     axios
-      .put(`${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`, null, axiosConfig)
+      .put(url, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

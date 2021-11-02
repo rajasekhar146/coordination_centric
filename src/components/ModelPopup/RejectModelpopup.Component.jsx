@@ -25,9 +25,10 @@ const useStyles = makeStyles(theme => ({
 
 const RejectModel = props => {
   const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
+  const [reason, setReason] = useState(null)
 
   const handleSubmit = () => {
-    const res = organizationService.updateOrganization(selectedOrg.id, 'declined')
+    const res = organizationService.updateOrganization(selectedOrg.id, 'declined', reason)
     res.then(() => {
       setOrganizations([])
       setSkip(1)
@@ -55,6 +56,9 @@ const RejectModel = props => {
         <TextField
           margin="normal"
           type="text"
+          onChange={(e) => {
+              setReason(e.target.value)
+          }}
           placeholder={'e.g. Website design'}
           className={classes.textField}
           InputProps={{

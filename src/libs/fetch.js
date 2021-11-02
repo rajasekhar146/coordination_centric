@@ -85,12 +85,12 @@ function fetchRx(url, optionParams = {}) {
         error = (!response.ok);
         // eslint-disable-next-line prefer-destructuring
         status = response.status;
-        if (status === 401) {
-            // setAuthToken(null);
-            localStorage.clear()
-            window.window.location.href = `/`
+        // if (status === 401) {
+        //     // setAuthToken(null);
+        //     localStorage.clear()
+        //     window.window.location.href = `/`
             
-        }
+        // }
         if (!noParseStatusCodes.includes(status)) {
             try {
                 const contentType = response.headers.get('Content-Type');

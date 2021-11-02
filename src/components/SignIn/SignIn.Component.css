@@ -16,6 +16,7 @@
     justify-content: center;
     flex-direction: column;
     background: #E42346;
+    position: fixed;
 }
 
 .si__right__div {
@@ -26,9 +27,10 @@
     justify-content: center;
     flex-direction: column;
     background-color: #FFFFFF;
-    position: relative;
+    position: relative !important;
     right: -29%;
-    top: 20%;
+    top: 30%;
+    left: 150%;
 }
 
 .si__left__content {
@@ -91,6 +93,7 @@
 
     /* Neutral/Gray */
     color: #A0A4A8;
+    text-align: center;
 }
 
 .si__right__label {
@@ -114,9 +117,10 @@
     color: #696F79 !important;
 }
 
+
 .si__left__image {
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .si__login__btn {
@@ -125,6 +129,15 @@
     width: 100%;
     color: #fff !important;
     padding: 12px !important;
+}
+.si_disable_btn {
+    background: #E42346 !important;
+    border-radius: 8px !important;
+    width: 100%;
+    color: #fff !important;
+    padding: 12px !important;
+    background-color: #DBDDE0 !important;
+    pointer-events: none;
 }
 
 .si__forgot__link {
@@ -285,4 +298,93 @@
 
 .evp__code__text__box {
     text-align: center !important;
+}
+.si__right__forgot {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 34px;
+    align-items: center;
+    letter-spacing: 0.2px;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+}
+.io_width150 {
+    width: 150%;
+}
+.io__right__div_resend {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    position: relative;
+    left: 60%;
+    top: 20%;
+}
+.si__right__content_resend {
+    background: #FFFFFF;
+    border-radius: 8px !important;
+    color: #A0A4A8 !important;
+    height: 48px !important;
+    padding: 12px !important;
+    width: 100% !important;
+}
+.si_width75 {
+    width: 75%;
+}
+.css-1rv3ei8-MuiFormControl-root-MuiTextField-root {
+    width: 100%;
+}
+.si_list_style{
+    list-style: none;
+    padding-left: 26px;
+    letter-spacing: 1px;
+    padding: 0;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 12px;
+    letter-spacing: 0.2px;
+    color: #A0A4A8;
+}
+.si_list_style li {
+    margin-bottom: 5px;
+}
+.check_icon{
+    margin-right: 10px !important;
+}
+.si_password_req {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.1px;
+    color: #A0A4A8;
+}
+.si_active {
+    letter-spacing: 0.2px;
+    color: #03B575;
+}
+.si_nonactive {
+    letter-spacing: 0.2px;
+    color: #A0A4A8;
+}
+.si_submit{
+    background-color: #DBDDE0 !important;
+}
+.si_left180 {
+    left: 180% !important;
+}
+.si_left270 {
+    left: 270% !important;
+}
+.si_top_zero {
+    top: 0 !important;
 }
