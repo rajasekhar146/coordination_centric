@@ -35,6 +35,10 @@ import EmailVerificationPage from './components/SignIn/EmailVerificationPage.Com
 import EmailVerificationSuccess from './components/SignIn/EmailVerificationSuccess.Component'
 import EmailVerificationFailed from './components/SignIn/EmailVerificationFail.Component'
 import TwoFaCodeVerification from './components/EnableTwoFactorAuth/TwoFaCodeVerification'
+import ForgotPassword from './components/SignIn/ForgotPassword.Component'
+import ForgotPasswordResend from './components/SignIn/ForgotPasswordResend.Component'
+import ResetPassword from './components/SignIn/ResetPassword.Component'
+
 class Routes extends Component {
   render() {
     return (
@@ -44,6 +48,10 @@ class Routes extends Component {
             <Redirect to="/signin" />
           </Route>
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
+          <DefaultLayoutComponentRoute path="/forgotpassword" component={ForgotPassword} />
+          <DefaultLayoutComponentRoute path="/forgotpasswordresend" component={ForgotPasswordResend} />
+          <DefaultLayoutComponentRoute path="/reset-password" component={ResetPassword} />
+          <DefaultLayoutComponentRoute path="/resetpasswordsuccess" component={ResetPassword} />
           <DefaultLayoutComponentRoute path="/onboarding" component={Onboarding} />
           <DefaultLayoutComponentRoute path="/new-onboarding" component={NewOnboarding} />
           <DefaultLayoutComponentRoute path="/bank-info" component={BankInformation} />

@@ -145,8 +145,8 @@ const SignInComponent = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="si__right__div">
-          <div className="si__right__content">
+      <div className="si__right__div si_left180">
+                    <div className="si__right__content ">
             <div className="si__right__title">Welcome to CoordiNation Centric!</div>
             <div className="si__right__subtitle">Enter the credentials provided to access our platform</div>
             <div className="si__right__label">
@@ -216,7 +216,13 @@ const SignInComponent = () => {
                 Login{' '}
               </Button>{' '}
             </div>
-            <div className="si__forgot__link"> Forgot Password? </div>
+            <div 
+            className="si__forgot__link"
+            onClick={() => {
+              history.push('/forgotpassword')
+            }}
+            > Forgot Password? 
+            </div>
           </div>
         </div>
         <Alert
