@@ -479,12 +479,12 @@ const BankInformationComponent = () => {
                         </Button>
                       </div>
 
-                      <div className="ac__column ac__right__action">
+                      {/* <div className="ac__column ac__right__action">
                         <Button type="submit" for="continue" className="ac__next__btn">
                           Pay & Continue
                           <ArrowForwardIosRoundedIcon />
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
