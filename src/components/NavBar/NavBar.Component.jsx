@@ -91,7 +91,7 @@ const NavBarComponent = () => {
     str.replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()).replace(/^\w/, c => c.toLowerCase())
 
   useEffect(() => {
-    console.log('current user', authenticationService.currentUserValue.data.data)
+    // console.log('current user', authenticationService.currentUserValue.data.data)
     var data = authenticationService?.currentUserValue?.data?.data
     var fullName = ''
     var roleName = ''

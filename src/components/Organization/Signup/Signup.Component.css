@@ -363,19 +363,31 @@
     text-transform: uppercase !important;
     color: #fff !important;
     width: 10%;
+    border: 1px solid #E42346;
 }
 
 .su__plan__button {
     width: 10%;
     font-family: Lato;
     font-style: normal;
-    font-weight: 800;
-    font-size: 10px;
-    line-height: 12px;
-
-    /* identical to box height */
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.75;
     text-align: center;
     letter-spacing: 0.833333px;
-
     color: #848199 !important;
+    border: 1px solid #FFFFFF !important;
+}
+.su__plan__button:hover {
+    width: 10%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    text-align: center;
+    letter-spacing: 0.833333px;
+    color: #848199 !important;
+    border: 1px solid #E42346 !important;
+    border-radius: 30px !important;
 }
