@@ -300,7 +300,7 @@ const statusNames = [
     name: 'All Status', value: "All Status", key: "all"
   },
   {
-    name: 'Verified', value: "Verified",  key: "active"
+    name: 'Verified', value: "Verified", key: "active"
   },
   {
     name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
@@ -419,7 +419,7 @@ const OrganizationDashboardComponent = () => {
   const open = Boolean(anchorEl)
 
   const [selectedStatus, setSelectedStatus] = React.useState([
-    
+
   ])
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
@@ -672,12 +672,22 @@ const OrganizationDashboardComponent = () => {
     // getOrganization(searchText, searchDate, e.target.value)
   }
 
+  const handleClear = () => {
+    setSearchText('')
+    setSearchStartDate(null)
+    setSearchEndDate(null)
+    setSelectedStatus([])
+  }
+
 
   return (
     <div className="od__main__div">
       <div className="od__row od_flex_space_between">
         <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
+          <Button className="od_clear_btn" onClick={handleClear}>
+           &nbsp;&nbsp; Clear Filters
+          </Button>
           {role === "superadmin" || (planType === "premium") ? (
             <Button className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"} onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
@@ -691,6 +701,7 @@ const OrganizationDashboardComponent = () => {
             margin="normal"
             placeholder="Search"
             onChange={e => handleSearchText(e)}
+            value={searchText}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -729,16 +740,16 @@ const OrganizationDashboardComponent = () => {
             </FormControl>
           </div>
           <div className="od__btn__div">
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              value={searchEndDate}
-              maxDate={new Date()}
-              onChange={e => handleSearchEndDate(e)}
-              renderInput={params => <TextField {...params} />}
-              InputProps={{ className: 'od__date__field' }}
-            />
-          </LocalizationProvider>
-        </div>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                value={searchEndDate}
+                maxDate={new Date()}
+                onChange={e => handleSearchEndDate(e)}
+                renderInput={params => <TextField {...params} />}
+                InputProps={{ className: 'od__date__field' }}
+              />
+            </LocalizationProvider>
+          </div>
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
@@ -750,8 +761,6 @@ const OrganizationDashboardComponent = () => {
               />
             </LocalizationProvider>
           </div>
-         
-
         </div>
       </div>
 

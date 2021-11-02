@@ -34,7 +34,7 @@ const UserVerificationPage = props => {
           <label>Verify Your Email Address </label>
         </div>
         <div className="io_apologize_label io_width60">
-          <label>To continue using Coordination Centeric, please verify your email address:</label>
+          <label>To continue using Coordination Centric, please verify your email address:</label>
         </div>
         <div className="io_email_label">
           <label>{currentUserEmail}</label>

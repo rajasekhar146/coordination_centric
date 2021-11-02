@@ -40,7 +40,7 @@ const TwoFaVerificationFail = props => {
             <Button
               className="io__activate__enable io__margin25 io__width40"
               onClick={() => {
-                if (twoFactor_auth_type === null) {
+                if (twoFactor_auth_type === 'none') {
                   history.push('/2facodeverification')
                 } else if (twoFactor_auth_type === 'email') {
                   history.push(`/verification/${twoFactor_auth_type}`)

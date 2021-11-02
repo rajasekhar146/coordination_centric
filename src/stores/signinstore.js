@@ -6,7 +6,8 @@ const apiURL = 'https://api.csuite.health'
 
 const SigninStore = new Store({
     email: '',
-    password: ''
+    password: '',
+    organisationName: ''
 },
     [
         {

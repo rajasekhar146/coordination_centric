@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 
 import './NewOnBoarding.Component.css'
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const NewOnboardingComponent = () => {
   const [activeStep, setActiveStep] = React.useState(1)

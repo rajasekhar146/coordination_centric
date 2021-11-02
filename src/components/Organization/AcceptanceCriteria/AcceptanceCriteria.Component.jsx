@@ -11,9 +11,10 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import { useForm } from 'react-hook-form'
 import history from '../../../history'
 import { useParams } from 'react-router-dom'
+import SigninStore from '../../../stores/signinstore'
 
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 
 
@@ -55,6 +56,9 @@ const AcceptanceCriteriaComponent = (props) => {
       email: data.email,
       phoneNumber: data.phoneNumber,
     }
+
+    SigninStore.set({ organisationName: data.facilityName })
+
 
     data.planType = planType == 'P' ? 'premium' : 'free'
 

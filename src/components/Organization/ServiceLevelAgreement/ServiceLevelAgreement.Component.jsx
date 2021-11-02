@@ -22,6 +22,8 @@ import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
+import useStore from '../../../hooks/use-store';
+import SigninStore from '../../../stores/signinstore'
 
 const useStyles = makeStyles(theme => ({
   datefield: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Policies']
+const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const ServiceLevelAgreementComponent = props => {
   const classes = useStyles()
@@ -41,6 +43,11 @@ const ServiceLevelAgreementComponent = props => {
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
 
+  const [signinStoreData] = useStore(SigninStore);
+
+  const {
+    organisationName,
+  } = signinStoreData;
 
   var sigPad = {}
 
@@ -290,6 +297,13 @@ const ServiceLevelAgreementComponent = props => {
                           <div className="eulaa__label">Date</div>
                         </div>
                       </div>
+                    </div>
+                    <div style={{ position: "relative",  marginBottom: "33px", }}>
+                      <h4 style={{
+                        position: "absolute",
+                       
+                        left: "5%"
+                      }}>{organisationName}</h4>
                     </div>
                     <div className="ac__gap__div"></div>
 
