@@ -16,9 +16,18 @@ import ArrowLeft from '../../assets/icons/arrow-left.png'
 import { isUpperCase } from "is-upper-case";
 import { isLowerCase } from "is-lower-case";
 import { useLocation } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles'
+
+
+const useStyles = makeStyles(theme => ({
+    input: {
+        width: '100%',
+    },
+}))
 
 
 const ResetPasswordPage = props => {
+    const classes = useStyles()
     const [isSubmit, setIsSubmit] = useState(false)
     const [errMsg, setErrMsg] = useState('')
     const [password, setPassword] = useState('')
@@ -83,16 +92,16 @@ const ResetPasswordPage = props => {
             SignInStore.load('ResetPassword', {
                 resetData,
                 successCallback: (data) => {
-                    history.push('/signin')
+                    history.push('/resetpasswordsuccess')
                 },
                 errorCallback: (err) => {
-    
+
                 }
             })
         } else {
             setErrMsg('The password confirmation doesn’t match.')
         }
-        
+
     }
 
 
@@ -127,6 +136,7 @@ const ResetPasswordPage = props => {
                                 }}
                                 margin="normal"
                                 type="password"
+                                className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
                             />
                         </div>
@@ -234,7 +244,7 @@ const ResetPasswordPage = props => {
                                     || !validations.number
                                     || !validations.small
                                     || !validations.capital
-                                    || !validations.symbol 
+                                    || !validations.symbol
                                     || !password
                                     || !conformPassword
                                     ? 'si_disable_btn' : 'si__login__btn'}`}
@@ -244,7 +254,11 @@ const ResetPasswordPage = props => {
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div className="si__forgot__link">
+                        <div
+                            onClick={() => {
+                                history.push('/signin')
+                            }}
+                            className="si__forgot__link">
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in
