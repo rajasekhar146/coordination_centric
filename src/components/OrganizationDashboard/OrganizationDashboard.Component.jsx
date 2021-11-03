@@ -321,7 +321,7 @@ const statusNames = [
     name: 'Invited', value: "Invited", key: "invited"
   },
   {
-    name: 'Cancelled', value: "Cancelled", value: "cancelled"
+    name: 'Cancelled', value: "Cancelled", key: "cancelled"
   }
 ]
 

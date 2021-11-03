@@ -273,7 +273,8 @@ const EULAAgreementComponent = () => {
                     <div style={{ position: "relative",  marginBottom: "33px", }}>
                       <h4 style={{
                         position: "absolute",
-                        left: "5%"
+                        left: "19%",
+                        bottom: "0"
                       }}>{organisationName}</h4>
                     </div>
                     <div className="ac__gap__div"></div>
