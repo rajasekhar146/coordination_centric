@@ -19,17 +19,17 @@ export const organizationService = {
   uploadCertificate,
   resendInvite,
   cancelIvitation,
+  validateToken,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
-
   //var dateUTC = date + 'T00:00:00.000Z'
   //date = 'A'
-  const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD');
-  const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD');
+  const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD')
+  const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD')
   const statusvalues = status?.join()
 
   //status = ''
@@ -74,8 +74,6 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
 
   console.log(status)
 
-
-  
   return (
     axios
       .get(url, axiosConfig)
@@ -94,13 +92,13 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
 
 function addOrganization(bodyMsg, role) {
   console.log('axiosConfig', axiosConfig)
- 
+
   var url = `${apiURL}/facilityList/inviteFacility`
 
-  if(role === 'superadmin') {
+  if (role === 'superadmin') {
     url = `${apiURL}/facilityList/addFacility`
   }
-  
+
   return (
     axios
       .post(url, bodyMsg, axiosConfig)
@@ -113,9 +111,9 @@ function addOrganization(bodyMsg, role) {
 
 function updateOrganization(id, status, reason = null) {
   console.log('axiosConfig', axiosConfig)
-  let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`;
+  let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`
   // if (status === 'declined') {
-    url += `/${reason}`
+  url += `/${reason}`
   // }
   return (
     axios
@@ -249,6 +247,25 @@ function cancelIvitation(id) {
       //.then(handleResponse)
       .then(data => {
         return data
+      })
+  )
+}
+
+function validateToken(token) {
+  const bobyMsg = {
+    inviteToken: token,
+  }
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/facilityList/validateInviteToken`, bobyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
       })
   )
 }

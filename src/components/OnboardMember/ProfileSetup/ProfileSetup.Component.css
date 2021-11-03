@@ -1,0 +1,170 @@
+.psp__main__div {
+    /* width: 100vw; */
+    /* height: 100vh; */
+    /* min-width: 85%; */
+    height: 100%;
+    padding: 10px 0px 0px 50px;
+}
+
+.psp__row {
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    /* background-color: #A0A4A8; */
+}
+
+.psp__header__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 34px;
+
+    /* identical to box height, or 121% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.2px;
+
+    color: #000000;
+}
+
+.psp__back__button {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+
+    color: #8692A6;
+    cursor: pointer;
+}
+
+
+.psp__subtitle {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+
+    /* identical to box height, or 133% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1px;
+
+    color: #8692A6
+}
+
+.psp__header__space {
+    height: 50px;
+}
+
+.psp__profile__img {
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+}
+
+.psp__updload__btn {
+    background-color: #e42346 !important;
+    color: #FFFFFF !important;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+
+    /* identical to box height, or 129% */
+    letter-spacing: 0.2px;
+
+}
+
+.psp__image__preview {
+    margin-left: 20px;
+}
+
+.psp__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    /* Gray/700 */
+    color: #344054;
+}
+
+.psp__step__text {
+    position: absolute;
+    right: 50px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    text-align: right;
+
+    /* Neutral/Gray Light */
+    color: #CACCCF;
+}
+
+.psp__multiline__text__box {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+    margin-right: 60px !important;
+}
+
+.psp__next__btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 30px !important;
+
+    /* Primary/Default */
+    background: #E42346 !important;
+    border-radius: 8px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+
+    /* identical to box height, or 129% */
+    letter-spacing: 0.2px;
+
+    /* Neutral/White */
+    color: #FFFFFF !important;
+    
+    width: 150px !important;
+    height: 50px !important;
+    justify-content: right !important;
+
+}
+
+.psp__submit__btn__center__align {
+    display: flex !important;
+    /* justify-content: right !important; */
+    align-items: center !important;
+
+}

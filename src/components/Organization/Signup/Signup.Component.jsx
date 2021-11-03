@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import tickPremiumIcon from '../../../assets/icons/tick__premium__icon.png'
 import history from '../../../history'
 import { useParams } from 'react-router-dom'
+import { organizationService } from '../../../services'
 
 const SignupComponent = () => {
   const [selectedPlan, setSelectedPlan] = useState('M')
@@ -17,8 +18,26 @@ const SignupComponent = () => {
     history.push(`/acceptance-criteria/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     console.log('referredBy', referredby, 'inviteToken', invitetoken)
+    const tokenResponse = await organizationService.validateToken(invitetoken)
+    console.log('token >> response', tokenResponse)
+    const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
+    console.log('token >> data', data)
+    if (data.status_code !== 200) {
+      history.push('/error-page')
+    }
+    // .then(data => {
+    //   const response = data.response.data
+    //   console.log('tokan data >> ', response.status_code)
+    //   if(response.status_code !== 200 ){
+    //     history.push('/error-page')
+    //   }
+    // })
+    // .catch(err => {
+    //   console.log('tokan data err >> ', err)
+    //   history.push('/error-page')
+    // })
   }, [])
 
   return (

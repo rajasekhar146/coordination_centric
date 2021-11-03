@@ -1,0 +1,18 @@
+.ml__master__main{
+    min-height: 100vh;
+    height: 100%;
+    min-width: 100vw;
+    width: 100%;
+    clear: both;
+}
+
+.ml__left__menu__section{
+    float: left; 
+    width: 350px;
+}
+
+.mlr__right__content__section{
+    width: calc(100vw - 350px);
+    height: 100vh;
+    float: left; 
+}
