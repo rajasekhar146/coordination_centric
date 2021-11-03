@@ -1,0 +1,162 @@
+.ms__main__div {
+    width: 100vw;
+    /* height: 100vh; */
+    display: flex;
+    flex-direction: row;
+    font-family: Lato;
+}
+
+.ms__left__div {
+    box-sizing: border-box;
+    flex: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #E42346;
+}
+
+.ms__right__div {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    position: relative;
+    right: -29%;
+    top: 18%;
+}
+
+.ms__left__image {
+    width: 100%;
+    height: 100vh;
+}
+
+.ms__left__image__logo {
+    position: absolute;
+    top: 32px;
+    left: 60px;
+}
+
+.ms__right__content > div {
+    padding: 4px;
+}
+
+.ms__right__title {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 34px;
+
+    /* identical to box height, or 121% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.2px;
+
+    color: #000000;
+}
+
+.ms__right__subtitle {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+
+    /* identical to box height, or 133% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+}
+
+.ms__right__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px !important;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    display: flex;
+    align-items: center !important;
+    letter-spacing: 0.1px;
+
+    color: #696F79;
+    
+}
+
+.ms__text__box {
+    /* background: #FFFFFF;
+    border-radius: 5px !important;
+    width: 100% !important; */
+    background: #FFFFFF;
+    border-radius: 8px !important;
+    width: 450px !important;
+    color: #A0A4A8 !important;
+    height: 48px !important;
+    padding: 12px !important;
+}
+
+
+.ms__pwd__show {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+
+    /* identical to box height, or 133% */
+    display: flex;
+    align-items: center;
+    text-align: right;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin-right: 10px !important;
+}
+
+.ms__login__btn {
+    background: #E42346 !important;
+    border-radius: 8px !important;
+    width: 88%;
+    color: #fff !important;
+    padding: 12px !important;
+}
+
+.ms__sign__in {
+    /* display: flex; */
+    position: absolute;
+    top: 20px;
+    right: 150px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    display: flex;
+    align-items: center;
+    text-align: right;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+}
+
+.ms__signin__text {
+    color: #E42346;
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+.ms__signin__button {
+    color: #E42346 !important;
+    margin-left: -10px !important;
+}

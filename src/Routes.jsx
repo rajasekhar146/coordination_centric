@@ -3,6 +3,7 @@ import history from './history'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import DefaultLayoutComponentRoute from './components/DefaultLayout/DefaultLayout.Component'
 import MasterLayoutWithLefuMenuComponent from './components/MasterLayoutWithLefuMenu/MasterLayoutWithLefuMenu.Component'
+import MemberLayoutComponent from './components/MemberLayout/MemberLayout.Component'
 import AcceptanceCriteria from './pages/acceptance-criteria'
 import Signup from './pages/signup'
 import ServiceLevelAgreement from './pages/service-level-agreement'
@@ -39,6 +40,11 @@ import ForgotPassword from './components/SignIn/ForgotPassword.Component'
 import ForgotPasswordResend from './components/SignIn/ForgotPasswordResend.Component'
 import ResetPassword from './components/SignIn/ResetPassword.Component'
 import ResetPasswordSuccess from './components/SignIn/ResetPasswordSuccess.Component'
+import TwoFaEnabled from './pages/two-fa-enabled'
+import MemberSignIn from './pages/member-signin'
+import PersonalDetail from './pages/personal-detail'
+import TokenValidationError from './pages/token-validation-error'
+import ProfileSetup from './pages/profile-setup'
 
 class Routes extends Component {
   render() {
@@ -70,7 +76,11 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/emailverification" component={EmailVerificationPage} />
           <DefaultLayoutComponentRoute path="/emailverification-success" component={EmailVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/emailverification-failed" component={EmailVerificationFailed} />
-          <DefaultLayoutComponentRoute path="/service-level-agreement/:invitetoken/:referredby/:invitedBy" component={ServiceLevelAgreement} />
+          <DefaultLayoutComponentRoute path="/two-fa-enabled" component={TwoFaEnabled} />
+          <DefaultLayoutComponentRoute
+            path="/service-level-agreement/:invitetoken/:referredby/:invitedBy"
+            component={ServiceLevelAgreement}
+          />
           <DefaultLayoutComponentRoute path="/navbar" component={NavBarComponent} />
           <DefaultLayoutComponentRoute path="/enable2fa" component={EnableTwoFactorAuth} />
           <DefaultLayoutComponentRoute path="/verification/:method" component={VerificationCodePage} />
@@ -78,6 +88,8 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2faverificationsuccess" component={TwoFaVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
+          <DefaultLayoutComponentRoute path="/members/register" component={MemberSignIn} />
+          <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
@@ -87,6 +99,8 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
+          <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
+          <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
         </Switch>
       </Router>
     )
