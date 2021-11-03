@@ -356,7 +356,7 @@ const columns = [
   { id: 'facilityName', label: 'Organization Name', minWidth: 180, align: 'left', visible: true },
   { id: 'orgName', label: 'Org Admin', minWidth: 100, align: 'left', visible: true },
   { id: 'facilityAddress', label: 'Address', minWidth: 200, align: 'left', visible: true },
-  { id: 'referredBy', label: 'Referred by', minWidth: 110, align: 'left', visible: true },
+  { id: 'invited_facilityName', label: 'Referred by', minWidth: 110, align: 'left', visible: true },
   { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
   { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -533,6 +533,7 @@ const OrganizationDashboardComponent = () => {
           orgName: fullName,
           facilityAddress: r.facilityAddress,
           referredBy: r.referred_by == "0" ? '' : r.referred_by,
+          invited_facilityName: get(r, ['invited_facilityName'], ''),
           status: r.status,
           action: '',
         }
@@ -588,6 +589,7 @@ const OrganizationDashboardComponent = () => {
           orgName: fullName,
           facilityAddress: r.facilityAddress,
           referredBy: r.referred_by == "0" ? '' : r.referred_by,
+          invited_facilityName: get(r, ['invited_facilityName'], ''),
           status: r.status,
           action: '',
         }
