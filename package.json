@@ -53,6 +53,7 @@
     "react-scripts": "4.0.3",
     "react-signature-canvas": "^1.0.3",
     "rxjs": "^7.3.1",
+    "use-file-upload": "^1.0.11",
     "validator": "^13.6.0",
     "web-vitals": "^1.1.2"
   },
