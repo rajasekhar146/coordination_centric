@@ -21,9 +21,9 @@ const SignupComponent = () => {
   useEffect(async () => {
     console.log('referredBy', referredby, 'inviteToken', invitetoken)
     const tokenResponse = await organizationService.validateToken(invitetoken)
-    // console.log('token >> response', tokenResponse)
+    console.log('token >> response', tokenResponse)
     const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
-    // console.log('token >> data', data)
+    console.log('token >> data', data)
     if (data.status_code !== 200) {
       history.push('/error-page')
     }
