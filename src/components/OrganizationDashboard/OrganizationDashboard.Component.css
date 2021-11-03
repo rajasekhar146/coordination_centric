@@ -485,3 +485,22 @@
     display: flex;
     justify-content: space-between;
 }
+.od_add_member_btn {
+    background-color: #E42346 !important;
+    color: #FFFFFF !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+    color: #FFFFFF;
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;   
+    padding: 8px 10px 8px 10px !important;
+    border-radius: 3px !important;
+    width: 150px !important;
+}
