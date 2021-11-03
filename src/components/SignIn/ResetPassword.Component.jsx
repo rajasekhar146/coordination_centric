@@ -233,6 +233,7 @@ const ResetPasswordPage = props => {
                                 }}
                                 margin="normal"
                                 type="password"
+                                className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
                             />
                         </div>

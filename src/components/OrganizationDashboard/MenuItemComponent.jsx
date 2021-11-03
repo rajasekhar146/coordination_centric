@@ -30,8 +30,9 @@ const OrganisationItem = props => {
                             selectedStatus.splice(selectedStatus.indexOf('all'), 1)
                         } else {
                             selectedStatus.splice(selectedStatus.indexOf(status.key), 1)
-                            selectedStatus.splice(selectedStatus.indexOf('all'), 1)
-
+                            if(selectedStatus.indexOf('all') > -1) {
+                                selectedStatus.splice(selectedStatus.indexOf('all'), 1)
+                            }
                         }
                         setSelectedStatus([...selectedStatus])
                         setIsStatusFieldsChanged(true)
