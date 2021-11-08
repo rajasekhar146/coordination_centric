@@ -116,7 +116,7 @@ const ResetPasswordPage = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="si__right__div si_top_zero">
+                <div className="si__right__div si_top_zero si_reset">
                     <div className="si__right__content si_width75">
                         <div className="si__right__forgot">
                             <img src={KeyIcon} alt="key" />
