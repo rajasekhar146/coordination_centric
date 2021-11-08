@@ -9,6 +9,7 @@
     width: 100% !important;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .od__row > div {
@@ -465,7 +466,7 @@
     border-radius: 5px !important;
 }
 
-.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+/* .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
     opacity: 1;
     transform: none;
     transition: opacity 203ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 135ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -473,7 +474,7 @@
     left: 1100px !important;
     width: 16% !important;
     transform-origin: 85px 0px;
-}
+} */
 
 .od_status {
     display: flex;

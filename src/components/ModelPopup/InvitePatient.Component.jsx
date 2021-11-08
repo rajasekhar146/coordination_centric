@@ -18,6 +18,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import MembersStore from '../../stores/membersstore'
+import UserIcon from '../../assets/icons/usericon.png'
+import PlusIcon from '../../assets/icons/plus_icon.png'
+
 
 const useStyles = makeStyles(theme => ({
     select: {
@@ -36,7 +39,7 @@ const roles = [
 ]
 
 
-const InviteMemberComponent = props => {
+const InvitePatientComponent = props => {
     const classes = useStyles()
 
     const {
@@ -44,7 +47,7 @@ const InviteMemberComponent = props => {
         // setAlertMsg,
         // clickCloseButton,
         // setSubLabel,
-        setOpenInviteMemberSuccess,
+        setOpenInvitePatientSuccess,
         setOpenInviteMember
     } = props;
 
@@ -71,37 +74,45 @@ const InviteMemberComponent = props => {
 
     const onSubmit = (requestData) => {
         setIsSubmit(true)
-        MembersStore.load('InviteMember', {
-            requestData,
-            successCallback: (data) => {
-                setOpenInviteMember(false)
-                setOpenInviteMemberSuccess(true)
-            },
-            errorCallback: (err) => {
-                setIsExist(err.message)
-            }
-        })
-        
+        setOpenInvitePatientSuccess(true)
+        // MembersStore.load('InviteMember', {
+        //     requestData,
+        //     successCallback: (data) => {
+        //         setOpenInviteMember(false)
+               
+        //     },
+        //     errorCallback: (err) => {
+        //         setIsExist(err.message)
+        //     }
+        // })
     }
 
 
     return (
         <div className="io__main__div">
-            <div className="io__title__text">Invite a Member</div>
-
             <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="io__row">
+                    <img src={UserIcon} alt="Approve Org" />
+                </div>
+                <div className="io__invite__title">Invite Patient</div>
+                <div className="io__row io_invite_sub_title ">
+                    <label className="io__conform__title">
+                        Your new project has been created.
+                        Invite colleagues to collaborate on this project.
+                    </label>
+                </div>
                 <div className="io__form form-body">
                     <div className="io__row">
                         <div className="io__label">
-                            First name <span className="ac__required">*</span>
+                            Patient Name <span className="ac__required">*</span>
                         </div>
                         <TextField
                             // {...useInput('facilityName', { isRequired: true })}
-                            {...register('firstName', {
-                                required: 'First Name is required.',
+                            {...register('patientName', {
+                                required: 'patient name is required.',
                             })}
                             margin="normal"
-                            error={errors.facilityName && isSubmit}
+                            error={errors.patientName && isSubmit}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -111,37 +122,16 @@ const InviteMemberComponent = props => {
                                 className: 'im__text__box',
                             }}
                         />
-                        {errors.firstName && <p className="io__required">{errors.firstName.message}</p>}
+                        {errors.patientName && <p className="io__required">{errors.patientName.message}</p>}
                     </div>
 
-                    <div className="io__row">
-                        <div className="io__label">
-                            Last name <span className="ac__required">*</span>
-                        </div>
-                        <TextField
-                            // {...useInput('facilityEmail', { isRequired: true })}
-                            {...register('lastName', {
-                                required: 'Last Name Required.'
-                            })}
-                            margin="normal"
-                            error={errors.facilityEmail && isSubmit}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <img src={NameIcon} alt="Last Name" />
-                                    </InputAdornment>
-                                ),
-                                className: 'im__text__box',
-                            }}
-                        />
-                        {errors.lastName && <p className="io__required">{errors.lastName.message}</p>}
-                    </div>
+
 
                     <div className="io__row">
-                        <div className="io__label">Email <span className="ac__required">*</span></div>
+                        <div className="io__label">Patient Email <span className="ac__required">*</span></div>
                         <TextField
                             {...register('email', {
-                                required: 'Email is required.',
+                                required: 'patient email is required.',
                                 pattern: {
                                     value:
                                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -164,10 +154,10 @@ const InviteMemberComponent = props => {
                     </div>
 
                     <div className="io__row">
-                        <div className="io__label">Role <span className="ac__required">*</span></div>
+                        <div className="io__label">Access Type <span className="ac__required">*</span></div>
                         <Select
-                            {...register('role', {
-                                required: 'Role is required.',
+                            {...register('accessType', {
+                                required: 'Access Type is required.',
                                 // pattern: {
                                 //   value:
                                 //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -189,17 +179,21 @@ const InviteMemberComponent = props => {
                         {errors.role && <p className="io__required">{errors.role.message}</p>}
 
                     </div>
-
+                    <div>
+                        <label className="add_another_label">
+                        <img src={PlusIcon} alt="Approve Org" />  Add another
+                        </label>
+                    </div>
                     <div className="io__row">
                         <div style={{ marginTop: "50px" }} className="io__same__line">
                             <div className="io__column">
                                 <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
-                                    Close
+                                    Cancel
                                 </Button>
                             </div>
                             <div style={{ marginLeft: "15px" }} className="io__column io__invite__org__btn">
                                 <Button type="submit" className="io__add__organization__btn">
-                                    Invite Member
+                                    Send Invite
                                 </Button>
                             </div>
                         </div>
@@ -210,4 +204,4 @@ const InviteMemberComponent = props => {
     )
 }
 
-export default InviteMemberComponent
+export default InvitePatientComponent

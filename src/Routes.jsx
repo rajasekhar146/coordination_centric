@@ -14,7 +14,7 @@ import NavBarComponent from './components/NavBar/NavBar.Component'
 import OrganizationDashboard from './pages/organization-dashboard'
 import OrganizationView from './pages/organization-view'
 import Appointments from './pages/appointments'
-import Users from './pages/users'
+import PatienRecords from './pages/patien_records'
 import Patients from './pages/patients'
 import Vaccinations from './pages/vaccinations'
 import Notifications from './pages/notifications'
@@ -94,7 +94,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
-          <MasterLayoutWithLefuMenuComponent path="/users" component={Users} />
+          <MasterLayoutWithLefuMenuComponent path="/patientrecords" component={PatienRecords} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />

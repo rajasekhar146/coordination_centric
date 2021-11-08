@@ -30,15 +30,15 @@ const colorcodes = {
     declined: '#B42318',
 }
 
-const MembersComponent = props => {
+const PatientComponent = props => {
     const {
         orgDet,
         colorcodes,
     } = props
 
-    let membersList = get(orgDet, ['invited_facilityName'], [])
+    let patientList = get(orgDet, ['invited_facilityName'], [])
 
-    membersList = [
+    patientList = [
         {
             id: '1223',
             name: 'rajasekhar',
@@ -95,7 +95,7 @@ const MembersComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {membersList.map((row, index) => (
+                            {patientList.map((row, index) => (
                                 <MemberItem
                                     row={row}
                                     index={index}
@@ -115,4 +115,4 @@ const MembersComponent = props => {
     )
 }
 
-export default MembersComponent
+export default PatientComponent

@@ -86,7 +86,7 @@ const menuOptions = [
       },
       {
         name: 'Patient Records',
-        link: '/users',
+        link: '/patientrecords',
         icon: require('../../assets/icons/users.png').default,
         activeIcon: require('../../assets/icons/users.png').default,
       },

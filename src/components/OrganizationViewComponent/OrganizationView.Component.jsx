@@ -22,8 +22,12 @@ import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel.Component';
 import Overview from './Overview.Component';
 import Members from './Members.Component';
+import Collaborator from './Collaborator.Component'
+import Patient from './Patients.Component'
 import InviteMemberComponent from '../ModelPopup/InviteMemberComponent'
 import InviteMemberSuccess from '../ModelPopup/MemberInvitationSuccess'
+import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
+import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
 import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
@@ -43,9 +47,10 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: 0,
     boxShadow: 24,
     p: 4,
+    borderRadius: '10px'
 }
 
 const successStyle = {
@@ -59,6 +64,8 @@ const successStyle = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    border: 0,
+    borderRadius: '10px'
 }
 const OrganizationViewComponent = () => {
     const classes = useStyles()
@@ -68,6 +75,9 @@ const OrganizationViewComponent = () => {
     const [value, setValue] = React.useState('0');
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
+    const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
+    const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
+
 
 
 
@@ -137,16 +147,35 @@ const OrganizationViewComponent = () => {
                 )
                 break
             case '2':
+                return (
+                    <div className="od__btn__div od">
+                        <Button 
+                        onClick={() => {
+                            setOpenInviteCollaborator(true)
+                        }}
+                        className="od_add_member_btn">
+                            &nbsp;&nbsp; Add Collaborator 
+                        </Button>
+                    </div>
+                )
                 break
             default:
                 return null
         }
     }
 
-    const closeModel = () => {
+    const closeInviteModel = () => {
         setOpenInviteMember(false)
-        setOpenInviteMemberSuccess(false)
+        setOpenInviteCollaborator(false)
     }
+
+    const closeInviteSuccessModel = () => {
+        setOpenInviteMemberSuccess(false)
+        setOpenInviteCollaboratorSuccess(false)
+    }
+
+
+
 
     return (
         <div className="od__main__div">
@@ -190,10 +219,10 @@ const OrganizationViewComponent = () => {
                 <Members orgDet={orgDet} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                Item Three
+                <Collaborator orgDet={orgDet} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                Item Three
+               <Patient orgDet={orgDet} />
             </TabPanel>
             <Modal
                 open={openInviteMember}
@@ -202,7 +231,8 @@ const OrganizationViewComponent = () => {
             >
                 <Box sx={style}>
                 <InviteMemberComponent
-                        clickCloseButton={closeModel}
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
                         // setSkip={setSkip}
                         // selectedOrg={selectedOrg}
@@ -220,13 +250,43 @@ const OrganizationViewComponent = () => {
             >
                 <Box sx={successStyle}>
                 <InviteMemberSuccess
-                        clickCloseButton={closeModel}
+                        clickCloseButton={closeInviteSuccessModel}
                         // setSkip={setSkip}
                         // selectedOrg={selectedOrg}
                         // setOrganizations={setOrganizations}
                         // setOpenFlash={setOpenFlash}
                         // setAlertMsg={setAlertMsg}
                         // setSubLabel={setSubLabel}
+                    />
+                </Box>
+            </Modal>
+            <Modal
+                open={openInviteCollaborator}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                <InviteCollaborator
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteCollaborator={setOpenInviteCollaborator}
+                        setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+                        // setSkip={setSkip}
+                        // selectedOrg={selectedOrg}
+                        // setOrganizations={setOrganizations}
+                        // setOpenFlash={setOpenFlash}
+                        // setAlertMsg={setAlertMsg}
+                        // setSubLabel={setSubLabel}
+                    />
+                </Box>
+            </Modal>
+            <Modal
+                open={openInviteCollaboratorSuccess}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                <InviteCollaboratorSuccess
+                         clickCloseButton={closeInviteSuccessModel}
                     />
                 </Box>
             </Modal>

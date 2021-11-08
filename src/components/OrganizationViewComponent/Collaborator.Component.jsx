@@ -30,15 +30,18 @@ const colorcodes = {
     declined: '#B42318',
 }
 
-const MembersComponent = props => {
+
+const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
     } = props
 
-    let membersList = get(orgDet, ['invited_facilityName'], [])
+    // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
-    membersList = [
+    let collaboratorList = get(orgDet, ['invited_facilityName'], [])
+
+    collaboratorList = [
         {
             id: '1223',
             name: 'rajasekhar',
@@ -95,7 +98,7 @@ const MembersComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {membersList.map((row, index) => (
+                            {collaboratorList.map((row, index) => (
                                 <MemberItem
                                     row={row}
                                     index={index}
@@ -115,4 +118,4 @@ const MembersComponent = props => {
     )
 }
 
-export default MembersComponent
+export default CollaboratorComponent
