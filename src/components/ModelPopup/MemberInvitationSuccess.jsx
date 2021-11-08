@@ -27,9 +27,8 @@ const useStyles = makeStyles(theme => ({
 const MemberInviteSuccess = props => {
     const { selectedOrg, clickCloseButton } = props
 
-    const handleOK = () => {
-        //props.clickCloseButton()
-        history.push('/enable2fa')
+    const handleSubmit = () => {
+        props.clickCloseButton()
     }
     const classes = useStyles()
     return (
@@ -39,16 +38,18 @@ const MemberInviteSuccess = props => {
                 <img width="200" src={MemberInviteIcon} alt="TwoFaImg" />
             </div>
             <div className="io__row io__icon">
-                <h5>Invite Sent Successfully</h5>
-                <label>The staff member will receive an invitation by email to join your organization.</label>
+                <div className="io_enter_label">
+                    <label>Invite Sent Successfully</label>
+                </div>
+                <div className="io_apologize_label">
+                    <label>The staff member will receive an invitation by email to join your organization.</label>
+                </div>
             </div>
             <div className="io__conform">
-                <div className="io__same__line">
-                    <div className="io__skip">
-                        <Button className="io__skip__btn" onClick={clickCloseButton}>
-                            Done
-                        </Button>
-                    </div>
+                <div style={{ textAlign: "center" }}>
+                    <Button onClick={handleSubmit} type="submit" className="io__done__btn">
+                        Done
+                    </Button>
                 </div>
             </div>
         </div>
