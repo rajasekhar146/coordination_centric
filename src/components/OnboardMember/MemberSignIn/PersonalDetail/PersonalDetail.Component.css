@@ -62,7 +62,7 @@
     width: 290px !important;
     left: 0px;
     top: 0px;
-    padding: 4px;
+    /* padding: 4px; */
     border-radius: 5px;
     /* padding: 8px !important; */
     min-height: 20px;
@@ -168,7 +168,7 @@
 
 .pdc__step__text {
     position: absolute;
-    right: 50px;
+    right: 0px;
     font-family: Lato;
     font-style: normal;
     font-weight: 500;
