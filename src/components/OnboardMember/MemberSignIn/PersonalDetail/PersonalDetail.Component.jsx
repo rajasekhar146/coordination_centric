@@ -152,19 +152,21 @@ const PersonalDetailComponent = () => {
           </div>
 
           <div className="pdc__row">
+            
+
             <div className="pdc__column">
-              <div className="pdc__label">City</div>
-              <FormControl sx={{ m: 1, minWidth: 210 }}>
-                <Select value={age} onChange={handleChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                  <MenuItem value="">
-                    <em>City</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Male</MenuItem>
-                  <MenuItem value={20}>Female</MenuItem>
-                  <MenuItem value={30}>Other</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+            <div className="pdc__label">Country</div>
+            <FormControl sx={{ m: 1, minWidth: 210 }}>
+              <Select value={age} onChange={handleChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+                <MenuItem value="">
+                  <em>Country</em>
+                </MenuItem>
+                <MenuItem value={10}>Male</MenuItem>
+                <MenuItem value={20}>Female</MenuItem>
+                <MenuItem value={30}>Other</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
 
             <div className="pdc__column">
               <div className="pdc__label">State</div>
@@ -181,18 +183,18 @@ const PersonalDetailComponent = () => {
             </div>
 
             <div className="pdc__column">
-              <div className="pdc__label">Country</div>
-              <FormControl sx={{ m: 1, minWidth: 210 }}>
-                <Select value={age} onChange={handleChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                  <MenuItem value="">
-                    <em>Country</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Male</MenuItem>
-                  <MenuItem value={20}>Female</MenuItem>
-                  <MenuItem value={30}>Other</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+            <div className="pdc__label">City</div>
+            <FormControl sx={{ m: 1, minWidth: 210 }}>
+              <Select value={age} onChange={handleChange} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+                <MenuItem value="">
+                  <em>City</em>
+                </MenuItem>
+                <MenuItem value={10}>Male</MenuItem>
+                <MenuItem value={20}>Female</MenuItem>
+                <MenuItem value={30}>Other</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
             <div className="pdc__column">
               <div className="pdc__label">Postal Code</div>
               <TextField id="" defaultValue="" style={{ minWidth: 100 }} margin="normal" />
