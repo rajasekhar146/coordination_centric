@@ -24,16 +24,16 @@ function sendEmailWithVerificationCode(email) {
 
   return (
     axios
-    .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
-    //.then(handleResponse)
-    .then(data => {
-      console.log('sendEmailWithVerificationCode', data)
-      return data
-    })
-    .catch(err => {
-      // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-      return { errorCode: err.status, errorMessage: err.message }
-    })
+      .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('sendEmailWithVerificationCode', data)
+        return data
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return { errorCode: err.status, errorMessage: err.message }
+      })
   )
 }
 

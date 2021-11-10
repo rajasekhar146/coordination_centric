@@ -72,7 +72,7 @@ function login(username, password) {
         //   data: err.data,
         // }
 
-        if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')){
+        if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')) {
           update2fa(true)
         }
 

@@ -1,7 +1,7 @@
 import { ActionTypes } from '../constants/action-types'
 
 const initialState = {
-    organizations: [],
+  organizations: [],
 }
 
 const initialOrg = {
@@ -36,7 +36,6 @@ const initialOrg = {
   website: '',
   zipcode: '',
 }
-
 
 export const organizationReducer = (state = initialState, { type, payload }) => {
   switch (type) {
