@@ -13,10 +13,10 @@ import get from 'lodash.get'
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: true },
-    { id: 'name', label: 'Name', minWidth: 180, align: 'left', visible: true },
+    { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'roles', label: 'Roles', minWidth: 200, align: 'left', visible: true },
-    { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
+    { id: 'role', label: 'Roles', minWidth: 200, align: 'left', visible: true },
+    { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
 
@@ -32,35 +32,11 @@ const colorcodes = {
 
 const MembersComponent = props => {
     const {
-        orgDet,
+        membersList,
         colorcodes,
     } = props
 
-    let membersList = get(orgDet, ['invited_facilityName'], [])
-
-    membersList = [
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'invited'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'inactive'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'pending_acceptance'
-        }
-    ]
+  
 
     const [anchorEl, setAnchorEl] = React.useState(null)
 

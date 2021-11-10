@@ -3,6 +3,7 @@ import { authHeader, handleResponse } from '../helpers'
 import { authenticationService } from '../services'
 import history from '../history'
 import moment from 'moment'
+import get from 'lodash.get'
 
 const apiURL = 'https://api.csuite.health'
 
@@ -128,12 +129,12 @@ function updateOrganization(id, status, reason = null) {
 function getOrganizationDetails(orgId) {
   return (
     axios
-      .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${orgId}`, axiosConfig)
+      .get(`${apiURL}/facilityList/getDetailsById?id=${orgId}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('getOrganizationDetails - ', data)
         if (data?.data?.data) {
-          const res = data.data.data
+          const res = get(data, ['data', 'data', '0', 'totalData', '0'], {})
           console.log('Result >> ', res)
           return res
         } else {

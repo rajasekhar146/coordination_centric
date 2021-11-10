@@ -45,6 +45,8 @@ import MemberSignIn from './pages/member-signin'
 import PersonalDetail from './pages/personal-detail'
 import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
+import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
+import Settings from './components/Settings/Settings.Component'
 
 class Routes extends Component {
   render() {
@@ -99,6 +101,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
+          <MasterLayoutWithOutLefuMenuComponent path="/settings" component={Settings} />
           <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
         </Switch>

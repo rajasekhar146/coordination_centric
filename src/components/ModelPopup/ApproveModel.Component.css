@@ -134,3 +134,16 @@
 .add_another_label {
     color: #E42346;
 }
+.io__share__label{
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #344054;
+}
+.io_clone {
+    position: absolute;
+    right: 0;
+    top: 30px;
+}

@@ -104,8 +104,100 @@
     padding: 20px 0 20px 0;
 }
 .od_label_p {
-    width: 30%;
+    width: 35%;
 }
 .od_input_p {
     width: 60%;
+}
+.od_dropzone{
+    position: relative;
+    width: 80%;
+    height: 100px;
+    border-width: 2px;
+    border-radius: 5px;
+    border: 1px solid #E0DADA;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+.od_dropzone section {
+    height: 100%;
+    width: 100%;
+}
+.od_dropzone p {
+    padding: 15px;
+}
+.io_drop {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+.io_profile {
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+}
+.io_upload_label{
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085;
+    text-align: center;
+}
+.io_highlite {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #C11B39;
+}
+.io_upload_icon {
+    position: relative;
+    top: 22px;
+}
+.rdw-editor-toolbar {
+    padding: 6px 5px 0;
+    border-radius: 2px;
+    border:0;
+    display: flex;
+    justify-content: flex-start;
+    background: #F6F8FB;
+    flex-wrap: wrap;
+    font-size: 15px;
+    margin-bottom: 5px;
+    -webkit-user-select: none;
+    user-select: none;
+    padding-left: 200px;
+}
+.rdw-editor-main {
+    height: 150px;
+    overflow: auto;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    padding-left: 10px;
+    border: 1px solid #E0DADA;
+    border-radius: 8px;
+}
+.rdw-option-wrapper {
+    padding: 5px;
+    min-width: 25px;
+    height: 20px;
+    margin: 0 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #F6F8FB;
+    text-transform: capitalize;
+    border: 0;
+}
+.io_count_label {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085;
 }

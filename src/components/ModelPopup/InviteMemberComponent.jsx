@@ -18,6 +18,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import MembersStore from '../../stores/membersstore'
+import { memberService } from '../../services'
+import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
     select: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const roles = [
-    { name: 'Doctor' },
+    { name: 'doctor',  },
     { name: 'NP' },
     { name: 'PA' },
     { name: 'Receptionist' }
@@ -71,16 +73,23 @@ const InviteMemberComponent = props => {
 
     const onSubmit = (requestData) => {
         setIsSubmit(true)
-        MembersStore.load('InviteMember', {
-            requestData,
-            successCallback: (data) => {
-                setOpenInviteMember(false)
-                setOpenInviteMemberSuccess(true)
-            },
-            errorCallback: (err) => {
-                setIsExist(err.message)
-            }
+        const res = memberService.inviteMember(requestData)
+        res.then((data) => {
+            setOpenInviteMember(false)
+            setOpenInviteMemberSuccess(true)
+        }).catch((err) => {
+            setIsExist(get(err.response, ['body', 'message'], null))
         })
+        // MembersStore.load('InviteMember', {
+        //     requestData,
+        //     successCallback: (data) => {
+        //         setOpenInviteMember(false)
+        //         setOpenInviteMemberSuccess(true)
+        //     },
+        //     errorCallback: (err) => {
+        //         setIsExist(err.message)
+        //     }
+        // })
         
     }
 

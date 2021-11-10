@@ -136,11 +136,11 @@ const OrganizationViewComponent = () => {
             case '1':
                 return (
                     <div className="od__btn__div od">
-                        <Button 
-                        onClick={() => {
-                            setOpenInviteMember(true)
-                        }}
-                        className="od_add_member_btn">
+                        <Button
+                            onClick={() => {
+                                setOpenInviteMember(true)
+                            }}
+                            className="od_add_member_btn">
                             &nbsp;&nbsp; Add Member
                         </Button>
                     </div>
@@ -149,12 +149,12 @@ const OrganizationViewComponent = () => {
             case '2':
                 return (
                     <div className="od__btn__div od">
-                        <Button 
-                        onClick={() => {
-                            setOpenInviteCollaborator(true)
-                        }}
-                        className="od_add_member_btn">
-                            &nbsp;&nbsp; Add Collaborator 
+                        <Button
+                            onClick={() => {
+                                setOpenInviteCollaborator(true)
+                            }}
+                            className="od_add_member_btn">
+                            &nbsp;&nbsp; Add Collaborator
                         </Button>
                     </div>
                 )
@@ -216,13 +216,17 @@ const OrganizationViewComponent = () => {
                 <Overview orgDet={orgDet} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Members orgDet={orgDet} />
+                <Members
+                    membersList={orgDet.user_details}
+                />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Collaborator orgDet={orgDet} />
+                <Collaborator
+                    collaboratorList={orgDet.facility_details}
+                />
             </TabPanel>
             <TabPanel value={value} index={3}>
-               <Patient orgDet={orgDet} />
+                <Patient orgDet={orgDet} />
             </TabPanel>
             <Modal
                 open={openInviteMember}
@@ -230,16 +234,16 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <InviteMemberComponent
+                    <InviteMemberComponent
                         clickCloseButton={closeInviteModel}
                         setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
-                        // setSkip={setSkip}
-                        // selectedOrg={selectedOrg}
-                        // setOrganizations={setOrganizations}
-                        // setOpenFlash={setOpenFlash}
-                        // setAlertMsg={setAlertMsg}
-                        // setSubLabel={setSubLabel}
+                    // setSkip={setSkip}
+                    // selectedOrg={selectedOrg}
+                    // setOrganizations={setOrganizations}
+                    // setOpenFlash={setOpenFlash}
+                    // setAlertMsg={setAlertMsg}
+                    // setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>
@@ -249,14 +253,14 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={successStyle}>
-                <InviteMemberSuccess
+                    <InviteMemberSuccess
                         clickCloseButton={closeInviteSuccessModel}
-                        // setSkip={setSkip}
-                        // selectedOrg={selectedOrg}
-                        // setOrganizations={setOrganizations}
-                        // setOpenFlash={setOpenFlash}
-                        // setAlertMsg={setAlertMsg}
-                        // setSubLabel={setSubLabel}
+                    // setSkip={setSkip}
+                    // selectedOrg={selectedOrg}
+                    // setOrganizations={setOrganizations}
+                    // setOpenFlash={setOpenFlash}
+                    // setAlertMsg={setAlertMsg}
+                    // setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>
@@ -266,16 +270,16 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <InviteCollaborator
+                    <InviteCollaborator
                         clickCloseButton={closeInviteModel}
                         setOpenInviteCollaborator={setOpenInviteCollaborator}
                         setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
-                        // setSkip={setSkip}
-                        // selectedOrg={selectedOrg}
-                        // setOrganizations={setOrganizations}
-                        // setOpenFlash={setOpenFlash}
-                        // setAlertMsg={setAlertMsg}
-                        // setSubLabel={setSubLabel}
+                    // setSkip={setSkip}
+                    // selectedOrg={selectedOrg}
+                    // setOrganizations={setOrganizations}
+                    // setOpenFlash={setOpenFlash}
+                    // setAlertMsg={setAlertMsg}
+                    // setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>
@@ -285,8 +289,8 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <InviteCollaboratorSuccess
-                         clickCloseButton={closeInviteSuccessModel}
+                    <InviteCollaboratorSuccess
+                        clickCloseButton={closeInviteSuccessModel}
                     />
                 </Box>
             </Modal>

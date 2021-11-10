@@ -122,7 +122,11 @@ const getOptions = () => {
                     fnKey: 'setInvitePatientClicked',
                     icon: require('../../src/assets/icons/resent_invitation.png').default,
                 },
-                { text: 'Share', icon: require('../../src/assets/icons/suspend.png').default },
+                {
+                    text: 'Share',
+                    fnKey: 'setOpenSharePatientRecord',
+                    icon: require('../../src/assets/icons/share_icon.png').default
+                },
                 { text: 'Archive', icon: require('../../src/assets/icons/suspend.png').default },
 
             ],

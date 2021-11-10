@@ -7,14 +7,14 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import MemberItem from './MemberItem.Component'
+import CollaboratorItem from './CollaboratorItem.Component'
 import get from 'lodash.get'
 
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: true },
-    { id: 'name', label: 'Name', minWidth: 180, align: 'left', visible: true },
-    { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
+    { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
+    { id: 'facilityEmail', label: 'Email', minWidth: 100, align: 'left', visible: true },
     { id: 'roles', label: 'Roles', minWidth: 200, align: 'left', visible: true },
     { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
@@ -35,35 +35,10 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
+        collaboratorList
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
-
-    let collaboratorList = get(orgDet, ['invited_facilityName'], [])
-
-    collaboratorList = [
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'invited'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'inactive'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'pending_acceptance'
-        }
-    ]
 
     const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -99,7 +74,7 @@ const CollaboratorComponent = props => {
                         </TableHead>
                         <TableBody>
                             {collaboratorList.map((row, index) => (
-                                <MemberItem
+                                <CollaboratorItem
                                     row={row}
                                     index={index}
                                     columns={columns}

@@ -5,7 +5,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel.Component';
-import ProfessionalInfo from './PersonalInfo.component'
+import PersonalInfo from './PersonalInfo.component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 
@@ -123,16 +123,16 @@ const OrganizationViewComponent = () => {
                 <TabItem value="4" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <ProfessionalInfo />
+                <PersonalInfo />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProfessionalInfo />
+                <PersonalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ProfessionalInfo />
+                <PersonalInfo />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <ProfessionalInfo />
+                <PersonalInfo />
             </TabPanel>
         </div >
     )

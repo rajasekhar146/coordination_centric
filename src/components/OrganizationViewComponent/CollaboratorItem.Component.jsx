@@ -197,7 +197,7 @@ const menuList = [
 ]
 
 
-const MemberItemComponent = props => {
+const CollaboratorItemComponent = props => {
     const classes = useStyles()
 
     const {
@@ -266,12 +266,12 @@ const MemberItemComponent = props => {
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        {/* <div className={`od__${value?.toLowerCase()}__status`}>
+                        <div className={`od__${value?.toLowerCase()}__status`}>
                             <CircleIcon fontSize="small"  />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
-                        </div> */}
+                        </div>
                     </TableCell>
                 ) : column.id == 'action' ? (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
@@ -328,4 +328,4 @@ const MemberItemComponent = props => {
     )
 }
 
-export default MemberItemComponent
+export default CollaboratorItemComponent

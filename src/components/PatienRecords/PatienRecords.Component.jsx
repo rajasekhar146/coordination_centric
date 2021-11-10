@@ -20,6 +20,7 @@ import Modal from '@mui/material/Modal'
 import InvitePatient from '../ModelPopup/InvitePatient.Component'
 import Box from '@mui/material/Box'
 import InvitePatientSuccess from '../ModelPopup/InvitePatientSuccess.Component'
+import SharePatientRecord from '../ModelPopup/SharePatientRecord.Component'
 
 const useStyles = makeStyles(theme => ({
   menuItem: {
@@ -112,6 +113,7 @@ const PatienRecordsComponent = (props) => {
   const [menuOptions, setMenuOptions] = React.useState([])
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
   const [openInvitePatientSuccess, setOpenInvitePatientSuccess] = useState(false)
+  const [openSharePatientRecord, setOpenSharePatientRecord] = useState(false)
 
   const open = Boolean(anchorEl)
   const classes = useStyles()
@@ -123,6 +125,7 @@ const PatienRecordsComponent = (props) => {
   const closeModel = () => {
     setInvitePatientClicked(false)
     setOpenInvitePatientSuccess(false)
+    setOpenSharePatientRecord(false)
   }
 
   const handleMenuAction = (e, action, index, orgId) => {
@@ -132,7 +135,8 @@ const PatienRecordsComponent = (props) => {
       case 'setInvitePatientClicked':
         setInvitePatientClicked(true)
         break
-
+      case 'setOpenSharePatientRecord':
+        setOpenSharePatientRecord(true)
       default:
         return null
     }
@@ -256,6 +260,19 @@ const PatienRecordsComponent = (props) => {
       >
         <Box sx={invitePatientSuccess}>
           <InvitePatientSuccess
+            clickCloseButton={closeModel}
+
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={openSharePatientRecord}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={invitePatientSuccess}>
+          <SharePatientRecord
             clickCloseButton={closeModel}
 
           />

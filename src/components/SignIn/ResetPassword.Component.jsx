@@ -18,7 +18,6 @@ import { isLowerCase } from "is-lower-case";
 import { useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 
-
 const useStyles = makeStyles(theme => ({
     input: {
         width: '100%',
@@ -89,15 +88,22 @@ const ResetPasswordPage = props => {
             resetData.temporaryPassword = password;
             resetData.token = token;
             resetData.email = email;
-            SignInStore.load('ResetPassword', {
-                resetData,
-                successCallback: (data) => {
-                    history.push('/resetpasswordsuccess')
-                },
-                errorCallback: (err) => {
+            const res = authenticationService.resetPassword(resetData)
+            res.then(() => {
+                history.push('/resetpasswordsuccess')
+            }).catch(() => {
 
-                }
             })
+            // SignInStore.load('ResetPassword', {
+            //     resetData,
+            //     successCallback: (data) => {
+            //         history.push('/resetpasswordsuccess')
+            //     },
+            //     errorCallback: (err) => {
+
+            //     }
+            // })
+
         } else {
             setErrMsg('The password confirmation doesn’t match.')
         }
