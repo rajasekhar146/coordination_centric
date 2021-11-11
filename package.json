@@ -62,6 +62,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:development": "env-cmd -f .env.development npm run-script build",
+    "build:uat": "env-cmd -f .env.uat npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint-fix": "eslint ./src --fix --format table",

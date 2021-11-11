@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form'
 import { commonService } from '../../../services'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCountries } from '../../../redux/actions/commonActions'
-import { newMember } from '../../../redux/actions/memberActions'
+import { newMember, resetMember } from '../../../redux/actions/memberActions'
 
 const genderList = [
   {

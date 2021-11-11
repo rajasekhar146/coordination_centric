@@ -9,7 +9,7 @@ import history from '../../../history'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import { newMember } from '../../../redux/actions/memberActions'
+import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import {memberService} from '../../../services'
 
 const ProfileSetupComponent = () => {
@@ -42,7 +42,7 @@ const ProfileSetupComponent = () => {
     dispatch(newMember(memberData))
     console.log('save member data >> ', memberData)
     var response = await memberService.saveMember(memberData).catch(err => {console.log(err)})
-
+    dispatch(resetMember({}))
     console.log(response)
   }
 
