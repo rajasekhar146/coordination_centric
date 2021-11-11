@@ -3,8 +3,8 @@ import { authHeader, handleResponse } from '../helpers'
 import { authenticationService } from '../services'
 import history from '../history'
 import moment from 'moment'
-
-const apiURL = 'https://api.csuite.health'
+import * as env from '../environments/environment'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),

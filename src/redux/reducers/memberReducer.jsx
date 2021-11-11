@@ -61,3 +61,12 @@ export const newMemberReducer = (state = newMemberInitialState, { type, payload 
       return state
   }
 }
+
+export const resetMemberReducer = (state = newMemberInitialState, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.RESET_MEMBER:
+      return newMemberInitialState
+    default:
+      return newMemberInitialState
+  }
+}

@@ -1,8 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import { authHeader, handleResponse } from '../helpers'
+import * as env from '../environments/environment'
 
-const apiURL = 'https://api.csuite.health'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),

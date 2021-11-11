@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { memberReducer, newMemberReducer } from './memberReducer'
+import { memberReducer, newMemberReducer, resetMemberReducer } from './memberReducer'
 import { organizationReducer, newOrganizationReducer } from './organizationReducer'
 import { commonReducer } from './commonReducer'
 
@@ -9,6 +9,7 @@ const reducers = combineReducers({
   newOrganization: newOrganizationReducer,
   allCountries: commonReducer,
   newMember: newMemberReducer,
+  resetMember: resetMemberReducer,
 })
 
 export default reducers

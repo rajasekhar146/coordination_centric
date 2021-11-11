@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { BehaviorSubject } from 'rxjs'
 import get from 'lodash.get'
-
+import * as env from '../environments/environment'
 // import config from 'config';
 import { authHeader, handleResponse } from '../helpers'
-const apiURL = 'https://api.csuite.health'
+const apiURL = env.environment.apiBaseUrl
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')))
 const qrImgSubject = new BehaviorSubject()
@@ -53,6 +53,7 @@ function login(username, password) {
 
   var bodyMsg = JSON.stringify({ email: username, password, deviceId, deviceType, fcmId, backoffice })
   console.log('request', axiosConfig)
+  console.log('apiURL', process.env.REACT_APP_API_URL)
   return (
     axios
       .post(`${apiURL}/users/login`, bodyMsg, axiosConfig)
