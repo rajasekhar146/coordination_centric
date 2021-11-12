@@ -62,11 +62,55 @@
     width: 290px !important;
     left: 0px;
     top: 0px;
-    /* padding: 4px; */
+    padding: 4px;
     border-radius: 5px;
     /* padding: 8px !important; */
-    min-height: 20px;
+    height: 45px;
 }
+
+.pdc__address__text__box {    
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* height: 40px; */
+    width: 925px !important;
+    left: 0px;
+    top: 0px;
+    padding: 4px;
+    border-radius: 5px;
+    /* padding: 8px !important; */
+    height: 45px;
+}
+
+.pdc__phone__text__box {    
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* height: 40px; */
+    width: 370px !important;
+    left: 0px;
+    top: 0px;
+    padding: 4px;
+    border-radius: 5px;
+    /* padding: 8px !important; */
+    height: 45px;
+}
+
+.pdc__dropdown {    
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* height: 40px; */
+    width: 220px !important;
+    padding: 4px;
+    border-radius: 5px;
+    /* padding: 8px !important; */
+    height: 45px;
+}
+
 
 .pdc__row {
     width: 100%;
@@ -168,7 +212,7 @@
 
 .pdc__step__text {
     position: absolute;
-    right: 0px;
+    right: 50px;
     font-family: Lato;
     font-style: normal;
     font-weight: 500;
@@ -182,4 +226,52 @@
 
     /* Neutral/Gray Light */
     color: #CACCCF;
+}
+
+.MuiOutlinedInput-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+    padding: 10.5px 10px !important;
+    padding-right: 0;
+}
+
+.MuiOutlinedInput-root {
+    min-height: 20px !important;
+}
+
+.MuiInputBase-input-MuiOutlinedInput-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+    padding: 11px 11px;
+    padding-right: 0;
 }

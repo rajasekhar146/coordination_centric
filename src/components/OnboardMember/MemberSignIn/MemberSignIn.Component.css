@@ -128,6 +128,14 @@
     padding: 12px !important;
 }
 
+.ms__login__btn__disabled {
+    background: #858383 !important;
+    border-radius: 8px !important;
+    width: 88%;
+    color: #fff !important;
+    padding: 12px !important;
+}
+
 .ms__sign__in {
     /* display: flex; */
     position: absolute;

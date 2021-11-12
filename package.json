@@ -24,6 +24,7 @@
     "dot-object": "^2.1.4",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "highcharts": "^9.2.2",
@@ -66,6 +67,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:development": "env-cmd -f .env.development npm run-script build",
+    "build:uat": "env-cmd -f .env.uat npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint-fix": "eslint ./src --fix --format table",

@@ -1,0 +1,115 @@
+.gn__main__div {
+    width: 100%;
+    border-radius: 10px;
+}
+
+
+.gn__row {
+    width: 100%;
+    display: flex;
+}
+
+.gn__column {
+    padding-right: 30px;
+}
+
+.gn__label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin: 8px 0px 10px 0px;
+}
+
+.gn__title {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+
+    /* identical to box height, or 130% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.2px;
+
+    color: #000000;
+}
+
+.gn__sub__title{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* or 150% */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1px;
+
+    color: #8692A6;
+}
+
+.gn__text__box {
+    /* background: #FFFFFF;
+    border-radius: 5px !important;
+    width: 100% !important; */
+    background: #FFFFFF;
+    border-radius: 8px !important;
+    width: 285px !important;
+    /* color: #A0A4A8 !important; */
+    height: 48px !important;
+}
+
+.gn__same__line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.gn__submit__btn {
+    background-color: #E42346 !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+
+    /* identical to box height, or 200% */
+    letter-spacing: 0.2px;   
+    border: 1px solid #E42346 !important; 
+    /* padding: 8px !important; */
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+    padding: 4px 16px 4px 16px !important;
+    color: #fff !important
+}
+
+.gn__close__btn {
+    color: #E42346 !important;
+    border-radius: 5px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+
+    /* identical to box height, or 200% */
+    letter-spacing: 0.2px;   
+    border: 1px solid #E42346 !important; 
+    /* padding: 8px !important; */
+    border-radius: 5px !important;
+    text-transform: uppercase !important;
+    padding: 4px 16px 4px 16px !important;
+    
+}

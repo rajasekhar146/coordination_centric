@@ -13,3 +13,17 @@ export const selectedMember = member => {
     payload: member,
   }
 }
+
+export const newMember = member => {
+  return {
+    type: ActionTypes.NEW_MEMBER,
+    payload: member,
+  }
+}
+
+export const resetMember = () => {
+  return {
+    type: ActionTypes.RESET_MEMBER,
+    payload: {},
+  }
+}

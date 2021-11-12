@@ -1,6 +1,5 @@
 import { ActionTypes } from '../constants/action-types'
 
-
 export const setAllOrganizations = organizations => {
   return {
     type: ActionTypes.SET_ORGANIZATIONS,

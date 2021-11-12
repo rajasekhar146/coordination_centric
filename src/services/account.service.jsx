@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import { authHeader, handleResponse } from '../helpers'
-
-const apiURL = 'https://api.csuite.health'
+import * as env from '../environments/environment'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),
@@ -24,16 +24,16 @@ function sendEmailWithVerificationCode(email) {
 
   return (
     axios
-    .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
-    //.then(handleResponse)
-    .then(data => {
-      console.log('sendEmailWithVerificationCode', data)
-      return data
-    })
-    .catch(err => {
-      // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-      return { errorCode: err.status, errorMessage: err.message }
-    })
+      .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('sendEmailWithVerificationCode', data)
+        return data
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return { errorCode: err.status, errorMessage: err.message }
+      })
   )
 }
 

@@ -6,6 +6,8 @@ import moment from 'moment'
 import get from 'lodash.get'
 
 const apiURL = 'https://api.csuite.health'
+import * as env from '../environments/environment'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),
@@ -163,7 +165,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
   const currentUser = authenticationService?.currentUserValue
   console.log('currentUser', currentUser)
   var myHeaders = new Headers()
-  myHeaders.append('x-access-token', `${currentUser?.data?.token}`)
+  myHeaders.append('x-access-token', `${currentUser.data.token}`)
   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
 
   var urlencoded = new URLSearchParams()
@@ -177,7 +179,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
     redirect: 'follow',
   }
 
-  fetch(`${apiURL}/files/upload`, requestOptions)
+  return fetch(`${apiURL}/files/upload`, requestOptions)
     .then(response => response.text())
     .then(result => {
       var response = JSON.parse(result)
@@ -200,20 +202,78 @@ async function uploadCertificate(bodyMsg, certificateType) {
         }
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
-      if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
-      else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
-      else if (certificateType == 'EULAAgreement') {
-        const planType = localStorage?.getItem('plan_type')
-        console.log('planType', planType)
-        if (planType === 'F') history.push('/terms-condition')
-        else history.push('/bank-info')
-      } else history.push('/terms-condition')
+      return updatedFacility
+      // if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
+      // else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
+      // else if (certificateType == 'EULAAgreement') {
+      //   const planType = localStorage?.getItem('plan_type')
+      //   console.log('planType', planType)
+      //   if (planType === 'F') history.push('/terms-condition')
+      //   else history.push('/bank-info')
+      // } else history.push('/terms-condition')
     })
     .catch(error => {
       console.log('error', error)
       return error
     })
 }
+
+// async function uploadCertificate(bodyMsg, certificateType) {
+//   console.log('axiosConfig', axiosConfig)
+//   const currentUser = authenticationService?.currentUserValue
+//   console.log('currentUser', currentUser)
+//   var myHeaders = new Headers()
+//   myHeaders.append('x-access-token', `${currentUser?.data?.token}`)
+//   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+
+//   var urlencoded = new URLSearchParams()
+//   urlencoded.append('name', bodyMsg.name)
+//   urlencoded.append('type', bodyMsg.type)
+
+//   var requestOptions = {
+//     method: 'POST',
+//     headers: myHeaders,
+//     body: urlencoded,
+//     redirect: 'follow',
+//   }
+
+//   fetch(`${apiURL}/files/upload`, requestOptions)
+//     .then(response => response.text())
+//     .then(result => {
+//       var response = JSON.parse(result)
+//       var facility = JSON.parse(localStorage.getItem('facility'))
+
+//       if (certificateType == 'ServiceLevelAgreement') {
+//         var updatedFacility = {
+//           ...facility,
+//           business_certificate: response.data,
+//         }
+//       } else if (certificateType == 'SAASAgreement') {
+//         var updatedFacility = {
+//           ...facility,
+//           saas_certificate: response.data,
+//         }
+//       } else {
+//         var updatedFacility = {
+//           ...facility,
+//           eula_certificate: response.data,
+//         }
+//       }
+//       localStorage.setItem('facility', JSON.stringify(updatedFacility))
+//       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
+//       else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
+//       else if (certificateType == 'EULAAgreement') {
+//         const planType = localStorage?.getItem('plan_type')
+//         console.log('planType', planType)
+//         if (planType === 'F') history.push('/terms-condition')
+//         else history.push('/bank-info')
+//       } else history.push('/terms-condition')
+//     })
+//     .catch(error => {
+//       console.log('error', error)
+//       return error
+//     })
+// }
 
 // console.log(updatedFacility)
 // await axios
