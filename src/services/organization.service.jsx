@@ -5,7 +5,6 @@ import history from '../history'
 import moment from 'moment'
 import get from 'lodash.get'
 
-const apiURL = 'https://api.csuite.health'
 import * as env from '../environments/environment'
 const apiURL = env.environment.apiBaseUrl
 
