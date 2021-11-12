@@ -84,6 +84,8 @@ const NavBarComponent = () => {
       authenticationService.logout()
       localStorage.removeItem('IsShow2FAPopup')
       history.push('/signin')
+    } else if (action.toLowerCase() === 'profile'){
+      history.push('/settings')
     }
   }
 
@@ -157,15 +159,15 @@ const NavBarComponent = () => {
             <div className="nb__profile__menu">
               <MenuItem onClick={e => handleClose('Profile')} className="nb__profile__menu__option" disableRipple>
                 <PersonRoundedIcon />
-                Profile
+                Profile Settings
               </MenuItem>
             </div>
-            <div className="nb__profile__menu">
+            {/* <div className="nb__profile__menu">
               <MenuItem onClick={e => handleClose('ChangePWD')} className="nb__profile__menu__option" disableRipple>
                 <VpnKeyRoundedIcon />
                 Change Password
               </MenuItem>
-            </div>
+            </div> */}
             <Divider sx={{ my: 0.5 }} />
             <div className="nb__profile__menu">
               <MenuItem onClick={e => handleClose('Logout')} className="nb__profile__menu__option" disableRipple>

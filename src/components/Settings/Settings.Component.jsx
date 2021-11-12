@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel.Component';
 import PersonalInfo from './PersonalInfo.component'
+import ProfessionalInfo from './ProfessionalInfo.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 
@@ -50,6 +51,10 @@ const OrganizationViewComponent = () => {
     const history = useHistory()
     const [value, setValue] = React.useState('0');
 
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
 
 
@@ -112,6 +117,7 @@ const OrganizationViewComponent = () => {
                 value={value}
                 // textColor="secondary"
                 // indicatorColor="secondary"
+                onChange={handleChange}
                 aria-label="secondary tabs example"
                 inkBarStyle={{ background: 'red' }}
                 TabIndicatorProps={{ className: classes.indicator }}
@@ -126,7 +132,7 @@ const OrganizationViewComponent = () => {
                 <PersonalInfo />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <PersonalInfo />
+                <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <PersonalInfo />

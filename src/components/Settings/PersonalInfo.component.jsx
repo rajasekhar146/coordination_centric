@@ -139,7 +139,6 @@ const PersonalInfo = props => {
                         })}
                         margin="normal"
                         InputProps={{
-
                             className: classes.input,
                         }}
                     />

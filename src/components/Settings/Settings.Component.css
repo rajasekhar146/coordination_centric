@@ -126,6 +126,23 @@
 .od_dropzone p {
     padding: 15px;
 }
+.od_dropzone_prof {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    border-width: 2px;
+    border-radius: 5px;
+    border: 1px solid #E0DADA;
+    background-color: #FFFFFF;
+    text-align: center;
+}
+.od_dropzone_prof section {
+    height: 100%;
+    width: 100%;
+}
+.od_dropzone_prof p {
+    padding: 15px;
+}
 .io_drop {
     display: flex;
     flex-direction: row-reverse;
@@ -200,4 +217,131 @@
     font-size: 14px;
     line-height: 20px;
     color: #667085;
+}
+.mb_25 {
+    margin-bottom: 25px;
+}
+.upload_icon {
+    position: absolute;
+    left: 8px;
+    top: 12px;
+}
+.od_dropzone_progress {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    border-width: 2px;
+    border-radius: 5px;
+    border: 1px solid #E0DADA;
+    background-color: #FFFFFF;
+}
+.io_filename {
+    position: absolute;
+    top: 14px;
+    left: 60px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #344054;
+}
+.io_filesize {
+    position: absolute;
+    top: 35px;
+    left: 60px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #667085
+}
+.io_progressbar {
+    width: 65%;
+    position: absolute;
+    top: 67px;
+    left: 60px;
+}
+.css-eglki6-MuiLinearProgress-root {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    height: 8px !important;
+    z-index: 0;
+    background-color: #F9F5FF !important;
+    border-radius: 4px;
+}
+.css-5xe99f-MuiLinearProgress-bar1 {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    height: 8px !important;
+    -webkit-transition: -webkit-transform .4s linear;
+    transition: transform .4s linear;
+    transform-origin: left;
+    background-color: #E42346 !important;
+    border-radius: 4px;
+}
+.io_p_value {
+    position: absolute;
+    right: 65px;
+    bottom: 22px;
+}
+.io_delete {
+    position: absolute;
+    right: 38px;
+}
+.io_link {
+    padding: 6px 10px 6px 10px;
+    margin-right: 10px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+.io_day {
+    width: 54px;
+    height: 54px;
+    right: 291.72px;
+    bottom: 0.61px;
+    background: #E42346;
+    border-radius: 5px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 24px;
+    color: #FFFFFF;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.io_availablity{
+    display: flex;
+    align-items: center;
+}
+.io_flex {
+    display: flex;
+}
+.io_timelabel{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.078458px;
+    color: #344054;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.io_times {
+    display: flex;
 }
