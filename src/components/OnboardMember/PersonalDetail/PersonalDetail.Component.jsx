@@ -11,12 +11,27 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import Button from '@mui/material/Button'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
-
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
 import { useForm } from 'react-hook-form'
 import { commonService } from '../../../services'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCountries } from '../../../redux/actions/commonActions'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
+import Guardian from '../../../pages/guardian'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
 
 const genderList = [
   {
@@ -38,11 +53,11 @@ const PersonalDetailComponent = () => {
   const [states, setStates] = useState(null)
   const dispatch = useDispatch()
   const member = useSelector(state => state.newMember)
-  const [gender, setGender] = useState('')
+  // const [gender, setGender] = useState('')
   const [dateOfBirth, setDOB] = useState('')
-  const [country, setCountry] = useState('')
-  const [state, setState] = useState('')
-
+  // const [country, setCountry] = useState('')
+  // const [state, setState] = useState('')
+  const [IsUnder19, setIsUnder19] = React.useState(false)
   var {
     register,
     setValue,
@@ -51,7 +66,7 @@ const PersonalDetailComponent = () => {
   } = useForm()
 
   const handleCountryChange = event => {
-    setCountry(event.target.value)
+    // setCountry(event.target.value)
     fetchStates(event.target.value)
   }
 
@@ -69,14 +84,16 @@ const PersonalDetailComponent = () => {
 
   const onSubmit = data => {
     data.dob = dateOfBirth
-    data.gender = gender
-    data.country = country
-    data.state = state
+    // data.gender = gender
+    // data.country = country
+    // data.state = state
     var memberData = { ...member.member, ...data }
     console.log('submit data >> ', memberData)
-    
+
     dispatch(newMember(memberData))
-    history.push('/members/profile-setup')
+    if (1 === 2) {
+      history.push('/members/profile-setup')
+    } else setIsUnder19(true)
   }
 
   const fetchCountries = async () => {
@@ -106,13 +123,17 @@ const PersonalDetailComponent = () => {
       // setValue('state', newMemberDetail.state)
       setValue('city', newMemberDetail.city)
       setValue('postalCode', newMemberDetail.postalCode)
-      setGender(newMemberDetail.gender)
+      setValue('gender', newMemberDetail.gender)
       setDOB(newMemberDetail.dob)
-      setCountry(newMemberDetail.country)
-      setState(newMemberDetail.state)
+      // setCountry('country', newMemberDetail.country)
+      setValue('state', newMemberDetail.state)
       fetchStates(newMemberDetail.country)
     }
   }, [])
+
+  const handleCloseGuardianScreen = () => {
+    setIsUnder19(!IsUnder19)
+  }
 
   return (
     <div className="pdc__main__div">
@@ -139,7 +160,7 @@ const PersonalDetailComponent = () => {
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
-                {errors.firstName && <p className="ac__required">{errors.firstName.message}</p>}
+                {errors.first_name && <p className="ac__required">{errors.first_name.message}</p>}
               </div>
 
               <div className="pdc__column">
@@ -151,7 +172,7 @@ const PersonalDetailComponent = () => {
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
-                {errors.middleName && <p className="ac__required">{errors.middleName.message}</p>}
+                {errors.middle_name && <p className="ac__required">{errors.middle_name.message}</p>}
               </div>
 
               <div className="pdc__column">
@@ -163,7 +184,7 @@ const PersonalDetailComponent = () => {
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
-                {errors.lastName && <p className="ac__required">{errors.lastName.message}</p>}
+                {errors.last_name && <p className="ac__required">{errors.last_name.message}</p>}
               </div>
             </div>
             <div className="pdc__row">
@@ -203,11 +224,10 @@ const PersonalDetailComponent = () => {
                     maxDate={currentDate}
                     onChange={newValue => {
                       setDOB(newValue)
-                    }}                   
-                    renderInput={params => <TextField  {...params} />}
+                    }}
+                    renderInput={params => <TextField {...params} />}
                     InputProps={{ className: 'pdc__date__field' }}
                   />
-               
                 </LocalizationProvider>
               </div>
 
@@ -236,10 +256,12 @@ const PersonalDetailComponent = () => {
                 </div>
                 <FormControl sx={{ m: 1, minWidth: 250 }}>
                   <Select
-                    value={gender}
-                    
+                    //value={gender}
+                    {...register('gender', {
+                      required: 'Gender is required',
+                      onChange: e => setValue('gender', e.target.value),
+                    })}
                     inputProps={{ 'aria-label': 'Without label' }}
-                    onChange={e => setGender(e.target.value)}
                   >
                     <MenuItem value="">
                       <em>Select an option</em>
@@ -271,9 +293,12 @@ const PersonalDetailComponent = () => {
               <div className="pdc__column">
                 <div className="pdc__label">Country</div>
                 <FormControl sx={{ m: 1, minWidth: 210 }}>
-                  <Select                    
-                    value={country}                    
-                    onChange={e => handleCountryChange(e)}
+                  <Select
+                    // value={country}
+                    // onChange={e => handleCountryChange(e)}
+                    {...register('country', {
+                      onChange: e => setValue('country', e.target.value),
+                    })}
                     inputProps={{ 'aria-label': 'Without label' }}
                     key="country1"
                     inputProps={{ className: 'pdc__dropdown' }}
@@ -296,8 +321,11 @@ const PersonalDetailComponent = () => {
                 <FormControl sx={{ m: 1, minWidth: 210 }}>
                   <Select
                     key="state1"
-                    value={state}                    
-                    onChange={e => setState(e.target.value)}
+                    // value={state}
+                    // onChange={e => setState(e.target.value)}
+                    {...register('state', {
+                      onChange: e => setValue('state', e.target.value),
+                    })}
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="">
@@ -331,6 +359,12 @@ const PersonalDetailComponent = () => {
               </Button>
             </div>
           </div>
+
+          <Modal open={IsUnder19} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={style}>
+              <Guardian closeScreen={handleCloseGuardianScreen} />
+            </Box>
+          </Modal>
         </div>
       </form>
     </div>

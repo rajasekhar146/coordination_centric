@@ -10,7 +10,7 @@ import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRound
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
-import {memberService} from '../../../services'
+import { memberService } from '../../../services'
 
 const ProfileSetupComponent = () => {
   const defaultSrc =
@@ -36,14 +36,20 @@ const ProfileSetupComponent = () => {
   }, [])
 
   const onSubmit = async data => {
-    
     var memberData = member.member
     memberData.bio = data.bio
     dispatch(newMember(memberData))
     console.log('save member data >> ', memberData)
-    var response = await memberService.saveMember(memberData).catch(err => {console.log(err)})
+    var response = await memberService.saveMember(memberData).catch(err => {
+      console.log(err)
+    })
     dispatch(resetMember({}))
-    console.log(response)
+
+    if (response.status === 200) {
+      history.push('/signin')
+    } else {
+      console.log(response)
+    }
   }
 
   return (

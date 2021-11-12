@@ -13,17 +13,17 @@ export const memberService = {
 }
 
 function saveMember(member) {
-    return (
-        axios
-          .post(`${apiURL}/users/registerMember`, member, axiosConfig)
-          //.then(handleResponse)
-          .then(data => {
-            console.log('saveMember', data)
-            return data
-          })
-          .catch(err => {
-            // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-            return { errorCode: err.status, errorMessage: err.message }
-          })
-      )
+  return (
+    axios
+      .post(`${apiURL}/users/registerMember`, member, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('saveMember', data)
+        return data
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return { errorCode: err.status, errorMessage: err.message }
+      })
+  )
 }

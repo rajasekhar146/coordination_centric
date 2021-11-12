@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 // import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -20,6 +20,10 @@ import FormControl from '@mui/material/FormControl'
 import { get } from 'lodash'
 import Alert from '../../Alert/Alert.component'
 import SigninStore from '../../../stores/signinstore'
+import { isUpperCase } from 'is-upper-case'
+import { isLowerCase } from 'is-lower-case'
+import CheckedIcon from '../../../assets/icons/checked.png' //'../../assets/icons/checked.png'
+import UncheckedIcon from '../../../assets/icons/unchecked.png'
 
 const MemberSignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -30,6 +34,16 @@ const MemberSignInComponent = () => {
   const [IsValidPassword, setIsValidPassword] = useState(true)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [confirmPassword, setConfirmPassword] = React.useState('')
+
+  const [validations, setValidations] = useState({
+    passwordLength: false,
+    symbol: false,
+    number: false,
+    capital: false,
+    small: false,
+  })
 
   const handleCloseFlash = () => {
     setOpenFlash(false)
@@ -40,14 +54,62 @@ const MemberSignInComponent = () => {
     password: '',
   }
 
+  const handlePassword = pwd => {
+    setPassword(pwd)
+    const validationsObj = {
+      passwordLength: false,
+      symbol: false,
+      number: false,
+      capital: false,
+      small: false,
+    }
+
+    if (pwd) {
+      if (pwd.length >= 8) {
+        validationsObj.passwordLength = true
+      }
+      pwd.split('').forEach(val => {
+        const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g
+        if (!isNaN(val)) {
+          validationsObj.number = true
+        } else if (isLowerCase(val)) {
+          validationsObj.small = true
+        } else if (isUpperCase(val)) {
+          validationsObj.capital = true
+        } else if (regex.test(val)) {
+          validationsObj.symbol = true
+        }
+      })
+      setValidations({ ...validationsObj })
+    } else {
+      setValidations(validationsObj)
+    }
+    // return () => {
+    //     cleanup
+    // }
+  }
+
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors },
     watch,
   } = useForm()
 
   console.log(errors)
+
+  const fPassword = register('password', { required: true })
+  const onChangePassword = fPassword.onChange
+
+  fPassword.onChange = e => {
+    console.log('ddsf')
+    const res = onChangePassword(e)
+    const value = e.target.value
+    console.log('OnChnage', value)
+    return res
+  }
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
@@ -61,7 +123,8 @@ const MemberSignInComponent = () => {
     event.preventDefault()
   }
 
-  const handleChange = prop => event => {
+  const handleChange = () => {
+    console.log('Change')
     //setValues({ ...values, [prop]: event.target.value });
   }
 
@@ -120,9 +183,9 @@ const MemberSignInComponent = () => {
                   className="ms__text__box"
                   {...register('password', {
                     required: 'Password is required.',
+                    onChange: e => handlePassword(e.target.value),
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  onChange={handleChange()}
                   placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
@@ -140,6 +203,73 @@ const MemberSignInComponent = () => {
               </FormControl>
               {errors.password && <p className="ac__required">Password is required.</p>}
               {!IsValidPassword && <p className="ac__required">{errMsg}</p>}
+
+              <div>
+                <label className="si_password_req">Password Requirements</label>
+                <ul className="si_list_style">
+                  <li className={validations.passwordLength ? 'si_active' : 'si_nonactive'}>
+                    {validations.passwordLength ? (
+                      <span className="check_icon">
+                        <img width="16" src={CheckedIcon} alt="key" />
+                      </span>
+                    ) : (
+                      <span className="check_icon">
+                        <img width="16" src={UncheckedIcon} alt="key" />
+                      </span>
+                    )}
+                    Minimum of 8 digits
+                  </li>
+                  <li className={validations.capital ? 'si_active' : 'si_nonactive'}>
+                    {validations.capital ? (
+                      <span className="check_icon">
+                        <img width="16" src={CheckedIcon} alt="key" />
+                      </span>
+                    ) : (
+                      <span className="check_icon">
+                        <img width="16" src={UncheckedIcon} alt="key" />
+                      </span>
+                    )}
+                    At least 1 upper case letters (A - Z)
+                  </li>
+                  <li className={validations.small ? 'si_active' : 'si_nonactive'}>
+                    {validations.small ? (
+                      <span className="check_icon">
+                        <img width="16" src={CheckedIcon} alt="key" />
+                      </span>
+                    ) : (
+                      <span className="check_icon">
+                        <img width="16" src={UncheckedIcon} alt="key" />
+                      </span>
+                    )}
+                    At least 1 lower case letters (a - z)
+                  </li>
+                  <li className={validations.number ? 'si_active' : 'si_nonactive'}>
+                    {validations.number ? (
+                      <span className="check_icon">
+                        <img width="16" src={CheckedIcon} alt="key" />
+                      </span>
+                    ) : (
+                      <span className="check_icon">
+                        <img width="16" src={UncheckedIcon} alt="key" />
+                      </span>
+                    )}
+                    At least 1 number (0 - 9)
+                  </li>
+
+                  <li className={validations.symbol ? 'si_active' : 'si_nonactive'}>
+                    {validations.symbol ? (
+                      <span className="check_icon">
+                        <img width="16" src={CheckedIcon} alt="key" />
+                      </span>
+                    ) : (
+                      <span className="check_icon">
+                        <img width="16" src={UncheckedIcon} alt="key" />
+                      </span>
+                    )}
+                    At least 1 non-alphanumeric symbol (e.g ‘@#$%^&*’)
+                  </li>
+                </ul>
+              </div>
             </div>
             <div className="ms__right__label">
               Confirm password &nbsp;<span className="ac__required">*</span>
@@ -148,12 +278,11 @@ const MemberSignInComponent = () => {
               <FormControl>
                 <OutlinedInput
                   className="ms__text__box"
-                  {...register('password', {
+                  {...register('confirmPassword', {
                     required: 'Password is required.',
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  onChange={handleChange()}
-                  placeholder="Password"
+                  placeholder="Confirm Password"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -181,10 +310,7 @@ const MemberSignInComponent = () => {
             </div>
             <div>
               {' '}
-              <Button className="ms__login__btn" onClick={handleSubmitClick}>
-                {' '}
-                Register Account{' '}
-              </Button>{' '}
+              <Button onClick={handleSubmitClick}> Register Account </Button>{' '}
             </div>
           </div>
         </div>
