@@ -176,7 +176,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
     redirect: 'follow',
   }
 
-  return fetch(`${apiURL}/files/upload`, requestOptions)
+  return await fetch(`${apiURL}/files/upload`, requestOptions)
     .then(response => response.text())
     .then(result => {
       var response = JSON.parse(result)
@@ -199,15 +199,15 @@ async function uploadCertificate(bodyMsg, certificateType) {
         }
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
-      return updatedFacility
-      // if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
-      // else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
-      // else if (certificateType == 'EULAAgreement') {
-      //   const planType = localStorage?.getItem('plan_type')
-      //   console.log('planType', planType)
-      //   if (planType === 'F') history.push('/terms-condition')
-      //   else history.push('/bank-info')
-      // } else history.push('/terms-condition')
+      
+      if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
+      else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
+      else if (certificateType == 'EULAAgreement') {
+        const planType = localStorage?.getItem('plan_type')
+        console.log('planType', planType)
+        if (planType === 'F') history.push('/terms-condition')
+        else history.push('/bank-info')
+      } else history.push('/terms-condition')
     })
     .catch(error => {
       console.log('error', error)
