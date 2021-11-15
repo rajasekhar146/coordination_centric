@@ -12,7 +12,9 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import UploadFile from './UploadFile.Component'
+import AvailablityItem from './AvailablityItem.Component.jsx'
 import ToggleOnIcon from '../../assets/icons/toggle_on.png'
+import ToggleOnIcOff from '../../assets/icons/toggle_off.png'
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
+
 const PersonalInfo = props => {
     const classes = useStyles()
     const [profilepic, setProfilePic] = useState('')
@@ -49,6 +52,7 @@ const PersonalInfo = props => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [isSpeciality, setIsSpeciality] = useState(false)
     const [speciality, setSpeciality] = useState([])
+    const [toggleOn, setToggleOn] = useState(true);
 
 
     const ColoredLine = ({ color }) => (
@@ -105,6 +109,7 @@ const PersonalInfo = props => {
             }} className="io_link">{value}</label>
         )
     }
+
 
 
     return (
@@ -217,637 +222,19 @@ const PersonalInfo = props => {
                     Availability
                 </div>
                 <div className="od_input_p">
-                    <div className="io_availablity mb_25">
-                        <div className="io_availablity mb_25">
-                            <div >
-                                <img
-                                    src={ToggleOnIcon}
-                                    alt="upload" />
-                            </div>
 
-                            <div className="io_day">
-                                <label>Mon</label>
-                            </div>
-                        </div>
-                        <div className="io_morning_time">
-                            <div className="io_timelabel">
-                                Morning
-                                <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                    <TextField
-                                        {...register('email', {
-                                            required: 'Email is required.',
+                    <AvailablityItem day="Mon" />
+                    <AvailablityItem day="Tue" />
+                    <AvailablityItem day="Wed" />
+                    <AvailablityItem day="Thu" />
+                    <AvailablityItem day="Fri" />
+                    <AvailablityItem day="Sat" />
+                    <AvailablityItem day="Sun" />
 
-                                        })}
-                                        type="time"
-                                        margin="normal"
-                                        defaultValue="07:30"
-                                        InputProps={{
-
-                                            className: classes.timeInput,
-                                        }}
-                                    />
-                                    <label className="io_from">To:</label>
-                                    <TextField
-                                        {...register('email', {
-                                            required: 'Email is required.',
-
-                                        })}
-                                        type="time"
-                                        margin="normal"
-                                        defaultValue="07:30"
-                                        InputProps={{
-
-                                            className: classes.timeInput,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="io_morning_time">
-                            <div className="io_timelabel">
-                                <span>
-                                    Afternoon
-                                </span>
-
-                                <div className="io_times">
-                                <label className="io_from">From:</label>
-                                    <TextField
-                                        {...register('email', {
-                                            required: 'Email is required.',
-
-                                        })}
-                                        type="time"
-                                        margin="normal"
-                                        defaultValue="07:30"
-                                        InputProps={{
-
-                                            className: classes.timeInput,
-                                        }}
-                                    />
-                                    <label className="io_from">To:</label>
-                                    <TextField
-                                        {...register('email', {
-                                            required: 'Email is required.',
-
-                                        })}
-                                        type="time"
-                                        margin="normal"
-                                        defaultValue="07:30"
-                                        InputProps={{
-
-                                            className: classes.timeInput,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Tue</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                        <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                        <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Wed</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                        <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Thu</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Fri</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Sat</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div className="io_availablity mb_25">
-                        <div className="io_flex">
-                            <div className="io_availablity mb_25">
-                                <div >
-                                    <img
-                                        src={ToggleOnIcon}
-                                        alt="upload" />
-                                </div>
-
-                                <div className="io_day">
-                                    <label>Sun</label>
-                                </div>
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    Morning
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-                                                disableUnderline: true,
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="io_morning_time">
-                                <div className="io_timelabel">
-                                    <span>
-                                        Afternoon
-                                    </span>
-
-                                    <div className="io_times">
-                                    <label className="io_from">From:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                         <label className="io_from">To:</label>
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
+
             </div>
+
             <ColoredLine color="#E4E7EC" />
             <div className="od__row_p">
                 <div className="od_label_p" >
@@ -856,9 +243,24 @@ const PersonalInfo = props => {
                 <div >
                     <div className="io_availablity mb_25">
                         <div >
-                            <img
-                                src={ToggleOnIcon}
-                                alt="upload" />
+                            {toggleOn ?
+                                <img
+                                    className="toggle_icon"
+                                    onClick={() => {
+                                        setToggleOn(false)
+                                    }}
+                                    src={ToggleOnIcon}
+                                    alt="upload" />
+                                :
+                                <img
+                                    className="toggle_icon"
+                                    onClick={() => {
+                                        setToggleOn(true)
+                                    }}
+                                    src={ToggleOnIcOff}
+                                    alt="upload" />
+                            }
+
                         </div>
                         <div className="io_services">
                             Marketplace
@@ -868,14 +270,28 @@ const PersonalInfo = props => {
                     </div>
                     <div className="io_availablity mb_25">
                         <div >
-                            <img
-                                src={ToggleOnIcon}
-                                alt="upload" />
+                            {toggleOn ?
+                                <img
+                                    className="toggle_icon"
+                                    onClick={() => {
+                                        setToggleOn(false)
+                                    }}
+                                    src={ToggleOnIcon}
+                                    alt="upload" />
+                                :
+                                <img
+                                    className="toggle_icon"
+                                    onClick={() => {
+                                        setToggleOn(true)
+                                    }}
+                                    src={ToggleOnIcOff}
+                                    alt="upload" />
+                            }
+
                         </div>
                         <div className="io_services">
-                            Marketplace
+                            Presential Consultation
                         </div>
-
                     </div>
 
                 </div>

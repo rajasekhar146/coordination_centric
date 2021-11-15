@@ -382,3 +382,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .od_label_p_av {
     width: 27%;
 }
+.toggle_icon {
+    cursor: pointer;
+}

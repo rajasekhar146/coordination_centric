@@ -22,12 +22,8 @@ const columns = [
 
 const colorcodes = {
     invited: '#2E90FA',
-    pending_verification: '#F79009',
     active: '#12B76A',
-    pending_acceptance: '#7A5AF8',
-    cancelled: '#757500',
     inactive: '#A0A4A8',
-    declined: '#B42318',
 }
 
 const MembersComponent = props => {
