@@ -22,6 +22,7 @@ export const organizationService = {
   resendInvite,
   cancelIvitation,
   validateToken,
+  registerMember,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -319,6 +320,22 @@ function validateToken(token) {
   return (
     axios
       .post(`${apiURL}/facilityList/validateInviteToken`, bobyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function registerMember(data) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/users/registerMember`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)

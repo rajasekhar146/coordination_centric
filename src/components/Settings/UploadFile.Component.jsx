@@ -42,7 +42,7 @@ const UploadFile = (props) => {
             setImgUrl(URL.createObjectURL(file))
         }
         reader.readAsArrayBuffer(file)
-        memberService.uploadCertificate(formData, (event) => {
+        memberService.uploadCertificate(formData, 'doctor', (event) => {
             setProgress(Math.round((100 * event.loaded) / event.total));
         }).then((response) => {
             setMessage(response.data.message);

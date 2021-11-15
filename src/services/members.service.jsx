@@ -30,12 +30,11 @@ function inviteMember(data) {
     )
 }
 
-function uploadCertificate(formData, onUploadProgress) {
+function uploadCertificate(formData, role, onUploadProgress) {
     let axiosConfig = {
         headers: authHeader(),
         onUploadProgress: onUploadProgress
     }
-    const role = 'doctor';
     return (
         axios
             .post(`${apiURL}/files/uploadCertificate/${role}`, formData, axiosConfig)
@@ -47,3 +46,22 @@ function uploadCertificate(formData, onUploadProgress) {
 }
 
 
+// function uploadMemberPic(role, file, source) {
+//     const bodyMsg = {
+//         image: file
+//     }
+//     var formdata = new FormData();
+//     //formdata.append("image", fileInput.files[0], "/C:/Users/LENOVO/Pictures/Screenshots/Screenshot (6).png");
+//     formdata.append("image", file, source);
+
+//     var requestOptions = {
+//         method: 'POST',
+//         body: formdata,
+//         redirect: 'follow'
+//     };
+
+//     fetch("https://api.csuite.health/files/uploadCertificate/doctor", requestOptions)
+//         .then(response => response.text())
+//         .then(result => console.log('doctor', JSON.parse(result)))
+//         .catch(error => console.log('error', error))
+// }

@@ -99,7 +99,7 @@ const PersonalInfo = props => {
                             })}
                             type="time"
                             margin="normal"
-                            defaultValue="07:30"
+                            defaultValue="00:00"
                             InputProps={{
                                 className: classes.timeInput,
                             }}
@@ -112,7 +112,7 @@ const PersonalInfo = props => {
                             })}
                             type="time"
                             margin="normal"
-                            defaultValue="07:30"
+                            defaultValue="00:00"
                             InputProps={{
                                 className: classes.timeInput,
                             }}
