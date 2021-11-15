@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     timeInput: {
         background: "#FFFFFF",
         height: '34px',
-        width: '90%'
+        width: '100%'
     }
 }))
 
@@ -157,7 +157,8 @@ const PersonalInfo = props => {
                     <div className="od_dropzone_prof mb_25">
                         <Dropzone
                             onDrop={handleDrop}
-                            accept="image/*"
+                            accept="image/jpeg, image/png, application/pdf, .pdf, .docx"
+                            maxSize={524288000}
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <section>
@@ -208,17 +209,15 @@ const PersonalInfo = props => {
                         ))
                         }
                     </div>
-
                 </div>
-
             </div>
             <ColoredLine color="#E4E7EC" />
-            <div className="od__row_p">
-                <div className="od_label_p" >
+            <div className="od__row_p_availablity">
+                <div className="od_label_p_av" >
                     Availability
                 </div>
                 <div className="od_input_p">
-                    <div className="io_flex">
+                    <div className="io_availablity mb_25">
                         <div className="io_availablity mb_25">
                             <div >
                                 <img
@@ -234,33 +233,35 @@ const PersonalInfo = props => {
                             <div className="io_timelabel">
                                 Morning
                                 <div className="io_times">
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
+                                    <label className="io_from">From:</label>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email is required.',
 
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
+                                        })}
+                                        type="time"
+                                        margin="normal"
+                                        defaultValue="07:30"
+                                        InputProps={{
 
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
+                                            className: classes.timeInput,
+                                        }}
+                                    />
+                                    <label className="io_from">To:</label>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email is required.',
 
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
+                                        })}
+                                        type="time"
+                                        margin="normal"
+                                        defaultValue="07:30"
+                                        InputProps={{
 
-                                                className: classes.timeInput,
-                                            }}
-                                        /> 
-                                    </div>
+                                            className: classes.timeInput,
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                         </div>
@@ -271,33 +272,35 @@ const PersonalInfo = props => {
                                 </span>
 
                                 <div className="io_times">
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
+                                <label className="io_from">From:</label>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email is required.',
 
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
+                                        })}
+                                        type="time"
+                                        margin="normal"
+                                        defaultValue="07:30"
+                                        InputProps={{
 
-                                                className: classes.timeInput,
-                                            }}
-                                        />
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
+                                            className: classes.timeInput,
+                                        }}
+                                    />
+                                    <label className="io_from">To:</label>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email is required.',
 
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
+                                        })}
+                                        type="time"
+                                        margin="normal"
+                                        defaultValue="07:30"
+                                        InputProps={{
 
-                                                className: classes.timeInput,
-                                            }}
-                                        /> 
-                                    </div>
+                                            className: classes.timeInput,
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                         </div>
@@ -320,6 +323,7 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -333,6 +337,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                        <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -345,7 +350,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -357,6 +362,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -370,6 +376,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                        <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -382,7 +389,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -406,6 +413,7 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -419,6 +427,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                        <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -431,7 +440,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -443,6 +452,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -456,6 +466,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -468,7 +479,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -492,6 +503,7 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -505,6 +517,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -517,7 +530,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -529,6 +542,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -542,6 +556,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -554,7 +569,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -578,6 +593,7 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -591,6 +607,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -603,7 +620,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -615,6 +632,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -628,6 +646,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -640,7 +659,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -664,6 +683,7 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -677,6 +697,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -689,7 +710,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -701,6 +722,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -714,6 +736,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -726,7 +749,7 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
@@ -750,6 +773,21 @@ const PersonalInfo = props => {
                                 <div className="io_timelabel">
                                     Morning
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
+                                        <TextField
+                                            {...register('email', {
+                                                required: 'Email is required.',
+
+                                            })}
+                                            type="time"
+                                            margin="normal"
+                                            defaultValue="07:30"
+                                            InputProps={{
+                                                disableUnderline: true,
+                                                className: classes.timeInput,
+                                            }}
+                                        />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -763,19 +801,6 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
-                                        <TextField
-                                            {...register('email', {
-                                                required: 'Email is required.',
-
-                                            })}
-                                            type="time"
-                                            margin="normal"
-                                            defaultValue="07:30"
-                                            InputProps={{
-
-                                                className: classes.timeInput,
-                                            }}
-                                        /> 
                                     </div>
                                 </div>
 
@@ -787,6 +812,7 @@ const PersonalInfo = props => {
                                     </span>
 
                                     <div className="io_times">
+                                    <label className="io_from">From:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -800,6 +826,7 @@ const PersonalInfo = props => {
                                                 className: classes.timeInput,
                                             }}
                                         />
+                                         <label className="io_from">To:</label>
                                         <TextField
                                             {...register('email', {
                                                 required: 'Email is required.',
@@ -812,13 +839,45 @@ const PersonalInfo = props => {
 
                                                 className: classes.timeInput,
                                             }}
-                                        /> 
+                                        />
                                     </div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <ColoredLine color="#E4E7EC" />
+            <div className="od__row_p">
+                <div className="od_label_p" >
+                    What services?
+                </div>
+                <div >
+                    <div className="io_availablity mb_25">
+                        <div >
+                            <img
+                                src={ToggleOnIcon}
+                                alt="upload" />
+                        </div>
+                        <div className="io_services">
+                            Marketplace
+                        </div>
+
+
+                    </div>
+                    <div className="io_availablity mb_25">
+                        <div >
+                            <img
+                                src={ToggleOnIcon}
+                                alt="upload" />
+                        </div>
+                        <div className="io_services">
+                            Marketplace
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
             <ColoredLine color="#E4E7EC" />
