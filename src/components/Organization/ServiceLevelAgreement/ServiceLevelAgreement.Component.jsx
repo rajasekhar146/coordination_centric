@@ -22,14 +22,16 @@ import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
-import useStore from '../../../hooks/use-store';
+import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
+import { useSelector, useDispatch } from 'react-redux'
+import { newOrganization } from '../../../redux/actions/organizationActions'
 
 const useStyles = makeStyles(theme => ({
   datefield: {
     top: '22px',
-    borderBottom: "1px solid #000000"
-  }
+    borderBottom: '1px solid #000000',
+  },
 }))
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
@@ -43,11 +45,9 @@ const ServiceLevelAgreementComponent = props => {
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
 
-  const [signinStoreData] = useStore(SigninStore);
+  const [signinStoreData] = useStore(SigninStore)
 
-  const {
-    organisationName,
-  } = signinStoreData;
+  const { organisationName } = signinStoreData
 
   var sigPad = {}
 
@@ -55,7 +55,10 @@ const ServiceLevelAgreementComponent = props => {
 
   const [activeStep, setActiveStep] = React.useState(1)
 
-  const handleNext = () => {
+  const newOrg = useSelector(state => state.newOrganization)
+  const dispatch = useDispatch()
+
+  const handleNext = async () => {
     console.log('Date', sigPad.isEmpty())
     setDateEntered(value != null)
     setSigned(!sigPad.isEmpty())
@@ -71,7 +74,7 @@ const ServiceLevelAgreementComponent = props => {
           type: 'certificate',
         }
         organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
-
+        //console.log('updateFacility', updateFacility)
         // .then(data => {
         //   console.log('uploadFile >> response', data)
         //   var updatedFacility = {
@@ -100,11 +103,9 @@ const ServiceLevelAgreementComponent = props => {
     var inviteToken = nfacility?.inviteToken
     var invitedBy = nfacility?.invited_by
 
-    if(referredBy === undefined || referredBy === null)
-      referredBy = 0
-    
-    if(invitedBy === undefined || invitedBy === null)  
-      invitedBy = 0
+    if (referredBy === undefined || referredBy === null) referredBy = 0
+
+    if (invitedBy === undefined || invitedBy === null) invitedBy = 0
 
     history.push(`/acceptance-criteria/${inviteToken}/${referredBy}/${invitedBy}`)
   }
@@ -258,7 +259,6 @@ const ServiceLevelAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
@@ -276,7 +276,6 @@ const ServiceLevelAgreementComponent = props => {
                         </div>
 
                         <div className="eulaa__column">
-                          
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -298,12 +297,16 @@ const ServiceLevelAgreementComponent = props => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ position: "relative",  marginBottom: "33px", }}>
-                      <h4 style={{
-                        position: "absolute",
-                        left: "19%",
-                        bottom: "0"
-                      }}>{organisationName}</h4>
+                    <div style={{ position: 'relative', marginBottom: '33px' }}>
+                      <h4
+                        style={{
+                          position: 'absolute',
+                          left: '19%',
+                          bottom: '0',
+                        }}
+                      >
+                        {organisationName}
+                      </h4>
                     </div>
                     <div className="ac__gap__div"></div>
 
