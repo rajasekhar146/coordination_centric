@@ -66,7 +66,7 @@ const ForgotPasswordResend = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="si__right__div si_left270">
+                <div className="si__right__div si_left_reset">
                     <div className="si__right__content ">
                         <div className="si__right__forgot">
                             <img src={MsgIcon} alt="key" />

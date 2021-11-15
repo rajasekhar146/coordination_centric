@@ -32,6 +32,9 @@
     top: 30%;
     left: 150%;
 }
+.si_left_signin {
+    left: 166% !important;
+}
 
 .si__left__content {
     font-family: Lato;
@@ -390,9 +393,12 @@
 .si_left180 {
     left: 180% !important;
 }
-.si_left270 {
-    left: 270% !important;
+.si_left_reset {
+    left: 255% !important;
 }
 .si_top_zero {
     top: 0 !important;
+}
+.si_reset {
+    left: 130%;
 }

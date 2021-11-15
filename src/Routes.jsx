@@ -14,7 +14,7 @@ import NavBarComponent from './components/NavBar/NavBar.Component'
 import OrganizationDashboard from './pages/organization-dashboard'
 import OrganizationView from './pages/organization-view'
 import Appointments from './pages/appointments'
-import Users from './pages/users'
+import PatienRecords from './pages/patien_records'
 import Patients from './pages/patients'
 import Vaccinations from './pages/vaccinations'
 import Notifications from './pages/notifications'
@@ -45,6 +45,8 @@ import MemberSignIn from './pages/member-signin'
 import PersonalDetail from './pages/personal-detail'
 import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
+import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
+import Settings from './components/Settings/Settings.Component'
 
 class Routes extends Component {
   render() {
@@ -94,11 +96,12 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
-          <MasterLayoutWithLefuMenuComponent path="/users" component={Users} />
+          <MasterLayoutWithLefuMenuComponent path="/patientrecords" component={PatienRecords} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
+          <MasterLayoutWithOutLefuMenuComponent path="/settings" component={Settings} />
           <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
         </Switch>

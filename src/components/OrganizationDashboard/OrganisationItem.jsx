@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useHistory } from 'react-router-dom'
 import { organizationService } from '../../services'
+import './OrganizationDashboard.Component.css'
 
 const ITEM_HEIGHT = 60
 
@@ -50,7 +51,9 @@ const OrganisationItem = props => {
     console.log('menus[0].options', menus[0].options)
   }
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
