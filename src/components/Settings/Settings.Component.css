@@ -344,4 +344,44 @@
 }
 .io_times {
     display: flex;
+    padding-top: 6px;
+    align-items: center;
+}
+.io_services {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+    color: #000000;
+    margin-left: 22px;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+   
+    background: url('../../assets/icons/down_arrow.png') no-repeat;
+    height: 10px;
+    padding: 0px;
+}
+.od__row_p_availablity {
+    width: 90%;
+    display: flex;
+    padding: 20px 0 20px 0;
+}
+.io_from {
+    padding-right: 10px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.078458px;
+    color: #25282B;
+    padding: 0px 10px 0 10px;
+}
+.od_label_p_av {
+    width: 27%;
+}
+.toggle_icon {
+    cursor: pointer;
 }

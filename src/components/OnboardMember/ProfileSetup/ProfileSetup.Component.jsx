@@ -77,7 +77,10 @@ const ProfileSetupComponent = () => {
             className="psp__updload__btn"
             onClick={() =>
               selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
+                const formData = new FormData()
+                formData.append(`image`, file)
                 console.log('Files Selected', { name, size, source, file })
+                memberService.uploadCertificate(formData, 'doctor', null)
               })
             }
           >

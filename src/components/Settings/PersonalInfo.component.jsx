@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
@@ -11,6 +11,9 @@ import { EditorState, convertToRaw, convertFromHTML } from 'draft-js';
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
+import { setCountries } from '../../redux/actions/commonActions'
+import { useSelector, useDispatch } from 'react-redux'
+import { commonService } from '../../services'
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,6 +35,8 @@ const PersonalInfo = props => {
     const [profilepic, setProfilePic] = useState('')
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
     const [textCount, setTextCount] = useState(500)
+    const dispatch = useDispatch()
+    const [countries, setAllCountries] = useState([])
 
     const ColoredLine = ({ color }) => (
         <hr
@@ -73,7 +78,19 @@ const PersonalInfo = props => {
         }
 
     };
+    const fetchCountries = async () => {
+        const response = await commonService.getCountries().catch(error => {
+            console.log(error)
+        })
 
+        console.log('getCountries', response.data.data)
+        setAllCountries(response.data.data.data)
+        dispatch(setCountries(response.data.data.data))
+    }
+
+    useEffect(() => {
+        fetchCountries()
+    }, [])
 
     return (
         <div className="io_p_info">
@@ -225,11 +242,12 @@ const PersonalInfo = props => {
                         className={classes.select}
                         id="demo-simple-select-helper"
                     >
-                        {['option'].map(op => (
-                            <MenuItem key={op} value={op}>
-                                <ListItemText primary={op} />
-                            </MenuItem>
-                        ))}
+                       {countries &&
+                      countries.map(c => (
+                        <MenuItem value={c.code} key={c.code}>
+                          {c.name}
+                        </MenuItem>
+                      ))}
                     </Select>
                 </div>
             </div>

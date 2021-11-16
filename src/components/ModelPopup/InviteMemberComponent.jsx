@@ -31,10 +31,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const roles = [
-    { name: 'doctor',  },
-    { name: 'NP' },
-    { name: 'PA' },
-    { name: 'Receptionist' }
+    { name: 'Doctor', value: 'doctor'  },
+    { name: 'NP', value: 'np' }, 
+    { name: 'PA', value: 'pa' },
+    { name: 'Receptionist', value: 'receptionist' }
 ]
 
 
@@ -190,7 +190,7 @@ const InviteMemberComponent = props => {
                                 Select an Option
                             </MenuItem> */}
                             {roles.map(role => (
-                                <MenuItem key={role.name} value={role.name}>
+                                <MenuItem key={role.name} value={role.value}>
                                     <ListItemText primary={role.name} />
                                 </MenuItem>
                             ))}

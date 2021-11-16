@@ -23,7 +23,10 @@ import SigninStore from '../../../stores/signinstore'
 import { isUpperCase } from 'is-upper-case'
 import { isLowerCase } from 'is-lower-case'
 import CheckedIcon from '../../../assets/icons/checked.png' //'../../assets/icons/checked.png'
-import UncheckedIcon from '../../../assets/icons/unchecked.png'
+import UncheckedIcon from '../../../assets/icons/unchecked.png';
+import { organizationService } from '../../../services'
+import { useParams } from 'react-router-dom'
+
 
 const MemberSignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -36,6 +39,7 @@ const MemberSignInComponent = () => {
   const [alertMsg, setAlertMsg] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
+  const { invitetoken } = useParams()
 
   const [validations, setValidations] = useState({
     passwordLength: false,
@@ -115,8 +119,22 @@ const MemberSignInComponent = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleSubmitClick = () => {
-    history.push('/members/personal-detail')
+  const onSubmit = async (data) => {
+    data['first_name'] = '';
+    data['middle_name'] = '';
+    data['last_name'] = '';
+    data['ssn'] = '';
+    if (password === confirmPassword) {
+      const res = await organizationService.registerMember(data)
+      res.then(() => {
+        history.push('/members/personal-detail')
+      }).catch(() => {
+
+      })
+    } else {
+      setErrMsg('The password confirmation doesnâ€™t match.')
+  }
+
   }
 
   const handleMouseDownPassword = event => {
@@ -128,6 +146,27 @@ const MemberSignInComponent = () => {
     //setValues({ ...values, [prop]: event.target.value });
   }
 
+  useEffect(async () => {
+    // console.log('referredBy', referredby, 'inviteToken', invitetoken)
+    const tokenResponse = await organizationService.validateToken(invitetoken)
+    const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
+    console.log('token >> data', data)
+    if (data.status_code !== 200) {
+      history.push('/error-page')
+    }
+    // .then(data => {
+    //   const response = data.response.data
+    //   console.log('tokan data >> ', response.status_code)
+    //   if(response.status_code !== 200 ){
+    //     history.push('/error-page')
+    //   }
+    // })
+    // .catch(err => {
+    //   console.log('tokan data err >> ', err)
+    //   history.push('/error-page')
+    // })
+  }, [])
+
   return (
     <div className="ms__main__div">
       <div className="ms__left__div">
@@ -137,7 +176,7 @@ const MemberSignInComponent = () => {
           <img src={LeftImageIcon} alt="Login Left Logo" />
         </div>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="ms__sign__in">
           Already have an account?{' '}
           <span className="ms__signin__text">
@@ -266,7 +305,7 @@ const MemberSignInComponent = () => {
                         <img width="16" src={UncheckedIcon} alt="key" />
                       </span>
                     )}
-                    At least 1 non-alphanumeric symbol (e.g ‘@#$%^&*’)
+                    At least 1 non-alphanumeric symbol (e.g ï¿½@#$%^&*ï¿½)
                   </li>
                 </ul>
               </div>
@@ -310,7 +349,9 @@ const MemberSignInComponent = () => {
             </div>
             <div>
               {' '}
-              <Button onClick={handleSubmitClick}> Register Account </Button>{' '}
+              <Button
+                type="submit"
+              > Register Account </Button>{' '}
             </div>
           </div>
         </div>
