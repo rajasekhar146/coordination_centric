@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel.Component';
 import PersonalInfo from './PersonalInfo.component'
 import ProfessionalInfo from './ProfessionalInfo.Component'
+import PatientHealthDetails from './PatientHealthDetails.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 
@@ -124,9 +125,10 @@ const OrganizationViewComponent = () => {
             >
                 <TabItem value="0" label="My Details" />
                 <TabItem value="1" label="Professional Info" />
-                <TabItem value="2" label="Password" />
-                <TabItem value="3" label="Plan" />
-                <TabItem value="4" label="Notifications" />
+                <TabItem value="2" label="Health Info" />
+                <TabItem value="3" label="Password" />
+                <TabItem value="4" label="Plan" />
+                <TabItem value="5" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <PersonalInfo />
@@ -135,9 +137,12 @@ const OrganizationViewComponent = () => {
                 <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PersonalInfo />
+                <PatientHealthDetails />
             </TabPanel>
             <TabPanel value={value} index={3}>
+                <PersonalInfo />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
                 <PersonalInfo />
             </TabPanel>
         </div >

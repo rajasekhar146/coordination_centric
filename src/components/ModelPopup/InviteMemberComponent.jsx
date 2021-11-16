@@ -106,7 +106,7 @@ const InviteMemberComponent = props => {
                         </div>
                         <TextField
                             // {...useInput('facilityName', { isRequired: true })}
-                            {...register('firstName', {
+                            {...register('first_name', {
                                 required: 'First Name is required.',
                             })}
                             margin="normal"
@@ -120,7 +120,7 @@ const InviteMemberComponent = props => {
                                 className: 'im__text__box',
                             }}
                         />
-                        {errors.firstName && <p className="io__required">{errors.firstName.message}</p>}
+                        {errors.first_name && <p className="io__required">{errors.first_name.message}</p>}
                     </div>
 
                     <div className="io__row">
@@ -129,7 +129,7 @@ const InviteMemberComponent = props => {
                         </div>
                         <TextField
                             // {...useInput('facilityEmail', { isRequired: true })}
-                            {...register('lastName', {
+                            {...register('last_name', {
                                 required: 'Last Name Required.'
                             })}
                             margin="normal"
@@ -143,7 +143,7 @@ const InviteMemberComponent = props => {
                                 className: 'im__text__box',
                             }}
                         />
-                        {errors.lastName && <p className="io__required">{errors.lastName.message}</p>}
+                        {errors.last_name && <p className="io__required">{errors.last_name.message}</p>}
                     </div>
 
                     <div className="io__row">
