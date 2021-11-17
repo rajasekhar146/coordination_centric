@@ -525,8 +525,3 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .od_address_label {
     height: 48px;
 }
-.io_height ul {
-    width: 108px !important;
-    max-height: 100px !important;
-    min-height: 100px !important;
-}

@@ -14,10 +14,8 @@ import { useForm } from 'react-hook-form'
 // import get from 'lodash.get'
 import Select from '@mui/material/Select'
 import { makeStyles } from '@material-ui/core/styles'
-import MenuItem from '@mui/material/MenuItem'
-import ListItemText from '@mui/material/ListItemText'
-import MembersStore from '../../stores/membersstore'
-
+import get from 'lodash.get'
+import { organizationService } from '../../services'
 
 const useStyles = makeStyles(theme => ({
     select: {
@@ -25,6 +23,11 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "8px",
         width: "100%",
         height: "48px"
+    },
+    input: {
+        background: "#FFFFFF",
+        borderRadius: "8px",
+        width: '100%'
     },
 }))
 
@@ -62,16 +65,33 @@ const InviteCollaboratorComponent = props => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [isExist, setIsExist] = useState('')
 
-    const onSubmit = requestData => {
+    const onSubmit = (data) => {
         setIsSubmit(true)
-        MembersStore.load('InviteCollaborator', {
-            requestData,
-            successCallback: (data) => {
-                setOpenInviteCollaborator(false)
-                setOpenInviteCollaboratorSuccess(true)
-            },
-            errorCallback: (err) => {
-                setIsExist(err.message)
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+        const currentUserRole = get(currentUser, ['data', 'data', 'role'], '')
+        const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+
+        var orgDetail = {
+            facilityName: data.facilityName,
+            facilityEmail: data.facilityEmail,
+        }
+
+        if (currentUserRole === 'admin') {
+            orgDetail = {
+                adminEmail: currentUserEmail,
+                facilityEmail: data.facilityEmail,
+                facilityName: data.facilityName,
+            }
+        }
+
+        const res = organizationService.addOrganization(orgDetail, currentUserRole)
+        res.then((response) => {
+            setOpenInviteCollaborator(false)
+            setOpenInviteCollaboratorSuccess(true)
+        }).catch((error) => {
+            console.log(error.response)
+            if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
+                setIsExist('Email Already Registered')
             }
         })
     }
@@ -99,7 +119,7 @@ const InviteCollaboratorComponent = props => {
                                         <img src={NameIcon} alt="First Name" />
                                     </InputAdornment>
                                 ),
-                                className: 'im__text__box',
+                                className: classes.input
                             }}
                         />
                         {errors.name && <p className="io__required">{errors.name.message}</p>}
@@ -124,7 +144,7 @@ const InviteCollaboratorComponent = props => {
                                         <img src={EmailIcon} alt="Email Icon" />
                                     </InputAdornment>
                                 ),
-                                className: 'im__text__box',
+                                className: classes.input
                             }}
                         />
                         {errors.email && <p className="io__required">{errors.email.message}</p>}

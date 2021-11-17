@@ -28,6 +28,11 @@ const useStyles = makeStyles(theme => ({
         width: "100%",
         height: "48px"
     },
+    input: {
+        background: "#FFFFFF",
+        borderRadius: "8px",
+        width: '100%'
+    },
 }))
 
 const roles = [
@@ -117,8 +122,10 @@ const InviteMemberComponent = props => {
                                         <img src={NameIcon} alt="First Name" />
                                     </InputAdornment>
                                 ),
-                                className: 'im__text__box',
+                                className: classes.input
                             }}
+                         
+                            
                         />
                         {errors.first_name && <p className="io__required">{errors.first_name.message}</p>}
                     </div>
@@ -140,7 +147,7 @@ const InviteMemberComponent = props => {
                                         <img src={NameIcon} alt="Last Name" />
                                     </InputAdornment>
                                 ),
-                                className: 'im__text__box',
+                                className: classes.input
                             }}
                         />
                         {errors.last_name && <p className="io__required">{errors.last_name.message}</p>}
@@ -164,7 +171,7 @@ const InviteMemberComponent = props => {
                                         <img src={EmailIcon} alt="Email Icon" />
                                     </InputAdornment>
                                 ),
-                                className: 'im__text__box',
+                                className: classes.input
                             }}
                         />
                         {errors.email && <p className="io__required">{errors.email.message}</p>}

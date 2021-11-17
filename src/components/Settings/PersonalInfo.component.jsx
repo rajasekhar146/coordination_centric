@@ -19,24 +19,34 @@ import { settinService } from '../../services'
 import { memberService } from '../../services'
 import FormControl from "@material-ui/core/FormControl";
 import moment from 'moment-timezone'
+import { withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
+    root: {
+        display: "flex",
+        flexWrap: "wrap",
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+        background: "#FFFFFF",
+        width: '100%'
+    },
+    dropdownStyle: {
+        border: "1px solid black",
+        borderRadius: "5px",
+        width: '50px',
+        height: '200px'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing.unit * 2
+    },
     input: {
         background: "#FFFFFF",
         borderRadius: "8px",
+        width: '100%'
     },
-    select: {
-        background: "#FFFFFF",
-        borderRadius: "8px",
-        width: "10%",
-        height: "48px",
-        maxHeight: 200
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        width: "100%"
-    },
-}))
+});
 
 
 const PersonalInfo = props => {
@@ -45,8 +55,8 @@ const PersonalInfo = props => {
 
     const {
         userDetails,
+        classes
     } = props
-    const classes = useStyles()
     const [profilepic, setProfilePic] = useState('')
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
     const [textCount, setTextCount] = useState(500)
@@ -325,9 +335,8 @@ const PersonalInfo = props => {
                                     value={selectedCountry}
                                     className={classes.select}
                                     id="demo-simple-select-helper"
-                                    inputProps={{
+                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
 
-                                    }}
                                 >
                                     {countries &&
                                         countries.map(c => (
@@ -350,9 +359,8 @@ const PersonalInfo = props => {
                                     // value={selectedCountry}
                                     className={classes.select}
                                     id="demo-simple-select-helper"
-                                    inputProps={{
+                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
 
-                                    }}
                                 >
                                     {countries &&
                                         countries.map(c => (
@@ -364,7 +372,7 @@ const PersonalInfo = props => {
                             </FormControl>
                         </div>
                         <div className="mb_25">
-                            <FormControl variant="outlined" className={classes.formControl}>
+                            {/* <FormControl variant="outlined" className={classes.formControl}> */}
                                 <TextField
                                     {...register('city', {
                                         required: 'city is required.',
@@ -375,10 +383,9 @@ const PersonalInfo = props => {
                                         className: classes.input,
                                     }}
                                 />
-                            </FormControl>
+                            {/* </FormControl> */}
                         </div>
                         <div className="mb_25">
-                            <FormControl variant="outlined" className={classes.formControl}>
                                 <TextField
                                     {...register('zipcode', {
                                         required: 'zipcode is required.',
@@ -389,7 +396,6 @@ const PersonalInfo = props => {
                                         className: classes.input,
                                     }}
                                 />
-                            </FormControl>
                         </div>
                     </div>
 
@@ -403,6 +409,7 @@ const PersonalInfo = props => {
                         Timezone
                     </div>
                     <div className="od_input_p">
+                    <FormControl variant="outlined" className={classes.formControl}>
                         <Select
                             // {...register('timezone', {
                             //     required: 'timezone is required.',
@@ -411,7 +418,7 @@ const PersonalInfo = props => {
                                 setSelectedTimeZone(e.target.value)
                             }}
                             value={selectedTimeZone}
-                            className={classes.select}
+                            MenuProps={{ classes: { paper: classes.dropdownStyle } }}
                             id="demo-simple-select-helper"
                         // value={userDetails.timezone}
                         >
@@ -421,6 +428,7 @@ const PersonalInfo = props => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        </FormControl>
                         {/* <Select 
                         className={classes.select}
                         onChange={e => register({ name: 'timezone', value: e.target.value })}>
@@ -492,4 +500,4 @@ const PersonalInfo = props => {
         </div>
     );
 }
-export default PersonalInfo
+export default withStyles(styles)(PersonalInfo)
