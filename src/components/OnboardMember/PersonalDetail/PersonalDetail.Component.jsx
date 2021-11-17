@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setCountries } from '../../../redux/actions/commonActions'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import Guardian from '../../../pages/guardian'
+import moment from 'moment'
 
 const style = {
   position: 'absolute',
@@ -87,11 +88,20 @@ const PersonalDetailComponent = () => {
     // data.gender = gender
     // data.country = country
     // data.state = state
+
+    
+    
+    var age = 0
+    if(dateOfBirth != null)
+      age = moment(dateOfBirth, "MM/DD/YYYY").fromNow().split(" ")[0] //moment(dateOfBirth).fromNow();
+    
+
     var memberData = { ...member.member, ...data }
     console.log('submit data >> ', memberData)
+    console.log('submit role >> ', memberData.role)
 
     dispatch(newMember(memberData))
-    if (1 === 2) {
+    if (memberData.role == 'doctor' || Number(age) > 18) {
       history.push('/members/profile-setup')
     } else setIsUnder19(true)
   }
