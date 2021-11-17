@@ -4,4 +4,5 @@ export * from './organization.service'
 export * from './payment.service'
 export * from './members.service'
 export * from './common.service'
-
+export * from './member.service'
+export * from './settings.service'

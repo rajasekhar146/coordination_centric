@@ -85,7 +85,7 @@ const ResetPasswordPage = props => {
         if (password === conformPassword) {
             setIsSubmit(true)
             const resetData = {};
-            resetData.temporaryPassword = password;
+            resetData.password = password;
             resetData.token = token;
             resetData.email = email;
             const res = authenticationService.resetPassword(resetData)

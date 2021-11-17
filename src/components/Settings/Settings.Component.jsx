@@ -7,6 +7,9 @@ import Tab from '@mui/material/Tab';
 import TabPanel from './TabPanel.Component';
 import PersonalInfo from './PersonalInfo.component'
 import ProfessionalInfo from './ProfessionalInfo.Component'
+import PatientHealthDetails from './PatientHealthDetails.Component'
+import { settinService } from '../../services'
+import get from 'lodash.get'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 
@@ -50,11 +53,39 @@ const OrganizationViewComponent = () => {
     const classes = useStyles()
     const history = useHistory()
     const [value, setValue] = React.useState('0');
-
+    const { userId } = useParams()
+    const [userDetails, setUserDetails] = useState(null)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    useEffect(async () => {
+        const res = await settinService.getMemberDetails(userId).catch((err) => {
+
+        })
+        if (get(res, ['data', "status"], '') === 200) {
+            // setValue('first_name', res?.data?.first_name)
+            // setValue('middle_name', res?.data?.middle_name)
+            // setValue('last_name', res?.data?.last_name)
+            // setValue('ssn', res?.data?.ssn)
+            // setValue('occupation', res?.data?.occupation)
+            // // setValue('dob', newMemberDetail.dob)
+            // setValue('phoneNumber', res?.data?.phoneNumber)
+            // setValue('gender', res?.data?.gender)
+            // setValue('address', res?.data?.address)
+            // // setValue('country', newMemberDetail.country)
+            // // setValue('state', newMemberDetail.state)
+            // setValue('city', res?.data?.city)
+            // setValue('postalCode', res?.data?.postalCode)
+            // setValue('gender', res?.data?.gender)
+            console.log(get(res, ['data', 'data', 'data'], null))
+            setUserDetails(get(res, ['data', 'data', 'data'], null))
+        } else {
+            console.log(res)
+        }
+
+    }, [])
 
 
 
@@ -123,21 +154,29 @@ const OrganizationViewComponent = () => {
                 TabIndicatorProps={{ className: classes.indicator }}
             >
                 <TabItem value="0" label="My Details" />
-                <TabItem value="1" label="Professional Info" />
-                <TabItem value="2" label="Password" />
-                <TabItem value="3" label="Plan" />
-                <TabItem value="4" label="Notifications" />
+                {get(userDetails, ['role'], '') === 'admin'
+                    && <TabItem value="1" label="Professional Info" />
+                }
+                {get(userDetails, ['role'], '') === 'admin'
+                    && <TabItem value="2" label="Health Info" />
+                }
+                <TabItem value="3" label="Password" />
+                <TabItem value="4" label="Plan" />
+                <TabItem value="5" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <PersonalInfo />
+                <PersonalInfo userDetails={userDetails} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PersonalInfo />
+                <PatientHealthDetails />
             </TabPanel>
             <TabPanel value={value} index={3}>
+                <PersonalInfo />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
                 <PersonalInfo />
             </TabPanel>
         </div >

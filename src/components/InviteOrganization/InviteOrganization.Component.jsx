@@ -70,8 +70,8 @@ const InviteOrganizationComponent = props => {
     if(currentUserRole === 'admin') {
       orgDetail = {
         adminEmail: currentUserEmail,
-        newFacilityEmail: defaultValues.facilityEmail,
-        newFacilityName: defaultValues.facilityName,
+        facilityEmail: defaultValues.facilityEmail,
+        facilityName: defaultValues.facilityName,
         facilityAddress: defaultValues.facilityAddress,
         facilityPhone: defaultValues.facilityPhone
       }

@@ -101,7 +101,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
-          <MasterLayoutWithOutLefuMenuComponent path="/settings" component={Settings} />
+          <MasterLayoutWithOutLefuMenuComponent path="/settings/:userId" component={Settings} />
           <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
         </Switch>

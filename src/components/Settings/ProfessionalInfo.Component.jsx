@@ -114,7 +114,6 @@ const PersonalInfo = props => {
 
     return (
         <div className="io_p_info">
-
             <div className="od__row od_flex_space_between">
                 <div className="od__p_title io_pl0">
                     Professional info
@@ -122,9 +121,7 @@ const PersonalInfo = props => {
                         Update your certificates and professional details here.
                     </div>
                 </div>
-
             </div>
-
             <ColoredLine color="#E4E7EC" />
 
             <div className="od__row_p">
@@ -306,7 +303,10 @@ const PersonalInfo = props => {
                         Cancel
                     </Button>
 
-                    <Button className="io__save__btn">
+                    <Button
+                        type="submit"
+                        className="io__save__btn"
+                    >
                         Save
                     </Button>
 

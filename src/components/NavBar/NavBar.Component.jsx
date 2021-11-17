@@ -72,6 +72,7 @@ const NavBarComponent = () => {
   const open = Boolean(anchorEl)
   const [name, setName] = React.useState('')
   const [role, setRole] = React.useState()
+  const [userId, setUserId] = React.useState('')
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -85,7 +86,7 @@ const NavBarComponent = () => {
       localStorage.removeItem('IsShow2FAPopup')
       history.push('/signin')
     } else if (action.toLowerCase() === 'profile'){
-      history.push('/settings')
+      history.push(`/settings/${userId}`)
     }
   }
 
@@ -103,9 +104,11 @@ const NavBarComponent = () => {
       else fullName = data.first_name
 
       roleName = data.role
+      setUserId(data._id)
     }
     setName(fullName)
     setRole(roleName)
+
   }, [])
 
   return (
