@@ -16,36 +16,52 @@ import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../services'
 import UploadFile from './UploadFile.Component'
 import FormControl from "@material-ui/core/FormControl";
+import { withStyles } from "@material-ui/core/styles";
+import { settinService } from '../../services'
 
 
-const useStyles = makeStyles(theme => ({
-    input: {
-        background: "#F9FAFB",
-        borderRadius: "8px",
-    },
-    select: {
-        background: "#FFFFFF",
-        borderRadius: "8px",
-        width: "100%",
-        height: "48px",
-        maxHeight: 200
+const styles = theme => ({
+    root: {
+        display: "flex",
+        flexWrap: "wrap",
     },
     formControl: {
-        margin: theme.spacing(1),
-        width: "100%"
+        margin: theme.spacing.unit,
+        minWidth: 120,
+        background: "#FFFFFF",
     },
-}))
-
+    dropdownStyle: {
+        border: "1px solid black",
+        borderRadius: "5px",
+        width: '50px',
+        height: '200px'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing.unit * 2
+    },
+    input: {
+        background: "#FFFFFF",
+        borderRadius: "8px",
+    },
+});
 
 const PatientHealthDetails = props => {
-    const classes = useStyles()
+    const {
+        classes,
+        userDetails
+    } = props;
+
     const [profilepic, setProfilePic] = useState('')
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
     const [textCount, setTextCount] = useState(500)
     const dispatch = useDispatch()
     const [countries, setAllCountries] = useState([])
     const [selectedFiles, setSelectedFiles] = useState([]);
-
+    const [height, setHeight] = useState(null)
+    const [weight, setWeight] = useState(null)
+    const [medi_check, setMediCheck] = useState(null)
+    const [problems, setProblems] = useState([])
+    
 
     const ColoredLine = ({ color }) => (
         <hr
@@ -96,7 +112,7 @@ const PatientHealthDetails = props => {
         fetchCountries()
     }, [])
 
-    const height = [
+    const heightArray = [
         145,
         160,
         145,
@@ -111,9 +127,22 @@ const PatientHealthDetails = props => {
         160,
     ]
 
+    const onSubmit = async (data) => {
+        data.height = height;
+        data.weight = weight;
+        data.medicine = {
+            medi_check: medi_check,
+            medi_name: data.medi_name
+        }
+        data.problems = problems;
+        const res = await settinService.updateHealthInfo(userDetails._id, data).catch((err) => {
+
+        })
+    }
+
     return (
         <div className="io_p_info">
-
+           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="od__row od_flex_space_between">
                 <div className="od__p_title io_pl0">
                     Health info
@@ -136,7 +165,7 @@ const PatientHealthDetails = props => {
             <ColoredLine color="#E4E7EC" />
 
             <div className="od__row_p">
-                <div className="od_label_p" >
+                <div className="od_label_p">
                     Name
                 </div>
                 <div className="od_input_p io_radio">
@@ -145,14 +174,18 @@ const PatientHealthDetails = props => {
                         <div style={{ marginTop: "10px" }}>
                             <FormControl variant="outlined" className={classes.formControl}>
                                 <Select
-                                    {...register('country', {
-                                        required: 'Country is required.',
-                                    })}
-                                    className={classes.select}
+                                    // {...register('country', {
+                                    //     required: 'Country is required.',
+                                    // })}
+                                    value={height}
+                                    onChange={(e) => {
+                                        setHeight(e.target.value)
+                                    }}
                                     id="demo-simple-select-helper"
+                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
                                 >
-                                    {height &&
-                                        height.map(option => (
+                                    {heightArray &&
+                                        heightArray.map(option => (
                                             <MenuItem value={option} key={option}>
                                                 {option}
                                             </MenuItem>
@@ -164,15 +197,27 @@ const PatientHealthDetails = props => {
                     <div className="io_height">
                         Weight
                         <div style={{ marginTop: "10px" }}>
-                            <Select
-                                {...register('role', {
-                                    required: 'Role is required.',
-                                })}
-                                className={classes.select}
-                                id="demo-simple-select-helper"
-                            >
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <Select
+                                    // {...register('role', {
+                                    //     required: 'Role is required.',
+                                    // })}
+                                    onChange={(e) => {
+                                        setWeight(e.target.value)
+                                    }}
+                                    value={weight}
+                                    id="demo-simple-select-helper"
+                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
 
-                            </Select>
+                                >
+                                    {heightArray &&
+                                        heightArray.map(option => (
+                                            <MenuItem value={option} key={option}>
+                                                {option}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </FormControl>
                         </div>
                     </div>
 
@@ -195,6 +240,9 @@ const PatientHealthDetails = props => {
                                 <input
                                     type="radio"
                                     name="dashboard"
+                                    onChange={(e) => {
+                                        setMediCheck(true)
+                                    }}
                                 />
                                 <span className="check"></span>
                             </label>
@@ -207,6 +255,9 @@ const PatientHealthDetails = props => {
                                 <input
                                     type="radio"
                                     name="dashboard"
+                                    onChange={(e) => {
+                                        setMediCheck(false)
+                                    }}
                                 />
                                 <span className="check"></span>
                             </label>
@@ -216,13 +267,8 @@ const PatientHealthDetails = props => {
 
                     <div>
                         <TextField
-                            {...register('email', {
-                                required: 'Email is required.',
-                                pattern: {
-                                    value:
-                                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                    message: 'Please enter a valid email',
-                                },
+                            {...register('medi_name', {
+                            
                             })}
                             margin="normal"
                             InputProps={{
@@ -241,34 +287,51 @@ const PatientHealthDetails = props => {
                 <div className="od_input_p">
                     <div className="io_radio">
                         <label className="container">
-                            Checkbox
+                            headache
                             <input
                                 type="checkbox"
-                                checked={true}
+                                checked={problems.indexOf('headache') > -1}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        problems.push('headache')
+                                    } else {
+                                        problems.splice(problems.indexOf('headache'), 1)
+                                    }
+                                    setProblems([...problems])
+                                }}
+
                             />
                             <span className="checkmark"></span>
                         </label>
                         <label className="container">
-                            Checkbox
+                            heartattach
                             <input
                                 type="checkbox"
-                                checked={true}
+                                checked={problems.indexOf('heartattach') > -1}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        problems.push('heartattach')
+                                    } else {
+                                        problems.splice(problems.indexOf('heartattach'), 1)
+                                    }
+                                    setProblems([...problems])
+                                }}
                             />
                             <span className="checkmark"></span>
                         </label>
                         <label className="container">
-                            Checkbox
+                            lungs burst out
                             <input
                                 type="checkbox"
-                                checked={true}
-                            />
-                            <span className="checkmark"></span>
-                        </label>
-                        <label className="container">
-                            Checkbox
-                            <input
-                                type="checkbox"
-                                checked={true}
+                                checked={problems.indexOf('lungs burst out') > -1}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        problems.push('lungs burst out')
+                                    } else {
+                                        problems.splice(problems.indexOf('lungs burst out'), 1)
+                                    }
+                                    setProblems([...problems])
+                                }}
                             />
                             <span className="checkmark"></span>
                         </label>
@@ -276,14 +339,10 @@ const PatientHealthDetails = props => {
 
                     <div>
                         <TextField
-                            {...register('email', {
-                                required: 'Email is required.',
-                                pattern: {
-                                    value:
-                                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                    message: 'Please enter a valid email',
-                                },
+                            {...register('others', {
+
                             })}
+                            placeholder="others ..."
                             margin="normal"
                             InputProps={{
                                 className: classes.input,
@@ -341,13 +400,14 @@ const PatientHealthDetails = props => {
                         Cancel
                     </Button>
 
-                    <Button className="io__save__btn">
+                    <Button type="submit" className="io__save__btn">
                         Save
                     </Button>
 
                 </div>
             </div>
+            </form>
         </div>
     );
 }
-export default PatientHealthDetails
+export default withStyles(styles)(PatientHealthDetails)

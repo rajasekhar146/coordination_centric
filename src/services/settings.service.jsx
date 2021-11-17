@@ -10,7 +10,8 @@ const axiosConfig = {
 
 export const settinService = {
     getMemberDetails,
-    updateMemberDetails
+    updateMemberDetails,
+    updateHealthInfo
 }
 
 
@@ -33,6 +34,23 @@ function getMemberDetails(id) {
 }
 
 function updateMemberDetails(id, reqdata) {
+    console.log('axiosConfig', axiosConfig)
+    return (
+        axios
+            .put(`${apiURL}/users/updateMember/${id}`, reqdata, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                //   console.log('getCountries', data)
+                return { data }
+            })
+            .catch(err => {
+                // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+                return null
+            })
+    )
+}
+
+function updateHealthInfo(id, reqdata) {
     console.log('axiosConfig', axiosConfig)
     return (
         axios

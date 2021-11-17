@@ -171,7 +171,7 @@ const OrganizationViewComponent = () => {
                 <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PatientHealthDetails />
+                <PatientHealthDetails userDetails={userDetails} />
             </TabPanel>
             <TabPanel value={value} index={3}>
                 <PersonalInfo />
