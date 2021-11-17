@@ -25,10 +25,10 @@ const useStyles = makeStyles(theme => ({
         left: 0,
     },
     header: {
-       fontWeight: 500,
+       fontWeight: 450,
     //    fontFamily: 'Poppins',
-       fontSize: '40px',
-       lineHeight: '51px',
+       fontSize: '30px',
+       lineHeight: '40px',
        letterSpacing: '-0.035em',
        color: '#ffffff',
        paddingLeft: "120px",
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
        top: 0
     },
     subText: {
-       fontSize: '19px',
+       fontSize: '15px',
        lineHeight: '23px',
        letterSpacing: '0.02em',
        color: '#ffffff',

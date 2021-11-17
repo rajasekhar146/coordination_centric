@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import './ProfileSetup.Component.css'
@@ -15,7 +15,7 @@ import { memberService } from '../../../services'
 const ProfileSetupComponent = () => {
   const defaultSrc =
     'https://www.pngkit.com/png/full/301-3012694_account-user-profile-avatar-comments-fa-user-circle.png'
-
+  const[profilePicName, setProfilePicName] = useState('')
   const [files, selectFiles] = useFileUpload()
   var {
     register,
@@ -38,6 +38,7 @@ const ProfileSetupComponent = () => {
   const onSubmit = async data => {
     var memberData = member.member
     memberData.bio = data.bio
+    memberData.profilePic = profilePicName
     dispatch(newMember(memberData))
     console.log('save member data >> ', memberData)
     var response = await memberService.saveMember(memberData).catch(err => {
@@ -81,6 +82,14 @@ const ProfileSetupComponent = () => {
                 formData.append(`image`, file)
                 console.log('Files Selected', { name, size, source, file })
                 memberService.uploadCertificate(formData, 'doctor', null)
+                .then(response => { 
+                  if(response?.data) {
+                    var fileData = response.data
+                    console.log('fileData', fileData)
+                    setProfilePicName(fileData.data)
+                  }
+                })
+                .catch(err => console.log('Error profile pic', err))                                    
               })
             }
           >

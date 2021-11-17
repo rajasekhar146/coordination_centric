@@ -26,11 +26,13 @@ import CheckedIcon from '../../../assets/icons/checked.png' //'../../assets/icon
 import UncheckedIcon from '../../../assets/icons/unchecked.png';
 import { organizationService } from '../../../services'
 import { useParams } from 'react-router-dom'
-
+import { newMember, resetMember } from '../../../redux/actions/memberActions'
+import { useSelector, useDispatch } from 'react-redux'
 
 const MemberSignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [IsValidUser, setIsValidUser] = useState(true)
   const [errMsg, setErrMsg] = useState('')
   const [IsValidEmail, setIsValidEmail] = useState(true)
@@ -40,7 +42,12 @@ const MemberSignInComponent = () => {
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const { invitetoken } = useParams()
-
+  const { referredby } = useParams()
+  const { invitedBy } = useParams()
+  //const [member, setMember] = useState({})
+  const dispatch = useDispatch()
+  let member = useSelector(state => state.newMember)      
+     
   const [validations, setValidations] = useState({
     passwordLength: false,
     symbol: false,
@@ -93,6 +100,10 @@ const MemberSignInComponent = () => {
     // }
   }
 
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e)
+  }
+
   const {
     register,
     handleSubmit,
@@ -104,35 +115,44 @@ const MemberSignInComponent = () => {
 
   console.log(errors)
 
-  const fPassword = register('password', { required: true })
-  const onChangePassword = fPassword.onChange
-
-  fPassword.onChange = e => {
-    console.log('ddsf')
-    const res = onChangePassword(e)
-    const value = e.target.value
-    console.log('OnChnage', value)
-    return res
-  }
+  
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const onSubmit = async (data) => {
-    data['first_name'] = '';
-    data['middle_name'] = '';
-    data['last_name'] = '';
-    data['ssn'] = '';
-    if (password === confirmPassword) {
-      const res = await organizationService.registerMember(data)
-      res.then(() => {
-        history.push('/members/personal-detail')
-      }).catch(() => {
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword)
+  }
 
+
+  const onSubmit = async (data) => {
+    // data['first_name'] = '';
+    // data['middle_name'] = '';
+    // data['last_name'] = '';
+    // data['ssn'] = '';
+    
+    console.log(password , confirmPassword)
+    if (password === confirmPassword) {
+      member.member.password = password
+
+      member.member.dob = '12/12/2020'
+      member.member.gender = 'Male'
+      member.member.ssn = '12345678'
+      member.member.occupation = 'Eye Doctor'
+      
+      console.log('memberData', member)
+      await organizationService.registerMember( member.member)
+      .then(res => {
+        dispatch(newMember(member.member))
+        history.push('/members/personal-detail')
+      })
+      .catch(err => {
+        console.log(err)
       })
     } else {
-      setErrMsg('The password confirmation doesn’t match.')
+      setAlertMsg('The password confirmation doesn’t match.')
+      setOpenFlash(true)
   }
 
   }
@@ -147,12 +167,18 @@ const MemberSignInComponent = () => {
   }
 
   useEffect(async () => {
-    // console.log('referredBy', referredby, 'inviteToken', invitetoken)
+    console.log('referredBy', referredby, 'inviteToken', invitetoken)
     const tokenResponse = await organizationService.validateToken(invitetoken)
     const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
-    console.log('token >> data', data)
     if (data.status_code !== 200) {
       history.push('/error-page')
+    }
+    else {
+      // setMember(data.data)
+      console.log('data.data', data.data)
+      dispatch(newMember(data.data))
+      var email = data.data.email
+      setValue('email', email)
     }
     // .then(data => {
     //   const response = data.response.data
@@ -319,14 +345,15 @@ const MemberSignInComponent = () => {
                   className="ms__text__box"
                   {...register('confirmPassword', {
                     required: 'Password is required.',
+                    onChange: e => handleConfirmPassword(e.target.value),
                   })}
-                  type={showPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirm Password"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
@@ -350,7 +377,7 @@ const MemberSignInComponent = () => {
             <div>
               {' '}
               <Button
-                type="submit"
+                type="submit" className="ms__login__btn"
               > Register Account </Button>{' '}
             </div>
           </div>

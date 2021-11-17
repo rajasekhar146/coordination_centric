@@ -12,7 +12,8 @@ const axiosConfig = {
 
 export const memberService = {
     inviteMember,
-    uploadCertificate
+    uploadCertificate,
+    saveMember
 }
 
 
@@ -36,12 +37,13 @@ function uploadCertificate(formData, role, onUploadProgress) {
         onUploadProgress: onUploadProgress
     }
     return (
-        axios
+            axios
             .post(`${apiURL}/files/uploadCertificate/${role}`, formData, axiosConfig)
             //.then(handleResponse)
             .then(data => {
+                console.log('data', data)
                 return data
-            })
+            }).catch(err => {return err})
     )
 }
 
@@ -65,3 +67,18 @@ function uploadCertificate(formData, role, onUploadProgress) {
 //         .then(result => console.log('doctor', JSON.parse(result)))
 //         .catch(error => console.log('error', error))
 // }
+function saveMember(member) {
+    return (
+      axios
+        .post(`${apiURL}/users/registerMember`, member, axiosConfig)
+        //.then(handleResponse)
+        .then(data => {
+          console.log('saveMember', data)
+          return data
+        })
+        .catch(err => {
+          // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+          return { errorCode: err.status, errorMessage: err.message }
+        })
+    )
+  }
