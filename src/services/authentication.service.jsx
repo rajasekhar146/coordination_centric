@@ -154,7 +154,7 @@ function resetPassword(data) {
   }
   return (
     axios
-      .post(`${apiURL}/users/forgotPassword`, data, axiosConfig)
+      .post(`${apiURL}/users/setNewPassword`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

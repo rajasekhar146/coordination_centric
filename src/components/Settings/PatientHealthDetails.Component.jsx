@@ -15,6 +15,7 @@ import { setCountries } from '../../redux/actions/commonActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../services'
 import UploadFile from './UploadFile.Component'
+import FormControl from "@material-ui/core/FormControl";
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +27,12 @@ const useStyles = makeStyles(theme => ({
         background: "#FFFFFF",
         borderRadius: "8px",
         width: "100%",
-        height: "48px"
+        height: "48px",
+        maxHeight: 200
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        width: "100%"
     },
 }))
 
@@ -90,6 +96,21 @@ const PatientHealthDetails = props => {
         fetchCountries()
     }, [])
 
+    const height = [
+        145,
+        160,
+        145,
+        160,
+        145,
+        160,
+        145,
+        160,
+        145,
+        160,
+        145,
+        160,
+    ]
+
     return (
         <div className="io_p_info">
 
@@ -122,15 +143,22 @@ const PatientHealthDetails = props => {
                     <div className="io_height">
                         height
                         <div style={{ marginTop: "10px" }}>
-                            <Select
-                                {...register('role', {
-                                    required: 'Role is required.',
-                                })}
-                                className={classes.select}
-                                id="demo-simple-select-helper"
-                            >
-
-                            </Select>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <Select
+                                    {...register('country', {
+                                        required: 'Country is required.',
+                                    })}
+                                    className={classes.select}
+                                    id="demo-simple-select-helper"
+                                >
+                                    {height &&
+                                        height.map(option => (
+                                            <MenuItem value={option} key={option}>
+                                                {option}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </FormControl>
                         </div>
                     </div>
                     <div className="io_height">
@@ -143,12 +171,7 @@ const PatientHealthDetails = props => {
                                 className={classes.select}
                                 id="demo-simple-select-helper"
                             >
-                                {countries &&
-                                    countries.map(c => (
-                                        <MenuItem value={c.code} key={c.code}>
-                                            {c.name}
-                                        </MenuItem>
-                                    ))}
+
                             </Select>
                         </div>
                     </div>
