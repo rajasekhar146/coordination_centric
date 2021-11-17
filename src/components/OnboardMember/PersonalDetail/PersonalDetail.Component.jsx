@@ -297,7 +297,10 @@ const PersonalDetailComponent = () => {
                     // value={country}
                     // onChange={e => handleCountryChange(e)}
                     {...register('country', {
-                      onChange: e => setValue('country', e.target.value),
+                      onChange: e => {
+                        setValue('country', e.target.value)
+                        fetchStates(e.target.value)
+                      },
                     })}
                     inputProps={{ 'aria-label': 'Without label' }}
                     key="country1"

@@ -90,7 +90,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2faverificationsuccess" component={TwoFaVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
-          <DefaultLayoutComponentRoute path="/members/register" component={MemberSignIn} />
+          <DefaultLayoutComponentRoute path="/members/register/:invitetoken/:referredby/:invitedBy" component={MemberSignIn} />
           <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
