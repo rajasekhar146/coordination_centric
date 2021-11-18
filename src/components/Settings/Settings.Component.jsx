@@ -10,8 +10,10 @@ import ProfessionalInfo from './ProfessionalInfo.Component'
 import PatientHealthDetails from './PatientHealthDetails.Component'
 import { settinService } from '../../services'
 import get from 'lodash.get'
+import PasswordSettings from './PasswordSettings.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
+import Alert from '../Alert/Alert.component'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
@@ -55,6 +57,10 @@ const OrganizationViewComponent = () => {
     const [value, setValue] = React.useState('0');
     const { userId } = useParams()
     const [userDetails, setUserDetails] = useState(null)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -86,6 +92,10 @@ const OrganizationViewComponent = () => {
         }
 
     }, [])
+
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
 
 
 
@@ -154,31 +164,54 @@ const OrganizationViewComponent = () => {
                 TabIndicatorProps={{ className: classes.indicator }}
             >
                 <TabItem value="0" label="My Details" />
-                {get(userDetails, ['role'], '') === 'admin'
+                {/* {get(userDetails, ['role'], '') === 'doctor'
                     && <TabItem value="1" label="Professional Info" />
                 }
-                {get(userDetails, ['role'], '') === 'admin'
+                {get(userDetails, ['role'], '') === 'patient'
                     && <TabItem value="2" label="Health Info" />
-                }
+                } */}
+
+                <TabItem value="1" label="Professional Info" />
+
+
+                <TabItem value="2" label="Health Info" />
+
                 <TabItem value="3" label="Password" />
+                <TabItem value="4" label="2Factor-Authentication" />
                 <TabItem value="4" label="Plan" />
                 <TabItem value="5" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <PersonalInfo userDetails={userDetails} />
+                <PersonalInfo
+                    userDetails={userDetails}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PatientHealthDetails userDetails={userDetails} />
+                <PatientHealthDetails 
+                userDetails={userDetails}
+                setOpenFlash={setOpenFlash}
+                setAlertMsg={setAlertMsg}
+                setSubLabel={setSubLabel}
+                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <PersonalInfo />
+                <PasswordSettings />
             </TabPanel>
             <TabPanel value={value} index={4}>
                 <PersonalInfo />
             </TabPanel>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+            />
         </div >
     )
 }

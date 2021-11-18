@@ -6,3 +6,10 @@ export const setCountries = countries => {
     payload: countries,
   }
 }
+
+export const setAllHealthProblems = issues => {
+  return {
+    type: ActionTypes.SET_HEALTH_PROBLEMS,
+    payload: issues,
+  }
+}

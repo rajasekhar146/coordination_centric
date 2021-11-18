@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import MembersStore from '../../stores/membersstore'
-import { memberService } from '../../services'
+import { memberService, commonService } from '../../services'
 import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
@@ -52,9 +52,13 @@ const InviteMemberComponent = props => {
         // clickCloseButton,
         // setSubLabel,
         setOpenInviteMemberSuccess,
-        setOpenInviteMember
+        setOpenInviteMember,
+        orgId,
     } = props;
 
+    useEffect(() => {
+        const res = commonService.getAllRoles()
+    }, [])
 
 
     const {
@@ -78,6 +82,7 @@ const InviteMemberComponent = props => {
 
     const onSubmit = (requestData) => {
         setIsSubmit(true)
+        requestData.refUserId = orgId
         const res = memberService.inviteMember(requestData)
         res.then((data) => {
             setOpenInviteMember(false)
@@ -95,8 +100,9 @@ const InviteMemberComponent = props => {
         //         setIsExist(err.message)
         //     }
         // })
-        
     }
+
+
 
 
     return (
@@ -207,7 +213,7 @@ const InviteMemberComponent = props => {
                     </div>
 
                     <div className="io__row">
-                        <div style={{ marginTop: "50px" }} className="io__same__line">
+                        <div style={{ marginTop: "50px" }} className="io__flex_btn">
                             <div className="io__column">
                                 <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
                                     Close

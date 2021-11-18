@@ -90,7 +90,7 @@ const ResetPasswordPage = props => {
             resetData.email = email;
             const res = authenticationService.resetPassword(resetData)
             res.then(() => {
-                history.push('/resetpasswordsuccess')
+                // history.push('/resetpasswordsuccess')
             }).catch(() => {
 
             })

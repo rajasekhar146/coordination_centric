@@ -67,7 +67,8 @@ const successStyle = {
     border: 0,
     borderRadius: '10px'
 }
-const OrganizationViewComponent = () => {
+const OrganizationViewComponent = (props) => {
+   
     const classes = useStyles()
     const { orgId } = useParams()
     const history = useHistory()
@@ -218,11 +219,13 @@ const OrganizationViewComponent = () => {
             <TabPanel value={value} index={1}>
                 <Members
                     membersList={orgDet.user_details}
+                    orgId={orgId}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Collaborator
                     collaboratorList={orgDet.facility_details}
+                    orgId={orgId}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -238,6 +241,7 @@ const OrganizationViewComponent = () => {
                         clickCloseButton={closeInviteModel}
                         setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
+                        orgId={orgId}
                     // setSkip={setSkip}
                     // selectedOrg={selectedOrg}
                     // setOrganizations={setOrganizations}
@@ -274,6 +278,7 @@ const OrganizationViewComponent = () => {
                         clickCloseButton={closeInviteModel}
                         setOpenInviteCollaborator={setOpenInviteCollaborator}
                         setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+                        orgId={orgId}
                     // setSkip={setSkip}
                     // selectedOrg={selectedOrg}
                     // setOrganizations={setOrganizations}

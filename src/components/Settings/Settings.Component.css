@@ -461,6 +461,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .io_radio {
     display: flex;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 .io_radio_item {
     margin-right: 50px;
@@ -524,4 +525,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .od_address_label {
     height: 48px;
+}
+.io_password {
+    width: 50%;
+}
+.od__row_password{
+    display: flex;
+    padding: 20px 0 0 0;
+    justify-content: space-between;
+}
+.io_password_form{
+    display: flex;
+}
+.io_password_requiments {
+    display: flex;
+    align-items: center;
+}
+.si_password_content {
+    padding-left: 50px;
 }
