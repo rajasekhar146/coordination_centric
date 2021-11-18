@@ -15,7 +15,8 @@ import UploadFile from './UploadFile.Component'
 import AvailablityItem from './AvailablityItem.Component.jsx'
 import ToggleOnIcon from '../../assets/icons/toggle_on.png'
 import ToggleOnIcOff from '../../assets/icons/toggle_off.png'
-import { memberService, commonService } from '../../services'
+import { memberService, commonService, settinService } from '../../services'
+import get from 'lodash.get'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   memberProfessionalInfo,
@@ -26,6 +27,9 @@ import Chip from '@mui/material/Chip'
 import Autocomplete from '@mui/material/Autocomplete'
 import Stack from '@mui/material/Stack'
 import UploadCertificateFile from './UploadCertificateFile'
+import { useParams } from 'react-router-dom'
+import './Settings.Component.css'
+import Alert from '../Alert/Alert.component'
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -65,12 +69,15 @@ const PersonalInfo = props => {
   const [pcToggleOn, setPCToggleOn] = useState(true)
   const [availabilities, setAvailabilities] = useState([])
   const [npiId, setNPIID] = useState('')
-
+  const [email, setEmail] = useState('')
+  const { userId } = useParams()
   const dispatch = useDispatch()
   const mProfessionalInfo = useSelector(state => state.memberProfessionalInfo)
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const mAvaliabilities = useSelector(state => state.memberAvaliabilities)
-
+const [openflash, setOpenFlash] = useState(false)
+const [alertMsg, setAlertMsg] = useState('')
+const [subLabel, setSubLabel] = useState('')
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -108,7 +115,7 @@ const PersonalInfo = props => {
   }
 
   const fetchMemberProfessionalInfo = async () => {
-    const response = await memberService.getMemberProfessionalInfo('5eb5066c201ecb6aeb1bc1e3').catch(err => {
+    const response = await memberService.getMemberProfessionalInfo(userId).catch(err => {
       console.log(err)
     })
     dispatch(memberProfessionalInfo(response?.data?.data))
@@ -124,13 +131,19 @@ const PersonalInfo = props => {
   }, [])
 
   const handleDeleteSpecialties = () => {}
-  const loadFormData = data => {
+  const loadFormData = async data => {
     handleSpecialitySearch('')
+     const res = await settinService.getMemberDetails(userId).catch(err => {})
+     if (get(res, ['data', 'status'], '') === 200) {
+       console.log('res', get(res, ['data', 'data', 'data', 'email'], null))
+       setEmail(get(res, ['data', 'data', 'data', 'email'], null))
+     }
     // setSpecialities(links)
     console.log('load >> formdata', data)
     const mpInfo = data
     if (mpInfo) {
       setValue('npiId', mpInfo.npiId)
+      setNPIID(mpInfo.npiId)
 
       const services = mpInfo.services
       console.log('services', services)
@@ -138,11 +151,18 @@ const PersonalInfo = props => {
       setPCToggleOn(services?.consultation)
 
       const specialization = mpInfo.specialization
-      console.log('specialization', specialization)
 
-      console.log(specialization)
+      var tSpecialization = []
+      specialization.map(s => {
+        const nSpl = {
+          id: s._id,
+          speciality_name: s.speciality_name,
+        }
+        tSpecialization.push(nSpl)
+      })
+      setSpeciality(tSpecialization)
 
-      const availability = mpInfo.availability
+      const availability = mpInfo.availabilities
 
       getAvailability(availability)
     } else {
@@ -156,8 +176,16 @@ const PersonalInfo = props => {
     const response = await commonService.getSpecializations(searchText).catch(err => {
       console.log(err)
     })
-    console.log(response.data.data.data)
-    setSpecialities(response.data.data.data)
+    console.log('setSpecialities', response.data.data.data)
+    var tSpecializations = []
+    var data = response.data?.data?.data
+    data?.map(d => {
+      tSpecializations.push({
+        id: d.id,
+        speciality_name: d.speciality_name,
+      })
+    })
+    setSpecialities(tSpecializations)
   }
 
   const getLabel = value => {
@@ -170,6 +198,7 @@ const PersonalInfo = props => {
 
   const handleChange = (event, value) => {
     setSpeciality(value)
+    // console.log(speciality)
   }
 
   const handleSave = async () => {
@@ -180,24 +209,32 @@ const PersonalInfo = props => {
     console.log('Market Place ', mpToggleOn)
     console.log('Presendial Con ', pcToggleOn)
 
-    var newSpecialties = [];
+    var newSpecialties = []
     speciality.map(s => {
       newSpecialties.push(s.id)
     })
 
-    var newAvailabilities = [];
+    var newAvailabilities = []
     mAvaliabilities.map(a => {
-      if(a.is_available)
-        newAvailabilities.push(a)
+      if (a.is_available) {
+        const av = {
+          day: a.day,
+          first_half_starting_time: a.first_half_starting_time,
+          first_half_ending_time: a.first_half_ending_time,
+          second_half_starting_time: a.second_half_starting_time,
+          second_half_ending_time: a.second_half_ending_time,
+        }
+        newAvailabilities.push(av)
+      }
     })
 
-    var newCertificates = [];
+    var newCertificates = []
     certificates.map(c => {
       newCertificates.push(c.certificate_name)
     })
 
     const formData = {
-      email: 'tuckerd@yopmail.com',
+      email: email,
       npiID: npiId,
       certificates: newCertificates,
       speciality: newSpecialties,
@@ -210,7 +247,17 @@ const PersonalInfo = props => {
 
     console.log('formData 1234', formData)
     const response = await memberService.updatePrefessionalInfo(formData).catch(err => console.log(err))
+    console.log('response', response)
+    if (get(response, ['data', 'status'], '') === 200) {
+      setOpenFlash(true)
+      setAlertMsg('Saved')
+      setSubLabel('Your changes are saved')
+    }
   }
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
+
   const getAvailability = newavailability => {
     const defaultValues = [
       {
@@ -312,7 +359,10 @@ const PersonalInfo = props => {
         </div>
         <div className="od_input_p">
           <TextField
-            onChange={e => setNPIID(e.target.value)}
+            {...register('npiId', {
+              required: 'NPI ID is required.',
+              onChange: e => setNPIID(e.target.value),
+            })}
             margin="normal"
             InputProps={{
               className: classes.input,
@@ -364,10 +414,13 @@ const PersonalInfo = props => {
             <Stack spacing={3} sx={{ width: 500 }}>
               <Autocomplete
                 multiple
-                onChange={(event, value) => console.log(value)}
+                onChange={(event, value) => {
+                  console.log(value)
+                  handleChange(event, value)
+                }}
                 options={specialities}
-                onChange={handleChange}
                 getOptionLabel={option => option.speciality_name}
+                defaultValues={speciality}
                 renderInput={params => <TextField {...params} />}
               />
             </Stack>
@@ -454,6 +507,7 @@ const PersonalInfo = props => {
           </Button>
         </div>
       </div>
+      <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
     </div>
   )
 }
