@@ -27,7 +27,7 @@ const UploadFile = (props) => {
     const {
         file,
         setReportsArray,
-        reportsArray
+        reportsArray = []
     } = props;
     const [imgUrl, setImgUrl] = useState('')
     const [progress, setProgress] = useState(0);

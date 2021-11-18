@@ -86,7 +86,7 @@ const PersonalInfo = props => {
         />
     );
 
-   
+
     useEffect(() => {
         const validationsObj = {
             passwordLength: false,
@@ -126,13 +126,15 @@ const PersonalInfo = props => {
         e.stopPropagation()
         if (newPassword === confirmPassword) {
             // setIsSubmit(true)
-            // const resetData = {};
-            // resetData.password = password;
-            // resetData.token = token;
-            // resetData.email = email;
-            const res = authenticationService.resetPassword()
+            const data = {};
+            data.oldPassword = oldPassword;
+            data.newPassword = newPassword;
+            const res = authenticationService.changePassword(data)
             res.then(() => {
                 // history.push('/resetpasswordsuccess')
+                setOpenFlash(true)
+                setAlertMsg('Updated')
+                setSubLabel('Your password was successfuly updated.')
             }).catch(() => {
 
             })
@@ -214,14 +216,20 @@ const PersonalInfo = props => {
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setConfirmPassword(e.target.value)
+                                    setErrMsg('')
                                 }}
                                 value={confirmPassword}
                                 margin="normal"
                                 type="password"
                                 className={classes.input}
-                                InputProps={{ className: 'si__right__content_resend' }}
+                                Inp
+                                utProps={{ className: 'si__right__content_resend' }}
                             />
+                            {errMsg && <p className="ac__required">{errMsg}</p>}
+
                         </div>
+
+
                     </div>
                     <ColoredLine color="#E4E7EC" />
                     <div className="od__row od_flex_space_between">
@@ -240,8 +248,8 @@ const PersonalInfo = props => {
                         </div>
                     </div>
                 </div>
-                <div className="io_password">
-                    <div>
+                <div className="io_password_requiments">
+                    <div className="si_password_content">
                         <label className="si_password_req">
                             Password Requirements
                         </label>
