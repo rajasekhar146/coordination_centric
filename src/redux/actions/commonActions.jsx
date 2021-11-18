@@ -13,3 +13,10 @@ export const setAllHealthProblems = issues => {
     payload: issues,
   }
 }
+
+export const setSpecialties = specialties => {
+  return {
+    type: ActionTypes.FETCH_SPECIALTIES,
+    payload: specialties,
+  }
+}

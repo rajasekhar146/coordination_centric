@@ -27,3 +27,31 @@ export const resetMember = () => {
     payload: {},
   }
 }
+
+export const memberProfessionalInfo = mProfessionalInfo => {
+  return {
+    type: ActionTypes.MEMBER_PROFFESSIONAL_INFO,
+    payload: mProfessionalInfo,
+  }
+}
+
+export const memberAvaliabilities = availability => {
+  return {
+    type: ActionTypes.MEMBER_AVAILABILITIES,
+    payload: availability,
+  }
+}
+
+export const memberSpecialties = specialties => {
+  return {
+    type: ActionTypes.MEMBER_SPECIALTIES,
+    payload: specialties,
+  }
+}
+
+export const memberProfessionalInfoCertificates = certificate => {
+  return {
+    type: ActionTypes.MEMBER_PROFESSIONAL_CERTIFICATES,
+    payload: certificate,
+  }
+}

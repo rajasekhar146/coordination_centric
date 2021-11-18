@@ -13,7 +13,8 @@ export const commonService = {
   getStates,
   getAllRoles,
   getHealthProblems,
-  getProfile
+  getProfile,
+  getSpecializations,
 }
 
 function getCountries() {
@@ -102,6 +103,24 @@ function getProfile(urlData) {
       //.then(handleResponse)
       .then(data => {
         //   console.log('getCountries', data)
+        return { data }
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return null
+      })
+  )
+}
+
+function getSpecializations(searchText) {
+  console.log('axiosConfig', axiosConfig)
+
+  return (
+    axios
+      .get(`${apiURL}/specialization/getAllSpecializations?search=${searchText}&skip=0&limit=10`, axiosConfig)
+      //.then(response => console.log(response))
+      .then(data => {
+        console.log('getAllSpecializations', data.data)
         return { data }
       })
       .catch(err => {

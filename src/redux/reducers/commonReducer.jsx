@@ -4,6 +4,10 @@ const initialState = {
   countries: [],
 }
 
+const specialtiesInitialState = {
+  specialties: [],
+}
+
 export const commonReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_COUNTRIES:
@@ -14,3 +18,14 @@ export const commonReducer = (state = initialState, { type, payload }) => {
       return state
   }
 }
+
+
+export const specialtiesReducer = (state = specialtiesInitialState, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.FETCH_SPECIALTIES:
+      return { ...state, specialties: payload }
+    default:
+      return state
+  }
+}
+
