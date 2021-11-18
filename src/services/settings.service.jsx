@@ -11,7 +11,8 @@ const axiosConfig = {
 export const settinService = {
     getMemberDetails,
     updateMemberDetails,
-    addHealthInfo
+    addHealthInfo,
+    addInsuranceInfo,
 }
 
 
@@ -56,6 +57,24 @@ function addHealthInfo(id, reqdata) {
     return (
         axios
             .patch(`${apiURL}/users/updateHealthInfo`, reqdata, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                //   console.log('getCountries', data)
+                return { data }
+            })
+            .catch(err => {
+                // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+                return null
+            })
+    )
+}
+
+
+function addInsuranceInfo(info) {
+    console.log('axiosConfig', axiosConfig)
+    return (
+        axios
+            .patch(`${apiURL}/users/updateHealthInfo`, info, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 //   console.log('getCountries', data)
