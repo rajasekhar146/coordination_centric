@@ -11,6 +11,7 @@ import PatientHealthDetails from './PatientHealthDetails.Component'
 import { settinService } from '../../services'
 import get from 'lodash.get'
 import PasswordSettings from './PasswordSettings.Component'
+import InsuranceComponent from './Insurance.Component';
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 import Alert from '../Alert/Alert.component'
@@ -178,8 +179,8 @@ const OrganizationViewComponent = () => {
 
                 <TabItem value="3" label="Password" />
                 <TabItem value="4" label="2Factor-Authentication" />
-                <TabItem value="4" label="Plan" />
-                <TabItem value="5" label="Notifications" />
+                <TabItem value="5" label="Insurance Information" />
+                <TabItem value="6" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <PersonalInfo
@@ -207,8 +208,12 @@ const OrganizationViewComponent = () => {
                     setSubLabel={setSubLabel}
                 />
             </TabPanel>
-            <TabPanel value={value} index={4}>
-                <PersonalInfo />
+            <TabPanel value={value} index={5}>
+                <InsuranceComponent
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                />
             </TabPanel>
             <Alert
                 handleCloseFlash={handleCloseFlash}
