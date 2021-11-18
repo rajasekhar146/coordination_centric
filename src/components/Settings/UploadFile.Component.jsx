@@ -25,7 +25,9 @@ const formatBytes = (bytes, decimals = 2) => {
 
 const UploadFile = (props) => {
     const {
-        file
+        file,
+        setReportsArray,
+        reportsArray
     } = props;
     const [imgUrl, setImgUrl] = useState('')
     const [progress, setProgress] = useState(0);
@@ -46,8 +48,10 @@ const UploadFile = (props) => {
             setProgress(Math.round((100 * event.loaded) / event.total));
         }).then((response) => {
             setMessage(response.data.message);
+            reportsArray.push(response.data.data)
+            setReportsArray([...reportsArray])
         }).catch(() => {
-
+            
         })
     }, [])
 

@@ -11,14 +11,15 @@ import { EditorState, convertToRaw, convertFromHTML } from 'draft-js';
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
-import { setCountries } from '../../redux/actions/commonActions'
+import { setCountries, setAllHealthProblems } from '../../redux/actions/commonActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../services'
 import UploadFile from './UploadFile.Component'
 import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from "@material-ui/core/styles";
 import { settinService } from '../../services'
-
+import get from 'lodash.get'
+import HealthIssueItem from './HealthIssueItem.Component'
 
 const styles = theme => ({
     root: {
@@ -48,7 +49,10 @@ const styles = theme => ({
 const PatientHealthDetails = props => {
     const {
         classes,
-        userDetails
+        userDetails,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props;
 
     const [profilepic, setProfilePic] = useState('')
@@ -57,11 +61,14 @@ const PatientHealthDetails = props => {
     const dispatch = useDispatch()
     const [countries, setAllCountries] = useState([])
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [reportsArray, setReportsArray] = useState([])
     const [height, setHeight] = useState(null)
     const [weight, setWeight] = useState(null)
     const [medi_check, setMediCheck] = useState(null)
     const [problems, setProblems] = useState([])
-    
+    const [allProblems, setAllProblems] = useState([])
+    const [mediName, setMediName] = useState('')
+
 
     const ColoredLine = ({ color }) => (
         <hr
@@ -108,8 +115,17 @@ const PatientHealthDetails = props => {
         dispatch(setCountries(response.data.data.data))
     }
 
+    const fetchHealthProblems = async () => {
+        const response = await commonService.getHealthProblems().catch(error => {
+            console.log(error)
+        })
+        dispatch(setAllHealthProblems(response.data.data.data))
+        setAllProblems(get(response, ['data', 'data', 'data'], []))
+    }
+
     useEffect(() => {
         fetchCountries()
+        fetchHealthProblems()
     }, [])
 
     const heightArray = [
@@ -132,280 +148,252 @@ const PatientHealthDetails = props => {
         data.weight = weight;
         data.medicine = {
             medi_check: medi_check,
-            medi_name: data.medi_name
+            medi_name: mediName
         }
         data.problems = problems;
-        const res = await settinService.updateHealthInfo(userDetails._id, data).catch((err) => {
-
+        data.reports = reportsArray;
+        const res = await settinService.addHealthInfo(userDetails._id, data).catch((err) => {
         })
+        if (get(res, ['data', 'status'], '') === 200) {
+            setOpenFlash(true)
+            setAlertMsg('Saved')
+            setSubLabel('Your changes are saved')
+        }
     }
 
     return (
         <div className="io_p_info">
-           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="od__row od_flex_space_between">
-                <div className="od__p_title io_pl0">
-                    Health info
-                    <div className="io_p_info_label">
-                        Update your health details here.
-                    </div>
-                </div>
-                <div className="od__btn__div od__align__right io_pr0">
-                    <Button className="io_p_cancel">
-                        Cancel
-                    </Button>
-
-                    <Button className="io__save__btn">
-                        Save
-                    </Button>
-
-                </div>
-            </div>
-
-            <ColoredLine color="#E4E7EC" />
-
-            <div className="od__row_p">
-                <div className="od_label_p">
-                    Name
-                </div>
-                <div className="od_input_p io_radio">
-                    <div className="io_height">
-                        height
-                        <div style={{ marginTop: "10px" }}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <Select
-                                    // {...register('country', {
-                                    //     required: 'Country is required.',
-                                    // })}
-                                    value={height}
-                                    onChange={(e) => {
-                                        setHeight(e.target.value)
-                                    }}
-                                    id="demo-simple-select-helper"
-                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
-                                >
-                                    {heightArray &&
-                                        heightArray.map(option => (
-                                            <MenuItem value={option} key={option}>
-                                                {option}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                            </FormControl>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="od__row od_flex_space_between">
+                    <div className="od__p_title io_pl0">
+                        Health info
+                        <div className="io_p_info_label">
+                            Update your health details here.
                         </div>
                     </div>
-                    <div className="io_height">
-                        Weight
-                        <div style={{ marginTop: "10px" }}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <Select
-                                    // {...register('role', {
-                                    //     required: 'Role is required.',
-                                    // })}
-                                    onChange={(e) => {
-                                        setWeight(e.target.value)
-                                    }}
-                                    value={weight}
-                                    id="demo-simple-select-helper"
-                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+                    <div className="od__btn__div od__align__right io_pr0">
+                        <Button className="io_p_cancel">
+                            Cancel
+                        </Button>
 
-                                >
-                                    {heightArray &&
-                                        heightArray.map(option => (
-                                            <MenuItem value={option} key={option}>
-                                                {option}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                            </FormControl>
+                        <Button className="io__save__btn">
+                            Save
+                        </Button>
+
+                    </div>
+                </div>
+
+                <ColoredLine color="#E4E7EC" />
+
+                <div className="od__row_p">
+                    <div className="od_label_p">
+                        Bmi
+                    </div>
+                    <div className="od_input_p io_radio">
+                        <div className="io_height">
+                            height
+                            <div style={{ marginTop: "10px" }}>
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <Select
+                                        // {...register('country', {
+                                        //     required: 'Country is required.',
+                                        // })}
+                                        value={height}
+                                        onChange={(e) => {
+                                            setHeight(e.target.value)
+                                        }}
+                                        id="demo-simple-select-helper"
+                                        MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+                                    >
+                                        {heightArray &&
+                                            heightArray.map(option => (
+                                                <MenuItem value={option} key={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        </div>
+                        <div className="io_height">
+                            Weight
+                            <div style={{ marginTop: "10px" }}>
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <Select
+                                        // {...register('role', {
+                                        //     required: 'Role is required.',
+                                        // })}
+                                        onChange={(e) => {
+                                            setWeight(e.target.value)
+                                        }}
+                                        value={weight}
+                                        id="demo-simple-select-helper"
+                                        MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+
+                                    >
+                                        {heightArray &&
+                                            heightArray.map(option => (
+                                                <MenuItem value={option} key={option}>
+                                                    {option}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <ColoredLine color="#E4E7EC" />
+                <div className="od__row_p">
+                    <div className="od_label_p" >
+                        Do you take any medication?
+                        <div className="io_p_info_label">
+                            If yes, please describe
                         </div>
                     </div>
+                    <div className="od_input_p">
+                        <div className="io_radio">
+                            <div className="io_radio_item">
+                                <label className="radio_container">
+                                    Yes
+                                    <input
+                                        type="radio"
+                                        name="dashboard"
+                                        onChange={(e) => {
+                                            setMediCheck(true)
+                                        }}
+                                    />
+                                    <span className="check"></span>
+                                </label>
 
+                            </div>
 
-                </div>
-            </div>
-            <ColoredLine color="#E4E7EC" />
-            <div className="od__row_p">
-                <div className="od_label_p" >
-                    Do you take any medication?
-                    <div className="io_p_info_label">
-                        If yes, please describe
+                            <div>
+                                <label className="radio_container">
+                                    No
+                                    <input
+                                        type="radio"
+                                        name="dashboard"
+                                        onChange={(e) => {
+                                            setMediCheck(false)
+                                        }}
+                                    />
+                                    <span className="check"></span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <TextField
+                                onChange={(e) => {
+                                    setMediName(false)
+                                }}
+                                margin="normal"
+                                InputProps={{
+                                    className: classes.input,
+                                }}
+                            />
+                        </div>
+
                     </div>
                 </div>
-                <div className="od_input_p">
-                    <div className="io_radio">
-                        <div className="io_radio_item">
-                            <label className="radio_container">
-                                Yes
-                                <input
-                                    type="radio"
-                                    name="dashboard"
-                                    onChange={(e) => {
-                                        setMediCheck(true)
-                                    }}
+                <ColoredLine color="#E4E7EC" />
+                <div className="od__row_p">
+                    <div className="od_label_p">
+                        Any previous health problems?
+                    </div>
+                    <div className="od_input_p">
+                        <div className="io_radio">
+                            {allProblems.map((item) => (
+                                <HealthIssueItem
+                                    item={item}
+                                    problems={problems}
+                                    setProblems={setProblems}
+                                    allProblems={allProblems}
                                 />
-                                <span className="check"></span>
-                            </label>
+
+                            ))
+                            }
 
                         </div>
 
                         <div>
-                            <label className="radio_container">
-                                No
-                                <input
-                                    type="radio"
-                                    name="dashboard"
-                                    onChange={(e) => {
-                                        setMediCheck(false)
-                                    }}
-                                />
-                                <span className="check"></span>
-                            </label>
+                            <TextField
+                                {...register('others', {
 
+                                })}
+                                placeholder="others ..."
+                                margin="normal"
+                                InputProps={{
+                                    className: classes.input,
+                                }}
+                            />
                         </div>
                     </div>
 
-                    <div>
-                        <TextField
-                            {...register('medi_name', {
-                            
-                            })}
-                            margin="normal"
-                            InputProps={{
-                                className: classes.input,
-                            }}
-                        />
+                </div>
+                <ColoredLine color="#E4E7EC" />
+                <div className="od__row_p">
+                    <div className="od_label_p">
+                        Medical Reports / Documents
+
+                        <div className="io_p_info_label">
+                            Upload the documents
+                        </div>
                     </div>
+                    <div className="od_input_p">
+                        <div className="od_dropzone_prof mb_25">
+                            <Dropzone
+                                onDrop={handleDrop}
+                                accept="image/jpeg, image/png, application/pdf, .pdf, .docx"
+                                maxSize={524288000}
+                            >
+                                {({ getRootProps, getInputProps }) => (
+                                    <section>
 
-                </div>
-            </div>
-            <ColoredLine color="#E4E7EC" />
-            <div className="od__row_p">
-                <div className="od_label_p">
-                    Any previous health problems?
-                </div>
-                <div className="od_input_p">
-                    <div className="io_radio">
-                        <label className="container">
-                            headache
-                            <input
-                                type="checkbox"
-                                checked={problems.indexOf('headache') > -1}
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        problems.push('headache')
-                                    } else {
-                                        problems.splice(problems.indexOf('headache'), 1)
-                                    }
-                                    setProblems([...problems])
-                                }}
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <img className="io_upload_icon" src={UploadIcon} alt="upload" />
+                                            <p className="io_upload_label">
+                                                <span className="io_highlite">Click to upload</span> or drag and drop
+                                                <br />
+                                                SVG, PNG, JPG or GIF (max. 800x400px)
+                                            </p>
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone>
+                        </div>
 
+                        {selectedFiles.map((file) => (
+                            <UploadFile 
+                            file={file} 
+                            setReportsArray={setReportsArray} 
+                            reportsArray={reportsArray}
                             />
-                            <span className="checkmark"></span>
-                        </label>
-                        <label className="container">
-                            heartattach
-                            <input
-                                type="checkbox"
-                                checked={problems.indexOf('heartattach') > -1}
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        problems.push('heartattach')
-                                    } else {
-                                        problems.splice(problems.indexOf('heartattach'), 1)
-                                    }
-                                    setProblems([...problems])
-                                }}
-                            />
-                            <span className="checkmark"></span>
-                        </label>
-                        <label className="container">
-                            lungs burst out
-                            <input
-                                type="checkbox"
-                                checked={problems.indexOf('lungs burst out') > -1}
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        problems.push('lungs burst out')
-                                    } else {
-                                        problems.splice(problems.indexOf('lungs burst out'), 1)
-                                    }
-                                    setProblems([...problems])
-                                }}
-                            />
-                            <span className="checkmark"></span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <TextField
-                            {...register('others', {
-
-                            })}
-                            placeholder="others ..."
-                            margin="normal"
-                            InputProps={{
-                                className: classes.input,
-                            }}
-                        />
+                        ))
+                        }
                     </div>
                 </div>
+                <ColoredLine color="#E4E7EC" />
+                <div className="od__row od_flex_space_between">
+                    <div className="od__p_title io_pl0">
 
-            </div>
-            <ColoredLine color="#E4E7EC" />
-            <div className="od__row_p">
-                <div className="od_label_p">
-                    Degrees/Certifications
-                    <div className="io_p_info_label">
-                        Upload the documents
+                    </div>
+                    <div className="od__btn__div od__align__right io_pr0">
+                        <Button className="io_p_cancel">
+                            Cancel
+                        </Button>
+
+                        <Button type="submit" className="io__save__btn">
+                            Save
+                        </Button>
+
                     </div>
                 </div>
-                <div className="od_input_p">
-                    <div className="od_dropzone_prof mb_25">
-                        <Dropzone
-                            onDrop={handleDrop}
-                            accept="image/jpeg, image/png, application/pdf, .pdf, .docx"
-                            maxSize={524288000}
-                        >
-                            {({ getRootProps, getInputProps }) => (
-                                <section>
-
-                                    <div {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        <img className="io_upload_icon" src={UploadIcon} alt="upload" />
-                                        <p className="io_upload_label">
-                                            <span className="io_highlite">Click to upload</span> or drag and drop
-                                            <br />
-                                            SVG, PNG, JPG or GIF (max. 800x400px)
-                                        </p>
-                                    </div>
-                                </section>
-                            )}
-                        </Dropzone>
-                    </div>
-
-                    {selectedFiles.map((file) => (
-                        <UploadFile file={file} />
-                    ))
-                    }
-                </div>
-            </div>
-            <ColoredLine color="#E4E7EC" />
-            <div className="od__row od_flex_space_between">
-                <div className="od__p_title io_pl0">
-
-                </div>
-                <div className="od__btn__div od__align__right io_pr0">
-                    <Button className="io_p_cancel">
-                        Cancel
-                    </Button>
-
-                    <Button type="submit" className="io__save__btn">
-                        Save
-                    </Button>
-
-                </div>
-            </div>
             </form>
         </div>
     );

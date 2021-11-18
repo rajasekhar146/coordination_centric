@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone'
 import UploadIcon from '../../assets/icons/upload.png'
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, convertFromHTML } from 'draft-js';
+import { EditorState, convertToRaw, convertFromHTML, convertFromRaw } from 'draft-js';
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
@@ -53,17 +53,28 @@ const PersonalInfo = props => {
     const timezones = moment.tz.names();
     console.log(timezones);
 
+
+
     const {
         userDetails,
-        classes
+        classes,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
     const [profilepic, setProfilePic] = useState('')
+    const [prfileUrl, setProfileUrl] = useState('')
+    const [updatedUrl, setUpdatedUrl] = useState('')
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
     const [textCount, setTextCount] = useState(500)
     const dispatch = useDispatch()
     const [countries, setAllCountries] = useState([])
     const [selectedCountry, setSelectedCountry] = useState('')
     const [selectedTimeZone, setSelectedTimeZone] = useState('')
+
+    useEffect(() => {
+
+    }, [])
 
     const {
         register,
@@ -73,9 +84,35 @@ const PersonalInfo = props => {
         formState: { errors },
     } = useForm()
 
+    const arrayBufferToBase64 = (buffer) => {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    const getProfile = async (userDetails) => {
+        const urlData = {
+            name: `doctors_certificate/${userDetails.profilePic}`
+        }
+        const response = await commonService.getProfile(urlData).catch(error => {
+            console.log(error)
+        })
+        if (response && response.data.status ===200) {
+            setProfileUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
+        }
+    }
 
     useEffect(() => {
         fetchCountries()
+        if (get(userDetails, ['biograhpy_object'], null)) {
+            userDetails.biograhpy_object.entityMap = {}
+            const data = convertFromRaw(userDetails.biograhpy_object)
+            setEditorState(EditorState.createWithContent(data))
+        }
         setValue('first_name', get(userDetails, ['first_name'], ''))
         setValue('middle_name', get(userDetails, ['middle_name'], ''))
         setValue('last_name', get(userDetails, ['last_name'], ''))
@@ -88,9 +125,14 @@ const PersonalInfo = props => {
         setSelectedCountry(get(userDetails, ['country'], ''))
         setSelectedTimeZone(get(userDetails, ['timezone'], ''))
         setProfilePic(get(userDetails, ['profilePic'], ''))
-        // setValue('city', get(userDetails, ['ssn'], ''))
+        setValue('city', get(userDetails, ['city'], ''))
+        setValue('state', get(userDetails, ['state'], ''))
+        setValue('postalCode', get(userDetails, ['postalCode'], ''))
         // setValue('postalCode', get(userDetails, ['ssn'], ''))
         // setValue('gender', get(userDetails, ['ssn'], ''))
+        if (userDetails) {
+            getProfile(userDetails)
+        }
     }, [userDetails])
 
 
@@ -106,14 +148,10 @@ const PersonalInfo = props => {
     const handleDrop = (files) => {
         const formData = new FormData()
         files.forEach(file => {
-
-
-        });
-        files.forEach(file => {
             formData.append(`image`, file)
             const reader = new FileReader();
             reader.onload = () => {
-                setProfilePic(URL.createObjectURL(file))
+                setUpdatedUrl(URL.createObjectURL(file))
                 memberService.uploadCertificate(formData, 'doctor', (event) => {
                     // setProgress(Math.round((100 * event.loaded) / event.total));
                 }).then((response) => {
@@ -128,6 +166,8 @@ const PersonalInfo = props => {
 
         });
     }
+
+
 
     const onEditorStateChange = editorState => {
         if (editorState) {
@@ -157,10 +197,16 @@ const PersonalInfo = props => {
     const onSubmit = async (data) => {
         data.timezone = selectedTimeZone;
         data.country = selectedCountry;
+        data.profilePic = profilepic;
         data.biograhpy_object = convertToRaw(editorState.getCurrentContent())
         const res = await settinService.updateMemberDetails(userDetails._id, data).catch((err) => {
 
         })
+        if (get(res, ['data', 'status'], '') === 200) {
+            setOpenFlash(true)
+            setAlertMsg('Saved')
+            setSubLabel('Your changes are saved')
+        }
     }
 
     return (
@@ -278,7 +324,7 @@ const PersonalInfo = props => {
                         <div>
                             {profilepic
                                 && <img
-                                    src={profilepic}
+                                    src={updatedUrl ? updatedUrl : `data:image/png;base64,${prfileUrl}`}
                                     alt="profile"
                                     className="io_profile"
                                 />
@@ -295,7 +341,7 @@ const PersonalInfo = props => {
                     <div className="od_input_p">
                         <TextField
                             {...register('role', {
-                                required: 'Email is required.',
+                                required: 'role is required.',
 
                             })}
                             margin="normal"
@@ -349,53 +395,43 @@ const PersonalInfo = props => {
                         </div>
                         <div className="mb_25">
                             <FormControl variant="outlined" className={classes.formControl}>
-                                <Select
-                                    // {...register('country', {
-                                    //     onChange: e => setValue('country', e.target.value),
-                                    // })}
-                                    onChange={(e) => {
-                                        setSelectedCountry(e.target.value)
-                                    }}
-                                    // value={selectedCountry}
-                                    className={classes.select}
-                                    id="demo-simple-select-helper"
-                                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+                            <TextField
+                                {...register('state', {
+                                    required: 'state is required.',
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                >
-                                    {countries &&
-                                        countries.map(c => (
-                                            <MenuItem value={c.code} key={c.code}>
-                                                {c.name}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+                                    className: classes.input,
+                                }}
+                            />
                             </FormControl>
                         </div>
                         <div className="mb_25">
                             {/* <FormControl variant="outlined" className={classes.formControl}> */}
-                                <TextField
-                                    {...register('city', {
-                                        required: 'city is required.',
-                                    })}
-                                    margin="normal"
-                                    InputProps={{
+                            <TextField
+                                {...register('city', {
+                                    required: 'city is required.',
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                        className: classes.input,
-                                    }}
-                                />
+                                    className: classes.input,
+                                }}
+                            />
                             {/* </FormControl> */}
                         </div>
                         <div className="mb_25">
-                                <TextField
-                                    {...register('zipcode', {
-                                        required: 'zipcode is required.',
-                                    })}
-                                    margin="normal"
-                                    InputProps={{
+                            <TextField
+                                {...register('postalCode', {
+                                    required: 'zipcode is required.',
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                        className: classes.input,
-                                    }}
-                                />
+                                    className: classes.input,
+                                }}
+                            />
                         </div>
                     </div>
 
@@ -409,25 +445,25 @@ const PersonalInfo = props => {
                         Timezone
                     </div>
                     <div className="od_input_p">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <Select
-                            // {...register('timezone', {
-                            //     required: 'timezone is required.',
-                            // })}
-                            onChange={(e) => {
-                                setSelectedTimeZone(e.target.value)
-                            }}
-                            value={selectedTimeZone}
-                            MenuProps={{ classes: { paper: classes.dropdownStyle } }}
-                            id="demo-simple-select-helper"
-                        // value={userDetails.timezone}
-                        >
-                            {timezones.map(op => (
-                                <MenuItem key={op} value={op}>
-                                    <ListItemText primary={op} />
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <Select
+                                // {...register('timezone', {
+                                //     required: 'timezone is required.',
+                                // })}
+                                onChange={(e) => {
+                                    setSelectedTimeZone(e.target.value)
+                                }}
+                                value={selectedTimeZone}
+                                MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+                                id="demo-simple-select-helper"
+                            // value={userDetails.timezone}
+                            >
+                                {timezones.map(op => (
+                                    <MenuItem key={op} value={op}>
+                                        <ListItemText primary={op} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
                         </FormControl>
                         {/* <Select 
                         className={classes.select}

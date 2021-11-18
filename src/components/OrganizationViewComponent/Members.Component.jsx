@@ -28,7 +28,7 @@ const colorcodes = {
 
 const MembersComponent = props => {
     const {
-        membersList,
+        membersList = [],
         colorcodes,
     } = props
 

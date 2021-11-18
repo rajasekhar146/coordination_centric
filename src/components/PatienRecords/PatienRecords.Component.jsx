@@ -21,6 +21,7 @@ import InvitePatient from '../ModelPopup/InvitePatient.Component'
 import Box from '@mui/material/Box'
 import InvitePatientSuccess from '../ModelPopup/InvitePatientSuccess.Component'
 import SharePatientRecord from '../ModelPopup/SharePatientRecord.Component'
+import PatientItem from './PatientItem.Component'
 
 const useStyles = makeStyles(theme => ({
   menuItem: {
@@ -114,6 +115,8 @@ const PatienRecordsComponent = (props) => {
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
   const [openInvitePatientSuccess, setOpenInvitePatientSuccess] = useState(false)
   const [openSharePatientRecord, setOpenSharePatientRecord] = useState(false)
+  const [selectedItem, setSelectedItem] = React.useState(null)
+
 
   const open = Boolean(anchorEl)
   const classes = useStyles()
@@ -128,20 +131,7 @@ const PatienRecordsComponent = (props) => {
     setOpenSharePatientRecord(false)
   }
 
-  const handleMenuAction = (e, action, index, orgId) => {
-    e.preventDefault()
-    e.stopPropagation()
-    switch (action) {
-      case 'setInvitePatientClicked':
-        setInvitePatientClicked(true)
-        break
-      case 'setOpenSharePatientRecord':
-        setOpenSharePatientRecord(true)
-      default:
-        return null
-    }
-    setAnchorEl(null)
-  }
+  
 
   const handleClick = (event, status) => {
     event.preventDefault()
@@ -186,51 +176,20 @@ const PatienRecordsComponent = (props) => {
                 </TableHead>
                 <TableBody>
                   {rows.map((row, index) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      <TableCell key={index}>{row.name}</TableCell>
-                      <TableCell key={index}>{row.email}</TableCell>
-                      <TableCell key={index}>{row.speciality}</TableCell>
-                      <TableCell key={index}>{row.licence}</TableCell>
-                      <TableCell
-                        key={index}
-                      // align={'center'}
-                      >
-                        <CircleIcon fontSize="small" sx={{ color: '#027A48' }} />
-                      </TableCell>
-                      <TableCell key={index} align={'right'}>
-                        <IconButton
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls="long-menu"
-                          aria-haspopup="true"
-                          onClick={e => handleClick(e, `open`)}
-                        >
-                          <MoreVertRoundedIcon />
-                        </IconButton>
-                        <Menu
-                          MenuListProps={{
-                            'aria-labelledby': 'long-button',
-                          }}
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          className={classes.menu}
-                        >
-                          {menuOptions.map((option, idx) => (
-                            <MenuItem
-                              key={option}
-                              onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
-                              className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
-                            >
-                              <div className="od__menu__icon__column">
-                                <img width={18} src={option.icon} alt={option.text} />
-                              </div>
-                              <div className="od__menu__text__column">{option.text}</div>
-                            </MenuItem>
-                          ))}
-                        </Menu>
-                      </TableCell>
-                    </TableRow>
+                    <PatientItem
+                      row={row}
+                      index={index}
+                      open={open}
+                      handleClose={handleClose}
+                      classes={classes}
+                      menuOptions={menuOptions}
+                      getTextColor={getTextColor}
+                      rows={rows}
+                      menuList={menuList}
+                      setOpenSharePatientRecord={setOpenSharePatientRecord}
+                      setInvitePatientClicked={setInvitePatientClicked}
+                      setSelectedItem={setSelectedItem}
+                    />
                   ))}
                 </TableBody>
               </Table>
@@ -248,7 +207,7 @@ const PatienRecordsComponent = (props) => {
           <InvitePatient
             clickCloseButton={closeModel}
             setOpenInvitePatientSuccess={setOpenInvitePatientSuccess}
-
+            selectedItem={selectedItem}
           />
         </Box>
       </Modal>

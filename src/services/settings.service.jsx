@@ -11,13 +11,14 @@ const axiosConfig = {
 export const settinService = {
     getMemberDetails,
     updateMemberDetails,
-    updateHealthInfo
+    addHealthInfo
 }
 
 
 function getMemberDetails(id) {
-    console.log('axiosConfig', axiosConfig)
-
+    const axiosConfig = {
+        headers: authHeader(),
+    }
     return (
         axios
             .get(`${apiURL}/users/getMemberDetailsById?id=${id}`, axiosConfig)
@@ -50,11 +51,11 @@ function updateMemberDetails(id, reqdata) {
     )
 }
 
-function updateHealthInfo(id, reqdata) {
+function addHealthInfo(id, reqdata) {
     console.log('axiosConfig', axiosConfig)
     return (
         axios
-            .put(`${apiURL}/users/updateMember/${id}`, reqdata, axiosConfig)
+            .patch(`${apiURL}/users/updateHealthInfo`, reqdata, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 //   console.log('getCountries', data)

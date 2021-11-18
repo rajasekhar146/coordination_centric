@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
@@ -48,7 +48,8 @@ const InvitePatientComponent = props => {
         // clickCloseButton,
         // setSubLabel,
         setOpenInvitePatientSuccess,
-        setOpenInviteMember
+        setOpenInviteMember,
+        selectedItem
     } = props;
 
 
@@ -57,8 +58,14 @@ const InvitePatientComponent = props => {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm()
+
+    useEffect(() => {
+        setValue('patientName', selectedItem.name)
+        setValue('email', selectedItem.email)
+    }, {})
 
     console.log(errors)
 

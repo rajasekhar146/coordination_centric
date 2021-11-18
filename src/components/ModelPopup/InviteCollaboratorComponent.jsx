@@ -41,7 +41,8 @@ const InviteCollaboratorComponent = props => {
         // clickCloseButton,
         // setSubLabel,
         setOpenInviteCollaboratorSuccess,
-        setOpenInviteCollaborator
+        setOpenInviteCollaborator,
+        orgId
     } = props;
 
 
@@ -74,6 +75,7 @@ const InviteCollaboratorComponent = props => {
         var orgDetail = {
             facilityName: data.facilityName,
             facilityEmail: data.facilityEmail,
+            refUserId: orgId
         }
 
         if (currentUserRole === 'admin') {
@@ -81,6 +83,7 @@ const InviteCollaboratorComponent = props => {
                 adminEmail: currentUserEmail,
                 facilityEmail: data.facilityEmail,
                 facilityName: data.facilityName,
+                refUserId: orgId
             }
         }
 
@@ -108,7 +111,7 @@ const InviteCollaboratorComponent = props => {
                         </div>
                         <TextField
                             // {...useInput('facilityName', { isRequired: true })}
-                            {...register('name', {
+                            {...register('facilityName', {
                                 required: 'Name is required.'
                             })}
                             margin="normal"
@@ -129,7 +132,7 @@ const InviteCollaboratorComponent = props => {
                     <div className="io__row">
                         <div className="io__label">Email <span className="ac__required">*</span></div>
                         <TextField
-                            {...register('email', {
+                            {...register('facilityEmail', {
                                 required: 'Email is required.',
                                 pattern: {
                                     value:
