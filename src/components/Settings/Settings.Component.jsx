@@ -193,15 +193,19 @@ const OrganizationViewComponent = () => {
                 <ProfessionalInfo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PatientHealthDetails 
-                userDetails={userDetails}
-                setOpenFlash={setOpenFlash}
-                setAlertMsg={setAlertMsg}
-                setSubLabel={setSubLabel}
-                 />
+                <PatientHealthDetails
+                    userDetails={userDetails}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <PasswordSettings />
+                <PasswordSettings
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                />
             </TabPanel>
             <TabPanel value={value} index={4}>
                 <PersonalInfo />

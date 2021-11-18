@@ -18,6 +18,7 @@ export const authenticationService = {
   twoFactorEmailAuthVerification,
   twoFactorAppAuthVerification,
   resetPassword,
+  changePassword,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -155,6 +156,20 @@ function resetPassword(data) {
   return (
     axios
       .post(`${apiURL}/users/setNewPassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function changePassword(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/changePassword`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
