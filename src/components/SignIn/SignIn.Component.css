@@ -90,13 +90,10 @@
     font-weight: normal;
     font-size: 18px;
     line-height: 24px;
-
-    /* identical to box height, or 133% */
     letter-spacing: 0.1px;
-
-    /* Neutral/Gray */
     color: #A0A4A8;
     text-align: center;
+    cursor: pointer;
 }
 
 .si__right__label {

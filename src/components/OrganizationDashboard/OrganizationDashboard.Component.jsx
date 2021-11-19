@@ -471,15 +471,20 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (
-      !isDeactivateClicked
-      && !isRejectClicked
-      && !isAcceptClicked
-      && !isAcivated
-    ) {
-      getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
-    }
-    return () => { }
+    const handler = setTimeout(() => {
+      if (
+        !isDeactivateClicked
+        && !isRejectClicked
+        && !isAcceptClicked
+        && !isAcivated
+      ) {
+        getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
+      }
+    }, 1000);
+    
+    return () => {
+      clearTimeout(handler);
+    };
   }, [
     skip,
     isDeactivateClicked,
@@ -489,7 +494,7 @@ const OrganizationDashboardComponent = () => {
     selectedStatus,
     isAcivated
   ])
-
+  
   useEffect(() => {
     if (isStatusFieldsChanged) {
       getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
