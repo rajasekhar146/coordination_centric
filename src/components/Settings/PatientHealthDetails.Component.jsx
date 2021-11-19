@@ -30,6 +30,7 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         minWidth: 120,
         background: "#FFFFFF",
+        width: '100%'
     },
     dropdownStyle: {
         border: "1px solid black",
@@ -286,17 +287,19 @@ const PatientHealthDetails = props => {
                             </div>
                         </div>
 
-                        <div>
-                            <TextField
-                                onChange={(e) => {
-                                    setMediName(false)
-                                }}
-                                margin="normal"
-                                InputProps={{
-                                    className: classes.input,
-                                }}
-                            />
-                        </div>
+                        
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <TextField
+                                    onChange={(e) => {
+                                        setMediName(false)
+                                    }}
+                                    margin="normal"
+                                    InputProps={{
+                                        className: classes.input,
+                                    }}
+                                />
+                            </FormControl>
+                        
 
                     </div>
                 </div>
@@ -321,16 +324,18 @@ const PatientHealthDetails = props => {
                         </div>
 
                         <div>
-                            <TextField
-                                {...register('others', {
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <TextField
+                                    {...register('others', {
 
-                                })}
-                                placeholder="others ..."
-                                margin="normal"
-                                InputProps={{
-                                    className: classes.input,
-                                }}
-                            />
+                                    })}
+                                    placeholder="others ..."
+                                    margin="normal"
+                                    InputProps={{
+                                        className: classes.input,
+                                    }}
+                                />
+                            </FormControl>
                         </div>
                     </div>
 
@@ -369,10 +374,10 @@ const PatientHealthDetails = props => {
                         </div>
 
                         {selectedFiles.map((file) => (
-                            <UploadFile 
-                            file={file} 
-                            setReportsArray={setReportsArray} 
-                            reportsArray={reportsArray}
+                            <UploadFile
+                                file={file}
+                                setReportsArray={setReportsArray}
+                                reportsArray={reportsArray}
                             />
                         ))
                         }

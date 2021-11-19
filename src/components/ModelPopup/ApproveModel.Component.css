@@ -151,3 +151,14 @@
     display: flex;
     justify-content: space-between;
 }
+.io__conform__title_twofa {
+    margin-bottom: 20px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #A0A4A8;
+}

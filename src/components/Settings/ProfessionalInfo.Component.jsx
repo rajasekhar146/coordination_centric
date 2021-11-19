@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
-import { makeStyles } from '@material-ui/core/styles'
 import Dropzone from 'react-dropzone'
 import UploadIcon from '../../assets/icons/upload.png'
 import { Editor } from 'react-draft-wysiwyg'
@@ -30,34 +29,41 @@ import UploadCertificateFile from './UploadCertificateFile'
 import { useParams } from 'react-router-dom'
 import './Settings.Component.css'
 import Alert from '../Alert/Alert.component'
+import FormControl from "@material-ui/core/FormControl";
+import { withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+
+const styles = theme => ({
+  root: {
+      display: "flex",
+      flexWrap: "wrap",
+  },
+  formControl: {
+      margin: theme.spacing.unit,
+      minWidth: 120,
+      background: "#FFFFFF",
+      width: '100%'
+  },
+  dropdownStyle: {
+      border: "1px solid black",
+      borderRadius: "5px",
+      width: '50px',
+      height: '200px'
+  },
+  selectEmpty: {
+      marginTop: theme.spacing.unit * 2
+  },
   input: {
-    background: '#F9FAFB',
-    borderRadius: '8px',
+      background: "#FFFFFF",
+      borderRadius: "8px",
+      width: '100%'
   },
-  select: {
-    background: '#FFFFFF',
-    borderRadius: '8px',
-    width: '100%',
-    height: '48px',
-  },
-  multiselect: {
-    position: 'relative',
-    width: '100%',
-    height: '100px',
-    borderRadius: '5px',
-    backgroundColor: '#FFFFFF',
-  },
-  timeInput: {
-    background: '#FFFFFF',
-    height: '34px',
-    width: '100%',
-  },
-}))
+});
 
 const PersonalInfo = props => {
-  const classes = useStyles()
+  const {
+    classes
+  } = props
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [textCount, setTextCount] = useState(500)
@@ -359,6 +365,7 @@ const [subLabel, setSubLabel] = useState('')
           NPI ID <span className="pdc__required">*</span>
         </div>
         <div className="od_input_p">
+        <FormControl variant="outlined" className={classes.formControl}>
           <TextField
             {...register('npiId', {
               required: 'NPI ID is required.',
@@ -369,6 +376,7 @@ const [subLabel, setSubLabel] = useState('')
               className: classes.input,
             }}
           />
+          </FormControl>
         </div>
       </div>
       <ColoredLine color="#E4E7EC" />
@@ -512,4 +520,4 @@ const [subLabel, setSubLabel] = useState('')
     </div>
   )
 }
-export default PersonalInfo
+export default withStyles(styles)(PersonalInfo)

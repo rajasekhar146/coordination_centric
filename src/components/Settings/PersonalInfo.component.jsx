@@ -101,7 +101,7 @@ const PersonalInfo = props => {
         const response = await commonService.getProfile(urlData).catch(error => {
             console.log(error)
         })
-        if (response && response.data.status ===200) {
+        if (response && response.data.status === 200) {
             setProfileUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
         }
     }
@@ -239,6 +239,7 @@ const PersonalInfo = props => {
                         First Name
                     </div>
                     <div className="od_input_p">
+                    <FormControl variant="outlined" className={classes.formControl}>
                         <TextField
                             {...register('first_name', {
                                 required: 'First Name is required.',
@@ -249,6 +250,7 @@ const PersonalInfo = props => {
                                 className: classes.input,
                             }}
                         />
+                        </FormControl>
                     </div>
                 </div>
                 <ColoredLine color="#E4E7EC" />
@@ -257,6 +259,7 @@ const PersonalInfo = props => {
                         Last Name
                     </div>
                     <div className="od_input_p">
+                    <FormControl variant="outlined" className={classes.formControl}>
                         <TextField
                             {...register('last_name', {
                                 required: 'Last Name is required.',
@@ -267,6 +270,7 @@ const PersonalInfo = props => {
                                 className: classes.input,
                             }}
                         />
+                        </FormControl>
                     </div>
                 </div>
                 <ColoredLine color="#E4E7EC" />
@@ -275,6 +279,7 @@ const PersonalInfo = props => {
                         Email address
                     </div>
                     <div className="od_input_p">
+                    <FormControl variant="outlined" className={classes.formControl}>
                         <TextField
                             {...register('email', {
                                 required: 'Email is required.',
@@ -285,6 +290,7 @@ const PersonalInfo = props => {
                                 className: classes.input,
                             }}
                         />
+                        </FormControl>
                     </div>
                 </div>
                 <ColoredLine color="#E4E7EC" />
@@ -339,6 +345,7 @@ const PersonalInfo = props => {
                         Role
                     </div>
                     <div className="od_input_p">
+                    <FormControl variant="outlined" className={classes.formControl}>
                         <TextField
                             {...register('role', {
                                 required: 'role is required.',
@@ -350,6 +357,7 @@ const PersonalInfo = props => {
                                 className: classes.input,
                             }}
                         />
+                        </FormControl>
                     </div>
                 </div>
                 <ColoredLine color="#E4E7EC" />
@@ -395,43 +403,45 @@ const PersonalInfo = props => {
                         </div>
                         <div className="mb_25">
                             <FormControl variant="outlined" className={classes.formControl}>
-                            <TextField
-                                {...register('state', {
-                                    required: 'state is required.',
-                                })}
-                                margin="normal"
-                                InputProps={{
+                                <TextField
+                                    {...register('state', {
+                                        required: 'state is required.',
+                                    })}
+                                    margin="normal"
+                                    InputProps={{
 
-                                    className: classes.input,
-                                }}
-                            />
+                                        className: classes.input,
+                                    }}
+                                />
                             </FormControl>
                         </div>
                         <div className="mb_25">
-                            {/* <FormControl variant="outlined" className={classes.formControl}> */}
-                            <TextField
-                                {...register('city', {
-                                    required: 'city is required.',
-                                })}
-                                margin="normal"
-                                InputProps={{
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <TextField
+                                    {...register('city', {
+                                        required: 'city is required.',
+                                    })}
+                                    margin="normal"
+                                    InputProps={{
 
-                                    className: classes.input,
-                                }}
-                            />
-                            {/* </FormControl> */}
+                                        className: classes.input,
+                                    }}
+                                />
+                            </FormControl>
                         </div>
                         <div className="mb_25">
-                            <TextField
-                                {...register('postalCode', {
-                                    required: 'zipcode is required.',
-                                })}
-                                margin="normal"
-                                InputProps={{
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <TextField
+                                    {...register('postalCode', {
+                                        required: 'zipcode is required.',
+                                    })}
+                                    margin="normal"
+                                    InputProps={{
 
-                                    className: classes.input,
-                                }}
-                            />
+                                        className: classes.input,
+                                    }}
+                                />
+                            </FormControl>
                         </div>
                     </div>
 
