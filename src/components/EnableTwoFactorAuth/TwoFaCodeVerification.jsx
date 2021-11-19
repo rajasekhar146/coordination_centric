@@ -52,8 +52,11 @@ const TwoFaEnabled = props => {
     email,
   } = signinStoreData;
 
+
+
   useEffect(() => {
-    if (twoFactor_auth_type !== 'none') {
+    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFaVerfied) {
       history.push(`/dashboard`)
     }
   }, [])
@@ -82,6 +85,7 @@ const TwoFaEnabled = props => {
     const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
     res
       .then(() => {
+        localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
       })
       .catch(() => {

@@ -111,7 +111,6 @@ const menuList = getOptions()
 const PatienRecordsComponent = (props) => {
 
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const [menuOptions, setMenuOptions] = React.useState([])
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
   const [openInvitePatientSuccess, setOpenInvitePatientSuccess] = useState(false)
   const [openSharePatientRecord, setOpenSharePatientRecord] = useState(false)
@@ -133,17 +132,17 @@ const PatienRecordsComponent = (props) => {
 
   
 
-  const handleClick = (event, status) => {
-    event.preventDefault()
-    event.stopPropagation()
-    setAnchorEl(event.currentTarget)
-    const menus = menuList.filter(m => m.menu === status.toLowerCase())
-    console.log('menus', menus)
-    if (menus.length > 0) setMenuOptions(menus[0].options)
-    else setMenuOptions([])
+  // const handleClick = (event, status) => {
+  //   event.preventDefault()
+  //   event.stopPropagation()
+  //   setAnchorEl(event.currentTarget)
+  //   const menus = menuList.filter(m => m.menu === status.toLowerCase())
+  //   console.log('menus', menus)
+  //   if (menus.length > 0) setMenuOptions(menus[0].options)
+  //   else setMenuOptions([])
 
-    console.log('menus[0].options', menus[0].options)
-  }
+  //   console.log('menus[0].options', menus[0].options)
+  // }
 
   return (
     <div className="od__main__div">
@@ -182,7 +181,6 @@ const PatienRecordsComponent = (props) => {
                       open={open}
                       handleClose={handleClose}
                       classes={classes}
-                      menuOptions={menuOptions}
                       getTextColor={getTextColor}
                       rows={rows}
                       menuList={menuList}

@@ -99,6 +99,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/patientrecords" component={PatienRecords} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
+          <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
           <MasterLayoutWithOutLefuMenuComponent path="/settings/:userId" component={Settings} />

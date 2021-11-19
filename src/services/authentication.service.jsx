@@ -77,6 +77,8 @@ function login(username, password) {
 
         if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')) {
           update2fa(true)
+          localStorage.setItem('currentUser', JSON.stringify(get(err.response, ['data', 'data'], '')))
+          currentUserSubject.next(get(err.response, ['data', 'data'], ''))
         }
 
         return err.response?.data
@@ -87,6 +89,7 @@ function login(username, password) {
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser')
+  localStorage.removeItem('twoFaVerfied')
   currentUserSubject.next(null)
 }
 

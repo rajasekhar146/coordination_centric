@@ -688,7 +688,7 @@ const OrganizationDashboardComponent = () => {
         <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
           <Button className="od_clear_btn" onClick={handleClear}>
-           &nbsp;&nbsp; Clear Filters
+            &nbsp;&nbsp; Clear Filters
           </Button>
           {role === "superadmin" || (planType === "premium") ? (
             <Button className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"} onClick={handleAddOrganizationOpen}>
@@ -774,7 +774,9 @@ const OrganizationDashboardComponent = () => {
                 <TableHead>
                   <TableRow>
                     {columns.map(column =>
-                      column.visible ? (
+                      column.id === 'invited_facilityName' && role !== 'superadmin' ? (
+                        null
+                      ) : (column.visible ? (
                         <TableCell
                           key={column.id}
                           align={column.align}
@@ -788,7 +790,10 @@ const OrganizationDashboardComponent = () => {
                           {column.label}
                         </TableCell>
                       ) : null
-                    )}
+                      ))
+                    }
+
+
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -817,6 +822,7 @@ const OrganizationDashboardComponent = () => {
                         setIsCancelInviteClicked={setIsCancelInviteClicked}
                         setSubLabel={setSubLabel}
                         setIsActivateClicked={setIsActivateClicked}
+                        role={role}
                       />
                     ))
                     : null
