@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -34,17 +34,21 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
-        collaboratorList
+        list
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
     const [anchorEl, setAnchorEl] = React.useState(null)
+    const [collaboratorList, setCollaboratorList] = React.useState([])
 
     const handleClose = () => {
         setAnchorEl(null)
     }
 
+    useEffect(() => {
+        setCollaboratorList([...list])
+    }, [list.length])
 
     return (
         <div>

@@ -62,7 +62,8 @@ const styles = theme => ({
 
 const PersonalInfo = props => {
   const {
-    classes
+    classes,
+    getMemberDetails
   } = props
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
@@ -259,6 +260,7 @@ const [subLabel, setSubLabel] = useState('')
       setOpenFlash(true)
       setAlertMsg('Saved')
       setSubLabel('Your changes are saved')
+      getMemberDetails()
     }
   }
   const handleCloseFlash = (event, reason) => {

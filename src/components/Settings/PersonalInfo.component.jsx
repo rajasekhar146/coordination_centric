@@ -53,14 +53,13 @@ const PersonalInfo = props => {
     const timezones = moment.tz.names();
     console.log(timezones);
 
-
-
     const {
         userDetails,
         classes,
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        getMemberDetails
     } = props
     const [profilepic, setProfilePic] = useState('')
     const [prfileUrl, setProfileUrl] = useState('')
@@ -206,6 +205,7 @@ const PersonalInfo = props => {
             setOpenFlash(true)
             setAlertMsg('Saved')
             setSubLabel('Your changes are saved')
+            getMemberDetails()
         }
     }
 
@@ -239,17 +239,17 @@ const PersonalInfo = props => {
                         First Name
                     </div>
                     <div className="od_input_p">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <TextField
-                            {...register('first_name', {
-                                required: 'First Name is required.',
-                            })}
-                            margin="normal"
-                            InputProps={{
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                {...register('first_name', {
+                                    required: 'First Name is required.',
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                className: classes.input,
-                            }}
-                        />
+                                    className: classes.input,
+                                }}
+                            />
                         </FormControl>
                     </div>
                 </div>
@@ -259,17 +259,17 @@ const PersonalInfo = props => {
                         Last Name
                     </div>
                     <div className="od_input_p">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <TextField
-                            {...register('last_name', {
-                                required: 'Last Name is required.',
-                            })}
-                            margin="normal"
-                            InputProps={{
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                {...register('last_name', {
+                                    required: 'Last Name is required.',
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                className: classes.input,
-                            }}
-                        />
+                                    className: classes.input,
+                                }}
+                            />
                         </FormControl>
                     </div>
                 </div>
@@ -279,17 +279,17 @@ const PersonalInfo = props => {
                         Email address
                     </div>
                     <div className="od_input_p">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <TextField
-                            {...register('email', {
-                                required: 'Email is required.',
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                {...register('email', {
+                                    required: 'Email is required.',
 
-                            })}
-                            margin="normal"
-                            InputProps={{
-                                className: classes.input,
-                            }}
-                        />
+                                })}
+                                margin="normal"
+                                InputProps={{
+                                    className: classes.input,
+                                }}
+                            />
                         </FormControl>
                     </div>
                 </div>
@@ -345,18 +345,18 @@ const PersonalInfo = props => {
                         Role
                     </div>
                     <div className="od_input_p">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <TextField
-                            {...register('role', {
-                                required: 'role is required.',
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                {...register('role', {
+                                    required: 'role is required.',
 
-                            })}
-                            margin="normal"
-                            InputProps={{
+                                })}
+                                margin="normal"
+                                InputProps={{
 
-                                className: classes.input,
-                            }}
-                        />
+                                    className: classes.input,
+                                }}
+                            />
                         </FormControl>
                     </div>
                 </div>

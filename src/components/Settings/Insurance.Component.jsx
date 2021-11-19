@@ -61,6 +61,7 @@ const InsuranceComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        getMemberDetails
     } = props
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -86,6 +87,7 @@ const InsuranceComponent = props => {
             setOpenFlash(true)
             setAlertMsg('Updated')
             setSubLabel('Your password was successfuly updated.')
+            getMemberDetails()
         }).catch(() => {
 
         })

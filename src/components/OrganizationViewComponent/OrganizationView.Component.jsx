@@ -30,6 +30,7 @@ import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
 import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
 import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
+import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
@@ -86,6 +87,11 @@ const OrganizationViewComponent = (props) => {
         setValue(newValue);
     };
 
+    const getOrgDetails = async () => {
+        let orgDetails = await organizationService.getOrganizationDetails(orgId)
+        setOrgDetails(orgDetails)
+    }
+
     useEffect(() => {
         getOrgDetails()
     }, [])
@@ -127,10 +133,7 @@ const OrganizationViewComponent = (props) => {
         selected: {},
     }))((props) => <Tab {...props} />)
 
-    const getOrgDetails = async () => {
-        let orgDetails = await organizationService.getOrganizationDetails(orgId)
-        setOrgDetails(orgDetails)
-    }
+   
 
     const getButton = () => {
         switch (value) {
@@ -218,13 +221,13 @@ const OrganizationViewComponent = (props) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Members
-                    membersList={orgDet.user_details}
+                    list={orgDet.user_details}
                     orgId={orgId}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Collaborator
-                    collaboratorList={orgDet.facility_details}
+                    list={orgDet.facility_details}
                     orgId={orgId}
                 />
             </TabPanel>
@@ -242,6 +245,8 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
                         orgId={orgId}
+                        admin={get(orgDet, ['user_details', '0'], null)}
+                        getOrgDetails={getOrgDetails}
                     // setSkip={setSkip}
                     // selectedOrg={selectedOrg}
                     // setOrganizations={setOrganizations}
@@ -279,6 +284,8 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteCollaborator={setOpenInviteCollaborator}
                         setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
                         orgId={orgId}
+                        admin={get(orgDet, ['user_details', '0'], null)}
+                        getOrgDetails={getOrgDetails}
                     // setSkip={setSkip}
                     // selectedOrg={selectedOrg}
                     // setOrganizations={setOrganizations}

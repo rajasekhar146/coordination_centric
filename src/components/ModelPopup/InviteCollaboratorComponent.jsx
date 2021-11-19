@@ -45,13 +45,11 @@ const InviteCollaboratorComponent = props => {
     } = props
 
     const {
-        // setOpenFlash,
-        // setAlertMsg,
-        // clickCloseButton,
-        // setSubLabel,
         setOpenInviteCollaboratorSuccess,
         setOpenInviteCollaborator,
-        orgId
+        orgId,
+        admin,
+        getOrgDetails
     } = props;
 
 
@@ -84,7 +82,7 @@ const InviteCollaboratorComponent = props => {
         var orgDetail = {
             facilityName: data.facilityName,
             facilityEmail: data.facilityEmail,
-            refUserId: orgId
+            refUserId: admin._id
         }
 
         if (currentUserRole === 'admin') {
@@ -92,7 +90,7 @@ const InviteCollaboratorComponent = props => {
                 adminEmail: currentUserEmail,
                 facilityEmail: data.facilityEmail,
                 facilityName: data.facilityName,
-                refUserId: orgId
+                refUserId: admin._id
             }
         }
 
@@ -100,6 +98,7 @@ const InviteCollaboratorComponent = props => {
         res.then((response) => {
             setOpenInviteCollaborator(false)
             setOpenInviteCollaboratorSuccess(true)
+            getOrgDetails()
         }).catch((error) => {
             console.log(error.response)
             if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {

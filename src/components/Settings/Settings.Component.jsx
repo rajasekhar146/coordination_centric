@@ -68,7 +68,7 @@ const OrganizationViewComponent = () => {
         setValue(newValue);
     };
 
-    useEffect(async () => {
+    const getMemberDetails = async () => {
         const res = await settinService.getMemberDetails(userId).catch((err) => {
 
         })
@@ -92,7 +92,10 @@ const OrganizationViewComponent = () => {
         } else {
             console.log(res)
         }
+    }
 
+    useEffect(() => {
+        getMemberDetails()
     }, [])
 
     const handleCloseFlash = (event, reason) => {
@@ -189,6 +192,7 @@ const OrganizationViewComponent = () => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -200,6 +204,7 @@ const OrganizationViewComponent = () => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -207,13 +212,16 @@ const OrganizationViewComponent = () => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
             <TabPanel value={value} index={4}>
                 <TwoFaEnableSettings
+                    enableTwoFa={get(userDetails, ['twoFactor_auth_type'], '')}
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
             <TabPanel value={value} index={5}>
@@ -221,6 +229,7 @@ const OrganizationViewComponent = () => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
             <Alert

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -28,17 +28,22 @@ const colorcodes = {
 
 const MembersComponent = props => {
     const {
-        membersList = [],
+        list = [],
         colorcodes,
     } = props
 
   
 
     const [anchorEl, setAnchorEl] = React.useState(null)
+    const [memberList, setMemberList] = React.useState([])
 
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    useEffect(() => {
+        setMemberList([...list])
+    }, [list.length])
 
 
     return (
@@ -67,7 +72,7 @@ const MembersComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {membersList.map((row, index) => (
+                            {memberList.map((row, index) => (
                                 <MemberItem
                                     row={row}
                                     index={index}

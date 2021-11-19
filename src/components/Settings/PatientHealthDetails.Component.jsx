@@ -54,6 +54,7 @@ const PatientHealthDetails = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        getMemberDetails
     } = props;
 
     const [profilepic, setProfilePic] = useState('')
@@ -159,6 +160,7 @@ const PatientHealthDetails = props => {
             setOpenFlash(true)
             setAlertMsg('Saved')
             setSubLabel('Your changes are saved')
+            getMemberDetails()
         }
     }
 
