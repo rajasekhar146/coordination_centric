@@ -45,7 +45,8 @@ const ForgotPasswordComponent = (props) => {
 
     const onSubmit = (data) => {
         SigninStore.set({ email: data.email })
-        const res = authenticationService.requestPassword(data.email)
+        const reBody = { email: data.email }
+        const res = authenticationService.requestPassword(reBody)
         res.then(() => {
             history.push('/forgotpasswordresend')
         }).catch(() => {

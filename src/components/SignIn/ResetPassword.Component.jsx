@@ -17,6 +17,11 @@ import { isUpperCase } from "is-upper-case";
 import { isLowerCase } from "is-lower-case";
 import { useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Alert from '../Alert/Alert.component'
+
 
 const useStyles = makeStyles(theme => ({
     input: {
@@ -34,6 +39,11 @@ const ResetPasswordPage = props => {
     const { search } = useLocation();
     const token = new URLSearchParams(search).get('token');
     const email = new URLSearchParams(search).get('email');
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
 
     const [validations, setValidations] = useState({
         passwordLength: false,
@@ -43,6 +53,20 @@ const ResetPasswordPage = props => {
         small: false,
     });
 
+    const handleMouseDownPassword = event => {
+        event.preventDefault()
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword)
+    }
+
+    const handleCloseFlash = () => {
+        setOpenFlash(false)
+      }
 
     useEffect(() => {
         const validationsObj = {
@@ -92,7 +116,8 @@ const ResetPasswordPage = props => {
             res.then(() => {
                 history.push('/resetpasswordsuccess')
             }).catch(() => {
-
+                setOpenFlash(true)
+                setSubLabel('Password has been Changed Already')
             })
             // SignInStore.load('ResetPassword', {
             //     resetData,
@@ -135,15 +160,27 @@ const ResetPasswordPage = props => {
                             Password &nbsp;<span className="ac__required">*</span>
                         </div>
                         <div className="io__icon">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setPassword(e.target.value)
                                 }}
+                                type={showPassword ? 'text' : 'password'}
                                 margin="normal"
-                                type="password"
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">Show</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                         <div>
@@ -232,15 +269,27 @@ const ResetPasswordPage = props => {
                             &nbsp;<span className="ac__required">*</span>
                         </div>
                         <div className="io__icon">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setConformPassword(e.target.value)
                                 }}
+                                type={showConfirmPassword ? 'text' : 'password'}
                                 margin="normal"
-                                type="password"
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">Show</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                         {errMsg && <p className="ac__required">{errMsg}</p>}
@@ -274,7 +323,10 @@ const ResetPasswordPage = props => {
                         </div>
                     </div>
                 </div>
-
+                <Alert
+                    handleCloseFlash={handleCloseFlash}
+                    subLebel={subLebel}
+                    openflash={openflash} />
             </form>
         </div>
     )
