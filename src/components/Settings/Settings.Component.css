@@ -544,3 +544,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .si_password_content {
     padding-left: 50px;
 }
+.io_p_info_twofa {
+    height: 100vh;
+    margin-top: 25px;
+}
+.io-twofa {
+    display: flex;
+    align-items: center;
+}
+.io_disable {
+    color: #E42346;
+}
+.io_enable {
+    color: #039855;
+}
+.od_label_p_twofa{
+    width: 35%;
+    display: flex;
+    align-items: center;
+}

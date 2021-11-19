@@ -12,28 +12,37 @@ import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 import { useForm } from 'react-hook-form'
 // import { organizationService } from '../../services'
 // import get from 'lodash.get'
-import Select from '@mui/material/Select'
-import { makeStyles } from '@material-ui/core/styles'
 import get from 'lodash.get'
 import { organizationService } from '../../services'
+import { withStyles } from "@material-ui/core/styles";
+import FormControl from "@material-ui/core/FormControl";
 
-const useStyles = makeStyles(theme => ({
-    select: {
+
+const styles = theme => ({
+    root: {
+        display: "flex",
+        flexWrap: "wrap",
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
         background: "#FFFFFF",
-        borderRadius: "8px",
-        width: "100%",
-        height: "48px"
+        width: '100%'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing.unit * 2
     },
     input: {
         background: "#FFFFFF",
         borderRadius: "8px",
-        width: '100%'
     },
-}))
+});
 
 
 const InviteCollaboratorComponent = props => {
-    const classes = useStyles()
+    const {
+        classes
+    } = props
 
     const {
         // setOpenFlash,
@@ -109,47 +118,51 @@ const InviteCollaboratorComponent = props => {
                         <div className="io__label">
                             Organization name <span className="ac__required">*</span>
                         </div>
-                        <TextField
-                            // {...useInput('facilityName', { isRequired: true })}
-                            {...register('facilityName', {
-                                required: 'Name is required.'
-                            })}
-                            margin="normal"
-                            error={errors.facilityName && isSubmit}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <img src={NameIcon} alt="First Name" />
-                                    </InputAdornment>
-                                ),
-                                className: classes.input
-                            }}
-                        />
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                // {...useInput('facilityName', { isRequired: true })}
+                                {...register('facilityName', {
+                                    required: 'Name is required.'
+                                })}
+                                margin="normal"
+                                error={errors.facilityName && isSubmit}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src={NameIcon} alt="First Name" />
+                                        </InputAdornment>
+                                    ),
+                                    className: classes.input
+                                }}
+                            />
+                        </FormControl>
                         {errors.name && <p className="io__required">{errors.name.message}</p>}
                     </div>
 
 
                     <div className="io__row">
                         <div className="io__label">Email <span className="ac__required">*</span></div>
-                        <TextField
-                            {...register('facilityEmail', {
-                                required: 'Email is required.',
-                                pattern: {
-                                    value:
-                                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                    message: 'Please enter a valid email',
-                                },
-                            })}
-                            margin="normal"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <img src={EmailIcon} alt="Email Icon" />
-                                    </InputAdornment>
-                                ),
-                                className: classes.input
-                            }}
-                        />
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                {...register('facilityEmail', {
+                                    required: 'Email is required.',
+                                    pattern: {
+                                        value:
+                                            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                        message: 'Please enter a valid email',
+                                    },
+                                })}
+                                margin="normal"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img src={EmailIcon} alt="Email Icon" />
+                                        </InputAdornment>
+                                    ),
+                                    className: classes.input
+                                }}
+                            />
+                        </FormControl>
                         {errors.email && <p className="io__required">{errors.email.message}</p>}
                         {isExist && <p className="io__required">{isExist}</p>}
 
@@ -177,4 +190,4 @@ const InviteCollaboratorComponent = props => {
     )
 }
 
-export default InviteCollaboratorComponent
+export default withStyles(styles)(InviteCollaboratorComponent)

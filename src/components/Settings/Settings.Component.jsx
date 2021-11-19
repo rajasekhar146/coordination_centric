@@ -12,6 +12,7 @@ import { settinService } from '../../services'
 import get from 'lodash.get'
 import PasswordSettings from './PasswordSettings.Component'
 import InsuranceComponent from './Insurance.Component';
+import TwoFaEnableSettings from './TwoFaEnableSettings.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
 import Alert from '../Alert/Alert.component'
@@ -203,6 +204,13 @@ const OrganizationViewComponent = () => {
             </TabPanel>
             <TabPanel value={value} index={3}>
                 <PasswordSettings
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+                <TwoFaEnableSettings
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
