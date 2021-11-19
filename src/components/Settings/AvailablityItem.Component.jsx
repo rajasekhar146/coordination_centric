@@ -104,7 +104,7 @@ const defaultValues = [
 ]
 
 const AvailablityItem = props => {
-  const { day, first_half_starting_time, first_half_ending_time, second_half_starting_time, second_half_ending_time } =
+  const { day, first_half_starting_time, first_half_ending_time, second_half_starting_time, second_half_ending_time, is_available } =
     props.avaliablity
   // const[availableTime, setAvailableTime] = defaultValues
   const classes = useStyles()
@@ -123,9 +123,9 @@ const AvailablityItem = props => {
     setToggleOn(IsEnbaled)
     //setAvailabilities(IsEnbaled)
     if (mAvaliabilities.length > 0) {
-      const newAvailable = mAvaliabilities.map(m => {
-        if (m.day === day && !IsEnbaled) return { ...m, is_available: false }
-        else return { ...m, is_available: true }
+      var newAvailable = mAvaliabilities.map(m => {
+        if (m.day === day) return { ...m, is_available: IsEnbaled }
+        else return m
       })
       dispatch(memberAvaliabilities(newAvailable))
     }
@@ -212,6 +212,7 @@ const AvailablityItem = props => {
     setValue('first_half_ending_time', moment(first_half_ending_time).format('hh:mm'))
     setValue('second_half_starting_time', moment(second_half_starting_time).format('hh:mm'))
     setValue('second_half_ending_time', moment(second_half_ending_time).format('hh:mm'))
+    setToggleOn(is_available)
   }, [])
 
   return (

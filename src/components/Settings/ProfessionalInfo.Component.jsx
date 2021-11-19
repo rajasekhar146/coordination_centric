@@ -162,8 +162,9 @@ const [subLabel, setSubLabel] = useState('')
       })
       setSpeciality(tSpecialization)
 
-      const availability = mpInfo.availabilities
-
+      const availability = mpInfo.availability
+      console.log('availability', availability)
+      
       getAvailability(availability)
     } else {
       console.log('Else')
@@ -238,7 +239,7 @@ const [subLabel, setSubLabel] = useState('')
       npiID: npiId,
       certificates: newCertificates,
       speciality: newSpecialties,
-      availabilities: newAvailabilities,
+      availabilities: {days: newAvailabilities},
       services: {
         marketPlace: mpToggleOn,
         consultation: pcToggleOn,
@@ -332,7 +333,7 @@ const [subLabel, setSubLabel] = useState('')
             second_half_ending_time: tAvailable[0].second_half_ending_time,
             is_available: true,
           }
-        } else return n
+        } else return {...n, is_available: false}
       })
       console.log('NEW Avaliablity', nAvailable)
       setAvailabilities(nAvailable)
