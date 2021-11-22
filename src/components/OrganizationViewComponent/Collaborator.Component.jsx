@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -14,7 +14,7 @@ import get from 'lodash.get'
 const columns = [
     { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'facilityEmail', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'roles', label: 'Roles', minWidth: 200, align: 'left', visible: true },
+    { id: 'roles', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -34,17 +34,21 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
-        collaboratorList
+        list
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
     const [anchorEl, setAnchorEl] = React.useState(null)
+    const [collaboratorList, setCollaboratorList] = React.useState([])
 
     const handleClose = () => {
         setAnchorEl(null)
     }
 
+    useEffect(() => {
+        setCollaboratorList([...list])
+    }, [list.length])
 
     return (
         <div>

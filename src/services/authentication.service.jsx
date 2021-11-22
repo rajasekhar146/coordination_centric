@@ -19,6 +19,7 @@ export const authenticationService = {
   twoFactorAppAuthVerification,
   resetPassword,
   changePassword,
+  requestPassword,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -77,6 +78,8 @@ function login(username, password) {
 
         if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')) {
           update2fa(true)
+          localStorage.setItem('currentUser', JSON.stringify(get(err.response, ['data', 'data'], '')))
+          currentUserSubject.next(get(err.response, ['data', 'data'], ''))
         }
 
         return err.response?.data
@@ -87,6 +90,7 @@ function login(username, password) {
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser')
+  localStorage.removeItem('twoFaVerfied')
   currentUserSubject.next(null)
 }
 
@@ -142,6 +146,20 @@ function twoFactorAppAuthVerification(data) {
   return (
     axios
       .post(`${apiURL}/users/twoFactorAuthenticationVerification`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function requestPassword(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/forgotPassword`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

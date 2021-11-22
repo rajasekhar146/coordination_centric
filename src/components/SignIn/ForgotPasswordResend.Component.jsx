@@ -107,7 +107,11 @@ const ForgotPasswordResend = props => {
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div className="si__right__subtitle  io_margin_bottom30">
+                        <div
+                            onClick={() => {
+                                onSubmit()
+                            }}
+                            className="si__right__subtitle  io_margin_bottom30">
                             Didn’t receive the email? Click to resend
                         </div>
                         <div

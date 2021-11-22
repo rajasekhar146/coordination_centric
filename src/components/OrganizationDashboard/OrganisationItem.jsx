@@ -33,7 +33,8 @@ const OrganisationItem = props => {
     setAlertMsg,
     setIsCancelInviteClicked,
     setSubLabel,
-    setIsActivateClicked
+    setIsActivateClicked,
+    role
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -222,7 +223,8 @@ const OrganisationItem = props => {
               ))}
             </Menu>
           </TableCell>
-        ) : column.id == 'id' ? null : (
+        ) :  column.id === 'invited_facilityName' && role !== 'superadmin' ? 
+        null : column.id == 'id' ? null : (
           <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
             {column.format && typeof value === 'number' ? column.format(value) : value}
           </TableCell>

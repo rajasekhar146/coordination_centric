@@ -38,16 +38,18 @@ const VerificationCodePage = props => {
   const [alertMsg, setAlertMsg] = useState('')
   const [subLebel, setSubLabel] = useState('')
 
-  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
 
 
   const [verificationCode, setVerificationCode] = useState('')
 
   useEffect(() => {
-    if (twoFactor_auth_type !== 'none') {
+    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFaVerfied) {
       history.push(`/dashboard`)
     }
   }, [])
+
 
   const getLabel = () => {
     switch (method) {
@@ -66,7 +68,9 @@ const VerificationCodePage = props => {
     const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
     res
       .then(() => {
+        localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
+        
       })
       .catch(() => {
         history.push(`/2faverificationfail`)

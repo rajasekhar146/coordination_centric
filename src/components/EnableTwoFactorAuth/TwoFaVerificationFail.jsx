@@ -43,9 +43,9 @@ const TwoFaVerificationFail = props => {
                 if (twoFactor_auth_type === 'none') {
                   history.push('/2facodeverification')
                 } else if (twoFactor_auth_type === 'email') {
-                  history.push(`/verification/${twoFactor_auth_type}`)
+                  history.push(`/enable2fa`)
                 } else if (twoFactor_auth_type === 'app') {
-                  history.push(`/verificationbyapp`)
+                  history.push(`/enable2fa`)
                 }
               }
               }

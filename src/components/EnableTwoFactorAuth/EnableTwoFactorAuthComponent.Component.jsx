@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './EnableTwoFactorAuthComponent.Component.css'
 import SmsIcon from '../../assets/icons/typing.png'
 import DeviceIcon from '../../assets/icons/mobile.png'
@@ -29,6 +29,14 @@ const EnableTwoFactorAuth = () => {
       history.push('/verificationbyapp')
     })
   }
+
+  useEffect(() => {
+    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFaVerfied) {
+      history.push(`/dashboard`)
+    }
+  }, [])
+
 
   return (
     <div className="io__two_fa">

@@ -31,38 +31,40 @@ import './Settings.Component.css'
 import Alert from '../Alert/Alert.component'
 import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from "@material-ui/core/styles";
+import history from '../../history'
 
 
 const styles = theme => ({
   root: {
-      display: "flex",
-      flexWrap: "wrap",
+    display: "flex",
+    flexWrap: "wrap",
   },
   formControl: {
-      margin: theme.spacing.unit,
-      minWidth: 120,
-      background: "#FFFFFF",
-      width: '100%'
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    background: "#FFFFFF",
+    width: '100%'
   },
   dropdownStyle: {
-      border: "1px solid black",
-      borderRadius: "5px",
-      width: '50px',
-      height: '200px'
+    border: "1px solid black",
+    borderRadius: "5px",
+    width: '50px',
+    height: '200px'
   },
   selectEmpty: {
-      marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2
   },
   input: {
-      background: "#FFFFFF",
-      borderRadius: "8px",
-      width: '100%'
+    background: "#FFFFFF",
+    borderRadius: "8px",
+    width: '100%'
   },
 });
 
 const PersonalInfo = props => {
   const {
-    classes
+    classes,
+    getMemberDetails
   } = props
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
@@ -81,9 +83,9 @@ const PersonalInfo = props => {
   const mProfessionalInfo = useSelector(state => state.memberProfessionalInfo)
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const mAvaliabilities = useSelector(state => state.memberAvaliabilities)
-const [openflash, setOpenFlash] = useState(false)
-const [alertMsg, setAlertMsg] = useState('')
-const [subLabel, setSubLabel] = useState('')
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLabel, setSubLabel] = useState('')
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -136,14 +138,14 @@ const [subLabel, setSubLabel] = useState('')
     //loadFormData(memberData)
   }, [])
 
-  const handleDeleteSpecialties = () => {}
+  const handleDeleteSpecialties = () => { }
   const loadFormData = async data => {
     handleSpecialitySearch('')
-     const res = await settinService.getMemberDetails(userId).catch(err => {})
-     if (get(res, ['data', 'status'], '') === 200) {
-       console.log('res', get(res, ['data', 'data', 'data', 'email'], null))
-       setEmail(get(res, ['data', 'data', 'data', 'email'], null))
-     }
+    const res = await settinService.getMemberDetails(userId).catch(err => { })
+    if (get(res, ['data', 'status'], '') === 200) {
+      console.log('res', get(res, ['data', 'data', 'data', 'email'], null))
+      setEmail(get(res, ['data', 'data', 'data', 'email'], null))
+    }
     // setSpecialities(links)
     console.log('load >> formdata', data)
     const mpInfo = data
@@ -170,7 +172,7 @@ const [subLabel, setSubLabel] = useState('')
 
       const availability = mpInfo.availability
       console.log('availability', availability)
-      
+
       getAvailability(availability)
     } else {
       console.log('Else')
@@ -245,7 +247,7 @@ const [subLabel, setSubLabel] = useState('')
       npiID: npiId,
       certificates: newCertificates,
       speciality: newSpecialties,
-      availabilities: {days: newAvailabilities},
+      availabilities: { days: newAvailabilities },
       services: {
         marketPlace: mpToggleOn,
         consultation: pcToggleOn,
@@ -259,6 +261,7 @@ const [subLabel, setSubLabel] = useState('')
       setOpenFlash(true)
       setAlertMsg('Saved')
       setSubLabel('Your changes are saved')
+      getMemberDetails()
     }
   }
   const handleCloseFlash = (event, reason) => {
@@ -339,7 +342,7 @@ const [subLabel, setSubLabel] = useState('')
             second_half_ending_time: tAvailable[0].second_half_ending_time,
             is_available: true,
           }
-        } else return {...n, is_available: false}
+        } else return { ...n, is_available: false }
       })
       console.log('NEW Avaliablity', nAvailable)
       setAvailabilities(nAvailable)
@@ -365,17 +368,17 @@ const [subLabel, setSubLabel] = useState('')
           NPI ID <span className="pdc__required">*</span>
         </div>
         <div className="od_input_p">
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            {...register('npiId', {
-              required: 'NPI ID is required.',
-              onChange: e => setNPIID(e.target.value),
-            })}
-            margin="normal"
-            InputProps={{
-              className: classes.input,
-            }}
-          />
+          <FormControl variant="outlined" className={classes.formControl}>
+            <TextField
+              {...register('npiId', {
+                required: 'NPI ID is required.',
+                onChange: e => setNPIID(e.target.value),
+              })}
+              margin="normal"
+              InputProps={{
+                className: classes.input,
+              }}
+            />
           </FormControl>
         </div>
       </div>
@@ -509,7 +512,13 @@ const [subLabel, setSubLabel] = useState('')
       <div className="od__row od_flex_space_between">
         <div className="od__p_title io_pl0"></div>
         <div className="od__btn__div od__align__right io_pr0">
-          <Button className="io_p_cancel">Cancel</Button>
+          <Button
+            onClick={() => {
+              history.push('/dashboard')
+            }}
+            className="io_p_cancel">
+            Cancel
+          </Button>
 
           <Button className="io__save__btn" onClick={handleSave}>
             Save

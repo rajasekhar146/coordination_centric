@@ -10,6 +10,7 @@ import LeftImageIcon from '../../assets/images/left_image_logo.png'
 import SigninStore from '../../stores/signinstore'
 import KeyIcon from '../../assets/icons/key_icon.png'
 import ArrowLeft from '../../assets/icons/arrow-left.png'
+import { authenticationService } from '../../services'
 
 
 
@@ -44,17 +45,18 @@ const ForgotPasswordComponent = (props) => {
 
     const onSubmit = (data) => {
         SigninStore.set({ email: data.email })
-        SigninStore.load('RequestPassword', {
-            email: data.email,
-            successCallback: (data) => {
-                history.push('./forgotpasswordresend')
-            }
+        const reBody = { email: data.email }
+        const res = authenticationService.requestPassword(reBody)
+        res.then(() => {
+            history.push('/forgotpasswordresend')
+        }).catch(() => {
+
         })
     }
 
 
-   
-    
+
+
 
     return (
         <div className="si__main__div">
@@ -103,21 +105,21 @@ const ForgotPasswordComponent = (props) => {
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div 
-                        className="si__forgot__link"
-                        onClick={() => {
-                            history.push('/signin')
-                          }}
+                        <div
+                            className="si__forgot__link"
+                            onClick={() => {
+                                history.push('/signin')
+                            }}
                         >
-                            <img src={ArrowLeft} alt="Login Left Logo" /> 
-                            <span style={{ marginLeft: "10px"}}>
-                            Back to log in
+                            <img src={ArrowLeft} alt="Login Left Logo" />
+                            <span style={{ marginLeft: "10px" }}>
+                                Back to log in
                             </span>
-                                 
+
                         </div>
                     </div>
                 </div>
-                
+
             </form>
         </div>
     )

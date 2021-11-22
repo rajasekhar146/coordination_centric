@@ -25,7 +25,10 @@ import { isLowerCase } from "is-lower-case";
 import CheckedIcon from '../../assets/icons/checked.png'
 import UncheckedIcon from '../../assets/icons/unchecked.png'
 import { authenticationService } from '../../services'
-
+import OutlinedInput from '@mui/material/OutlinedInput'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import history from '../../history'
 
 const styles = theme => ({
     root: {
@@ -67,7 +70,9 @@ const PersonalInfo = props => {
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [errMsg, setErrMsg] = useState('')
-
+    const [showPassword, setShowPassword] = useState(false)
+    const [showNewPassword, setShowNewPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const [validations, setValidations] = useState({
         passwordLength: false,
@@ -134,7 +139,7 @@ const PersonalInfo = props => {
                 // history.push('/resetpasswordsuccess')
                 setOpenFlash(true)
                 setAlertMsg('Updated')
-                setSubLabel('Your password was successfuly updated.')
+                setSubLabel('Your password was successfully updated.')
             }).catch(() => {
 
             })
@@ -152,6 +157,20 @@ const PersonalInfo = props => {
             setErrMsg('The password confirmation doesn’t match.')
         }
 
+    }
+
+    const handleMouseDownPassword = event => {
+        event.preventDefault()
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+    const handleClickShowNewPassword = () => {
+        setShowNewPassword(!showNewPassword)
+    }
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword)
     }
 
 
@@ -174,16 +193,28 @@ const PersonalInfo = props => {
                             Current Password
                         </div>
                         <div className="od_input_p io_radio">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setOldPassword(e.target.value)
                                 }}
                                 value={oldPassword}
                                 margin="normal"
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">Show</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                     </div>
@@ -193,16 +224,28 @@ const PersonalInfo = props => {
                             New Password
                         </div>
                         <div className="od_input_p io_radio">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setNewPassword(e.target.value)
                                 }}
                                 value={newPassword}
                                 margin="normal"
-                                type="password"
+                                type={showNewPassword ? 'text' : 'password'}
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowNewPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">Show</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                     </div>
@@ -212,7 +255,7 @@ const PersonalInfo = props => {
                             Confirm New Password
                         </div>
                         <div className="od_input_p io_radio">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setConfirmPassword(e.target.value)
@@ -220,10 +263,21 @@ const PersonalInfo = props => {
                                 }}
                                 value={confirmPassword}
                                 margin="normal"
-                                type="password"
+                                type={showConfirmPassword ? 'text' : 'password'}
                                 className={classes.input}
-                                Inp
-                                utProps={{ className: 'si__right__content_resend' }}
+                                InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">Show</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                             {errMsg && <p className="ac__required">{errMsg}</p>}
 
@@ -237,7 +291,11 @@ const PersonalInfo = props => {
 
                         </div>
                         <div className="od__btn__div od__align__right io_pr0">
-                            <Button className="io_p_cancel">
+                            <Button
+                                onClick={() => {
+                                    history.push('/dashboard')
+                                }}
+                                className="io_p_cancel">
                                 Cancel
                             </Button>
 

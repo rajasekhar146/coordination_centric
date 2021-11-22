@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -12,10 +12,10 @@ import get from 'lodash.get'
 
 
 const columns = [
-    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: true },
+    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
     { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'role', label: 'Roles', minWidth: 200, align: 'left', visible: true },
+    { id: 'role', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -28,17 +28,22 @@ const colorcodes = {
 
 const MembersComponent = props => {
     const {
-        membersList = [],
+        list = [],
         colorcodes,
     } = props
 
   
 
     const [anchorEl, setAnchorEl] = React.useState(null)
+    const [memberList, setMemberList] = React.useState([])
 
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    useEffect(() => {
+        setMemberList([...list])
+    }, [list.length])
 
 
     return (
@@ -67,7 +72,7 @@ const MembersComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {membersList.map((row, index) => (
+                            {memberList.map((row, index) => (
                                 <MemberItem
                                     row={row}
                                     index={index}

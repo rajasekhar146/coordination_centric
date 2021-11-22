@@ -72,6 +72,8 @@ const InviteMemberComponent = props => {
         setOpenInviteMemberSuccess,
         setOpenInviteMember,
         orgId,
+        admin,
+        getOrgDetails
     } = props;
 
     useEffect(() => {
@@ -100,11 +102,12 @@ const InviteMemberComponent = props => {
 
     const onSubmit = (requestData) => {
         setIsSubmit(true)
-        requestData.refUserId = orgId
+        requestData.refUserId = admin._id
         const res = memberService.inviteMember(requestData)
         res.then((data) => {
             setOpenInviteMember(false)
             setOpenInviteMemberSuccess(true)
+            getOrgDetails()
         }).catch((err) => {
             setIsExist(get(err.response, ['body', 'message'], null))
         })

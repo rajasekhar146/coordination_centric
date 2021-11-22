@@ -23,6 +23,7 @@ export const organizationService = {
   cancelIvitation,
   validateToken,
   registerMember,
+  disableTwoFa
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -346,3 +347,20 @@ function registerMember(data) {
       })
   )
 }
+
+function disableTwoFa(data) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/users/twoFAStatus`, {twoFactorStatus : false}, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+

@@ -13,6 +13,8 @@ import Collapse from '@material-ui/core/Collapse'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -128,10 +130,198 @@ const menuOptions = [
   },
 ]
 
+
+const getMenuList = (role) => {
+  switch (role) {
+    case 'superadmin':
+      return [
+        {
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+        },
+        {
+          name: 'Appointments',
+          link: '/appointments',
+          icon: require('../../assets/icons/appointments.png').default,
+          activeIcon: require('../../assets/icons/appointments.png').default,
+          items: [],
+        },
+        {
+          name: 'Organizations',
+          link: '/organizations',
+          icon: require('../../assets/icons/organizations.png').default,
+          activeIcon: require('../../assets/icons/sitemap_active.png').default,
+          items: [],
+        },
+        // {
+        //   name: 'Patient Records',
+        //   link: '/patients',
+        //   icon: require('../../assets/icons/patients.png').default,
+        //   items: [],
+        // },
+        {
+          name: 'Inventory',
+          link: '/inventory',
+          icon: require('../../assets/icons/vaccinations.png').default,
+          activeIcon: require('../../assets/icons/vaccinations.png').default,
+          items: [],
+        },
+        {
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+        },
+        {
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+        },
+      ]
+      break
+      case 'doctor':
+      case 'patient':
+        return [
+          {
+            name: 'Dashboard',
+            link: '/dashboard',
+            icon: require('../../assets/icons/dashboard.png').default,
+            activeIcon: require('../../assets/icons/active_dashboard.png').default,
+            items: [],
+          },
+          {
+            name: 'Appointments',
+            link: '/appointments',
+            icon: require('../../assets/icons/appointments.png').default,
+            activeIcon: require('../../assets/icons/appointments.png').default,
+            items: [],
+          },
+         
+          {
+            name: 'Marketplace',
+            link: '/marketplace',
+            icon: require('../../assets/icons/vaccinations.png').default,
+            activeIcon: require('../../assets/icons/vaccinations.png').default,
+            items: [],
+          },
+          {
+            name: 'Notifications',
+            link: '/notifications',
+            icon: require('../../assets/icons/notifications.png').default,
+            activeIcon: require('../../assets/icons/notifications.png').default,
+            items: [],
+          },
+          {
+            name: 'Payments',
+            link: '/payments',
+            icon: require('../../assets/icons/payments.png').default,
+            activeIcon: require('../../assets/icons/payments.png').default,
+            items: [],
+          },
+        ]
+   
+    default:
+      return [
+        {
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+        },
+        {
+          name: 'Appointments',
+          link: '/appointments',
+          icon: require('../../assets/icons/appointments.png').default,
+          activeIcon: require('../../assets/icons/appointments.png').default,
+          items: [],
+        },
+        {
+          name: 'Users',
+          link: '/users',
+          icon: require('../../assets/icons/users.png').default,
+          activeIcon: require('../../assets/icons/users.png').default,
+          items: [
+            {
+              name: 'Staff',
+              link: '/users',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+            },
+            {
+              name: 'Collaborators',
+              link: '/users',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+            },
+            {
+              name: 'Patient',
+              link: '/patients',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+            },
+          ],
+        },
+        {
+          name: 'Patient Records',
+          link: '/patientrecords',
+          icon: require('../../assets/icons/users.png').default,
+          activeIcon: require('../../assets/icons/users.png').default,
+        },
+        {
+          name: 'Organizations',
+          link: '/organizations',
+          icon: require('../../assets/icons/organizations.png').default,
+          activeIcon: require('../../assets/icons/sitemap_active.png').default,
+          items: [],
+        },
+        // {
+        //   name: 'Patient Records',
+        //   link: '/patients',
+        //   icon: require('../../assets/icons/patients.png').default,
+        //   items: [],
+        // },
+        {
+          name: 'Inventory',
+          link: '/inventory',
+          icon: require('../../assets/icons/vaccinations.png').default,
+          activeIcon: require('../../assets/icons/vaccinations.png').default,
+          items: [],
+        },
+        {
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+        },
+        {
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+        },
+      ]
+  }
+}
+
 const LeftMenuComponent = () => {
   const classes = useStyles()
 
-  return menuOptions.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
+  const currentUser = authenticationService.currentUserValue
+  const role = get(currentUser, ['data', 'data', 'role'], false)
+
+  const filteredMenus = getMenuList(role)
+
+
+  return filteredMenus.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
 
   // return (
   //   <div div className={classes.root}>

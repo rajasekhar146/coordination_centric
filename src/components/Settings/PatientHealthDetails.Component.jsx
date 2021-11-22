@@ -20,6 +20,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { settinService } from '../../services'
 import get from 'lodash.get'
 import HealthIssueItem from './HealthIssueItem.Component'
+import history from '../../history'
 
 const styles = theme => ({
     root: {
@@ -54,6 +55,7 @@ const PatientHealthDetails = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        getMemberDetails
     } = props;
 
     const [profilepic, setProfilePic] = useState('')
@@ -159,6 +161,7 @@ const PatientHealthDetails = props => {
             setOpenFlash(true)
             setAlertMsg('Saved')
             setSubLabel('Your changes are saved')
+            getMemberDetails()
         }
     }
 
@@ -287,19 +290,19 @@ const PatientHealthDetails = props => {
                             </div>
                         </div>
 
-                        
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <TextField
-                                    onChange={(e) => {
-                                        setMediName(false)
-                                    }}
-                                    margin="normal"
-                                    InputProps={{
-                                        className: classes.input,
-                                    }}
-                                />
-                            </FormControl>
-                        
+
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <TextField
+                                onChange={(e) => {
+                                    setMediName(false)
+                                }}
+                                margin="normal"
+                                InputProps={{
+                                    className: classes.input,
+                                }}
+                            />
+                        </FormControl>
+
 
                     </div>
                 </div>
@@ -389,7 +392,11 @@ const PatientHealthDetails = props => {
 
                     </div>
                     <div className="od__btn__div od__align__right io_pr0">
-                        <Button className="io_p_cancel">
+                        <Button
+                            onClick={() => {
+                                history.push('/dashboard')
+                            }}
+                            className="io_p_cancel">
                             Cancel
                         </Button>
 
