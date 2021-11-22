@@ -318,7 +318,7 @@ const MemberItemComponent = props => {
                             ))}
                         </Menu>
                     </TableCell>
-                ) : (
+                ) : column.id == 'id' ? null : (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                     </TableCell>

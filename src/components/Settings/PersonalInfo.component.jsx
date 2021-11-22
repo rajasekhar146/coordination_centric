@@ -20,6 +20,7 @@ import { memberService } from '../../services'
 import FormControl from "@material-ui/core/FormControl";
 import moment from 'moment-timezone'
 import { withStyles } from "@material-ui/core/styles";
+import history from '../../history'
 
 const styles = theme => ({
     root: {
@@ -344,13 +345,14 @@ const PersonalInfo = props => {
                     <div className="od_label_p" >
                         Role
                     </div>
-                    <div className="od_input_p">
+                    <div className="od_input_p ">
                         <FormControl variant="outlined" className={classes.formControl}>
                             <TextField
                                 {...register('role', {
                                     required: 'role is required.',
 
                                 })}
+                                disabled
                                 margin="normal"
                                 InputProps={{
 
@@ -532,7 +534,11 @@ const PersonalInfo = props => {
 
                     </div>
                     <div className="od__btn__div od__align__right io_pr0">
-                        <Button className="io_p_cancel">
+                        <Button
+                            onClick={() => {
+                                history.push('/dashboard')
+                            }}
+                            className="io_p_cancel">
                             Cancel
                         </Button>
 

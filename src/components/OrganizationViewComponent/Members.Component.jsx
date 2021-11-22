@@ -12,10 +12,10 @@ import get from 'lodash.get'
 
 
 const columns = [
-    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: true },
+    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
     { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'role', label: 'Roles', minWidth: 200, align: 'left', visible: true },
+    { id: 'role', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]

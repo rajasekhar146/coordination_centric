@@ -28,6 +28,7 @@ import { authenticationService } from '../../services'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
+import history from '../../history'
 
 const styles = theme => ({
     root: {
@@ -290,7 +291,11 @@ const PersonalInfo = props => {
 
                         </div>
                         <div className="od__btn__div od__align__right io_pr0">
-                            <Button className="io_p_cancel">
+                            <Button
+                                onClick={() => {
+                                    history.push('/dashboard')
+                                }}
+                                className="io_p_cancel">
                                 Cancel
                             </Button>
 

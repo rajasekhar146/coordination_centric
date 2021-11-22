@@ -24,6 +24,7 @@ import { isUpperCase } from "is-upper-case";
 import { isLowerCase } from "is-lower-case";
 import CheckedIcon from '../../assets/icons/checked.png'
 import UncheckedIcon from '../../assets/icons/unchecked.png'
+import history from '../../history'
 
 
 const styles = theme => ({
@@ -192,7 +193,7 @@ const InsuranceComponent = props => {
                     <ColoredLine color="#E4E7EC" />
                     <div className="od__row_password">
                         <div className="od_label_p" >
-                        Policy validity details
+                            Policy validity details
 
                         </div>
                         <div className="od_input_p io_radio">
@@ -211,10 +212,14 @@ const InsuranceComponent = props => {
                     <ColoredLine color="#E4E7EC" />
                     <div className="od__row od_flex_space_between">
                         <div className="od__p_title io_pl0">
-                            
+
                         </div>
                         <div className="od__btn__div od__align__right io_pr0">
-                            <Button className="io_p_cancel">
+                            <Button
+                                onClick={() => {
+                                    history.push('/dashboard')
+                                }}
+                                className="io_p_cancel">
                                 Cancel
                             </Button>
 
