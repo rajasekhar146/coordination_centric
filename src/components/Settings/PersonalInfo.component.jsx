@@ -215,11 +215,6 @@ const PersonalInfo = props => {
                         Personal info
                         <div className="io_p_info_label">Update your photo and personal details here.</div>
                     </div>
-                    <div className="od__btn__div od__align__right io_pr0">
-                        <Button className="io_p_cancel">Cancel</Button>
-
-                        <Button className="io__save__btn">Save</Button>
-                    </div>
                 </div>
 
                 <ColoredLine color="#E4E7EC" />
