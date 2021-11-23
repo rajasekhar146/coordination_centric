@@ -49,7 +49,8 @@ import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWitho
 import Settings from './components/Settings/Settings.Component'
 import StaffComponent from './components/Staff/Staff.Component'
 import Collaborators from './components/Collaborators/Collaborators.Component'
-
+import PatientsComponent from './components/Patients/Patients.Component'
+import TwoFaCodeVerificationFail from './components/EnableTwoFactorAuth/TwoFaCodeVerificationFail.Component'
 class Routes extends Component {
   render() {
     return (
@@ -92,6 +93,7 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2faverificationsuccess" component={TwoFaVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
+          <DefaultLayoutComponentRoute path="/2facodeverificationfail" component={TwoFaCodeVerificationFail} />
           <DefaultLayoutComponentRoute path="/members/register/:invitetoken/:referredby/:invitedBy" component={MemberSignIn} />
           <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
@@ -108,6 +110,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
           <MasterLayoutWithLefuMenuComponent path="/staff" component={StaffComponent} />
           <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
+          {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
           <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
         </Switch>

@@ -20,3 +20,11 @@ export const setSpecialties = specialties => {
     payload: specialties,
   }
 }
+
+
+export const setCopmletPropfilePopup = val => {
+  return {
+    type: ActionTypes.COMPLETE_PROFILE_POPUP,
+    payload: val,
+  }
+}

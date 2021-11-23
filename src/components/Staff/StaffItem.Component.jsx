@@ -214,7 +214,7 @@ const StaffItemComponent = props => {
 
 
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org.id, status)
+        const res = memberService.updateStatus(org._id, status)
         res.then(res => {
             setSkip(1)
             setAlertMsg('Re-sended')

@@ -9,7 +9,7 @@ import {
   memberProfessionalInfoCertificatesReducer,
 } from './memberReducer'
 import { organizationReducer, newOrganizationReducer } from './organizationReducer'
-import { commonReducer, specialtiesReducer } from './commonReducer'
+import { commonReducer, specialtiesReducer, setCompleteProfileReducer } from './commonReducer'
 
 const reducers = combineReducers({
   allMembers: memberReducer,
@@ -22,6 +22,7 @@ const reducers = combineReducers({
   memberAvaliabilities: memberAvailabilitiesReducer,
   memberSpecialties: memberSpecialtiesReducer,
   specialties: specialtiesReducer,
+  isOpenCompletProfilePopup: setCompleteProfileReducer,
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
 })
 

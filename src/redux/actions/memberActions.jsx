@@ -55,3 +55,5 @@ export const memberProfessionalInfoCertificates = certificate => {
     payload: certificate,
   }
 }
+
+

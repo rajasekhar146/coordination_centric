@@ -10,6 +10,10 @@ import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
+import CompleateProfile from './CompleateProfile.Component'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCopmletPropfilePopup } from '../../redux/actions/commonActions'
+
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -91,10 +95,27 @@ const twoFaModelStyle = {
   p: 4,
 }
 
+const completModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 380,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
 const DashboardComponent = () => {
+  const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState(false)
+  const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.isOpenCompletProfilePopup))
   const currentUser = authenticationService.currentUserValue
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
 
   useEffect(() => {
     // var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
@@ -109,7 +130,8 @@ const DashboardComponent = () => {
   const close2FaModel = () => {
     const res = authenticationService.skipTwoFa()
     res.then(data => {
-      
+      setIsOpenCompleateProfile(true)
+      dispatch(setCopmletPropfilePopup(true))
     })
     setIsOpen2FA(false)
   }
@@ -205,7 +227,24 @@ const DashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={twoFaModelStyle}>
-          <TwoFaModel clickCloseButton={close2FaModel} />
+          <TwoFaModel
+            clickCloseButton={close2FaModel}
+            setIsOpenCompleateProfile={setIsOpenCompleateProfile}
+          />
+        </Box>
+      </Modal>
+     
+      <Modal
+        open={isOpenCompleateProfile}
+        // onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={completModelStyle}>
+          <CompleateProfile
+            clickCloseButton={close2FaModel}
+            userId={userId}
+          />
         </Box>
       </Modal>
     </div>

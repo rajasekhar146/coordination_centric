@@ -65,12 +65,11 @@ const VerificationCodePage = props => {
   }
 
   const handleSubmit = () => {
-    const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
+    const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type)
     res
       .then(() => {
         localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        
       })
       .catch(() => {
         history.push(`/2faverificationfail`)
@@ -113,9 +112,10 @@ const VerificationCodePage = props => {
             type="text"
             className={classes.textField}
             value={verificationCode}
-            onChange={e => {
-              setVerificationCode(e.target.value)
-            }}
+            inputProps={{ maxLength: 6 }}
+              onChange={e => {
+                setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
+              }}
           />
         </div>
         <div className="io__two_justify io__margin__32 io__width__100">
