@@ -25,6 +25,8 @@ import PatientItem from './PatientItem.Component'
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
+import './PatientRecords.Component.css'
+
 const useStyles = makeStyles(theme => ({
   menuItem: {
     fontSize: 14,
@@ -55,6 +57,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0,
   },
 }))
+
 
 
 
@@ -227,6 +230,7 @@ const PatienRecordsComponent = (props) => {
             clickCloseButton={closeModel}
             setOpenInvitePatientSuccess={setOpenInvitePatientSuccess}
             selectedItem={selectedItem}
+            userId={userId}
           />
         </Box>
       </Modal>

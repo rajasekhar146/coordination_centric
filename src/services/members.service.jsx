@@ -18,7 +18,8 @@ export const memberService = {
   updatePrefessionalInfo,
   getStaffList,
   updateStatus,
-  getPatientRecords
+  getPatientRecords,
+  invitePatient
 }
 
 function inviteMember(data) {
@@ -171,3 +172,23 @@ function getPatientRecords(id, limit, skip) {
       })
   )
 }
+
+
+function invitePatient(reqData) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/facilityList/invitePatient`, reqData, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
