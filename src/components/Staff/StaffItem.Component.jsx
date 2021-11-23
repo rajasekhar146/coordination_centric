@@ -209,17 +209,18 @@ const StaffItemComponent = props => {
         setSkip,
         setOpenFlash,
         setAlertMsg,
-        setSubLabel
+        setSubLabel,
+        setStaffList
     } = props
 
 
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org._id, status)
+        const res = memberService.updateStatus(org._id, status, 'member')
         res.then(res => {
             setSkip(1)
-            setAlertMsg('Re-sended')
-            setSubLabel('Another invitation was sended to this Member.')
+
             setOpenFlash(true)
+            setStaffList([])
         })
     }
 
@@ -238,7 +239,9 @@ const StaffItemComponent = props => {
                 // setIsDeactivateClicked(true)
                 break
             case 'setIsCancelInviteClicked':
-                handleStatus(row, '')
+                handleStatus(row, 'cancel')
+                setAlertMsg('Cancelled')
+                setSubLabel('Ivitation Cancelled.')
                 break
             case 'setIsActivateClicked':
                 handleStatus(row, 'active')
@@ -246,11 +249,13 @@ const StaffItemComponent = props => {
                 break
             case 'setIsResendClicked':
                 handleStatus(row, 'resend')
+                setAlertMsg('Re-sended')
+                setSubLabel('Another invitation was sended to this Member.')
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()
             case 'viewdetails':
-                // routeDirect(orgId)
+            // routeDirect(orgId)
 
             default:
                 return null

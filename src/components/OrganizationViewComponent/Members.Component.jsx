@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import MemberItem from './MemberItem.Component'
 import get from 'lodash.get'
+import { memberService } from '../../services'
 
 
 const columns = [
@@ -28,19 +29,32 @@ const colorcodes = {
 
 const MembersComponent = props => {
     const {
-        list = [],
         colorcodes,
+        getOrgDetails,
+        admin
     } = props
+    const [limit, setLimit] = useState(10)
+    const [skip, setSkip] = useState(0)
+    const [membersList, setMembersList] = useState([])
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [page, setPage] = React.useState(1)
+    
 
-  
+    const getStaffList = async () => {
+        const res = await memberService.getStaffList(admin._id, 'member', limit, skip)
+        if (res.status === 200) {
+            setMembersList(get(res, ['data', 'data', '0', 'totalData'], []))
+        } else {
 
-    const [memberList, setMemberList] = React.useState([])
+        }
 
-   
-
+    }
     useEffect(() => {
-        setMemberList([...list])
-    }, [list.length])
+        getStaffList()
+    }, [])
 
 
     return (
@@ -69,12 +83,17 @@ const MembersComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {memberList.map((row, index) => (
+                            {membersList.map((row, index) => (
                                 <MemberItem
                                     row={row}
                                     index={index}
                                     columns={columns}
-                                // colorcodes={colorcodes}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setMembersList={setMembersList}
+                                    setSkip={setSkip}
+                                    admin={admin}
                                 />
                             ))
                             }

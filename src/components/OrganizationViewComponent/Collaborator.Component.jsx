@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import CollaboratorItem from './CollaboratorItem.Component'
 import get from 'lodash.get'
+import { memberService } from '../../services'
 
 
 const columns = [
@@ -34,21 +35,30 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
-        list
+        admin
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [collaboratorList, setCollaboratorList] = React.useState([])
-
+    const [skip, setSkip] = useState(0)
+    const [limit, setLimit] = useState(10)
     const handleClose = () => {
         setAnchorEl(null)
     }
+    const getStaffList = async () => {
+        const res = await memberService.getStaffList(admin._id, 'facility', limit, skip)
+        if (res.status === 200) {
+            setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
+        } else {
 
+        }
+
+    }
     useEffect(() => {
-        setCollaboratorList([...list])
-    }, [list.length])
+        getStaffList()
+    }, [])
 
     return (
         <div>
