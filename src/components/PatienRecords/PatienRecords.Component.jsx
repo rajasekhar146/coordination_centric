@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
 import Paper from '@mui/material/Paper'
@@ -22,7 +22,9 @@ import Box from '@mui/material/Box'
 import InvitePatientSuccess from '../ModelPopup/InvitePatientSuccess.Component'
 import SharePatientRecord from '../ModelPopup/SharePatientRecord.Component'
 import PatientItem from './PatientItem.Component'
-
+import { memberService } from '../../services'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
 const useStyles = makeStyles(theme => ({
   menuItem: {
     fontSize: 14,
@@ -54,13 +56,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const rows = [
-  { name: 'Rajasekhar', email: 'raj@gmail.com', speciality: 'General Pracice', licence: '145214', date: '05-10-2021' },
-  { name: 'Raj', email: 'raju@gmail.com', speciality: 'Dermatologist', licence: '145214', date: '05-10-2021' },
-  { name: 'Jhon', email: 'jhon@gmail.com', speciality: 'General Pracice', licence: '145214', date: '05-10-2021' },
-  { name: 'ram', email: 'ram@gmail.com', speciality: 'General Pracice', licence: '145214', date: '05-10-2021' },
-  { name: 'Rohit', email: 'rohit@gmail.com', speciality: 'General Pracice', licence: '145214', date: '05-10-2021' },
-]
+
 
 const getTextColor = text => {
   switch (text) {
@@ -115,7 +111,12 @@ const PatienRecordsComponent = (props) => {
   const [openInvitePatientSuccess, setOpenInvitePatientSuccess] = useState(false)
   const [openSharePatientRecord, setOpenSharePatientRecord] = useState(false)
   const [selectedItem, setSelectedItem] = React.useState(null)
-
+  const currentUser = authenticationService.currentUserValue
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
+  const role = get(currentUser, ['data', 'data', 'role'], false)
+  const [limit, setLimit] = useState(10)
+  const [skip, setSkip] = useState(0)
+  const [patientRecords, setPatientRecords] = useState([])
 
   const open = Boolean(anchorEl)
   const classes = useStyles()
@@ -130,19 +131,31 @@ const PatienRecordsComponent = (props) => {
     setOpenSharePatientRecord(false)
   }
 
-  
 
-  // const handleClick = (event, status) => {
-  //   event.preventDefault()
-  //   event.stopPropagation()
-  //   setAnchorEl(event.currentTarget)
-  //   const menus = menuList.filter(m => m.menu === status.toLowerCase())
-  //   console.log('menus', menus)
-  //   if (menus.length > 0) setMenuOptions(menus[0].options)
-  //   else setMenuOptions([])
+  const getPatientRecords = async () => {
+    const res = await memberService.getPatientRecords(userId, limit, skip)
+    if (res.status === 200) {
+      setPatientRecords(get(res, ['data', 'data', '0', 'totalData'], []))
+    } else {
 
-  //   console.log('menus[0].options', menus[0].options)
-  // }
+    }
+
+  }
+
+  useEffect(() => {
+    getPatientRecords()
+  }, [])
+
+
+  const columns = [
+    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
+    { id: 'first_name', label: 'Patient', minWidth: 180, align: 'left', visible: true },
+    { id: 'last_name', label: 'Doctor', minWidth: 100, align: 'left', visible: true },
+    { id: 'email', label: 'Email', minWidth: 200, align: 'left', visible: true },
+    { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
+    { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
+  ]
+
 
   return (
     <div className="od__main__div">
@@ -163,18 +176,26 @@ const PatienRecordsComponent = (props) => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Name</TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Email</TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Speciality</TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>License</TableCell>
-                    <TableCell style={{ fontWeight: 'bold', fontSize: 14 }}>Status</TableCell>
-                    <TableCell align={'right'} style={{ fontWeight: 'bold', fontSize: 14 }}>
-                      Action
-                    </TableCell>
+                    {columns.map(column =>
+                      column.visible ? (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{
+                            minWidth: column.minWidth,
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            visibility: column.visible ? 'visible' : 'hidden',
+                          }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ) : null
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row, index) => (
+                  {patientRecords.map((row, index) => (
                     <PatientItem
                       row={row}
                       index={index}
@@ -182,11 +203,11 @@ const PatienRecordsComponent = (props) => {
                       handleClose={handleClose}
                       classes={classes}
                       getTextColor={getTextColor}
-                      rows={rows}
                       menuList={menuList}
                       setOpenSharePatientRecord={setOpenSharePatientRecord}
                       setInvitePatientClicked={setInvitePatientClicked}
                       setSelectedItem={setSelectedItem}
+                      columns={columns}
                     />
                   ))}
                 </TableBody>

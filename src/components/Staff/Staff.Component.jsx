@@ -12,7 +12,9 @@ import get from 'lodash.get';
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import Button from '@mui/material/Button'
-
+import Alert from '../Alert/Alert.component'
+import Pagination from '@mui/material/Pagination'
+import Stack from '@mui/material/Stack'
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -40,6 +42,8 @@ const StaffComponent = props => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [page, setPage] = React.useState(1)
 
     const getStaffList = async () => {
         const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
@@ -53,9 +57,19 @@ const StaffComponent = props => {
 
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [staffList.length, skip])
 
-  
+
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
+
+    const handleChangePage = async (event, newPage) => {
+        setPage(newPage)
+        const skipRecords = (newPage - 1) * 10
+        setSkip(skipRecords)
+        
+    }
 
 
     return (
@@ -106,6 +120,7 @@ const StaffComponent = props => {
                                     setOpenFlash={setOpenFlash}
                                     setAlertMsg={setAlertMsg}
                                     setSubLabel={setSubLabel}
+                                    setStaffList={setStaffList}
                                 // colorcodes={colorcodes}
                                 />
                             ))
@@ -115,6 +130,23 @@ const StaffComponent = props => {
                     </Table>
                 </TableContainer>
             </Paper>
+            {staffList.length >= 10
+                ?
+                <div className="od__row">
+                    <div className="od__pagination__section">
+                        <Stack spacing={2}>
+                            <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
+                        </Stack>
+                    </div>
+                </div>
+                : null
+            }
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+            />
         </div>
 
     )

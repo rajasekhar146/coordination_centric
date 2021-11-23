@@ -199,7 +199,7 @@ const menuList = [
 ]
 
 
-const StaffItemComponent = props => {
+const CollaboratorComponent = props => {
     const classes = useStyles()
 
     const {
@@ -210,17 +210,16 @@ const StaffItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setStaffList
+        setCollaboratorList
     } = props
 
-
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org._id, status, 'member')
+        const res = memberService.updateStatus(org._id, status, 'facility')
         res.then(res => {
             setSkip(1)
 
             setOpenFlash(true)
-            setStaffList([])
+            setCollaboratorList([])
         })
     }
 
@@ -312,7 +311,7 @@ const StaffItemComponent = props => {
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 
-                return column.id == 'memberStatus' ? (
+                return column.id == 'status' ? (
                     <TableCell
                         key={column.id}
                         align={column.align}
@@ -333,7 +332,7 @@ const StaffItemComponent = props => {
                             aria-controls="long-menu"
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
-                            onClick={e => handleClick(e, `${row['memberStatus']}`)}
+                            onClick={e => handleClick(e, `${row['status']}`)}
                         >
                             <MoreVertRoundedIcon />
                         </IconButton>
@@ -380,4 +379,4 @@ const StaffItemComponent = props => {
     )
 }
 
-export default StaffItemComponent
+export default CollaboratorComponent

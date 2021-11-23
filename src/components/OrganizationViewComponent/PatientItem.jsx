@@ -8,9 +8,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
-import '../OrganizationDashboard/OrganizationDashboard.Component.css'
 
-const colorcodes = {
+const colorcodes = {    
     invited: '#2E90FA',
     pending_verification: '#F79009',
     active: '#12B76A',
@@ -199,26 +198,43 @@ const menuList = [
 ]
 
 
-const StaffItemComponent = props => {
+const PatientItemComponent = props => {
     const classes = useStyles()
 
     const {
         row,
         columns,
+        handleClose,
         index,
-        setSkip,
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setStaffList
+        setStaffList,
+        setSkip,
+        admin
     } = props
 
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open = Boolean(anchorEl)
+    const [menuOptions, setMenuOptions] = React.useState([])
+
+
+    const handleClick = (event, status) => {
+        event.preventDefault()
+        event.stopPropagation()
+        setAnchorEl(event.currentTarget)
+        const menus = menuList.filter(m => m.menu === status.toLowerCase())
+        console.log('menus', menus)
+        if (menus.length > 0) setMenuOptions(menus[0].options)
+        else setMenuOptions([])
+
+        console.log('menus[0].options', menus[0].options)
+    }
 
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org._id, status, 'member')
+        const res = memberService.updateStatus(admin._id, status, 'facility')
         res.then(res => {
             setSkip(1)
-
             setOpenFlash(true)
             setStaffList([])
         })
@@ -241,7 +257,7 @@ const StaffItemComponent = props => {
             case 'setIsCancelInviteClicked':
                 handleStatus(row, 'cancel')
                 setAlertMsg('Cancelled')
-                setSubLabel('Ivitation Cancelled.')
+                setSubLabel('')
                 break
             case 'setIsActivateClicked':
                 handleStatus(row, 'active')
@@ -263,28 +279,6 @@ const StaffItemComponent = props => {
         setAnchorEl(null)
     }
 
-    const [anchorEl, setAnchorEl] = React.useState(null)
-    const open = Boolean(anchorEl)
-    const [menuOptions, setMenuOptions] = React.useState([])
-
-
-    const handleClick = (event, status) => {
-        event.preventDefault()
-        event.stopPropagation()
-        setAnchorEl(event.currentTarget)
-        const menus = menuList.filter(m => m.menu === status.toLowerCase())
-        console.log('menus', menus)
-        if (menus.length > 0) setMenuOptions(menus[0].options)
-        else setMenuOptions([])
-
-        console.log('menus[0].options', menus[0].options)
-    }
-
-
-
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
 
     const getTextColor = text => {
         switch (text) {
@@ -319,7 +313,7 @@ const StaffItemComponent = props => {
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
+                            <CircleIcon fontSize="small"  />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
@@ -370,7 +364,7 @@ const StaffItemComponent = props => {
                             ))}
                         </Menu>
                     </TableCell>
-                ) : column.id == 'id' ? null : (
+                ) : (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                     </TableCell>
@@ -380,4 +374,4 @@ const StaffItemComponent = props => {
     )
 }
 
-export default StaffItemComponent
+export default PatientItemComponent

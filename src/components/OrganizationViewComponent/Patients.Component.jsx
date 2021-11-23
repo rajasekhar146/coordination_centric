@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -7,16 +7,16 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import MemberItem from './MemberItem.Component'
+import PatientItem from './PatientItem'
 import get from 'lodash.get'
+import { memberService } from '../../services'
 
 
 const columns = [
-    { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: true },
-    { id: 'name', label: 'Name', minWidth: 180, align: 'left', visible: true },
+    { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
     { id: 'roles', label: 'Roles', minWidth: 200, align: 'left', visible: true },
-    { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
+    { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
 
@@ -34,33 +34,12 @@ const PatientComponent = props => {
     const {
         orgDet,
         colorcodes,
+        admin,
+       
     } = props
 
-    let patientList = get(orgDet, ['invited_facilityName'], [])
 
-    patientList = [
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'invited'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'inactive'
-        },
-        {
-            id: '1223',
-            name: 'rajasekhar',
-            email: 'raj@gmail.com',
-            roles: '',
-            status: 'pending_acceptance'
-        }
-    ]
+   
 
     const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -68,6 +47,27 @@ const PatientComponent = props => {
         setAnchorEl(null)
     }
 
+    const [limit, setLimit] = useState(10)
+    const [skip, setSkip] = useState(0)
+    const [patientList, setPatientList] = useState([])
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [page, setPage] = React.useState(1)
+
+    const getStaffList = async () => {
+        const res = await memberService.getStaffList(admin._id, 'patient', limit, skip)
+        if (res.status === 200) {
+            setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
+        } else {
+
+        }
+
+    }
+    useEffect(() => {
+        getStaffList()
+    }, [])
 
     return (
         <div>
@@ -96,13 +96,18 @@ const PatientComponent = props => {
                         </TableHead>
                         <TableBody>
                             {patientList.map((row, index) => (
-                                <MemberItem
+                                <PatientItem
                                     row={row}
                                     index={index}
                                     columns={columns}
                                     setAnchorEl={setAnchorEl}
                                     handleClose={handleClose}
-                                // colorcodes={colorcodes}
+                                    admin={admin}
+                                    setSkip={setSkip}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setPatientList={setPatientList}
                                 />
                             ))
                             }
