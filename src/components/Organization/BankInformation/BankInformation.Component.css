@@ -214,13 +214,24 @@
 
 .bi__dropdown {    
     background: #FFFFFF;
-    border: 1px solid #E6E6E6;
+    border: 1px solid #b1aeae;
     box-sizing: border-box;
     border-radius: 5px;
     /* height: 40px; */
-    width: 330px !important;
+    width: 350px !important;
     padding: 4px;
     border-radius: 5px;
     /* padding: 8px !important; */
     height: 45px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
 }

@@ -42,6 +42,7 @@ const AcceptanceCriteriaComponent = props => {
   } = useForm()
 
   const fetchStates = async selectedCountryCode => {
+    console.log('selected country code: ' + selectedCountryCode)
     const response = await commonService.getStates(selectedCountryCode).catch(error => {
       console.log(error)
     })
@@ -76,7 +77,7 @@ const AcceptanceCriteriaComponent = props => {
 
   useEffect(async () => {
     console.log('New AC -- >> ', props.props)
-    fetchCountries()
+    await fetchCountries()
     var uFacility = localStorage.getItem('facility')
 
     if (uFacility != null) {
@@ -194,6 +195,7 @@ const AcceptanceCriteriaComponent = props => {
                               InputProps={{ className: 'ac__text__box' }}
                               // value={fullName}
                               // name="fullName"
+                              disabled
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
                           </div>
@@ -216,6 +218,7 @@ const AcceptanceCriteriaComponent = props => {
                               // value={email}
                               // name="email"
                               // value={initialValues ? initialValues.email : ''}
+                              disabled
                             />
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
@@ -289,9 +292,7 @@ const AcceptanceCriteriaComponent = props => {
                             />
                             {errors.facilityEmail && <p className="ac__required">{errors.facilityEmail.message}</p>}
                           </div>
-                        </div>
 
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               Phone Number <span className="ac__required">*</span>
@@ -314,7 +315,9 @@ const AcceptanceCriteriaComponent = props => {
                             />
                             {errors.facilityPhone && <p className="ac__required">{errors.facilityPhone.message}</p>}
                           </div>
+                        </div>
 
+                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               Fax Number <span className="ac__required">*</span>
@@ -329,9 +332,6 @@ const AcceptanceCriteriaComponent = props => {
                             />
                             {errors.faxNumber && <p className="ac__required">{errors.faxNumber.message}</p>}
                           </div>
-                        </div>
-
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               Address <span className="ac__required">*</span>
@@ -345,6 +345,39 @@ const AcceptanceCriteriaComponent = props => {
                               // value={initialValues ? initialValues.facilityAddress : ''}
                             />
                             {errors.facilityAddress && <p className="ac__required">{errors.facilityAddress.message}</p>}
+                          </div>
+                          <div className="ac__column">
+                            <div className="ac__label">
+                              Country <span className="ac__required">*</span>
+                            </div>
+                            <select
+                              {...register('country')}
+                              className="ac__dropdown"
+                              onChange={e => fetchStates(e.target.value)}
+                            >
+                              {countries &&
+                                countries.map(c => (
+                                  <option value={c.code} key={c.code} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="ac__row">
+                          <div className="ac__column">
+                            <div className="ac__label">
+                              State <span className="ac__required">*</span>
+                            </div>
+                            <select {...register('state')} className="ac__dropdown">
+                              {states &&
+                                states.map(c => (
+                                  <option value={c.statecode} key={c.statecode} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">
@@ -362,63 +395,6 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">
-                              Country <span className="ac__required">*</span>
-                            </div>
-                            <FormControl sx={{ m: 1, minWidth: 210 }}>
-                              <Select
-                                {...register('country', {
-                                  onChange: e => {
-                                    setValue('country', e.target.value)
-                                    fetchStates(e.target.value)
-                                  },
-                                })}
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                key="country1"
-                                inputProps={{ className: 'pdc__dropdown' }}
-                              >
-                                <MenuItem value="">
-                                  <em>Country</em>
-                                </MenuItem>
-                                {countries &&
-                                  countries.map(c => (
-                                    <MenuItem value={c.code} key={c.code}>
-                                      {c.name}
-                                    </MenuItem>
-                                  ))}
-                              </Select>
-                            </FormControl>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="ac__label">
-                            State <span className="ac__required">*</span>
-                          </div>
-                          <FormControl sx={{ m: 1, minWidth: 210 }}>
-                            <Select
-                              key="state1"
-                              // value={state}
-                              // onChange={e => setState(e.target.value)}
-                              {...register('state', {
-                                onChange: e => setValue('state', e.target.value),
-                              })}
-                              inputProps={{ 'aria-label': 'Without label' }}
-                            >
-                              <MenuItem value="">
-                                <em>State</em>
-                              </MenuItem>
-                              {states &&
-                                states.map(s => (
-                                  <MenuItem value={s.statecode} key={s.statecode}>
-                                    {s.name}
-                                  </MenuItem>
-                                ))}
-                            </Select>
-                          </FormControl>
-                        </div>
-                        <div className="ac__row">
-                          <div className="ac__column">
-                            <div className="ac__label">
                               Zipcode <span className="ac__required">*</span>
                             </div>
                             <TextField
@@ -431,7 +407,9 @@ const AcceptanceCriteriaComponent = props => {
                             />
                             {errors.zipcode && <p className="ac__required">{errors.zipcode.message}</p>}
                           </div>
+                        </div>
 
+                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               NPI <span className="ac__required">*</span>
@@ -458,9 +436,6 @@ const AcceptanceCriteriaComponent = props => {
                               // value={initialValues ? initialValues.taxId : ''}
                             />
                           </div>
-                        </div>
-
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">Medical ID</div>
                             <TextField
@@ -472,6 +447,9 @@ const AcceptanceCriteriaComponent = props => {
                               // value={initialValues ? initialValues.medicalId : ''}
                             />
                           </div>
+                        </div>
+
+                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField

@@ -367,28 +367,17 @@ const BankInformationComponent = () => {
                                   <div className="ac__label">Country or Region</div>
                                 </div>
                                 <div className="ac__row">
-                                  <FormControl sx={{ m: 1, minWidth: 210 }}>
-                                    <Select
-                                      {...register('country', {
-                                        onChange: e => {
-                                          setValue('country', e.target.value)
-                                        },
-                                      })}
-                                      inputProps={{ 'aria-label': 'Without label' }}
-                                      key="country1"
-                                      inputProps={{ className: 'bi__dropdown' }}
-                                    >
-                                      <MenuItem value="">
-                                        <em>Country</em>
-                                      </MenuItem>
-                                      {countries &&
-                                        countries.map(c => (
-                                          <MenuItem value={c.code} key={c.code}>
-                                            {c.name}
-                                          </MenuItem>
-                                        ))}
-                                    </Select>
-                                  </FormControl>
+                                <select
+                                {...register('country')}
+                                className="bi__dropdown"
+                              >
+                                {countries &&
+                                  countries.map(c => (
+                                    <option value={c.code} key={c.code} className="bi__dropdown">
+                                      {c.name}
+                                    </option>
+                                  ))}
+                              </select>
                                 </div>
                                 {errors.country && <p className="ac__required ml_15">{errors.country.message}</p>}
                               </div>
