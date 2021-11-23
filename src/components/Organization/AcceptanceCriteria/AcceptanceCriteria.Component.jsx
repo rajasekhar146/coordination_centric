@@ -14,7 +14,11 @@ import { useParams } from 'react-router-dom'
 import SigninStore from '../../../stores/signinstore'
 import { useSelector, useDispatch } from 'react-redux'
 import { newOrganization } from '../../../redux/actions/organizationActions'
-
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import { commonService } from '../../../services'
+import { setCountries } from '../../../redux/actions/commonActions'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const AcceptanceCriteriaComponent = props => {
@@ -27,22 +31,8 @@ const AcceptanceCriteriaComponent = props => {
   const { invitedBy } = useParams()
   const newOrg = useSelector(state => state.newOrganization)
   const dispatch = useDispatch()
-
-  // const [fullName, setFullName] = useState(null)
-  // const [email, setEmail] = useState(null)
-  // const [phoneNumber, setPhoneNumber] = useState(null)
-  // const [facilityName, setFacilityName] = useState(null)
-  // const [facilityEmail, setFacilityEmail] = useState(null)
-  // const [facilityPhone, setFacilityPhone] = useState(null)
-  // const [faxNumber, setFaxNumber] = useState(null)
-  // const [facilityAddress, setFacilityAddress] = useState(null)
-  // const [taxId, setTaxId] = useState(null)
-  // const [nip, setNIP] = useState(null)
-  // const [medicalId, setMedicalId] = useState(null)
-  // const [website, setWebsite] = useState(null)
-  // const [about, setAbout] = useState(null)
-
-  // console.log('props >> AC', props.props)
+  const [states, setStates] = useState(null)
+  const [countries, setAllCountries] = useState([])
 
   var {
     register,
@@ -51,13 +41,20 @@ const AcceptanceCriteriaComponent = props => {
     handleSubmit,
   } = useForm()
 
+  const fetchStates = async selectedCountryCode => {
+    const response = await commonService.getStates(selectedCountryCode).catch(error => {
+      console.log(error)
+    })
+
+    setStates(response.data.data.data)
+  }
   const onSubmit = data => {
     const admin = {
       fullName: data.fullName,
       email: data.email,
       phoneNumber: data.phoneNumber,
     }
-
+    console.log('form data', data)
     SigninStore.set({ organisationName: data.facilityName })
 
     data.planType = planType == 'P' ? 'premium' : 'free'
@@ -77,13 +74,14 @@ const AcceptanceCriteriaComponent = props => {
     history.push(`/service-level-agreement/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     console.log('New AC -- >> ', props.props)
-
+    fetchCountries()
     var uFacility = localStorage.getItem('facility')
 
     if (uFacility != null) {
       var data = JSON.parse(uFacility)
+      await fetchStates(data.country)
       setValue('fullName', data.fullName)
       setValue('email', data.email)
       setValue('phoneNumber', data.phoneNumber)
@@ -100,6 +98,7 @@ const AcceptanceCriteriaComponent = props => {
       setValue('city', data.city)
       setValue('state', data.state)
       setValue('zipcode', data.zipcode)
+      setValue('country', data.country)
     }
 
     const planType = localStorage?.getItem('plan_type')
@@ -140,6 +139,16 @@ const AcceptanceCriteriaComponent = props => {
     if (invitedBy === undefined || invitedBy === null) invitedBy = 0
 
     history.push(`/signup/${invitetoken}/${referredby}/${invitedBy}`)
+  }
+
+  const fetchCountries = async () => {
+    const response = await commonService.getCountries().catch(error => {
+      console.log(error)
+    })
+
+    console.log('getCountries', response.data.data.data)
+    setAllCountries(response.data.data.data)
+    dispatch(setCountries(response.data.data.data))
   }
 
   return (
@@ -353,20 +362,60 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">
-                              State <span className="ac__required">*</span>
+                              Country <span className="ac__required">*</span>
                             </div>
-                            <TextField
-                              {...register('state', { required: 'State is required ', maxLength: 20 })}
-                              InputProps={{ className: 'ac__text__box' }}
-                              margin="normal"
-                              // value={nip}
-                              // name="nip"
-                              // value={initialValues ? initialValues.nip : ''}
-                            />
-                            {errors.state && <p className="ac__required">{errors.state.message}</p>}
+                            <FormControl sx={{ m: 1, minWidth: 210 }}>
+                              <Select
+                                {...register('country', {
+                                  onChange: e => {
+                                    setValue('country', e.target.value)
+                                    fetchStates(e.target.value)
+                                  },
+                                })}
+                                inputProps={{ 'aria-label': 'Without label' }}
+                                key="country1"
+                                inputProps={{ className: 'pdc__dropdown' }}
+                              >
+                                <MenuItem value="">
+                                  <em>Country</em>
+                                </MenuItem>
+                                {countries &&
+                                  countries.map(c => (
+                                    <MenuItem value={c.code} key={c.code}>
+                                      {c.name}
+                                    </MenuItem>
+                                  ))}
+                              </Select>
+                            </FormControl>
                           </div>
                         </div>
 
+                        <div>
+                          <div className="ac__label">
+                            State <span className="ac__required">*</span>
+                          </div>
+                          <FormControl sx={{ m: 1, minWidth: 210 }}>
+                            <Select
+                              key="state1"
+                              // value={state}
+                              // onChange={e => setState(e.target.value)}
+                              {...register('state', {
+                                onChange: e => setValue('state', e.target.value),
+                              })}
+                              inputProps={{ 'aria-label': 'Without label' }}
+                            >
+                              <MenuItem value="">
+                                <em>State</em>
+                              </MenuItem>
+                              {states &&
+                                states.map(s => (
+                                  <MenuItem value={s.statecode} key={s.statecode}>
+                                    {s.name}
+                                  </MenuItem>
+                                ))}
+                            </Select>
+                          </FormControl>
+                        </div>
                         <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">

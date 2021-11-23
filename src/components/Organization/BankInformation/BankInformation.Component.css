@@ -211,3 +211,16 @@
 .ml_15 {
     margin-left: 15px;
 }
+
+.bi__dropdown {    
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* height: 40px; */
+    width: 330px !important;
+    padding: 4px;
+    border-radius: 5px;
+    /* padding: 8px !important; */
+    height: 45px;
+}
