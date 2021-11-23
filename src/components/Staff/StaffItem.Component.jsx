@@ -7,6 +7,8 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
+import { memberService } from '../../services'
+import '../OrganizationDashboard/OrganizationDashboard.Component.css'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -133,10 +135,19 @@ const menuList = [
         ],
     },
     {
-        menu: 'true',
+        menu: 'invited',
         options: [
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-          
+            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            {
+                text: 'Resend Invitation',
+                fnKey: 'setIsResendClicked',
+                icon: require('../../assets/icons/resent_invitation.png').default,
+            },
+            {
+                text: 'Cancel Invite',
+                fnKey: 'setIsCancelInviteClicked',
+                icon: require('../../assets/icons/suspend.png').default,
+            },
         ],
     },
 
@@ -188,14 +199,64 @@ const menuList = [
 ]
 
 
-const MemberItemComponent = props => {
+const StaffItemComponent = props => {
     const classes = useStyles()
 
     const {
         row,
         columns,
-        index
+        index,
+        setSkip,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel
     } = props
+
+
+    const handleStatus = (org, status) => {
+        const res = memberService.updateStatus(org.id, status)
+        res.then(res => {
+            setSkip(1)
+            setAlertMsg('Re-sended')
+            setSubLabel('Another invitation was sended to this Member.')
+            setOpenFlash(true)
+        })
+    }
+
+    const handleMenuAction = (e, action, index, orgId) => {
+        e.preventDefault()
+        e.stopPropagation()
+        console.log('orgId', orgId)
+        switch (action) {
+            case 'setIsAcceptClicked':
+                // setIsAcceptClicked(true)
+                break
+            case 'setIsRejectClicked':
+                // setIsRejectClicked(true)
+                break
+            case 'setIsDeactivateClicked':
+                // setIsDeactivateClicked(true)
+                break
+            case 'setIsCancelInviteClicked':
+                handleStatus(row, '')
+                break
+            case 'setIsActivateClicked':
+                handleStatus(row, 'active')
+                // setIsActiva/teClicked(true)
+                break
+            case 'setIsResendClicked':
+                handleStatus(row, 'resend')
+                break
+            // case 'setIsActivateClicked':
+            //   handleActivate()
+            case 'viewdetails':
+                // routeDirect(orgId)
+
+            default:
+                return null
+        }
+        setAnchorEl(null)
+    }
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -214,15 +275,7 @@ const MemberItemComponent = props => {
         console.log('menus[0].options', menus[0].options)
     }
 
-    const handleMenuAction = (e, action, index, orgId) => {
-        e.preventDefault()
-        e.stopPropagation()
-        console.log('orgId', orgId)
-        switch (action) {
 
-        }
-        setAnchorEl(null)
-    }
 
     const handleClose = () => {
         setAnchorEl(null)
@@ -254,18 +307,18 @@ const MemberItemComponent = props => {
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 
-                return column.id == 'status' ? (
+                return column.id == 'memberStatus' ? (
                     <TableCell
                         key={column.id}
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        {/* <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small"  />
+                        <div className={`od__${value?.toLowerCase()}__status`}>
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
-                        </div> */}
+                        </div>
                     </TableCell>
                 ) : column.id == 'action' ? (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
@@ -275,7 +328,7 @@ const MemberItemComponent = props => {
                             aria-controls="long-menu"
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
-                            onClick={e => handleClick(e, `${row['status']}`)}
+                            onClick={e => handleClick(e, `${row['memberStatus']}`)}
                         >
                             <MoreVertRoundedIcon />
                         </IconButton>
@@ -322,4 +375,4 @@ const MemberItemComponent = props => {
     )
 }
 
-export default MemberItemComponent
+export default StaffItemComponent

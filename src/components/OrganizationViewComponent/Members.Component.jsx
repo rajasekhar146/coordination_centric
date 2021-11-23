@@ -34,12 +34,9 @@ const MembersComponent = props => {
 
   
 
-    const [anchorEl, setAnchorEl] = React.useState(null)
     const [memberList, setMemberList] = React.useState([])
 
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
+   
 
     useEffect(() => {
         setMemberList([...list])
@@ -77,8 +74,6 @@ const MembersComponent = props => {
                                     row={row}
                                     index={index}
                                     columns={columns}
-                                    setAnchorEl={setAnchorEl}
-                                    handleClose={handleClose}
                                 // colorcodes={colorcodes}
                                 />
                             ))

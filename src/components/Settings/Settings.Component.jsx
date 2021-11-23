@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabPanel from './TabPanel.Component';
+import TabPanel from '../TabPanel/TabPanel.Component';
 import PersonalInfo from './PersonalInfo.component'
 import ProfessionalInfo from './ProfessionalInfo.Component'
 import PatientHealthDetails from './PatientHealthDetails.Component'
@@ -169,17 +169,17 @@ const OrganizationViewComponent = () => {
                 TabIndicatorProps={{ className: classes.indicator }}
             >
                 <TabItem value="0" label="My Details" />
-                {/* {get(userDetails, ['role'], '') === 'doctor'
+                {get(userDetails, ['role'], '') === 'doctor'
                     && <TabItem value="1" label="Professional Info" />
                 }
                 {get(userDetails, ['role'], '') === 'patient'
                     && <TabItem value="2" label="Health Info" />
-                } */}
-
+                }
+{/* 
                 <TabItem value="1" label="Professional Info" />
 
 
-                <TabItem value="2" label="Health Info" />
+                <TabItem value="2" label="Health Info" /> */}
 
                 <TabItem value="3" label="Password" />
                 <TabItem value="4" label="2Factor-Authentication" />
