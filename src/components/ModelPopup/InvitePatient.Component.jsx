@@ -20,6 +20,7 @@ import ListItemText from '@mui/material/ListItemText'
 import MembersStore from '../../stores/membersstore'
 import UserIcon from '../../assets/icons/usericon.png'
 import PlusIcon from '../../assets/icons/plus_icon.png'
+import { memberService } from '../../services'
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,7 +50,8 @@ const InvitePatientComponent = props => {
         // setSubLabel,
         setOpenInvitePatientSuccess,
         setOpenInviteMember,
-        selectedItem
+        selectedItem,
+        userId
     } = props;
 
 
@@ -63,8 +65,10 @@ const InvitePatientComponent = props => {
     } = useForm()
 
     useEffect(() => {
-        setValue('patientName', selectedItem.name)
+        setValue('first_name', selectedItem.first_name)
+        setValue('last_name', selectedItem.last_name)
         setValue('email', selectedItem.email)
+        setValue('refUserId', selectedItem._id)
     }, {})
 
     console.log(errors)
@@ -79,19 +83,18 @@ const InvitePatientComponent = props => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [isExist, setIsExist] = useState('')
 
-    const onSubmit = (requestData) => {
-        setIsSubmit(true)
-        setOpenInvitePatientSuccess(true)
-        // MembersStore.load('InviteMember', {
-        //     requestData,
-        //     successCallback: (data) => {
-        //         setOpenInviteMember(false)
-               
-        //     },
-        //     errorCallback: (err) => {
-        //         setIsExist(err.message)
-        //     }
-        // })
+    const onSubmit = async (requestData) => {
+        const res = await memberService.invitePatient(requestData)
+        if (res.status === 200) {
+            // (get(res, ['data', 'data', '0', 'totalData'], []))
+            setIsSubmit(true)
+            setOpenInvitePatientSuccess(true)
+        } else {
+
+        }
+
+
+
     }
 
 
@@ -115,7 +118,7 @@ const InvitePatientComponent = props => {
                         </div>
                         <TextField
                             // {...useInput('facilityName', { isRequired: true })}
-                            {...register('patientName', {
+                            {...register('first_name', {
                                 required: 'patient name is required.',
                             })}
                             margin="normal"
@@ -177,9 +180,9 @@ const InvitePatientComponent = props => {
                             {/* <MenuItem value="none" disabled>
                                 Select an Option
                             </MenuItem> */}
-                            {roles.map(role => (
-                                <MenuItem key={role.name} value={role.name}>
-                                    <ListItemText primary={role.name} />
+                            {['read', 'write'].map(val => (
+                                <MenuItem key={val} value={val}>
+                                    <ListItemText primary={val} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -188,7 +191,7 @@ const InvitePatientComponent = props => {
                     </div>
                     <div>
                         <label className="add_another_label">
-                        <img src={PlusIcon} alt="Approve Org" />  Add another
+                            <img src={PlusIcon} alt="Approve Org" />  Add another
                         </label>
                     </div>
                     <div className="io__row">
@@ -198,7 +201,9 @@ const InvitePatientComponent = props => {
                                     Cancel
                                 </Button>
                             </div>
-                            <div style={{ marginLeft: "15px" }} className="io__column io__invite__org__btn">
+                            <div
+                                style={{ marginLeft: "15px" }}
+                                className="io__column io__invite__org__btn">
                                 <Button type="submit" className="io__add__organization__btn">
                                     Send Invite
                                 </Button>

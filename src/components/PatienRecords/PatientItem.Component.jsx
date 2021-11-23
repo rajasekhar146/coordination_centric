@@ -10,15 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
 import '../OrganizationDashboard/OrganizationDashboard.Component.css'
 
-const colorcodes = {
-    invited: '#2E90FA',
-    pending_verification: '#F79009',
-    active: '#12B76A',
-    pending_acceptance: '#7A5AF8',
-    cancelled: '#757500',
-    inactive: '#A0A4A8',
-    declined: '#B42318',
-}
+
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -53,8 +45,8 @@ const useStyles = makeStyles(theme => ({
 
 const getValue = val => {
     switch (val) {
-        case 'active':
-            return 'Verified'
+        case 'open':
+            return 'Open'
             break
         case 'inactive':
             return 'Suspended'
@@ -167,12 +159,12 @@ const menuList = [
         ],
     },
     {
-        menu: 'unverified',
+        menu: 'open',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Invite Patient', fnKey: 'setInvitePatientClicked', icon: require('../../assets/icons/edit_icon.png').default },
+            { text: 'Share', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+            { text: 'Archive', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
@@ -199,6 +191,11 @@ const menuList = [
 ]
 
 
+
+const colorcodes = {
+    open: '#12B76A',
+}
+
 const PatientItemComponent = props => {
     const classes = useStyles()
 
@@ -210,7 +207,9 @@ const PatientItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setCollaboratorList
+        setCollaboratorList,
+        setInvitePatientClicked,
+        setSelectedItem
     } = props
 
     const handleStatus = (org, status) => {
@@ -228,19 +227,8 @@ const PatientItemComponent = props => {
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
-            case 'setIsAcceptClicked':
-                // setIsAcceptClicked(true)
-                break
-            case 'setIsRejectClicked':
-                // setIsRejectClicked(true)
-                break
-            case 'setIsDeactivateClicked':
-                // setIsDeactivateClicked(true)
-                break
-            case 'setIsCancelInviteClicked':
-                handleStatus(row, 'cancel')
-                setAlertMsg('Cancelled')
-                setSubLabel('Ivitation Cancelled.')
+            case 'setInvitePatientClicked':
+                setInvitePatientClicked(true)
                 break
             case 'setIsActivateClicked':
                 handleStatus(row, 'active')
@@ -260,6 +248,7 @@ const PatientItemComponent = props => {
                 return null
         }
         setAnchorEl(null)
+        setSelectedItem(row)
     }
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -317,12 +306,12 @@ const PatientItemComponent = props => {
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        {/* <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-                            <div className={`od__${value?.toLowerCase()}__label`}>
-                                {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
+                        <div className={`od__open__status`}>
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes['open'] }} />
+                            <div className={`od__open__label`}>
+                                {column.format && typeof value === 'number' ? column.format('open') : getValue('open')}
                             </div>
-                        </div> */}
+                        </div>
                     </TableCell>
                 ) : column.id == 'action' ? (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
@@ -332,7 +321,7 @@ const PatientItemComponent = props => {
                             aria-controls="long-menu"
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
-                            onClick={e => handleClick(e, `${row['status']}`)}
+                            onClick={e => handleClick(e, `open`)}
                         >
                             <MoreVertRoundedIcon />
                         </IconButton>

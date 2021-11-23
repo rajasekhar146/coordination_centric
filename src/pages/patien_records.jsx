@@ -1,5 +1,5 @@
 import React from 'react'
-import PatienRecordsComponent from '../components/PatienRecords/PatienRecords.Component'
+import PatienRecordsComponent from '../components/PatienRecords/PatientRecords.Component'
 
 const PatienRecords = () => {
   return (
