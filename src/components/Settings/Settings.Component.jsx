@@ -56,13 +56,14 @@ const successStyle = {
 const OrganizationViewComponent = () => {
     const classes = useStyles()
     const history = useHistory()
-    const [value, setValue] = React.useState('0');
+    const [value, setValue] = React.useState(null);
     const { userId } = useParams()
     const [userDetails, setUserDetails] = useState(null)
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
 
+    const role = get(userDetails, ['role'], '')
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -94,13 +95,25 @@ const OrganizationViewComponent = () => {
         }
     }
 
+    const getValue = (role) => {
+        switch (role) {
+            case 'admin':
+                return '3'
+            default:
+                return '0'
+        }
+    }
+
     useEffect(() => {
         getMemberDetails()
-    }, [])
+        setValue(getValue(role))
+    }, [role])
 
     const handleCloseFlash = (event, reason) => {
         setOpenFlash(false)
     }
+
+
 
 
 
@@ -168,22 +181,21 @@ const OrganizationViewComponent = () => {
                 inkBarStyle={{ background: 'red' }}
                 TabIndicatorProps={{ className: classes.indicator }}
             >
-                <TabItem value="0" label="My Details" />
+                {get(userDetails, ['role'], '') === 'doctor'
+                    && <TabItem value="0" label="My Details" />
+                }
+
                 {get(userDetails, ['role'], '') === 'doctor'
                     && <TabItem value="1" label="Professional Info" />
                 }
                 {get(userDetails, ['role'], '') === 'patient'
                     && <TabItem value="2" label="Health Info" />
                 }
-{/* 
-                <TabItem value="1" label="Professional Info" />
-
-
-                <TabItem value="2" label="Health Info" /> */}
-
                 <TabItem value="3" label="Password" />
                 <TabItem value="4" label="2Factor-Authentication" />
-                <TabItem value="5" label="Insurance Information" />
+                {get(userDetails, ['role'], '') === 'patient'
+                    && <TabItem value="5" label="Insurance Information" />
+                }
                 <TabItem value="6" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>

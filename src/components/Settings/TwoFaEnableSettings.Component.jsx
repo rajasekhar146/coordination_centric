@@ -56,6 +56,16 @@ const TwoFaEnableSettings = props => {
     }
 
 
+    const showDisable = (value) => {
+        switch(value) {
+            case "none":
+            case "skipped":
+                return false
+            default:
+            return true
+        }
+    }
+
 
     return (
         <div className="io_p_info_twofa">
@@ -71,21 +81,23 @@ const TwoFaEnableSettings = props => {
             <ColoredLine color="#E4E7EC" />
             <div className="od__row_password">
                 <div className="od_label_p_twofa" >
-                    {twoFaValue !== "none" ?
+                    {showDisable(twoFaValue) ?
                         <img src={EnableLockIcon} alt="" />
                         :
                         <img src={DisableLockIcon} alt="" />
+                        
                     }
                     <label>2 Factor-Authentication is:
-                        <span className={twoFaValue !== 'none' ? 'io_enable' : 'io_disable'}>
-                            {twoFaValue !== 'none' ? 'Enabled' : 'Disabled'}
+                        <span className={showDisable(twoFaValue) ? 'io_enable' : 'io_disable'}>
+                            {showDisable(twoFaValue) ? 'Enabled' : 'Disabled'}
                         </span>
                     </label>
 
 
                 </div>
                 <div className="od_input_p io-twofa">
-                    {twoFaValue !== "none" ? (
+                    {showDisable(twoFaValue) ? (
+                        
                         <img
                             className="toggle_icon"
                             onClick={() => {
@@ -95,6 +107,7 @@ const TwoFaEnableSettings = props => {
                             src={ToggleOnIcon}
                             alt="upload"
                         />
+
                     ) : (
                         <img
                             className="toggle_icon"

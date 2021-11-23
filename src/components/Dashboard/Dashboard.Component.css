@@ -144,3 +144,7 @@
 .io__ok button{
     width: 80% !important;
 }
+.io__complete {
+    margin-top: 20px !important;
+    margin-bottom: 40px !important;
+}
