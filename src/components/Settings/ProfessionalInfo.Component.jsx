@@ -28,44 +28,39 @@ import Stack from '@mui/material/Stack'
 import UploadCertificateFile from './UploadCertificateFile'
 import { useParams } from 'react-router-dom'
 import './Settings.Component.css'
-import Alert from '../Alert/Alert.component'
-import FormControl from "@material-ui/core/FormControl";
-import { withStyles } from "@material-ui/core/styles";
+import FormControl from '@material-ui/core/FormControl'
+import { withStyles } from '@material-ui/core/styles'
 import history from '../../history'
-
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 120,
-    background: "#FFFFFF",
-    width: '100%'
+    background: '#FFFFFF',
+    width: '100%',
   },
   dropdownStyle: {
-    border: "1px solid black",
-    borderRadius: "5px",
+    border: '1px solid black',
+    borderRadius: '5px',
     width: '50px',
-    height: '200px'
+    height: '200px',
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2,
   },
   input: {
-    background: "#FFFFFF",
-    borderRadius: "8px",
-    width: '100%'
+    background: '#FFFFFF',
+    borderRadius: '8px',
+    width: '100%',
   },
-});
+})
 
 const PersonalInfo = props => {
-  const {
-    classes,
-    getMemberDetails
-  } = props
+  // const { classes, getMemberDetails } = props
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [textCount, setTextCount] = useState(500)
@@ -83,9 +78,12 @@ const PersonalInfo = props => {
   const mProfessionalInfo = useSelector(state => state.memberProfessionalInfo)
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const mAvaliabilities = useSelector(state => state.memberAvaliabilities)
-  const [openflash, setOpenFlash] = useState(false)
-  const [alertMsg, setAlertMsg] = useState('')
-  const [subLabel, setSubLabel] = useState('')
+  // const [openflash, setOpenFlash] = useState(false)
+  // const [alertMsg, setAlertMsg] = useState('')
+  // const [subLabel, setSubLabel] = useState('')
+  const [npiIdErr, setNPIIdErr] = useState(false)
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails } = props
+  console.log('certificates', certificates)
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -107,6 +105,27 @@ const PersonalInfo = props => {
       selectedFiles.push(file)
       setSelectedFiles([...selectedFiles])
     })
+  }
+
+  const handleDeleteFile = idx => {
+    var newFiles = []
+    var newTempFiles = []
+    certificates.forEach((file, index) => {
+      console.log('update-certificate-redux', file, index, idx)
+      if (index != idx) {
+        newFiles.push({ certificate_name: file.certificate_name })
+      }
+    })
+    selectedFiles.forEach((file, index) => {
+      console.log('update-certificate-local', file, index, idx)
+      if (index != idx) {
+        newTempFiles.push(file)
+      }
+    })
+    console.log('newFiles', newFiles)
+    console.log('newTempFiles', newTempFiles)
+    dispatch(memberProfessionalInfoCertificates(newFiles))
+    setSelectedFiles(newTempFiles)
   }
 
   const onEditorStateChange = editorState => {
@@ -138,10 +157,10 @@ const PersonalInfo = props => {
     //loadFormData(memberData)
   }, [])
 
-  const handleDeleteSpecialties = () => { }
+  const handleDeleteSpecialties = () => {}
   const loadFormData = async data => {
-    handleSpecialitySearch('')
-    const res = await settinService.getMemberDetails(userId).catch(err => { })
+    await handleSpecialitySearch('')
+    const res = await settinService.getMemberDetails(userId).catch(err => {})
     if (get(res, ['data', 'status'], '') === 200) {
       console.log('res', get(res, ['data', 'data', 'data', 'email'], null))
       setEmail(get(res, ['data', 'data', 'data', 'email'], null))
@@ -159,7 +178,7 @@ const PersonalInfo = props => {
       setPCToggleOn(services?.consultation)
 
       const specialization = mpInfo.specialization
-
+      
       var tSpecialization = []
       specialization.map(s => {
         const nSpl = {
@@ -169,7 +188,7 @@ const PersonalInfo = props => {
         tSpecialization.push(nSpl)
       })
       setSpeciality(tSpecialization)
-
+      console.log('setSpeciality', tSpecialization)
       const availability = mpInfo.availability
       console.log('availability', availability)
 
@@ -206,11 +225,18 @@ const PersonalInfo = props => {
   }
 
   const handleChange = (event, value) => {
+    console.log('handleChange', value)
     setSpeciality(value)
     // console.log(speciality)
   }
 
   const handleSave = async () => {
+    setNPIIdErr(false)
+    if (npiId === null || npiId?.trim().length === 0) {
+      console.log('Error')
+      setNPIIdErr(true)
+      return
+    }
     console.log('npiId', npiId)
     console.log('Certificates', certificates)
     console.log('Specialties ', speciality)
@@ -257,7 +283,8 @@ const PersonalInfo = props => {
     console.log('formData 1234', formData)
     const response = await memberService.updatePrefessionalInfo(formData).catch(err => console.log(err))
     console.log('response', response)
-    if (get(response, ['data', 'status'], '') === 200) {
+    if (get(response, ['status'], '') === 200) {
+      console.log('Successfull')
       setOpenFlash(true)
       setAlertMsg('Saved')
       setSubLabel('Your changes are saved')
@@ -352,6 +379,12 @@ const PersonalInfo = props => {
       dispatch(memberAvaliabilities(defaultValues))
     }
   }
+
+  const getOpObj = option => {
+    if (!option.id) option = specialities.find(op => op.id === option);
+    return option;
+  };
+
   return (
     <div className="io_p_info">
       <div className="od__row od_flex_space_between">
@@ -380,6 +413,11 @@ const PersonalInfo = props => {
               }}
             />
           </FormControl>
+          {npiIdErr ? (
+            <div className="ac__required" style={{ marginTop: 10 }}>
+              NPI ID is required
+            </div>
+          ) : null}
         </div>
       </div>
       <ColoredLine color="#E4E7EC" />
@@ -411,8 +449,8 @@ const PersonalInfo = props => {
               )}
             </Dropzone>
           </div>
-          {selectedFiles.map(file => (
-            <UploadCertificateFile file={file} />
+          {selectedFiles.map((file, index) => (
+            <UploadCertificateFile file={file} index={index} handleDeleteFile={handleDeleteFile} />
           ))}
         </div>
       </div>
@@ -432,7 +470,7 @@ const PersonalInfo = props => {
                 }}
                 options={specialities}
                 getOptionLabel={option => option.speciality_name}
-                defaultValues={speciality}
+                defaultValue={speciality}
                 renderInput={params => <TextField {...params} />}
               />
             </Stack>
@@ -516,7 +554,8 @@ const PersonalInfo = props => {
             onClick={() => {
               history.push('/dashboard')
             }}
-            className="io_p_cancel">
+            className="io_p_cancel"
+          >
             Cancel
           </Button>
 
@@ -525,7 +564,6 @@ const PersonalInfo = props => {
           </Button>
         </div>
       </div>
-      <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
     </div>
   )
 }
