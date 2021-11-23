@@ -8,15 +8,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 
-const colorcodes = {
-    invited: '#2E90FA',
-    pending_verification: '#F79009',
-    active: '#12B76A',
-    pending_acceptance: '#7A5AF8',
-    cancelled: '#757500',
-    inactive: '#A0A4A8',
-    declined: '#B42318',
-}
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -49,142 +40,40 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const getValue = val => {
-    switch (val) {
-        case 'active':
-            return 'Verified'
-            break
-        case 'inactive':
-            return 'Suspended'
-            break
-        case 'unverified':
-            return 'Unverified'
-            break
-        case 'invited':
-            return 'Invited'
-            break
-        case 'pending_verification':
-            return 'Pending verification'
-            break
-        case 'pending_acceptance':
-            return 'Pending acceptance'
-            break
-        case 'cancelled':
-            return 'cancelled'
-            break
-        case 'declined':
-            return 'declined'
-            break
-        default:
-            return null
-    }
-}
 
 const menuList = [
     {
-        menu: 'sent',
+        menu: 'confirmed',
+        options: [
+            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+    },
+    {
+        menu: 'pending_acceptance',
+        options: [
+            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+    },
+    {
+        menu: 'declined',
         options: [
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
         ],
     },
     {
-        menu: 'pending_verification',
+        menu: 'requested_to_reschedule',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'cancelled',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-            // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'declined',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-            // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'active',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'inactive',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
-        ],
-    },
-    {
-        menu: 'true',
-        options: [
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-          
+            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Reject', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
 
-    {
-        menu: 'suspended',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
-        ],
-    },
-    {
-        menu: 'verified',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
-        ],
-    },
-    {
-        menu: 'unverified',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'pending_acceptance',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'cancelled',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
 ]
 
 
@@ -194,7 +83,10 @@ const MemberItemComponent = props => {
     const {
         row,
         columns,
-        index
+        index,
+        setIsConfirmClicked,
+        setSelectedAppointment,
+        setIsRescheduleClicked
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -219,9 +111,14 @@ const MemberItemComponent = props => {
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
-
+            case 'setIsConfirmClicked': 
+            setIsConfirmClicked(true)
+            break
+            case 'setIsRescheduleClicked': 
+            setIsRescheduleClicked(true)
         }
         setAnchorEl(null)
+        setSelectedAppointment(row)
     }
 
     const handleClose = () => {
@@ -242,6 +139,36 @@ const MemberItemComponent = props => {
     }
 
 
+    const getValue = val => {
+        switch (val) {
+            case 'confirmed':
+                return 'confirmed'
+                break
+
+            case 'cancelled':
+                return 'cancelled'
+                break
+            case 'declined':
+                return 'declined'
+                break
+            case 'pending_acceptance':
+                return 'Pending acceptance'
+                break
+            case 'requested_to_reschedule':
+                return 'Requested to Re-schedule'
+                break
+            default:
+                return null
+        }
+    }
+
+    const colorcodes = {
+        confirmed: '#12B76A',
+        pending_acceptance: '#7A5AF8',
+        cancelled: '#757500',
+        declined: '#B42318',
+        requested_to_reschedule: '#B42318'
+    }
 
     return (
         <TableRow
@@ -260,12 +187,24 @@ const MemberItemComponent = props => {
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        {/* <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small"  />
+                        <div className={`od__${value?.toLowerCase()}__status`}>
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
-                        </div> */}
+                        </div>
+                    </TableCell>
+                ) : column.id == 'profile' ? (
+                    <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <div className={`od__${value?.toLowerCase()}__status`}>
+                            <div >
+                                <img className="ap_profile" src={value} alt="profile" />
+                            </div>
+                        </div>
                     </TableCell>
                 ) : column.id == 'action' ? (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>

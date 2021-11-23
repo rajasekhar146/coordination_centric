@@ -20,6 +20,7 @@ export const authenticationService = {
   resetPassword,
   changePassword,
   requestPassword,
+  skipTwoFa,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -188,6 +189,21 @@ function changePassword(data) {
   return (
     axios
       .post(`${apiURL}/users/changePassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+
+function skipTwoFa(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFAStatus`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

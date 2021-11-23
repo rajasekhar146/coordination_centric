@@ -97,16 +97,20 @@ const DashboardComponent = () => {
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
 
   useEffect(() => {
-    var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
-    console.log("name", IsShow2FAPopup, twoFactor_auth_type)
+    // var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
+    // console.log("name", IsShow2FAPopup, twoFactor_auth_type)
 
-    if (IsShow2FAPopup === null && twoFactor_auth_type === 'none') {
+    if (twoFactor_auth_type === 'none') {
       setIsOpen2FA(true)
-      localStorage.setItem('IsShow2FAPopup', false)
+      // localStorage.setItem('IsShow2FAPopup', false)
     }
   }, [])
 
   const close2FaModel = () => {
+    const res = authenticationService.skipTwoFa()
+    res.then(data => {
+      
+    })
     setIsOpen2FA(false)
   }
 

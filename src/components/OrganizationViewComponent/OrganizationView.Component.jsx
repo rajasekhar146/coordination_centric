@@ -19,7 +19,7 @@ import { Document } from 'react-pdf'
 import Modal from '@mui/material/Modal'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabPanel from './TabPanel.Component';
+import TabPanel from '../TabPanel/TabPanel.Component';
 import Overview from './Overview.Component';
 import Members from './Members.Component';
 import Collaborator from './Collaborator.Component'

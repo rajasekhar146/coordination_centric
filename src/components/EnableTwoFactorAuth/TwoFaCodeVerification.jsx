@@ -86,7 +86,7 @@ const TwoFaEnabled = props => {
     res
       .then(() => {
         localStorage.setItem('twoFaVerfied', true)
-        history.push(`/2faverificationsuccess`)
+        history.push(`/dashboard`)
       })
       .catch(() => {
         history.push(`/2faverificationfail`)

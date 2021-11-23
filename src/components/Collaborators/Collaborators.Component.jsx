@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import PatientItem from '../Staff/StaffItem.Component'
+import CollaboratorItem from '../Staff/StaffItem.Component'
 import get from 'lodash.get';
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
@@ -29,18 +29,18 @@ const colorcodes = {
     inactive: '#A0A4A8',
 }
 
-const PatientComponent = props => {
+const CollaboratorsComponent = props => {
 
-    const [patientList, setPatientList] = React.useState([])
+    const [collaboratorList, setCollaboratorList] = React.useState([])
     const currentUser = authenticationService.currentUserValue
     const organizationId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
         if (res.status === 200) {
-          setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
 
         }
@@ -55,15 +55,15 @@ const PatientComponent = props => {
     return (
         <div className="od__main__div">
             <div className="od__row od_flex_space_between">
-                <div className="od__title__text">Patients</div>
+                <div className="od__title__text">Collaborators</div>
                 <div className="od__btn__div od">
-                    {/* <Button
+                    <Button
                         onClick={() => {
                             // setOpenInviteMember(true)
                         }}
                         className="od_add_member_btn">
-                        &nbsp;&nbsp; Add Patient
-                    </Button> */}
+                        &nbsp;&nbsp; Add Collaborator
+                    </Button>
                 </div>
 
             </div>
@@ -91,15 +91,15 @@ const PatientComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {patientList.map((row, index) => (
-                                <PatientItem
+                            {/* {collaboratorList.map((row, index) => (
+                                <CollaboratorItem
                                     row={row}
                                     index={index}
                                     columns={columns}
                                 // colorcodes={colorcodes}
                                 />
                             ))
-                            }
+                            } */}
 
                         </TableBody>
                     </Table>
@@ -110,4 +110,4 @@ const PatientComponent = props => {
     )
 }
 
-export default PatientComponent
+export default CollaboratorsComponent

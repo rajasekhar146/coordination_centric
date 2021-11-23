@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import PatientItem from '../Staff/StaffItem.Component'
+import StaffItem from './StaffItem.Component'
 import get from 'lodash.get';
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
@@ -29,18 +29,22 @@ const colorcodes = {
     inactive: '#A0A4A8',
 }
 
-const PatientComponent = props => {
 
-    const [patientList, setPatientList] = React.useState([])
+const StaffComponent = props => {
+
+    const [staffList, setStaffList] = React.useState([])
     const currentUser = authenticationService.currentUserValue
     const organizationId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
-          setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setStaffList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
 
         }
@@ -51,19 +55,21 @@ const PatientComponent = props => {
         getStaffList()
     }, [])
 
+  
+
 
     return (
         <div className="od__main__div">
             <div className="od__row od_flex_space_between">
-                <div className="od__title__text">Patients</div>
+                <div className="od__title__text">Staff</div>
                 <div className="od__btn__div od">
-                    {/* <Button
+                    <Button
                         onClick={() => {
                             // setOpenInviteMember(true)
                         }}
                         className="od_add_member_btn">
-                        &nbsp;&nbsp; Add Patient
-                    </Button> */}
+                        &nbsp;&nbsp; Add Member
+                    </Button>
                 </div>
 
             </div>
@@ -91,11 +97,15 @@ const PatientComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {patientList.map((row, index) => (
-                                <PatientItem
+                            {staffList.map((row, index) => (
+                                <StaffItem
                                     row={row}
                                     index={index}
                                     columns={columns}
+                                    setSkip={setSkip}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
                                 // colorcodes={colorcodes}
                                 />
                             ))
@@ -110,4 +120,4 @@ const PatientComponent = props => {
     )
 }
 
-export default PatientComponent
+export default StaffComponent

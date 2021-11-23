@@ -16,6 +16,8 @@ export const memberService = {
   saveMember,
   getMemberProfessionalInfo,
   updatePrefessionalInfo,
+  getStaffList,
+  updateStatus,
 }
 
 function inviteMember(data) {
@@ -92,6 +94,42 @@ function updatePrefessionalInfo(bodyMsg) {
   return (
     axios
       .patch(`${apiURL}/users/UpdateProfessionalInfo`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function getStaffList(id, type, limit, skip) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .get(`${apiURL}/users/getDetails?id=${id}&type=${type}&limit=${limit}&skip="${skip}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function updateStatus(id, status) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .put(`${apiURL}/users/updateMemberStatus/${id}/${status}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
