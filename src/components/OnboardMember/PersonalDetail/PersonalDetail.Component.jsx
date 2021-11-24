@@ -309,7 +309,7 @@ const PersonalDetailComponent = () => {
                   <Select
                     // value={country}
                     // onChange={e => handleCountryChange(e)}
-                    {...register('country',{ required: 'Country is required' } ,{
+                    {...register('country',{ required: 'Country is required',
                       onChange: e => {
                         setValue('country', e.target.value)
                         fetchStates(e.target.value)
@@ -340,7 +340,7 @@ const PersonalDetailComponent = () => {
                     key="state1"
                     // value={state}
                     // onChange={e => setState(e.target.value)}
-                    {...register('state',{ required: 'state is required' } ,{
+                    {...register('state',{ required: 'state is required' ,
                       onChange: e => setValue('state', e.target.value),
                     })}
                     inputProps={{ 'aria-label': 'Without label' }}

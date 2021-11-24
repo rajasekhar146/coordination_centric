@@ -35,6 +35,9 @@
 .si_left_signin {
     left: 166% !important;
 }
+.si__left__200{
+    left: 210% !important;
+}
 
 .si__left__content {
     font-family: Lato;
@@ -146,7 +149,7 @@
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 18px;
     line-height: 16px;
     
     /* identical to box height, or 133% */
@@ -159,6 +162,8 @@
     /* Neutral/Gray */
     color: #A0A4A8;
     display: flex !important;
+    margin-top: 15px;
+    cursor: pointer;
 }
 
 .si__right__content > div {

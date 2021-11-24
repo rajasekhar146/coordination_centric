@@ -139,7 +139,7 @@ const TwoFaEnabled = props => {
             handleResend()
           }}
            className="io_resend_label io__margin_bottom30">
-            <label >Didn’t receive? Resend OTP</label>
+            <label className="pointer">Didn’t receive? Resend OTP</label>
           </div>
           <Button
             onClick={() => {
@@ -157,7 +157,7 @@ const TwoFaEnabled = props => {
         <div className="io__width100 io_mt_30">
           <label className="io_resend_label io_mr_20">Enter backup code </label>
           <label className="io_resend_label io_mr_20">or </label>
-          <label className="io_resend_label io_mr_20">Choose another authentication method</label>
+          <label className="io_resend_label io_mr_20 pointer">Choose another authentication method</label>
         </div>
 
         <div

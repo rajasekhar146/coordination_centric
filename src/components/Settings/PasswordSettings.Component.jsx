@@ -215,7 +215,7 @@ const PersonalInfo = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">Show</div>
+                                            <div className="si__pwd__show">{showPassword ? 'Hide' : 'Show'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -246,7 +246,7 @@ const PersonalInfo = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">Show</div>
+                                            <div className="si__pwd__show">{showNewPassword ? 'Hide' : 'Show'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -278,7 +278,7 @@ const PersonalInfo = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">Show</div>
+                                            <div className="si__pwd__show">{showConfirmPassword ? 'show' : 'hide'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }

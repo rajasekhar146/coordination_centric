@@ -68,7 +68,7 @@ const ForgotPasswordComponent = (props) => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="si__right__div si_left_signin">
+                <div className="si__right__div si__left__200 ">
                     <div className="si__right__content">
                         <div className="si__right__forgot">
                             <img src={KeyIcon} alt="key" />

@@ -177,7 +177,7 @@ const ResetPasswordPage = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">Show</div>
+                                            <div className="si__pwd__show">{showPassword ? 'Hide' : 'Show'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -286,7 +286,7 @@ const ResetPasswordPage = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">Show</div>
+                                            <div className="si__pwd__show">{showConfirmPassword ? 'Hide' : 'Show'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }

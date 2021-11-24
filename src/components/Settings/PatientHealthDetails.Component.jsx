@@ -303,7 +303,7 @@ const PatientHealthDetails = props => {
                         Any previous health problems?
                     </div>
                     <div className="od_input_p">
-                        <div className="io_radio">
+                        <div className="io_radio_grid">
                             {allProblems.map((item) => (
                                 <HealthIssueItem
                                     item={item}
