@@ -7,7 +7,6 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-    margin-top: 40px;
 }
 .io__two_fa__app {
     background-color: #fff;
@@ -133,7 +132,7 @@
 }
 .io__text {
     position: absolute;
-    top: 55%;
+    top: 60%;
     right: 39%;
 }
 .io__text_email {
@@ -218,6 +217,7 @@
     order: 1;
     flex-grow: 0;
     margin: 0px 8px;
+    cursor: pointer;
 }
 .io__width__45 {
     width: 45%;
@@ -442,4 +442,8 @@
 .io_mt_30 {
     margin-top: 30px;
     margin-bottom: 15px;
+}
+
+.pointer{
+    cursor: pointer;
 }

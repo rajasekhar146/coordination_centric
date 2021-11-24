@@ -128,7 +128,8 @@
 
 .ac__row {
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     /* background-color: #A0A4A8; */
 }
 
@@ -187,6 +188,7 @@
     flex-grow: 0;
     margin: 0px 0px;
     width: 180px !important;
+    height: 100%;
 }
 
 .ac__back__btn {
@@ -236,7 +238,7 @@
     box-sizing: border-box;
     border-radius: 5px;
     /* height: 40px; */
-    width: 290px !important;
+    width: 100% !important;
     padding: 4px;
     border-radius: 5px;
     /* padding: 8px !important; */
@@ -255,3 +257,9 @@
     color: #25282B;
 }
 
+
+.ac_align_buttons{
+    width: 100%;
+    display: inline-flex;
+    grid-template-columns: 1fr 1fr;
+}

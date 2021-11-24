@@ -195,7 +195,7 @@ const AcceptanceCriteriaComponent = props => {
                               InputProps={{ className: 'ac__text__box' }}
                               // value={fullName}
                               // name="fullName"
-                              disabled
+                              
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
                           </div>
@@ -218,7 +218,7 @@ const AcceptanceCriteriaComponent = props => {
                               // value={email}
                               // name="email"
                               // value={initialValues ? initialValues.email : ''}
-                              disabled
+                              
                             />
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
@@ -477,7 +477,7 @@ const AcceptanceCriteriaComponent = props => {
 
                         <div className="ac__gap__div"></div>
 
-                        <div className="ac__row">
+                        <div className="ac_align_buttons">
                           <div className="ac__column ac__left__action">
                             <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
                               Back

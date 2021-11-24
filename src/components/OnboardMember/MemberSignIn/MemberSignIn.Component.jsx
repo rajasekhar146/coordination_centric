@@ -134,13 +134,11 @@ const MemberSignInComponent = () => {
     
     console.log(password , confirmPassword)
     if (password === confirmPassword) {
-      member.member.password = password
-
-      member.member.dob = '12/12/2020'
-      member.member.gender = 'Male'
-      member.member.ssn = '12345678'
-      member.member.occupation = 'Eye Doctor'
-      
+      // member.member.password = password
+      // member.member.dob = '12/12/2020'
+      // member.member.gender = 'Male'
+      // member.member.ssn = '12345678'
+      // member.member.occupation = 'Eye Doctor'
       console.log('memberData', member)
       await organizationService.registerMember( member.member)
       .then(res => {

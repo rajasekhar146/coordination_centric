@@ -459,10 +459,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding: 5px;
 }
 .io_radio {
-    display: grid;
+    display: flex;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    grid-template-columns: 1fr 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr 1fr; */
 }
 .io_radio_item {
     margin-right: 50px;
@@ -591,4 +591,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .fu__icon {
     padding: 10px;
     cursor: pointer;
+}
+
+.io_radio_grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 20px;
 }
