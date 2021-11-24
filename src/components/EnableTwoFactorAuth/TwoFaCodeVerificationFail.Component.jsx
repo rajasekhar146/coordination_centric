@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
 
-const TwoFaVerificationFail = props => {
+const TwoFaCodeVerificationFail = props => {
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
@@ -29,20 +29,12 @@ const TwoFaVerificationFail = props => {
             <label>We apologize but something went wrong during this proccess.</label>
           </div>
           <div className="io__width100">
-            <Button
-              className="io__goto_dashboard io__width45"
-              onClick={() => {
-                history.push('/dashboard')
-              }}
-            >
-              Go to Dashboard
-            </Button>
+
             <Button
               className="io__activate__enable io__margin25 io__width40"
               onClick={() => {
-                history.push(`/enable2fa`)
-              }
-              }
+                history.push('/2facodeverification')
+              }}
             >
               Try Again
             </Button>
@@ -53,4 +45,4 @@ const TwoFaVerificationFail = props => {
   )
 }
 
-export default TwoFaVerificationFail
+export default TwoFaCodeVerificationFail

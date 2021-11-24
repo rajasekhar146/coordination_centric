@@ -55,3 +55,10 @@ export const memberProfessionalInfoCertificates = certificate => {
     payload: certificate,
   }
 }
+
+export const deleteMemberProfessionalInfoCertificate = certificate => {
+  return {
+    type: ActionTypes.DELETE_MEMBER_PROFESSIONAL_CERTIFICATE,
+    payload: certificate,
+  }
+}

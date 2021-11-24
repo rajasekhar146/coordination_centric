@@ -19,6 +19,9 @@ import Checkbox from '@mui/material/Checkbox'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
 import { loadStripe } from '@stripe/stripe-js/pure'
+import { useSelector, useDispatch } from 'react-redux'
+import { commonService } from '../../../services'
+import FormControl from '@mui/material/FormControl'
 
 import get from 'lodash.get'
 import { paymentService } from '../../../services'
@@ -61,6 +64,7 @@ const BankInformationComponent = () => {
   const [cardExpiry, setCardExpiry] = useState(null)
   const [cardCVV, setCardCVV] = useState(null)
   const [country, setCountry] = useState(null)
+  const [countries, setAllCountries] = useState([])
 
   var sigPad = {}
 
@@ -84,32 +88,48 @@ const BankInformationComponent = () => {
     history.push('/eula-agreement')
   }
 
+  const fetchCountries = async () => {
+    const response = await commonService.getCountries().catch(error => {
+      console.log(error)
+    })
+
+    console.log('getCountries', response.data.data.data)
+    setAllCountries(response.data.data.data)
+  }
+
   const captureSignature = () => {
     setSignature({ signatureUrl: sigPad.getTrimmedCanvas().toDataURL('image/png') })
   }
 
   const handleCardSection = () => {
+    clearFormData()
     setCardSection(!cardSection)
   }
 
-  const getCardDetail = async data => {
+  const clearFormData = () => {
+    setValue('nameOnCard', '')
+    setValue('cardNumber', '')
+    setValue('expiry', '')
+    setValue('cvv', '')
+    setValue('country', '')
+    setValue('accountNo', '')
+    setValue('routingNo', '')
+    setValue('name', '')
+  }
 
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))                   
+  const getCardDetail = async data => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
     const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
-   
+
     if (cardSection) {
       const ncardExpiry = data.expiry.split('/')
       const cardDetail = {
-        card: { number: data.cardNumber, 
-          exp_year: ncardExpiry[1], 
-          exp_month: ncardExpiry[0], 
-          cvc: data.cvv 
-        },
+        card: { number: data.cardNumber, exp_year: ncardExpiry[1], exp_month: ncardExpiry[0], cvc: data.cvv },
       }
-    
+
       await paymentService
         .generateToken(cardDetail)
-        .then(response => {         
+        .then(response => {
           const customerId = get(response, ['data', 'data', 'card', 'id'], '')
           const tokenId = get(response, ['data', 'data', 'id'], '')
           const saveDetail = {
@@ -117,62 +137,63 @@ const BankInformationComponent = () => {
             token: tokenId,
             type: 'card',
             customerId: '',
-            default: false
+            default: false,
           }
           console.log(saveDetail)
-          paymentService.savePaymentMethod(saveDetail)
-          .then(response => {
-            console.log('success', response)
-            history.push('/terms-condition')
-          })
-          .catch(err => {
-            console.log('Save Card Detail >> Err Response', err)
-          })
+          paymentService
+            .savePaymentMethod(saveDetail)
+            .then(response => {
+              console.log('success', response)
+              history.push('/terms-condition')
+            })
+            .catch(err => {
+              console.log('Save Card Detail >> Err Response', err)
+            })
         })
         .catch(err => {
           console.log('Card Detail >> Err Response', err)
         })
     } else {
-      const bankDetail = { bank_account :  
-          { 
-            country : "US", 
-            currency : "usd", 
-            account_holder_name : data.name, 
-            account_holder_type : "individual", 
-            routing_number : data.routingNo, 
-            account_number : data.accountNo 
-          } 
-        }      
+      const bankDetail = {
+        bank_account: {
+          country: 'US',
+          currency: 'usd',
+          account_holder_name: data.name,
+          account_holder_type: 'individual',
+          routing_number: data.routingNo,
+          account_number: data.accountNo,
+        },
+      }
 
       console.log('Bank Detail', bankDetail)
 
       await paymentService
         .generateBankToken(bankDetail)
-        .then(response => {     
-          console.log('Bank Token', response)    
-          const  customerId = get(response, ['data', 'data', 'bank_account', 'id'], '')
+        .then(response => {
+          console.log('Bank Token', response)
+          const customerId = get(response, ['data', 'data', 'bank_account', 'id'], '')
           const tokenId = get(response, ['data', 'data', 'id'], '')
           const saveDetail = {
             email: currentUserEmail,
             token: tokenId,
             type: 'account',
             customerId: '',
-            default: false
+            default: false,
           }
-          
-          paymentService.savePaymentMethod(saveDetail)
-          .then(response => {
-            console.log('success', response)
-            history.push('/terms-condition')
-          })
-          .catch(err => {
-            console.log('Save Card Detail >> Err Response', err)
-          })
+
+          paymentService
+            .savePaymentMethod(saveDetail)
+            .then(response => {
+              console.log('success', response)
+              history.push('/terms-condition')
+            })
+            .catch(err => {
+              console.log('Save Card Detail >> Err Response', err)
+            })
         })
         .catch(err => {
           console.log('Card Detail >> Err Response', err)
         })
-
     }
 
     //const response = paymentService.generateToken()
@@ -195,7 +216,8 @@ const BankInformationComponent = () => {
   // const loadError = (onError) => {
   //   console.error(`Failed ${onError.target.src} didn't load correctly`);
   // }
-  useEffect(() => {
+  useEffect(async () => {
+    await fetchCountries()
     //loadStripe.setLoadParameters({advancedFraudSignals: false});
     //createToken()
     // const LoadExternalScript = () => {
@@ -270,8 +292,14 @@ const BankInformationComponent = () => {
                                 </div>
                                 <div className="ac__row">
                                   <TextField
+                                    maxLength={16}
                                     className="bi__text__box"
+                                    characterLimit={16}
                                     margin="normal"
+                                    type="number"
+                                    onInput={e => {
+                                      e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 16)
+                                    }}
                                     onChange={e => setCardNumber(e.target.value)}
                                     {...register('cardNumber', {
                                       required: 'Card number is required.',
@@ -295,6 +323,11 @@ const BankInformationComponent = () => {
                                     <TextField
                                       margin="normal"
                                       placeholder="MM/YY"
+                                      maxLength={5}
+                                      characterLimit={5}
+                                      onInput={e => {
+                                        e.target.value = e.target.value.toString().slice(0, 5)
+                                      }}
                                       onChange={e => setCardCVV(e.target.value)}
                                       {...register('expiry', {
                                         required: 'expiry is required.',
@@ -311,8 +344,12 @@ const BankInformationComponent = () => {
                                     <TextField
                                       id=""
                                       type="password"
-                                      defaultValue="123"
                                       margin="normal"
+                                      maxLength={4}
+                                      characterLimit={4}
+                                      onInput={e => {
+                                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
+                                      }}
                                       onChange={e => setCardExpiry(e.target.value)}
                                       {...register('cvv', {
                                         required: 'cvv is required.',
@@ -330,32 +367,17 @@ const BankInformationComponent = () => {
                                   <div className="ac__label">Country or Region</div>
                                 </div>
                                 <div className="ac__row">
-                                  <Select
-                                    style={{ width: 345, height: 40 }}
-                                    {...register('country', {
-                                      required: 'Country is required.',
-                                      // pattern: {
-                                      //   value:
-                                      //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                      //   message: 'Please enter a valid email',
-                                      // },
-                                    })}
-                                    // onChange={(e) => {
-                                    //   e.target.value
-                                    // }}
-                                    id="demo-simple-select-helper"
-                                  >
-                                    <MenuItem value=""></MenuItem>
-                                    <MenuItem className="bi__menu__text" value={10}>
-                                      India
-                                    </MenuItem>
-                                    <MenuItem className="bi__menu__text" value={20}>
-                                      Australia
-                                    </MenuItem>
-                                    <MenuItem className="bi__menu__text" value={30}>
-                                      England
-                                    </MenuItem>
-                                  </Select>
+                                <select
+                                {...register('country')}
+                                className="bi__dropdown"
+                              >
+                                {countries &&
+                                  countries.map(c => (
+                                    <option value={c.code} key={c.code} className="bi__dropdown">
+                                      {c.name}
+                                    </option>
+                                  ))}
+                              </select>
                                 </div>
                                 {errors.country && <p className="ac__required ml_15">{errors.country.message}</p>}
                               </div>

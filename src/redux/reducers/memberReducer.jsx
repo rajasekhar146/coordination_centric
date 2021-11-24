@@ -197,3 +197,15 @@ export const memberProfessionalInfoCertificatesReducer = (state = memberCertific
       return state
   }
 }
+
+export const deleteMemberProfessionalInfoCertificatesReducer = (
+  state = memberCertificateInitialState,
+  { type, payload }
+) => {
+  switch (type) {
+    case ActionTypes.DELETE_MEMBER_PROFESSIONAL_CERTIFICATE:
+      return payload
+    default:
+      return state
+  }
+}

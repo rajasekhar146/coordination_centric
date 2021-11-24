@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
 
-const colorcodes = {
+const colorcodes = {    
     invited: '#2E90FA',
     pending_verification: '#F79009',
     active: '#12B76A',
@@ -134,10 +134,19 @@ const menuList = [
         ],
     },
     {
-        menu: 'true',
+        menu: 'invited',
         options: [
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-          
+            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            {
+                text: 'Resend Invitation',
+                fnKey: 'setIsResendClicked',
+                icon: require('../../assets/icons/resent_invitation.png').default,
+            },
+            {
+                text: 'Cancel Invite',
+                fnKey: 'setIsCancelInviteClicked',
+                icon: require('../../assets/icons/suspend.png').default,
+            },
         ],
     },
 
@@ -186,37 +195,22 @@ const menuList = [
             { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
         ],
     },
-    {
-        menu: 'invited',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            {
-                text: 'Cancel Invite',
-                fnKey: 'setIsCancelInviteClicked',
-                icon: require('../../assets/icons/suspend.png').default,
-            },
-        ],
-    },
 ]
 
 
-const MemberItemComponent = props => {
+const PatientItemComponent = props => {
     const classes = useStyles()
 
     const {
         row,
         columns,
+        handleClose,
         index,
-        setSkip,
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setMembersList,
+        setStaffList,
+        setSkip,
         admin
     } = props
 
@@ -238,11 +232,11 @@ const MemberItemComponent = props => {
     }
 
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(admin._id, status, 'member')
+        const res = memberService.updateStatus(admin._id, status, 'facility')
         res.then(res => {
             setSkip(1)
             setOpenFlash(true)
-            setMembersList([])
+            setStaffList([])
         })
     }
 
@@ -285,9 +279,6 @@ const MemberItemComponent = props => {
         setAnchorEl(null)
     }
 
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
 
     const getTextColor = text => {
         switch (text) {
@@ -322,8 +313,7 @@ const MemberItemComponent = props => {
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                        <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-
+                            <CircleIcon fontSize="small"  />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
@@ -374,7 +364,7 @@ const MemberItemComponent = props => {
                             ))}
                         </Menu>
                     </TableCell>
-                ) : column.id == 'id' ? null : (
+                ) : (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                     </TableCell>
@@ -384,4 +374,4 @@ const MemberItemComponent = props => {
     )
 }
 
-export default MemberItemComponent
+export default PatientItemComponent

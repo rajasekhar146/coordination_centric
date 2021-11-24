@@ -8,6 +8,8 @@ const specialtiesInitialState = {
   specialties: [],
 }
 
+
+
 export const commonReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_COUNTRIES:
@@ -29,3 +31,12 @@ export const specialtiesReducer = (state = specialtiesInitialState, { type, payl
   }
 }
 
+
+export const setCompleteProfileReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.COMPLETE_PROFILE_POPUP:
+      return payload
+    default:
+      return state
+  }
+}

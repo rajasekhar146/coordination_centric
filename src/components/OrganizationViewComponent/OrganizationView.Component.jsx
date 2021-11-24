@@ -19,7 +19,7 @@ import { Document } from 'react-pdf'
 import Modal from '@mui/material/Modal'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabPanel from './TabPanel.Component';
+import TabPanel from '../TabPanel/TabPanel.Component';
 import Overview from './Overview.Component';
 import Members from './Members.Component';
 import Collaborator from './Collaborator.Component'
@@ -68,7 +68,7 @@ const successStyle = {
     borderRadius: '10px'
 }
 const OrganizationViewComponent = (props) => {
-   
+
     const classes = useStyles()
     const { orgId } = useParams()
     const history = useHistory()
@@ -132,7 +132,7 @@ const OrganizationViewComponent = (props) => {
         selected: {},
     }))((props) => <Tab {...props} />)
 
-   
+
 
     const getButton = () => {
         switch (value) {
@@ -221,17 +221,22 @@ const OrganizationViewComponent = (props) => {
             <TabPanel value={value} index={1}>
                 <Members
                     list={orgDet.user_details}
-                    orgId={orgId}
+                    getOrgDetails={getOrgDetails}
+                    admin={get(orgDet, ['user_details', '0'], null)}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Collaborator
                     list={orgDet.facility_details}
-                    orgId={orgId}
+                    admin={get(orgDet, ['user_details', '0'], null)}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <Patient orgDet={orgDet} />
+                <Patient
+                    orgDet={orgDet}
+                    admin={get(orgDet, ['user_details', '0'], null)}
+
+                />
             </TabPanel>
             <Modal
                 open={openInviteMember}

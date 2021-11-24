@@ -10,6 +10,7 @@ import { authenticationService } from '../../services'
 import get from 'lodash.get'
 import useStore from '../../hooks/use-store';
 import SigninStore from '../../stores/signinstore'
+import { useDispatch } from 'react-redux'
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,9 +37,10 @@ const useStyles = makeStyles(theme => ({
 
 const TwoFaEnabled = props => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const currentUser = authenticationService.currentUserValue
-  const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
-  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const currentUserEmail = get(currentUser, ['email'], '')
+  const twoFactor_auth_type = get(currentUser, ['twoFactor_auth_type'], '')
 
 
   const [verificationCode, setVerificationCode] = useState('')
@@ -82,14 +84,14 @@ const TwoFaEnabled = props => {
   }, [minutes, seconds])
 
   const handleSubmit = () => {
-    const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
+    const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type, email)
     res
       .then(() => {
         localStorage.setItem('twoFaVerfied', true)
-        history.push(`/2faverificationsuccess`)
+        history.push(`/dashboard`)
       })
       .catch(() => {
-        history.push(`/2faverificationfail`)
+        history.push(`/2facodeverificationfail`)
       })
   }
 
@@ -126,8 +128,9 @@ const TwoFaEnabled = props => {
               placeholder="Enter your code"
               inputProps={{ style: { textAlign: 'center' } }}
               value={verificationCode}
+              inputProps={{ maxLength: 6 }}
               onChange={e => {
-                setVerificationCode(e.target.value)
+                setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
               }}
             />
           </div>

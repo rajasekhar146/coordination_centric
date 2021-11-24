@@ -26,7 +26,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const TwoFaModel = props => {
-  const { selectedOrg } = props
+  const { 
+    setIsOpenCompleateProfile,
+    clickCloseButton
+   } = props
 
   const handleOK = () => {
     //props.clickCloseButton()
@@ -46,7 +49,9 @@ const TwoFaModel = props => {
       <div className="io__conform">
         <div className="io__same__line">
           <div className="io__skip">
-            <Button className="io__skip__btn" onClick={props.clickCloseButton}>
+            <Button className="io__skip__btn" onClick={() => {
+              clickCloseButton()
+            }}>
               Skip
             </Button>
           </div>

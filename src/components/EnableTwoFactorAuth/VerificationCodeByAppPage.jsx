@@ -130,8 +130,9 @@ const VerificationCodeByAppPage = props => {
                 type="text"
                 className={classes.textField}
                 value={verificationCode}
+                inputProps={{ maxLength: 6 }}
                 onChange={e => {
-                  setVerificationCode(e.target.value)
+                  setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
                 }}
               />
               <Button

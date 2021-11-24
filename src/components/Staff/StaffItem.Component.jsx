@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
+import '../OrganizationDashboard/OrganizationDashboard.Component.css'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -134,10 +135,19 @@ const menuList = [
         ],
     },
     {
-        menu: 'true',
+        menu: 'invited',
         options: [
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-          
+            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            {
+                text: 'Resend Invitation',
+                fnKey: 'setIsResendClicked',
+                icon: require('../../assets/icons/resent_invitation.png').default,
+            },
+            {
+                text: 'Cancel Invite',
+                fnKey: 'setIsCancelInviteClicked',
+                icon: require('../../assets/icons/suspend.png').default,
+            },
         ],
     },
 
@@ -186,26 +196,10 @@ const menuList = [
             { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
         ],
     },
-    {
-        menu: 'invited',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            {
-                text: 'Cancel Invite',
-                fnKey: 'setIsCancelInviteClicked',
-                icon: require('../../assets/icons/suspend.png').default,
-            },
-        ],
-    },
 ]
 
 
-const MemberItemComponent = props => {
+const StaffItemComponent = props => {
     const classes = useStyles()
 
     const {
@@ -216,33 +210,17 @@ const MemberItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setMembersList,
-        admin
+        setStaffList
     } = props
 
-    const [anchorEl, setAnchorEl] = React.useState(null)
-    const open = Boolean(anchorEl)
-    const [menuOptions, setMenuOptions] = React.useState([])
-
-
-    const handleClick = (event, status) => {
-        event.preventDefault()
-        event.stopPropagation()
-        setAnchorEl(event.currentTarget)
-        const menus = menuList.filter(m => m.menu === status.toLowerCase())
-        console.log('menus', menus)
-        if (menus.length > 0) setMenuOptions(menus[0].options)
-        else setMenuOptions([])
-
-        console.log('menus[0].options', menus[0].options)
-    }
 
     const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(admin._id, status, 'member')
+        const res = memberService.updateStatus(org._id, status, 'member')
         res.then(res => {
             setSkip(1)
+
             setOpenFlash(true)
-            setMembersList([])
+            setStaffList([])
         })
     }
 
@@ -263,7 +241,7 @@ const MemberItemComponent = props => {
             case 'setIsCancelInviteClicked':
                 handleStatus(row, 'cancel')
                 setAlertMsg('Cancelled')
-                setSubLabel('')
+                setSubLabel('Ivitation Cancelled.')
                 break
             case 'setIsActivateClicked':
                 handleStatus(row, 'active')
@@ -284,6 +262,25 @@ const MemberItemComponent = props => {
         }
         setAnchorEl(null)
     }
+
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open = Boolean(anchorEl)
+    const [menuOptions, setMenuOptions] = React.useState([])
+
+
+    const handleClick = (event, status) => {
+        event.preventDefault()
+        event.stopPropagation()
+        setAnchorEl(event.currentTarget)
+        const menus = menuList.filter(m => m.menu === status.toLowerCase())
+        console.log('menus', menus)
+        if (menus.length > 0) setMenuOptions(menus[0].options)
+        else setMenuOptions([])
+
+        console.log('menus[0].options', menus[0].options)
+    }
+
+
 
     const handleClose = () => {
         setAnchorEl(null)
@@ -322,8 +319,7 @@ const MemberItemComponent = props => {
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                        <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
-
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
@@ -384,4 +380,4 @@ const MemberItemComponent = props => {
     )
 }
 
-export default MemberItemComponent
+export default StaffItemComponent

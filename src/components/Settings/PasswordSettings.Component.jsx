@@ -140,7 +140,11 @@ const PersonalInfo = props => {
                 setOpenFlash(true)
                 setAlertMsg('Updated')
                 setSubLabel('Your password was successfully updated.')
-            }).catch(() => {
+            }).catch((res) => {
+                console.log(res.response)
+                setOpenFlash(true)
+                setAlertMsg('Error')
+                setSubLabel(get(res, ['response', 'data', 'message']))
 
             })
             // SignInStore.load('ResetPassword', {

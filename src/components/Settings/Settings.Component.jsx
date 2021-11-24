@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router'
 import Button from '@mui/material/Button'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import TabPanel from './TabPanel.Component';
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import TabPanel from '../TabPanel/TabPanel.Component'
 import PersonalInfo from './PersonalInfo.component'
 import ProfessionalInfo from './ProfessionalInfo.Component'
 import PatientHealthDetails from './PatientHealthDetails.Component'
 import { settinService } from '../../services'
 import get from 'lodash.get'
 import PasswordSettings from './PasswordSettings.Component'
-import InsuranceComponent from './Insurance.Component';
+import InsuranceComponent from './Insurance.Component'
 import TwoFaEnableSettings from './TwoFaEnableSettings.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import './Settings.Component.css'
@@ -19,12 +19,10 @@ import Alert from '../Alert/Alert.component'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
-        backgroundColor: "#E42346",
-        height: "3px"
-    }
-}));
-
-
+        backgroundColor: '#E42346',
+        height: '3px',
+    },
+}))
 
 const style = {
     position: 'absolute',
@@ -36,7 +34,7 @@ const style = {
     border: 0,
     boxShadow: 24,
     p: 4,
-    borderRadius: '10px'
+    borderRadius: '10px',
 }
 
 const successStyle = {
@@ -51,18 +49,19 @@ const successStyle = {
     boxShadow: 24,
     p: 4,
     border: 0,
-    borderRadius: '10px'
+    borderRadius: '10px',
 }
 const OrganizationViewComponent = () => {
     const classes = useStyles()
     const history = useHistory()
-    const [value, setValue] = React.useState('0');
+    const [value, setValue] = React.useState(null);
     const { userId } = useParams()
     const [userDetails, setUserDetails] = useState(null)
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
 
+    const role = get(userDetails, ['role'], '')
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -94,17 +93,27 @@ const OrganizationViewComponent = () => {
         }
     }
 
+    const getValue = (role) => {
+        switch (role) {
+            case 'superadmin':
+            case 'admin':
+                return '3'
+            default:
+                return '0'
+        }
+    }
+
+
     useEffect(() => {
         getMemberDetails()
-    }, [])
+        setValue(getValue(role))
+    }, [role])
 
     const handleCloseFlash = (event, reason) => {
         setOpenFlash(false)
     }
 
-
-
-    const TabItem = withStyles((theme) => ({
+    const TabItem = withStyles(theme => ({
         root: {
             backgroundColor: '#F6F8FB',
             color: '#667085',
@@ -137,10 +146,7 @@ const OrganizationViewComponent = () => {
             },
         },
         selected: {},
-    }))((props) => <Tab {...props} />)
-
-
-
+    }))(props => <Tab {...props} />)
 
     return (
         <div className="od__setting__div">
@@ -168,22 +174,13 @@ const OrganizationViewComponent = () => {
                 inkBarStyle={{ background: 'red' }}
                 TabIndicatorProps={{ className: classes.indicator }}
             >
-                <TabItem value="0" label="My Details" />
-                {/* {get(userDetails, ['role'], '') === 'doctor'
-                    && <TabItem value="1" label="Professional Info" />
-                }
-                {get(userDetails, ['role'], '') === 'patient'
-                    && <TabItem value="2" label="Health Info" />
-                } */}
+                {get(userDetails, ['role'], '') === 'doctor' && <TabItem value="0" label="My Details" />}
 
-                <TabItem value="1" label="Professional Info" />
-
-
-                <TabItem value="2" label="Health Info" />
-
+                {get(userDetails, ['role'], '') === 'doctor' && <TabItem value="1" label="Professional Info" />}
+                {get(userDetails, ['role'], '') === 'patient' && <TabItem value="2" label="Health Info" />}
                 <TabItem value="3" label="Password" />
                 <TabItem value="4" label="2Factor-Authentication" />
-                <TabItem value="5" label="Insurance Information" />
+                {get(userDetails, ['role'], '') === 'patient' && <TabItem value="5" label="Insurance Information" />}
                 <TabItem value="6" label="Notifications" />
             </Tabs>
             <TabPanel value={value} index={0}>
@@ -196,7 +193,13 @@ const OrganizationViewComponent = () => {
                 />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <ProfessionalInfo />
+                <ProfessionalInfo
+                    userDetails={userDetails}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                    getMemberDetails={getMemberDetails}
+                />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <PatientHealthDetails
@@ -232,13 +235,8 @@ const OrganizationViewComponent = () => {
                     getMemberDetails={getMemberDetails}
                 />
             </TabPanel>
-            <Alert
-                handleCloseFlash={handleCloseFlash}
-                alertMsg={alertMsg}
-                openflash={openflash}
-                subLebel={subLebel}
-            />
-        </div >
+            <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} />
+        </div>
     )
 }
 

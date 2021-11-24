@@ -7,19 +7,20 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import PatientItem from '../Staff/StaffItem.Component'
+import CollaboratorItem from './CollaboratorItem'
 import get from 'lodash.get';
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import Button from '@mui/material/Button'
+import Alert from '../Alert/Alert.component'
 
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
-    { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
-    { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
+    { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
+    { id: 'facilityEmail', label: 'Email', minWidth: 100, align: 'left', visible: true },
     { id: 'role', label: 'Role', minWidth: 200, align: 'left', visible: true },
-    { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
+    { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
 
@@ -29,18 +30,21 @@ const colorcodes = {
     inactive: '#A0A4A8',
 }
 
-const PatientComponent = props => {
+const CollaboratorsComponent = props => {
 
-    const [patientList, setPatientList] = React.useState([])
+    const [collaboratorList, setCollaboratorList] = React.useState([])
     const currentUser = authenticationService.currentUserValue
     const organizationId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
         if (res.status === 200) {
-          setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
 
         }
@@ -49,21 +53,25 @@ const PatientComponent = props => {
 
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [collaboratorList.length, skip])
+
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
 
 
     return (
         <div className="od__main__div">
             <div className="od__row od_flex_space_between">
-                <div className="od__title__text">Patients</div>
+                <div className="od__title__text">Collaborators</div>
                 <div className="od__btn__div od">
-                    {/* <Button
+                    <Button
                         onClick={() => {
                             // setOpenInviteMember(true)
                         }}
                         className="od_add_member_btn">
-                        &nbsp;&nbsp; Add Patient
-                    </Button> */}
+                        &nbsp;&nbsp; Add Collaborator
+                    </Button>
                 </div>
 
             </div>
@@ -91,12 +99,16 @@ const PatientComponent = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {patientList.map((row, index) => (
-                                <PatientItem
+                            {collaboratorList.map((row, index) => (
+                                <CollaboratorItem
                                     row={row}
                                     index={index}
                                     columns={columns}
-                                // colorcodes={colorcodes}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setCollaboratorList={setCollaboratorList}
+                                    setSkip={setSkip}
                                 />
                             ))
                             }
@@ -105,9 +117,15 @@ const PatientComponent = props => {
                     </Table>
                 </TableContainer>
             </Paper>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+            />
         </div>
 
     )
 }
 
-export default PatientComponent
+export default CollaboratorsComponent

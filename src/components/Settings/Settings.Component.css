@@ -563,3 +563,31 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: flex;
     align-items: center;
 }
+
+.fu__row {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fu__success__icon {
+    width: 50% !important;
+}
+
+.fu__delete__icon {
+    width: 50%
+}
+
+.fu__upload__file__icon {
+    width: 10% !important;
+}
+
+.fu__upload__file__content__section {
+    width: 80% !important;
+}
+
+.fu__icon {
+    padding: 10px;
+    cursor: pointer;
+}

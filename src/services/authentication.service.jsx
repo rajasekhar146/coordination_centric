@@ -15,11 +15,12 @@ export const authenticationService = {
   logout,
   twoFactorEmailAuth,
   twoFactorByAppAuth,
-  twoFactorEmailAuthVerification,
+  twoFactorAuthVerification,
   twoFactorAppAuthVerification,
   resetPassword,
   changePassword,
   requestPassword,
+  skipTwoFa,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -63,6 +64,7 @@ function login(username, password) {
       //.then(handleResponse)
       .then(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
+        // const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
         localStorage.setItem('currentUser', JSON.stringify(user))
         currentUserSubject.next(user)
         // console.log(user)
@@ -123,13 +125,27 @@ function twoFactorByAppAuth(email) {
   )
 }
 
-function twoFactorEmailAuthVerification(code) {
+function twoFactorAuthVerification(code, type, email) {
   let axiosConfig = {
     headers: authHeader(),
   }
+  let url = `${apiURL}`
+
+  if (type === 'email') {
+    url += `/users/twoFactorEmailAuthenticationVerification/${code}`
+  } else if (type === 'app') {
+    url += `/users/twoFactorAuthenticationVerification`
+  }
+
+  const dataTosend = type === 'email' ? null : {
+    code,
+    email: email,
+    token: 'base32'
+  }
+
   return (
     axios
-      .post(`${apiURL}/users/twoFactorEmailAuthenticationVerification/${code}`, null, axiosConfig)
+      .post(url, dataTosend, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         localStorage.setItem('currentUser', JSON.stringify(data))
@@ -188,6 +204,21 @@ function changePassword(data) {
   return (
     axios
       .post(`${apiURL}/users/changePassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+
+function skipTwoFa(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/twoFAStatus`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

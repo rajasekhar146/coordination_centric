@@ -244,19 +244,19 @@ const getMenuList = (role) => {
         },
         {
           name: 'Users',
-          link: '/users',
+          link: '/staff',
           icon: require('../../assets/icons/users.png').default,
           activeIcon: require('../../assets/icons/users.png').default,
           items: [
             {
               name: 'Staff',
-              link: '/users',
+              link: '/staff',
               icon: require('../../assets/icons/users.png').default,
               activeIcon: require('../../assets/icons/users.png').default,
             },
             {
               name: 'Collaborators',
-              link: '/users',
+              link: '/collaborators',
               icon: require('../../assets/icons/users.png').default,
               activeIcon: require('../../assets/icons/users.png').default,
             },
