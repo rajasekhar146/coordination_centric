@@ -111,6 +111,7 @@
 
 .io__same__line {
     display: flex;
+    cursor: pointer;
 }
 .io__flex__spcebetween {
     display: flex;

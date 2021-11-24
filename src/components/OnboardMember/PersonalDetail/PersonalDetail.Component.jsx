@@ -26,7 +26,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
+  width: 670,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -153,6 +153,7 @@ const PersonalDetailComponent = () => {
         </div>
         <div className="pdc__step__text">STEP 01/02</div>
       </div>
+      <div className="pdc__sub__main__div">
       <div className="pdc__header__text">Personal Detail</div>
       <div className="pdc__content__div">
         Help us to get to know you a little more. All information remains private.
@@ -160,7 +161,7 @@ const PersonalDetailComponent = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="pdc__row">
           <div className="pdc__details__div">
-            <div className="pdc__row">
+            <div className="pdc__row_grid" >
               <div className="pdc__column">
                 <div className="pdc__label">
                   First Name <span className="pdc__required">*</span>
@@ -175,10 +176,10 @@ const PersonalDetailComponent = () => {
 
               <div className="pdc__column">
                 <div className="pdc__label">
-                  Middle Name <span className="pdc__required">*</span>
+                  Middle Name 
                 </div>
                 <TextField
-                  {...register('middle_name', { required: 'Middle Name is required', maxLength: 50 })}
+                  {...register('middle_name', {maxLength: 50 })}
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
@@ -197,7 +198,7 @@ const PersonalDetailComponent = () => {
                 {errors.last_name && <p className="ac__required">{errors.last_name.message}</p>}
               </div>
             </div>
-            <div className="pdc__row">
+            <div className="pdc__row__two_grid">
               <div className="pdc__column">
                 <div className="pdc__label">
                   SSN/ITIN <span className="pdc__required">*</span>
@@ -223,7 +224,7 @@ const PersonalDetailComponent = () => {
               </div>
             </div>
 
-            <div className="pdc__row">
+            <div className="pdc__row_grid">
               <div className="pdc__column">
                 <div className="pdc__label">
                   Date of Birth <span className="pdc__required">*</span>
@@ -248,13 +249,15 @@ const PersonalDetailComponent = () => {
                 <TextField
                   {...register('phoneNumber', {
                     required: 'Phone Number is required',
-                    maxLength: 20,
                     pattern: {
                       value: /\d+/,
                       message: 'This input is number only.',
                     },
                   })}
                   margin="normal"
+                  inputProps={{
+                    maxLength: 15,
+                  }}  
                   InputProps={{ className: 'pdc__phone__text__box' }}
                 />
                 {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
@@ -277,7 +280,7 @@ const PersonalDetailComponent = () => {
                       <em>Select an option</em>
                     </MenuItem>
                     {genderList.map(g => (
-                      <MenuItem value={g.value}>{g.text}</MenuItem>
+                      <MenuItem key={g.value} value={g.value}>{g.text}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -285,7 +288,7 @@ const PersonalDetailComponent = () => {
               </div>
             </div>
 
-            <div className="pdc__row">
+            <div className="">
               <div className="pdc__column">
                 <div className="pdc__label">
                   Address <span className="pdc__required">*</span>
@@ -299,14 +302,14 @@ const PersonalDetailComponent = () => {
               </div>
             </div>
 
-            <div className="pdc__row">
+            <div className="pdc__row__four__grid">
               <div className="pdc__column">
-                <div className="pdc__label">Country</div>
+                <div className="pdc__label">Country<span className="pdc__required"> *</span></div>
                 <FormControl sx={{ m: 1, minWidth: 210 }}>
                   <Select
                     // value={country}
                     // onChange={e => handleCountryChange(e)}
-                    {...register('country', {
+                    {...register('country',{ required: 'Country is required' } ,{
                       onChange: e => {
                         setValue('country', e.target.value)
                         fetchStates(e.target.value)
@@ -327,16 +330,17 @@ const PersonalDetailComponent = () => {
                       ))}
                   </Select>
                 </FormControl>
+                {errors.country && <p className="ac__required">{errors.country.message}</p>}
               </div>
 
               <div className="pdc__column">
-                <div className="pdc__label">State</div>
+                <div className="pdc__label">State<span className="pdc__required"> *</span></div>
                 <FormControl sx={{ m: 1, minWidth: 210 }}>
                   <Select
                     key="state1"
                     // value={state}
                     // onChange={e => setState(e.target.value)}
-                    {...register('state', {
+                    {...register('state',{ required: 'state is required' } ,{
                       onChange: e => setValue('state', e.target.value),
                     })}
                     inputProps={{ 'aria-label': 'Without label' }}
@@ -352,20 +356,23 @@ const PersonalDetailComponent = () => {
                       ))}
                   </Select>
                 </FormControl>
+                {errors.state && <p className="ac__required">{errors.state.message}</p>}
               </div>
 
               <div className="pdc__column">
-                <div className="pdc__label">City</div>
-                <TextField {...register('city')} style={{ minWidth: 100 }} margin="normal" />
+                <div className="pdc__label">City<span className="pdc__required"> *</span></div>
+                <TextField {...register('city',{ required: 'city is required' })} style={{ minWidth: 100 }} margin="normal" />
+                {errors.city && <p className="ac__required">{errors.city.message}</p>}
               </div>
 
               <div className="pdc__column">
-                <div className="pdc__label">Postal Code</div>
-                <TextField {...register('postalCode')} style={{ minWidth: 100 }} margin="normal" />
+                <div className="pdc__label">Postal Code<span className="pdc__required"> *</span></div>
+                <TextField {...register('postalCode',{ required: 'Postal Code is required' })} style={{ minWidth: 100 }} margin="normal" />
+                {errors.postalCode && <p className="ac__required">{errors.postalCode.message}</p>}
               </div>
             </div>
 
-            <div className="pdc__row pdc__align__right">
+            <div className="pdc__row pdc__align__right ">
               <Button className="pdc__next__btn" type="submit">
                 Next &nbsp;
                 <ArrowForwardIosRoundedIcon />
@@ -380,6 +387,7 @@ const PersonalDetailComponent = () => {
           </Modal>
         </div>
       </form>
+      </div>
     </div>
   )
 }

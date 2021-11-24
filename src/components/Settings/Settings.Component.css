@@ -459,9 +459,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding: 5px;
 }
 .io_radio {
-    display: flex;
+    display: grid;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 .io_radio_item {
     margin-right: 50px;

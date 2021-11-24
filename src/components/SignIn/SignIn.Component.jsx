@@ -169,7 +169,7 @@ const SignInComponent = () => {
                 InputProps={{ className: 'si__text__box' }}
               />
               {errors.email && <p className="ac__required">{errors.email.message}</p>}
-              {!IsValidEmail && <p className="ac__required">{errMsg}</p>}
+              {!IsValidEmail && !errors.email && <p className="ac__required">{errMsg}</p>}
             </div>
             <div className="si__right__label">
               Password &nbsp;<span className="ac__required">*</span>

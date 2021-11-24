@@ -62,12 +62,12 @@ const ProfileSetupComponent = () => {
           </div>
           <div className="psp__step__text">STEP 02/02</div>
         </div>
-        <div className="psp__row psp__header__space"></div>
+        <div className="psp_sub_div">
         <div className="psp__row psp__header__text">Setup your profile</div>
         <div className="psp__row psp__subtitle">
           Define the setting of your profile, you can always edit them later.{' '}
         </div>
-        <div className="psp__row">
+        <div className="psp__row mar-top-50">
           <div className="psp__image__preview">
             {' '}
             <img className="psp__profile__img" src={files?.source || defaultSrc} alt="preview" />
@@ -96,14 +96,13 @@ const ProfileSetupComponent = () => {
             <img src={CamerLogo} /> &nbsp; Upload Profile Photo
           </Button>
         </div>
-        <div className="psp__row">
+        <div className="psp__row mar-top-50">
           <div className="psp__label">Short Biography</div>
         </div>
 
         <div className="psp__row psp__submit__btn__center__align">
           <TextField
             className="psp__multiline__text__box"
-            style={{ width: '600px' }}
             {...register('bio')}
             margin="normal"
             multiline
@@ -114,6 +113,7 @@ const ProfileSetupComponent = () => {
             Submit &nbsp;
             <ArrowForwardIosRoundedIcon />
           </Button>
+        </div>
         </div>
       </form>
     </div>

@@ -3,7 +3,7 @@
     /* height: 100vh; */
     /* min-width: 85%; */
     height: 100%;
-    padding: 10px 0px 0px 50px;
+    padding: 10px 60px;
 }
 
 .psp__row {
@@ -26,6 +26,7 @@
     letter-spacing: 0.2px;
 
     color: #000000;
+    margin-top: 0px;
 }
 
 .psp__back__button {
@@ -102,7 +103,7 @@
 
 .psp__step__text {
     position: absolute;
-    right: 10px;
+    right: 65px;
     font-family: Lato;
     font-style: normal;
     font-weight: 500;
@@ -156,16 +157,14 @@
     /* Neutral/White */
     color: #FFFFFF !important;
     
-    width: 150px !important;
-    height: 50px !important;
-    justify-content: right !important;
-
+    width: 180px !important;
+    height: 55px !important;
 }
 
 .psp__submit__btn__center__align {
     display: flex !important;
-    /* justify-content: right !important; */
-    align-items: center !important;
+    /* justify-content: end !important; */
+    align-items: end !important;
 
 }
 
@@ -189,4 +188,12 @@
     animation-duration: 10ms;
     padding: 1px !important;
     padding-right: 0;
+}
+
+.psp_sub_div{
+    padding: 5rem;
+}
+
+.mar-top-50{
+    margin-top: 50px;
 }

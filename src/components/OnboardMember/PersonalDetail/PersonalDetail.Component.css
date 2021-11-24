@@ -10,7 +10,7 @@
     color: #000000; */
     min-width: 85%;
     height: 100%;
-    padding: 10px 0px 0px 50px;
+    padding: 10px 0px 0px 60px;
 }
 
 .pdc__header__text {
@@ -26,7 +26,6 @@
     letter-spacing: 0.2px;
 
     color: #000000;
-    margin-top: 100px;
 }
 
 .pdc__content__div{
@@ -115,7 +114,6 @@
 .pdc__row {
     width: 100%;
     display: flex;
-    margin-top: 20px;
     /* background-color: #A0A4A8; */
 }
 
@@ -129,6 +127,7 @@
 
 .pdc__details__div {
     margin-top: 20px;
+    width: 100%;
 }
 
 .pdc__column > div {
@@ -207,7 +206,7 @@
     margin-top: 50px;
     display: flex;
     justify-content: flex-end;
-    width: 96%;
+    width: 98%;
 }
 
 .pdc__step__text {
@@ -231,7 +230,7 @@
 .MuiOutlinedInput-input {
     font: inherit;
     letter-spacing: inherit;
-    color: currentColor;
+    color: black !important;
     padding: 4px 0 5px;
     border: 0;
     box-sizing: content-box;
@@ -251,13 +250,18 @@
 }
 
 .MuiOutlinedInput-root {
+    width: 100% !important;
     min-height: 20px !important;
+}
+
+.MuiFormControl-root-MuiTextField-root{
+    width: 100% !important;
 }
 
 .MuiInputBase-input-MuiOutlinedInput-input {
     font: inherit;
     letter-spacing: inherit;
-    color: currentColor;
+    color: black;
     padding: 4px 0 5px;
     border: 0;
     box-sizing: content-box;
@@ -274,4 +278,30 @@
     animation-duration: 10ms;
     padding: 11px 11px;
     padding-right: 0;
+}
+
+.pdc__row_grid{
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.pdc__row__four__grid{
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.pdc__row__two_grid{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.MuiFormControl-root, .MuiFormControl-root{
+width: 100% !important
+}
+
+.pdc__sub__main__div{
+    padding: 2rem 4rem;
 }

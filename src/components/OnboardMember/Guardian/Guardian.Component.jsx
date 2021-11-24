@@ -93,7 +93,8 @@ const GuardianComponent = props => {
 
         <div className="gn__row">
           <div className="gn__column">
-            <div className="gn__label">Phone number</div>
+            <div className="gn__label">Phone number
+            <span className="ac__required"> *</span></div>
             <TextField
               {...register('phone_no', { required: 'Phone number is required.' })}
               margin="normal"
@@ -110,7 +111,7 @@ const GuardianComponent = props => {
           </div>
 
           <div className="gn__column">
-            <div className="gn__label">Email</div>
+            <div className="gn__label">Email<span className="ac__required"> *</span></div>
             <TextField
               {...register('email', {
                 required: 'Guardian Email is required.',
