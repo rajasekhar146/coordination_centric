@@ -175,16 +175,7 @@ const PatientHealthDetails = props => {
                             Update your health details here.
                         </div>
                     </div>
-                    <div className="od__btn__div od__align__right io_pr0">
-                        <Button className="io_p_cancel">
-                            Cancel
-                        </Button>
-
-                        <Button className="io__save__btn">
-                            Save
-                        </Button>
-
-                    </div>
+                  
                 </div>
 
                 <ColoredLine color="#E4E7EC" />
