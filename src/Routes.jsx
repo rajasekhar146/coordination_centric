@@ -47,7 +47,7 @@ import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
 import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
 import Settings from './components/Settings/Settings.Component'
-
+// import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component';
 class Routes extends Component {
   render() {
     return (
@@ -105,6 +105,7 @@ class Routes extends Component {
           <MasterLayoutWithOutLefuMenuComponent path="/settings/:userId" component={Settings} />
           <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
+          {/* <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />  */}
         </Switch>
       </Router>
     )

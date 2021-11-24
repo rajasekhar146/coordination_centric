@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     header: {
        fontWeight: 450,
     //    fontFamily: 'Poppins',
-       fontSize: '30px',
+       fontSize: '24px',
        lineHeight: '40px',
        letterSpacing: '-0.035em',
        color: '#ffffff',
