@@ -214,15 +214,35 @@ const StaffItemComponent = props => {
         type
     } = props
 
-
-    const handleStatus = async(org, status) => {
-        const res = await memberService.updateStatus(org._id, status, type)
+    const resendInvite = (org, status) => {
+        const res = memberService.resendInvite(org._id, status, 'member')
         if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
             setStaffList([])
+            setAlertMsg('Re-sended')
+            setSubLabel('Another invitation was sended to this Member.')
         } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            // setSubLabel('Another invitation was sended to this Member.')
+            setStaffList([])
+        }
+    }
+    const cancelInvite = (org, status) => {
+        const res = memberService.cancelInvite(org._id, status, 'member')
 
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setStaffList([])
+            setAlertMsg('Cancelled')
+            setSubLabel('Ivitation Cancelled.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setStaffList([])
         }
     }
 
@@ -241,18 +261,16 @@ const StaffItemComponent = props => {
                 // setIsDeactivateClicked(true)
                 break
             case 'setIsCancelInviteClicked':
-                handleStatus(row, 'cancel')
-                setAlertMsg('Cancelled')
-                setSubLabel('Ivitation Cancelled.')
+                cancelInvite(row, 'cancel')
+
                 break
             case 'setIsActivateClicked':
-                handleStatus(row, 'active')
+                // handleStatus(row, 'active')
                 // setIsActiva/teClicked(true)
                 break
             case 'setIsResendClicked':
-                handleStatus(row, 'resend')
-                setAlertMsg('Re-sended')
-                setSubLabel('Another invitation was sended to this Member.')
+                resendInvite(row, 'resend')
+
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()
