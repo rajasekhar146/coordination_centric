@@ -213,8 +213,16 @@ const CollaboratorComponent = props => {
         setCollaboratorList
     } = props
 
-    const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org._id, status, 'facility')
+    const resendInvite = (org, status) => {
+        const res = memberService.resendInvite(org._id, status, 'facility')
+        res.then(res => {
+            setSkip(1)
+            setOpenFlash(true)
+            setCollaboratorList([])
+        })
+    }
+    const cancelInvite = (org, status) => {
+        const res = memberService.cancelInvite(org._id, status, 'facility')
         res.then(res => {
             setSkip(1)
 
@@ -238,18 +246,15 @@ const CollaboratorComponent = props => {
                 // setIsDeactivateClicked(true)
                 break
             case 'setIsCancelInviteClicked':
-                handleStatus(row, 'cancel')
-                setAlertMsg('Cancelled')
-                setSubLabel('Ivitation Cancelled.')
+                cancelInvite(row, 'cancel')
+
                 break
             case 'setIsActivateClicked':
-                handleStatus(row, 'active')
+                // handleStatus(row, 'active')
                 // setIsActiva/teClicked(true)
                 break
             case 'setIsResendClicked':
-                handleStatus(row, 'resend')
-                setAlertMsg('Re-sended')
-                setSubLabel('Another invitation was sended to this Member.')
+                resendInvite(row, 'resend')
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()

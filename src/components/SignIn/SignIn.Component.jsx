@@ -165,8 +165,13 @@ const SignInComponent = () => {
                 })}
                 margin="normal"
                 placeholder="Email"
+                type="email"
                 error={errors.email && isSubmit}
-                InputProps={{ className: 'si__text__box' }}
+                InputProps={{ 
+                  className: 'si__text__box',
+                  placeholder: 'Email'
+                }}
+
               />
               {errors.email && <p className="ac__required">{errors.email.message}</p>}
               {!IsValidEmail && !errors.email && <p className="ac__required">{errMsg}</p>}
@@ -183,7 +188,7 @@ const SignInComponent = () => {
                   })}
                   type={showPassword ? 'text' : 'password'}
                   onChange={handleChange()}
-                  placeholder="Password"
+                  placeholder="password"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
