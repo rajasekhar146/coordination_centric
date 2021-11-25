@@ -121,7 +121,11 @@ const PersonalDetailComponent = () => {
     // data.state = state
 
     var age = 0
-    if (dateOfBirth != null) age = moment(dateOfBirth, 'MM/DD/YYYY').fromNow().split(' ')[0] //moment(dateOfBirth).fromNow();
+    if(dateOfBirth != null){
+      const newAge = moment(dateOfBirth, "YYYY/MM/DD").fromNow();
+      age = newAge.split(" ")[0];
+    }
+    
 
     var memberData = { ...member.member, ...data }
     console.log('submit data >> ', memberData)
@@ -147,11 +151,12 @@ const PersonalDetailComponent = () => {
     dispatch(setCountries(response.data.data.data))
   }
 
-  useEffect(() => {
-    fetchCountries()
+  useEffect(async() => {
+    await fetchCountries()
     featchOcupations()
     const newMemberDetail = member?.member
     if (newMemberDetail) {
+      await fetchStates(newMemberDetail.country)
       setValue('first_name', newMemberDetail.first_name)
       setValue('middle_name', newMemberDetail.middle_name)
       setValue('last_name', newMemberDetail.last_name)
@@ -167,7 +172,8 @@ const PersonalDetailComponent = () => {
       setValue('postalCode', newMemberDetail.postalCode)
       setValue('gender', newMemberDetail.gender)
       setDOB(newMemberDetail.dob)
-      fetchStates(newMemberDetail.country)
+      // setCountry('country', newMemberDetail.country)
+      setValue('state', newMemberDetail.state)
     }
   }, [])
 
