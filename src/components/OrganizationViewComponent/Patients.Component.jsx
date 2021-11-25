@@ -34,7 +34,7 @@ const PatientComponent = props => {
     const {
         orgDet,
         colorcodes,
-        admin,
+        organizationId,
        
     } = props
 
@@ -57,7 +57,7 @@ const PatientComponent = props => {
     const [page, setPage] = React.useState(1)
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'patient', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
         if (res.status === 200) {
             setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -102,7 +102,7 @@ const PatientComponent = props => {
                                     columns={columns}
                                     setAnchorEl={setAnchorEl}
                                     handleClose={handleClose}
-                                    admin={admin}
+                                    organizationId
                                     setSkip={setSkip}
                                     setOpenFlash={setOpenFlash}
                                     setAlertMsg={setAlertMsg}

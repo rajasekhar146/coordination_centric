@@ -78,6 +78,7 @@ const StaffComponent = props => {
     const [page, setPage] = React.useState(1)
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
+    
     const getStaffList = async () => {
         const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
@@ -196,9 +197,7 @@ const StaffComponent = props => {
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
                         organizationId={organizationId}
                         setSkip={setSkip}
-                        setOpenFlash={setOpenFlash}
-                        setAlertMsg={setAlertMsg}
-                        setSubLabel={setSubLabel}
+                        setMembersList={setStaffList}
                     />
                 </Box>
             </Modal>
@@ -210,12 +209,6 @@ const StaffComponent = props => {
                 <Box sx={successStyle}>
                     <InviteMemberSuccess
                         clickCloseButton={closeInviteSuccessModel}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>

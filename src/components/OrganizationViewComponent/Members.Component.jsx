@@ -31,7 +31,7 @@ const MembersComponent = props => {
     const {
         colorcodes,
         getOrgDetails,
-        admin,
+        organizationId,
         setMembersList,
         membersList,
         setOpenFlash,
@@ -45,7 +45,7 @@ const MembersComponent = props => {
     
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'member', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
             setMembersList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -94,7 +94,7 @@ const MembersComponent = props => {
                                     setSubLabel={setSubLabel}
                                     setMembersList={setMembersList}
                                     setSkip={setSkip}
-                                    admin={admin}
+                                    organizationId={organizationId}
                                 />
                             ))
                             }

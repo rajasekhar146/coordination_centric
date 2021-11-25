@@ -49,11 +49,7 @@ const InviteCollaboratorComponent = props => {
         setOpenInviteCollaborator,
         orgId,
         organizationId,
-        getOrgDetails,
-        setOpenFlash,
-        setAlertMsg,
-        setSubLabel,
-        setStaffList,
+        setCollaboratorList,
     } = props;
 
 
@@ -102,7 +98,7 @@ const InviteCollaboratorComponent = props => {
         res.then((response) => {
             setOpenInviteCollaborator(false)
             setOpenInviteCollaboratorSuccess(true)
-            getOrgDetails()
+            setCollaboratorList([])
         }).catch((error) => {
             console.log(error.response)
             if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
