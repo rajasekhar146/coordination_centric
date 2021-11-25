@@ -11,11 +11,31 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import { memberService } from '../../../services'
+import userLogo from '../../../assets/icons/user_circle.svg';
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import ConfirmationPopupModel from '../../ModelPopup/ConfirmationPopupModel.Component'
+import { useParams } from 'react-router-dom'
+import { commonService } from '../../../services'
+import get from 'lodash.get'
+import { async } from 'rxjs'
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
 const ProfileSetupComponent = () => {
   const defaultSrc =
     'https://www.pngkit.com/png/full/301-3012694_account-user-profile-avatar-comments-fa-user-circle.png'
-  const[profilePicName, setProfilePicName] = useState('')
+  const[profilePicName, setProfilePicName] = useState(null)
   const [files, selectFiles] = useFileUpload()
   var {
     register,
@@ -25,16 +45,47 @@ const ProfileSetupComponent = () => {
   } = useForm()
   const dispatch = useDispatch()
   const member = useSelector(state => state.newMember)
+  const [openModel, setBool] = useState('')
+  const [prfileUrl, setProfileUrl] = useState('')
 
-  console.log('member', member)
 
-  useEffect(() => {
+  const { invitetoken } = useParams()
+  const { referredby } = useParams()
+  const { invitedBy } = useParams()
+  const arrayBufferToBase64 = buffer => {
+    let binary = ''
+    const bytes = new Uint8Array(buffer)
+    const len = bytes.byteLength
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i])
+    }
+    return window.btoa(binary)
+}
+const getProfilePic = async profilePicName => {
+  console.log('---pro' , profilePicName)
+  const urlData = {
+      name: `doctors_certificate/${profilePicName}`,
+  }
+  console.log('---' , urlData)
+  const response = await commonService.getProfile(urlData).catch(error => {
+      console.log(error)
+  })
+  if (response && response.data.status === 200) {
+      setProfileUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
+  }
+}
+  useEffect(async () => {
     const newMemberDetail = member?.member
     if (newMemberDetail) {
-      setValue('bio', newMemberDetail.bio)
+      setValue('bio', newMemberDetail.bio);
+      console.log('-------profile' , newMemberDetail.profilePic)
+     await getProfilePic(newMemberDetail.profilePic);
+      // setProfileUrl(arrayBufferToBase64(newMemberDetail.profilePic))
     }
   }, [])
-
+  const handleCloseModalPopup = () => {
+    setBool(!openModel)
+  }
   const onSubmit = async data => {
     var memberData = member.member
     memberData.bio = data.bio
@@ -57,7 +108,9 @@ const ProfileSetupComponent = () => {
     <div className="psp__main__div">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="psp__row">
-          <div className="psp__back__button" onClick={e => history.push('/members/personal-detail')}>
+          <div className="psp__back__button" onClick={newValue => {
+                      setBool(true)
+                    }}>
             <ArrowBackIosNewIcon /> &nbsp;Back
           </div>
           <div className="psp__step__text">STEP 02/02</div>
@@ -70,8 +123,17 @@ const ProfileSetupComponent = () => {
         <div className="psp__row mar-top-50">
           <div className="psp__image__preview">
             {' '}
-            <img className="psp__profile__img" src={files?.source || defaultSrc} alt="preview" />
+            <img className="psp__profile__img" src={files?.source || userLogo} alt="preview" />
           </div>
+          <div>
+                            {(
+                                <img
+                                    src={prfileUrl ? `data:image/png;base64,${prfileUrl} ` : files?.source || userLogo }
+                                    alt="profile"
+                                    className="io_profile"
+                                />
+                            )}
+                        </div>
         </div>
         <div className="psp__row">
           <Button
@@ -87,26 +149,29 @@ const ProfileSetupComponent = () => {
                     var fileData = response.data
                     console.log('fileData', fileData)
                     setProfilePicName(fileData.data)
+                    member.member.profilePic = fileData.data
+                    dispatch(newMember(member.member))
                   }
                 })
                 .catch(err => console.log('Error profile pic', err))                                    
               })
             }
           >
+     
             <img src={CamerLogo} /> &nbsp; Upload Profile Photo
           </Button>
         </div>
-        <div className="psp__row mar-top-50">
+        <div className="psp__row mar-top-30">
           <div className="psp__label">Short Biography</div>
         </div>
 
         <div className="psp__row psp__submit__btn__center__align">
-          <TextField
+          <TextField 
             className="psp__multiline__text__box"
             {...register('bio')}
             margin="normal"
             multiline
-            rows={5}
+            rows={3}
           />
           &nbsp; &nbsp;
           <Button className="psp__next__btn" type="submit">
@@ -115,6 +180,11 @@ const ProfileSetupComponent = () => {
           </Button>
         </div>
         </div>
+        <Modal open={openModel } aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={modalStyle}>
+              <ConfirmationPopupModel closeScreen={handleCloseModalPopup} url={`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`} />
+            </Box>
+          </Modal>
       </form>
     </div>
   )
