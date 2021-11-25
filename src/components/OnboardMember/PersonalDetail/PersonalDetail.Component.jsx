@@ -18,7 +18,8 @@ import { commonService } from '../../../services'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCountries } from '../../../redux/actions/commonActions'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
-import Guardian from '../../../pages/guardian'
+import Guardian from '../../../pages/guardian';
+import ConfirmationPopupModel from '../../ModelPopup/ConfirmationPopupModel.Component'
 import moment from 'moment'
 
 const style = {
@@ -32,6 +33,19 @@ const style = {
   boxShadow: 24,
   borderRadius: 3,
   p: 4,
+}
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
 }
 
 const genderList = [
@@ -56,6 +70,7 @@ const PersonalDetailComponent = () => {
   const member = useSelector(state => state.newMember)
   // const [gender, setGender] = useState('')
   const [dateOfBirth, setDOB] = useState('')
+  const [openModel, setBool] = useState('')
   // const [country, setCountry] = useState('')
   // const [state, setState] = useState('')
   const [IsUnder19, setIsUnder19] = React.useState(false)
@@ -144,11 +159,15 @@ const PersonalDetailComponent = () => {
   const handleCloseGuardianScreen = () => {
     setIsUnder19(!IsUnder19)
   }
-
+  const handleCloseModalPopup = () => {
+    setBool(!openModel)
+  }
   return (
     <div className="pdc__main__div">
       <div className="pdc__row">
-        <div className="pdc__back__button" onClick={() => history.push('/members/register')}>
+        <div className="pdc__back__button" onClick={newValue => {
+                      setBool(true)
+                    }}>
           <ArrowBackIosNewIcon /> &nbsp;Back
         </div>
         <div className="pdc__step__text">STEP 01/02</div>
@@ -383,6 +402,11 @@ const PersonalDetailComponent = () => {
           <Modal open={IsUnder19} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={style}>
               <Guardian closeScreen={handleCloseGuardianScreen} />
+            </Box>
+          </Modal>
+          <Modal open={openModel } aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={modalStyle}>
+              <ConfirmationPopupModel closeScreen={handleCloseModalPopup} url={'/members/register'} />
             </Box>
           </Modal>
         </div>
