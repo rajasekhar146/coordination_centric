@@ -17,9 +17,10 @@ export const memberService = {
   getMemberProfessionalInfo,
   updatePrefessionalInfo,
   getStaffList,
-  updateStatus,
   getPatientRecords,
-  invitePatient
+  invitePatient,
+  cancelInvite,
+  resendInvite
 }
 
 function inviteMember(data) {
@@ -125,25 +126,14 @@ function getStaffList(id, type, limit, skip) {
   )
 }
 
-function updateStatus(id, status, type) {
+function resendInvite(id, status, type) {
   let axiosConfig = {
     headers: authHeader(),
   }
-  let url = `${apiURL}`;
-
-  const geturl = () => {
-    switch(status){
-      case 'resend':
-        return url += `/facilityList/resendInvite/${id}/${type}`
-        case 'cancel':
-        return url += `/facilityList/cancelInvite/${id}/${type}`
-    }
-
-  }
-
+ 
   return (
     axios
-      .put(geturl(), null, axiosConfig)
+      .get(`${apiURL}/facilityList/resendInvite/${id}/${type}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
@@ -154,6 +144,30 @@ function updateStatus(id, status, type) {
       })
   )
 }
+
+
+function cancelInvite(id, status, type) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+ 
+  return (
+    axios
+      .put(`${apiURL}/facilityList/cancelInvite/${id}/${type}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+
+
+
 
 function getPatientRecords(id, limit, skip) {
   let axiosConfig = {
