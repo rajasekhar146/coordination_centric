@@ -134,7 +134,7 @@ const MemberSignInComponent = () => {
     
     console.log(password , confirmPassword)
     if (password === confirmPassword) {
-      // member.member.password = password
+      member.member.password = password
       // member.member.dob = '12/12/2020'
       // member.member.gender = 'Male'
       // member.member.ssn = '12345678'
@@ -143,7 +143,7 @@ const MemberSignInComponent = () => {
       await organizationService.registerMember( member.member)
       .then(res => {
         dispatch(newMember(member.member))
-        history.push('/members/personal-detail')
+        history.push(`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`)
       })
       .catch(err => {
         console.log(err)

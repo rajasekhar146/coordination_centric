@@ -96,8 +96,17 @@ const GuardianComponent = props => {
             <div className="gn__label">Phone number
             <span className="ac__required"> *</span></div>
             <TextField
-              {...register('phone_no', { required: 'Phone number is required.' })}
+              {...register('phone_no', { required: 'Phone number is required.' ,
+              pattern: {
+                value: /\d+/,
+                message: 'This input is number only.',
+              },})}
               margin="normal"
+              maxLength={15}
+              characterLimit={15}
+              onInput={e => {
+                e.target.value = e.target.value.toString().slice(0, 15)
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

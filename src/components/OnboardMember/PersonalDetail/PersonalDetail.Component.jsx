@@ -20,6 +20,7 @@ import { setCountries } from '../../../redux/actions/commonActions'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import Guardian from '../../../pages/guardian'
 import moment from 'moment'
+import { useParams } from 'react-router-dom'
 
 const style = {
   position: 'absolute',
@@ -59,6 +60,12 @@ const PersonalDetailComponent = () => {
   // const [country, setCountry] = useState('')
   // const [state, setState] = useState('')
   const [IsUnder19, setIsUnder19] = React.useState(false)
+
+  const { invitetoken } = useParams()
+  const { referredby } = useParams()
+  const { invitedBy } = useParams()
+
+
   var {
     register,
     setValue,
@@ -101,7 +108,7 @@ const PersonalDetailComponent = () => {
     console.log('submit role >> ', memberData.role)
 
     dispatch(newMember(memberData))
-    if (memberData.role == 'doctor' || Number(age) > 18) {
+    if (memberData.role == 'doctor' || Number(age) >= 18) {
       history.push('/members/profile-setup')
     } else setIsUnder19(true)
   }
@@ -125,7 +132,7 @@ const PersonalDetailComponent = () => {
       setValue('last_name', newMemberDetail.last_name)
       setValue('ssn', newMemberDetail.ssn)
       setValue('occupation', newMemberDetail.occupation)
-      // setValue('dob', newMemberDetail.dob)
+      setValue('dob', newMemberDetail.dob)
       setValue('phoneNumber', newMemberDetail.phoneNumber)
       setValue('gender', newMemberDetail.gender)
       setValue('address', newMemberDetail.address)
@@ -148,7 +155,7 @@ const PersonalDetailComponent = () => {
   return (
     <div className="pdc__main__div">
       <div className="pdc__row">
-        <div className="pdc__back__button" onClick={() => history.push('/members/register')}>
+        <div className="pdc__back__button" onClick={() => history.push(`/members/register/${invitetoken}/${referredby}/${invitedBy}`)}>
           <ArrowBackIosNewIcon /> &nbsp;Back
         </div>
         <div className="pdc__step__text">STEP 01/02</div>
@@ -167,7 +174,12 @@ const PersonalDetailComponent = () => {
                   First Name <span className="pdc__required">*</span>
                 </div>
                 <TextField
-                  {...register('first_name', { required: 'First Name is required', maxLength: 50 })}
+                  {...register('first_name', { required: 'First Name is required',
+                  pattern: {
+                    value: /^[A-Za-z]+$/,
+                    message: 'This input is characters only.',
+                  }, 
+                })}
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
@@ -179,7 +191,10 @@ const PersonalDetailComponent = () => {
                   Middle Name 
                 </div>
                 <TextField
-                  {...register('middle_name', {maxLength: 50 })}
+                  {...register('middle_name', {maxLength: 50 , pattern: {
+                    value: /^[A-Za-z]+$/,
+                    message: 'This input is characters only.',
+                  }, })}
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
@@ -191,7 +206,11 @@ const PersonalDetailComponent = () => {
                   Last Name <span className="pdc__required">*</span>
                 </div>
                 <TextField
-                  {...register('last_name', { required: 'Last Name is required', maxLength: 50 })}
+                  {...register('last_name', { required: 'Last Name is required', maxLength: 50, 
+                  pattern: {
+                    value: /^[A-Za-z]+$/,
+                    message: 'This input is characters only.',
+                  }, })}
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
@@ -204,7 +223,16 @@ const PersonalDetailComponent = () => {
                   SSN/ITIN <span className="pdc__required">*</span>
                 </div>
                 <TextField
-                  {...register('ssn', { required: 'SSN/ITIN is required', maxLength: 50 })}
+                 {...register('ssn', { required: 'SSN/ITIN is required.' ,
+                  pattern: {
+                  value: /\d/,
+                  message: 'This input is number only.',
+                },})}
+                maxLength={9}
+                characterLimit={9}
+                onInput={e => {
+                  e.target.value = e.target.value.toString().slice(0, 9)
+                }}
                   margin="normal"
                   InputProps={{ className: 'pdc__text__box' }}
                 />
@@ -232,7 +260,6 @@ const PersonalDetailComponent = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     value={dateOfBirth}
-                    maxDate={currentDate}
                     onChange={newValue => {
                       setDOB(newValue)
                     }}
@@ -305,57 +332,31 @@ const PersonalDetailComponent = () => {
             <div className="pdc__row__four__grid">
               <div className="pdc__column">
                 <div className="pdc__label">Country<span className="pdc__required"> *</span></div>
-                <FormControl sx={{ m: 1, minWidth: 210 }}>
-                  <Select
-                    // value={country}
-                    // onChange={e => handleCountryChange(e)}
-                    {...register('country',{ required: 'Country is required',
-                      onChange: e => {
-                        setValue('country', e.target.value)
-                        fetchStates(e.target.value)
-                      },
-                    })}
-                    inputProps={{ 'aria-label': 'Without label' }}
-                    key="country1"
-                    inputProps={{ className: 'pdc__dropdown' }}
-                  >
-                    <MenuItem value="">
-                      <em>Country</em>
-                    </MenuItem>
-                    {countries &&
-                      countries.map(c => (
-                        <MenuItem value={c.code} key={c.code}>
-                          {c.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
+                <select
+                {...register('country')}
+                className="ac__dropdown"
+                onChange={e => fetchStates(e.target.value)}
+              >
+                {countries &&
+                  countries.map(c => (
+                    <option value={c.code} key={c.code} className="ac__dropdown">
+                      {c.name}
+                    </option>
+                  ))}
+              </select>
                 {errors.country && <p className="ac__required">{errors.country.message}</p>}
               </div>
 
               <div className="pdc__column">
                 <div className="pdc__label">State<span className="pdc__required"> *</span></div>
-                <FormControl sx={{ m: 1, minWidth: 210 }}>
-                  <Select
-                    key="state1"
-                    // value={state}
-                    // onChange={e => setState(e.target.value)}
-                    {...register('state',{ required: 'state is required' ,
-                      onChange: e => setValue('state', e.target.value),
-                    })}
-                    inputProps={{ 'aria-label': 'Without label' }}
-                  >
-                    <MenuItem value="">
-                      <em>State</em>
-                    </MenuItem>
-                    {states &&
-                      states.map(s => (
-                        <MenuItem value={s.statecode} key={s.statecode}>
-                          {s.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
+                <select {...register('state')} className="ac__dropdown">
+                              {states &&
+                                states.map(c => (
+                                  <option value={c.statecode} key={c.statecode} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
                 {errors.state && <p className="ac__required">{errors.state.message}</p>}
               </div>
 
