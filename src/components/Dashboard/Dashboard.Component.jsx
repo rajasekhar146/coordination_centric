@@ -130,8 +130,8 @@ const DashboardComponent = () => {
   const close2FaModel = () => {
     const res = authenticationService.skipTwoFa()
     res.then(data => {
-      setIsOpenCompleateProfile(true)
-      dispatch(setCopmletPropfilePopup(true))
+      // setIsOpenCompleateProfile(true)
+      // dispatch(setCopmletPropfilePopup(true))
     })
     setIsOpen2FA(false)
   }
@@ -234,7 +234,7 @@ const DashboardComponent = () => {
         </Box>
       </Modal>
      
-      <Modal
+      {/* <Modal
         open={isOpenCompleateProfile}
         // onClose={closeApproveModel}
         aria-labelledby="modal-modal-title"
@@ -246,7 +246,7 @@ const DashboardComponent = () => {
             userId={userId}
           />
         </Box>
-      </Modal>
+      </Modal> */}
     </div>
   )
 }

@@ -88,7 +88,8 @@ const invitepatientModelStyle = {
   padding: '15px',
   paddingBottom: '40px',
   paddingTop: 0,
-  height: '580px'
+  height: '580px',
+  overflow: 'scroll'
 }
 
 const invitePatientSuccess = {

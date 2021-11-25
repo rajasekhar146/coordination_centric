@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow'
 import AppointmentItem from './AppointmentItem.Component'
 import ConfimationAppointment from '../ModelPopup/ConfimationAppointment.Component'
 import RescheduuleAppointment from '../ModelPopup/RescheduuleAppointment.Component'
+import RejectAppointment from '../ModelPopup/RejectAppointment.Component'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -137,6 +138,24 @@ const UpcomongAppointmentComponent = props => {
                 >
                     <Box sx={confirmAppointment}>
                         <ConfimationAppointment
+                            clickCloseButton={closeApproveModel}
+                            // setSkip={setSkip}
+                            selectedAppointment={selectedAppointment}
+                            // setOrganizations={setOrganizations}
+                            // setOpenFlash={setOpenFlash}
+                            // setAlertMsg={setAlertMsg}
+                            // setSubLabel={setSubLabel}
+                        />
+                    </Box>
+                </Modal>
+                <Modal
+                    open={isResheduleClicked}
+                    // onClose={setIsAcceptClicked}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={confirmAppointment}>
+                        <RejectAppointment
                             clickCloseButton={closeApproveModel}
                             // setSkip={setSkip}
                             selectedAppointment={selectedAppointment}

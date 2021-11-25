@@ -210,18 +210,20 @@ const StaffItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setStaffList
+        setStaffList,
+        type
     } = props
 
 
-    const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(org._id, status, 'member')
-        res.then(res => {
+    const handleStatus = async(org, status) => {
+        const res = await memberService.updateStatus(org._id, status, type)
+        if (res.status === 200) {
             setSkip(1)
-
             setOpenFlash(true)
             setStaffList([])
-        })
+        } else {
+
+        }
     }
 
     const handleMenuAction = (e, action, index, orgId) => {
