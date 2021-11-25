@@ -258,7 +258,7 @@ const MemberSignInComponent = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        <div className="ms__pwd__show">Show</div>
+                        <div className="ms__pwd__show">{showPassword ? 'Hide' : 'Show'}</div>
                       </IconButton>
                     </InputAdornment>
                   }
@@ -355,7 +355,7 @@ const MemberSignInComponent = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        <div className="ms__pwd__show">Show</div>
+                        <div className="ms__pwd__show">{showConfirmPassword ? 'Hide' : 'Show'}</div>
                       </IconButton>
                     </InputAdornment>
                   }

@@ -278,7 +278,7 @@ const PersonalInfo = props => {
                                             onMouseDown={handleMouseDownPassword}
                                             edge="end"
                                         >
-                                            <div className="si__pwd__show">{showConfirmPassword ? 'show' : 'hide'}</div>
+                                            <div className="si__pwd__show">{showConfirmPassword ? 'Hide' : 'Show'}</div>
                                         </IconButton>
                                     </InputAdornment>
                                 }
