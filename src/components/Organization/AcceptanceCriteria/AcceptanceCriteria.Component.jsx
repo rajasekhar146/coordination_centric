@@ -183,7 +183,7 @@ const AcceptanceCriteriaComponent = props => {
                     <div className="ac__form">
                       <div className="ac__header__text">Admin's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Full Name <span className="ac__required">*</span>
@@ -251,7 +251,7 @@ const AcceptanceCriteriaComponent = props => {
 
                       <div className="ac__header__text">Organization's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Name <span className="ac__required">*</span>
@@ -317,7 +317,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Fax Number <span className="ac__required">*</span>
@@ -365,7 +365,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               State <span className="ac__required">*</span>
@@ -409,7 +409,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               NPI <span className="ac__required">*</span>
@@ -449,7 +449,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField

@@ -112,8 +112,8 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/staff" component={StaffComponent} />
           <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
-          <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
-          <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
+          <MemberLayoutComponent path="/members/personal-detail/:invitetoken/:referredby/:invitedBy" component={PersonalDetail} />
+          <MemberLayoutComponent path="/members/profile-setup/:invitetoken/:referredby/:invitedBy" component={ProfileSetup} />
           {/* <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />  */}
         </Switch>
       </Router>

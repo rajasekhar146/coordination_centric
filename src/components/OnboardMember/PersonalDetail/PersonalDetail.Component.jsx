@@ -124,7 +124,7 @@ const PersonalDetailComponent = () => {
 
     dispatch(newMember(memberData))
     if (memberData.role == 'doctor' || Number(age) >= 18) {
-      history.push('/members/profile-setup')
+      history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
     } else setIsUnder19(true)
   }
 

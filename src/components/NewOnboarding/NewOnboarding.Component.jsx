@@ -46,7 +46,7 @@ const NewOnboardingComponent = () => {
                   <div className="ac__form">
                     <div className="ac__header__text">Admin’s Info</div>
                     <div>
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">
                             Full Name <span className="ac__required">*</span>
@@ -74,7 +74,7 @@ const NewOnboardingComponent = () => {
 
                     <div className="ac__header__text">Organization’s Info</div>
                     <div>
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">
                             Name <span className="ac__required">*</span>
@@ -90,7 +90,7 @@ const NewOnboardingComponent = () => {
                         </div>
                       </div>
 
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">
                             Phone Number <span className="ac__required">*</span>
@@ -106,7 +106,7 @@ const NewOnboardingComponent = () => {
                         </div>
                       </div>
 
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">
                             Address <span className="ac__required">*</span>
@@ -115,7 +115,7 @@ const NewOnboardingComponent = () => {
                         </div>
                       </div>
 
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">
                             NIP <span className="ac__required">*</span>
@@ -134,7 +134,7 @@ const NewOnboardingComponent = () => {
                         </div>
                       </div>
 
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column">
                           <div className="ac__label">Website</div>
                           <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
@@ -148,7 +148,7 @@ const NewOnboardingComponent = () => {
 
                       <div className="ac__gap__div"></div>
 
-                      <div className="ac__row">
+                      <div className="ac__row__grid">
                         <div className="ac__column no__left__action">
                           <Button color="inherit" className="no__back__btn">
                             Back
