@@ -72,11 +72,7 @@ const InviteMemberComponent = props => {
         setOpenInviteMemberSuccess,
         setOpenInviteMember,
         organizationId,
-        setMembersList,
-        setOpenFlash,
-        setAlertMsg,
-        setSubLabel,
-        setStaffList,
+        setMembersList
     } = props;
 
     useEffect(() => {
@@ -110,9 +106,7 @@ const InviteMemberComponent = props => {
         res.then((data) => {
             setOpenInviteMember(false)
             setOpenInviteMemberSuccess(true)
-            setStaffList([])
-            setOpenFlash(true)
-            setAlertMsg('Invitation sent successfully')
+            setMembersList([])
         }).catch((err) => {
             setIsExist(get(err.response, ['body', 'message'], null))
         })

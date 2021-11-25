@@ -35,20 +35,21 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
-        admin
+        organizationId,
+        setCollaboratorList,
+        collaboratorList
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
     const [anchorEl, setAnchorEl] = React.useState(null)
-    const [collaboratorList, setCollaboratorList] = React.useState([])
     const [skip, setSkip] = useState(0)
     const [limit, setLimit] = useState(10)
     const handleClose = () => {
         setAnchorEl(null)
     }
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'facility', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
         if (res.status === 200) {
             setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {

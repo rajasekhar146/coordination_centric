@@ -137,7 +137,7 @@ const menuList = [
         menu: 'true',
         options: [
             { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-          
+
         ],
     },
 
@@ -217,7 +217,7 @@ const MemberItemComponent = props => {
         setAlertMsg,
         setSubLabel,
         setMembersList,
-        admin
+        organizationId
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -237,13 +237,35 @@ const MemberItemComponent = props => {
         console.log('menus[0].options', menus[0].options)
     }
 
-    const handleStatus = (org, status) => {
-        const res = memberService.updateStatus(admin._id, status, 'member')
-        res.then(res => {
+    const resendInvite = async(org, status) => {
+        const res = await memberService.resendInvite(organizationId, status, 'member')
+        if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
             setMembersList([])
-        })
+            setAlertMsg('Re-sended')
+            setSubLabel('Another invitation was sended to this Member.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            // setSubLabel('Another invitation was sended to this Member.')
+        }
+    }
+
+    const cancelInvite = async(org, status) => {
+        const res = await memberService.cancelInvite(organizationId, status, 'member')
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setMembersList([])
+            setAlertMsg('Cancelled')
+            setSubLabel('Ivitation Cancelled.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+        }
     }
 
     const handleMenuAction = (e, action, index, orgId) => {
@@ -261,18 +283,15 @@ const MemberItemComponent = props => {
                 // setIsDeactivateClicked(true)
                 break
             case 'setIsCancelInviteClicked':
-                handleStatus(row, 'cancel')
-                setAlertMsg('Cancelled')
-                setSubLabel('')
+                cancelInvite(row, 'cancel')
+
                 break
             case 'setIsActivateClicked':
-                handleStatus(row, 'active')
+                // handleStatus(row, 'active')
                 // setIsActiva/teClicked(true)
                 break
             case 'setIsResendClicked':
-                handleStatus(row, 'resend')
-                setAlertMsg('Re-sended')
-                setSubLabel('Another invitation was sended to this Member.')
+                resendInvite(row, 'resend')
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()
@@ -322,7 +341,7 @@ const MemberItemComponent = props => {
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                        <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
 
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}

@@ -241,7 +241,7 @@ const StaffItemComponent = props => {
         } else {
             setSkip(1)
             setOpenFlash(true)
-            setStaffList([])
+            setAlertMsg('Error')
         }
     }
 

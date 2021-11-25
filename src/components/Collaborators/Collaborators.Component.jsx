@@ -13,7 +13,12 @@ import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import Button from '@mui/material/Button'
 import Alert from '../Alert/Alert.component'
-
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box';
+import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
+import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
+import Stack from '@mui/material/Stack'
+import Pagination from '@mui/material/Pagination'
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -30,6 +35,33 @@ const colorcodes = {
     inactive: '#A0A4A8',
 }
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: 0,
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px'
+}
+
+const successStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    border: 0,
+    borderRadius: '10px'
+}
+
 const CollaboratorsComponent = props => {
 
     const [collaboratorList, setCollaboratorList] = React.useState([])
@@ -41,6 +73,10 @@ const CollaboratorsComponent = props => {
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
     const [totalPage, setTotalPage] = React.useState(0)
+    const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
+    const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
+    const [page, setPage] = React.useState(1)
+
     const getStaffList = async () => {
         const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
         if (res.status === 200) {
@@ -59,6 +95,21 @@ const CollaboratorsComponent = props => {
         setOpenFlash(false)
     }
 
+    const closeInviteModel = () => {
+        setOpenInviteCollaborator(false)
+    }
+
+
+    const closeInviteSuccessModel = () => {
+        setOpenInviteCollaboratorSuccess(false)
+    }
+
+    const handleChangePage = async (event, newPage) => {
+        setPage(newPage)
+        const skipRecords = (newPage - 1) * 10
+        setSkip(skipRecords)
+
+    }
 
     return (
         <div className="od__main__div">
@@ -67,7 +118,7 @@ const CollaboratorsComponent = props => {
                 <div className="od__btn__div od">
                     <Button
                         onClick={() => {
-                            // setOpenInviteMember(true)
+                            setOpenInviteCollaborator(true)
                         }}
                         className="od_add_member_btn">
                         &nbsp;&nbsp; Add Collaborator
@@ -109,6 +160,7 @@ const CollaboratorsComponent = props => {
                                     setSubLabel={setSubLabel}
                                     setCollaboratorList={setCollaboratorList}
                                     setSkip={setSkip}
+                                    organizationId={organizationId}
                                 />
                             ))
                             }
@@ -117,6 +169,43 @@ const CollaboratorsComponent = props => {
                     </Table>
                 </TableContainer>
             </Paper>
+            <Modal
+                open={openInviteCollaborator}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaborator
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteCollaborator={setOpenInviteCollaborator}
+                        setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+                        organizationId={organizationId}
+                        setCollaboratorList={setCollaboratorList}
+                    />
+                </Box>
+            </Modal>
+            <Modal
+                open={openInviteCollaboratorSuccess}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaboratorSuccess
+                        clickCloseButton={closeInviteSuccessModel}
+                    />
+                </Box>
+            </Modal>
+            {collaboratorList.length >= 10
+                ?
+                <div className="od__row">
+                    <div className="od__pagination__section">
+                        <Stack spacing={2}>
+                            <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
+                        </Stack>
+                    </div>
+                </div>
+                : null
+            }
             <Alert
                 handleCloseFlash={handleCloseFlash}
                 alertMsg={alertMsg}
