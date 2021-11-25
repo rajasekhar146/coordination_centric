@@ -15,7 +15,7 @@ import { memberService } from '../../../services'
 const ProfileSetupComponent = () => {
   const defaultSrc =
     'https://www.pngkit.com/png/full/301-3012694_account-user-profile-avatar-comments-fa-user-circle.png'
-  const[profilePicName, setProfilePicName] = useState('')
+  const [profilePicName, setProfilePicName] = useState('')
   const [files, selectFiles] = useFileUpload()
   var {
     register,
@@ -63,57 +63,52 @@ const ProfileSetupComponent = () => {
           <div className="psp__step__text">STEP 02/02</div>
         </div>
         <div className="psp_sub_div">
-        <div className="psp__row psp__header__text">Setup your profile</div>
-        <div className="psp__row psp__subtitle">
-          Define the setting of your profile, you can always edit them later.{' '}
-        </div>
-        <div className="psp__row mar-top-50">
-          <div className="psp__image__preview">
-            {' '}
-            <img className="psp__profile__img" src={files?.source || defaultSrc} alt="preview" />
+          <div className="psp__row psp__header__text">Setup your profile</div>
+          <div className="psp__row psp__subtitle">
+            Define the setting of your profile, you can always edit them later.{' '}
           </div>
-        </div>
-        <div className="psp__row">
-          <Button
-            className="psp__updload__btn"
-            onClick={() =>
-              selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
-                const formData = new FormData()
-                formData.append(`image`, file)
-                console.log('Files Selected', { name, size, source, file })
-                memberService.uploadCertificate(formData, 'doctor', null)
-                .then(response => { 
-                  if(response?.data) {
-                    var fileData = response.data
-                    console.log('fileData', fileData)
-                    setProfilePicName(fileData.data)
-                  }
+          <div className="psp__row mar-top-50">
+            <div className="psp__image__preview">
+              {' '}
+              <img className="psp__profile__img" src={files?.source || defaultSrc} alt="preview" />
+            </div>
+          </div>
+          <div className="psp__row">
+            <Button
+              className="psp__updload__btn"
+              onClick={() =>
+                selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
+                  const formData = new FormData()
+                  formData.append(`image`, file)
+                  console.log('Files Selected', { name, size, source, file })
+                  memberService
+                    .uploadCertificate(formData, 'doctor', null)
+                    .then(response => {
+                      if (response?.data) {
+                        var fileData = response.data
+                        console.log('fileData', fileData)
+                        setProfilePicName(fileData.data)
+                      }
+                    })
+                    .catch(err => console.log('Error profile pic', err))
                 })
-                .catch(err => console.log('Error profile pic', err))                                    
-              })
-            }
-          >
-            <img src={CamerLogo} /> &nbsp; Upload Profile Photo
-          </Button>
-        </div>
-        <div className="psp__row mar-top-50">
-          <div className="psp__label">Short Biography</div>
-        </div>
+              }
+            >
+              <img src={CamerLogo} /> &nbsp; Upload Profile Photo
+            </Button>
+          </div>
+          <div className="psp__row mar-top-50">
+            <div className="psp__label">Short Biography</div>
+          </div>
 
-        <div className="psp__row psp__submit__btn__center__align">
-          <TextField
-            className="psp__multiline__text__box"
-            {...register('bio')}
-            margin="normal"
-            multiline
-            rows={5}
-          />
-          &nbsp; &nbsp;
-          <Button className="psp__next__btn" type="submit">
-            Submit &nbsp;
-            <ArrowForwardIosRoundedIcon />
-          </Button>
-        </div>
+          <div className="psp__row psp__submit__btn__center__align">
+            <TextField className="psp__multiline__text__box" {...register('bio')} margin="normal" multiline rows={5} />
+            &nbsp; &nbsp;
+            <Button className="psp__next__btn" type="submit">
+              Submit &nbsp;
+              <ArrowForwardIosRoundedIcon />
+            </Button>
+          </div>
         </div>
       </form>
     </div>
