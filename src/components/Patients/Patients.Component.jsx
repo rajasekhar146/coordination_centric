@@ -36,6 +36,11 @@ const PatientComponent = props => {
     const organizationId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [page, setPage] = React.useState(1)
 
     const getStaffList = async () => {
         const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
@@ -96,7 +101,12 @@ const PatientComponent = props => {
                                     row={row}
                                     index={index}
                                     columns={columns}
-                                // colorcodes={colorcodes}
+                                    setSkip={setSkip}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setStaffList={setPatientList}
+                                    type="patient"
                                 />
                             ))
                             }

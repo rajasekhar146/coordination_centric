@@ -28,7 +28,8 @@ const useStyles = makeStyles(theme => ({
         background: "#FFFFFF",
         borderRadius: "8px",
         width: "100%",
-        height: "48px"
+        height: "48px",
+        marginBottom: "20px"
     },
 }))
 
@@ -42,6 +43,7 @@ const roles = [
 
 const InvitePatientComponent = props => {
     const classes = useStyles()
+    const [accessTypes, setAccessTypes] = useState([''])
 
     const {
         // setOpenFlash,
@@ -165,32 +167,39 @@ const InvitePatientComponent = props => {
 
                     <div className="io__row">
                         <div className="io__label">Access Type <span className="ac__required">*</span></div>
-                        <Select
-                            {...register('accessType', {
-                                required: 'Access Type is required.',
-                                // pattern: {
-                                //   value:
-                                //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                //   message: 'Please enter a valid email',
-                                // },
-                            })}
-                            className={classes.select}
-                            id="demo-simple-select-helper"
-                        >
-                            {/* <MenuItem value="none" disabled>
+                        {accessTypes.map(() => (
+                            <Select
+                                {...register('accessType', {
+                                    required: 'Access Type is required.',
+                                    // pattern: {
+                                    //   value:
+                                    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                    //   message: 'Please enter a valid email',
+                                    // },
+                                })}
+                                className={classes.select}
+                                id="demo-simple-select-helper"
+                            >
+                                {/* <MenuItem value="none" disabled>
                                 Select an Option
                             </MenuItem> */}
-                            {['read', 'write'].map(val => (
-                                <MenuItem key={val} value={val}>
-                                    <ListItemText primary={val} />
-                                </MenuItem>
-                            ))}
-                        </Select>
+                                {['read', 'write'].map(val => (
+                                    <MenuItem key={val} value={val}>
+                                        <ListItemText primary={val} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        ))
+                        }
+
                         {errors.role && <p className="io__required">{errors.role.message}</p>}
 
                     </div>
                     <div>
-                        <label className="add_another_label">
+                        <label onClick={() => {
+                            accessTypes.push('')
+                            setAccessTypes([...accessTypes])
+                        }} className="add_another_label">
                             <img src={PlusIcon} alt="Approve Org" />  Add another
                         </label>
                     </div>

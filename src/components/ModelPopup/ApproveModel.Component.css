@@ -216,3 +216,16 @@
     color: #E42346 !important;
     border-color: #E42346 !important;
 }
+.io_reschedule_btn {
+    background: #F9F5FF;
+    border: 1px solid #F9F5FF;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    color: #6941C6 !important;
+}
+.io_appointment_details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

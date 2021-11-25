@@ -39,8 +39,7 @@ const TwoFaEnabled = props => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const currentUser = authenticationService.currentUserValue
-  const currentUserEmail = get(currentUser, ['email'], '')
-  const twoFactor_auth_type = get(currentUser, ['twoFactor_auth_type'], '')
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
 
 
   const [verificationCode, setVerificationCode] = useState('')

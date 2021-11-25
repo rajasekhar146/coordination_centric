@@ -121,6 +121,7 @@ const StaffComponent = props => {
                                     setAlertMsg={setAlertMsg}
                                     setSubLabel={setSubLabel}
                                     setStaffList={setStaffList}
+                                    type="member"
                                 // colorcodes={colorcodes}
                                 />
                             ))
