@@ -71,9 +71,12 @@ const InviteMemberComponent = props => {
         // setSubLabel,
         setOpenInviteMemberSuccess,
         setOpenInviteMember,
-        orgId,
-        admin,
-        getOrgDetails
+        organizationId,
+        setMembersList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        setStaffList,
     } = props;
 
     useEffect(() => {
@@ -102,12 +105,14 @@ const InviteMemberComponent = props => {
 
     const onSubmit = (requestData) => {
         setIsSubmit(true)
-        requestData.refUserId = admin._id
+        requestData.refUserId = organizationId
         const res = memberService.inviteMember(requestData)
         res.then((data) => {
             setOpenInviteMember(false)
             setOpenInviteMemberSuccess(true)
-            getOrgDetails()
+            setStaffList([])
+            setOpenFlash(true)
+            setAlertMsg('Invitation sent successfully')
         }).catch((err) => {
             setIsExist(get(err.response, ['body', 'message'], null))
         })

@@ -40,6 +40,15 @@ const roles = [
     { name: 'Receptionist' }
 ]
 
+const ListAccessTypes = [{
+  label: 'View Access',
+  value: 'read'
+},
+{
+  label: 'Grant Access',
+  value: 'write'
+}]
+
 
 const InvitePatientComponent = props => {
     const classes = useStyles()
@@ -183,14 +192,13 @@ const InvitePatientComponent = props => {
                                 {/* <MenuItem value="none" disabled>
                                 Select an Option
                             </MenuItem> */}
-                                {['read', 'write'].map(val => (
-                                    <MenuItem key={val} value={val}>
-                                        <ListItemText primary={val} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        ))
-                        }
+                {ListAccessTypes.map(a => (
+                  <MenuItem key={a.value} value={a.value}>
+                    <ListItemText primary={a.label} />
+                  </MenuItem>
+                ))}
+              </Select>
+            ))}
 
                         {errors.role && <p className="io__required">{errors.role.message}</p>}
 

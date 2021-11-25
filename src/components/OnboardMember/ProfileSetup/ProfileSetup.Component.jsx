@@ -116,69 +116,54 @@ const getProfilePic = async profilePicName => {
           <div className="psp__step__text">STEP 02/02</div>
         </div>
         <div className="psp_sub_div">
-        <div className="psp__row psp__header__text">Setup your profile</div>
-        <div className="psp__row psp__subtitle">
-          Define the setting of your profile, you can always edit them later.{' '}
-        </div>
-        <div className="psp__row mar-top-50">
-          <div className="psp__image__preview">
-            {' '}
-            <img className="psp__profile__img" src={files?.source || userLogo} alt="preview" />
+          <div className="psp__row psp__header__text">Setup your profile</div>
+          <div className="psp__row psp__subtitle">
+            Define the setting of your profile, you can always edit them later.{' '}
           </div>
-          <div>
-                            {(
-                                <img
-                                    src={prfileUrl ? `data:image/png;base64,${prfileUrl} ` : files?.source || userLogo }
-                                    alt="profile"
-                                    className="io_profile"
-                                />
-                            )}
-                        </div>
-        </div>
-        <div className="psp__row">
-          <Button
-            className="psp__updload__btn"
-            onClick={() =>
-              selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
-                const formData = new FormData()
-                formData.append(`image`, file)
-                console.log('Files Selected', { name, size, source, file })
-                memberService.uploadCertificate(formData, 'doctor', null)
-                .then(response => { 
-                  if(response?.data) {
-                    var fileData = response.data
-                    console.log('fileData', fileData)
-                    setProfilePicName(fileData.data)
-                    member.member.profilePic = fileData.data
+          <div className="psp__row mar-top-50">
+            <div className="psp__image__preview">
+              {' '}
+              <img className="psp__profile__img" src={files?.source || userLogo} alt="preview" />
+            </div>
+          </div>
+          <div className="psp__row">
+            <Button
+              className="psp__updload__btn"
+              onClick={() =>
+                selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
+                  const formData = new FormData()
+                  formData.append(`image`, file)
+                  console.log('Files Selected', { name, size, source, file })
+                  memberService
+                    .uploadCertificate(formData, 'doctor', null)
+                    .then(response => {
+                      if (response?.data) {
+                        var fileData = response.data
+                        console.log('fileData', fileData)
+                        setProfilePicName(fileData.data)
+                        member.member.profilePic = fileData.data
                     dispatch(newMember(member.member))
-                  }
+                      }
+                    })
+                    .catch(err => console.log('Error profile pic', err))
                 })
-                .catch(err => console.log('Error profile pic', err))                                    
-              })
-            }
-          >
-     
-            <img src={CamerLogo} /> &nbsp; Upload Profile Photo
-          </Button>
-        </div>
-        <div className="psp__row mar-top-30">
-          <div className="psp__label">Short Biography</div>
-        </div>
+              }
+            >
+              <img src={CamerLogo} /> &nbsp; Upload Profile Photo
+            </Button>
+          </div>
+          <div className="psp__row mar-top-50">
+            <div className="psp__label">Short Biography</div>
+          </div>
 
-        <div className="psp__row psp__submit__btn__center__align">
-          <TextField 
-            className="psp__multiline__text__box"
-            {...register('bio')}
-            margin="normal"
-            multiline
-            rows={3}
-          />
-          &nbsp; &nbsp;
-          <Button className="psp__next__btn" type="submit">
-            Submit &nbsp;
-            <ArrowForwardIosRoundedIcon />
-          </Button>
-        </div>
+          <div className="psp__row psp__submit__btn__center__align">
+            <TextField className="psp__multiline__text__box" {...register('bio')} margin="normal" multiline rows={5} />
+            &nbsp; &nbsp;
+            <Button className="psp__next__btn" type="submit">
+              Submit &nbsp;
+              <ArrowForwardIosRoundedIcon />
+            </Button>
+          </div>
         </div>
         <Modal open={openModel } aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={modalStyle}>
