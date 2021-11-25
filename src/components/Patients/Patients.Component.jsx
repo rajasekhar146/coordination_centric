@@ -12,6 +12,7 @@ import get from 'lodash.get';
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import Button from '@mui/material/Button'
+import Alert from '../Alert/Alert.component'
 
 
 const columns = [
@@ -54,7 +55,13 @@ const PatientComponent = props => {
 
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [patientList.length, skip])
+
+
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
+
 
 
     return (
@@ -106,7 +113,7 @@ const PatientComponent = props => {
                                     setAlertMsg={setAlertMsg}
                                     setSubLabel={setSubLabel}
                                     setStaffList={setPatientList}
-                                    type="patient"
+                                    type="member"
                                 />
                             ))
                             }
@@ -114,6 +121,12 @@ const PatientComponent = props => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+            />
             </Paper>
         </div>
 

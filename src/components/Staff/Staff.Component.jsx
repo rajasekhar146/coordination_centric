@@ -15,6 +15,38 @@ import Button from '@mui/material/Button'
 import Alert from '../Alert/Alert.component'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
+import InviteMemberComponent from '../ModelPopup/InviteMemberComponent'
+import InviteMemberSuccess from '../ModelPopup/MemberInvitationSuccess'
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: 0,
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px'
+}
+
+const successStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    border: 0,
+    borderRadius: '10px'
+}
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -44,7 +76,8 @@ const StaffComponent = props => {
     const [subLebel, setSubLabel] = useState('')
     const [totalPage, setTotalPage] = React.useState(0)
     const [page, setPage] = React.useState(1)
-
+    const [openInviteMember, setOpenInviteMember] = useState(false)
+    const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
     const getStaffList = async () => {
         const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
@@ -68,7 +101,16 @@ const StaffComponent = props => {
         setPage(newPage)
         const skipRecords = (newPage - 1) * 10
         setSkip(skipRecords)
-        
+
+    }
+
+    const closeInviteModel = () => {
+        setOpenInviteMember(false)
+    }
+
+
+    const closeInviteSuccessModel = () => {
+        setOpenInviteMemberSuccess(false)
     }
 
 
@@ -79,7 +121,7 @@ const StaffComponent = props => {
                 <div className="od__btn__div od">
                     <Button
                         onClick={() => {
-                            // setOpenInviteMember(true)
+                            setOpenInviteMember(true)
                         }}
                         className="od_add_member_btn">
                         &nbsp;&nbsp; Add Member
@@ -142,6 +184,41 @@ const StaffComponent = props => {
                 </div>
                 : null
             }
+            <Modal
+                open={openInviteMember}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteMemberComponent
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteMember={setOpenInviteMember}
+                        setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
+                        organizationId={organizationId}
+                        setSkip={setSkip}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setSubLabel={setSubLabel}
+                    />
+                </Box>
+            </Modal>
+            <Modal
+                open={openInviteMemberSuccess}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={successStyle}>
+                    <InviteMemberSuccess
+                        clickCloseButton={closeInviteSuccessModel}
+                    // setSkip={setSkip}
+                    // selectedOrg={selectedOrg}
+                    // setOrganizations={setOrganizations}
+                    // setOpenFlash={setOpenFlash}
+                    // setAlertMsg={setAlertMsg}
+                    // setSubLabel={setSubLabel}
+                    />
+                </Box>
+            </Modal>
             <Alert
                 handleCloseFlash={handleCloseFlash}
                 alertMsg={alertMsg}
