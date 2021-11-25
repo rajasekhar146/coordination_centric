@@ -78,7 +78,11 @@ const OrganizationViewComponent = (props) => {
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
     const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
     const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
-
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [membersList, setMembersList] = useState([])
 
 
 
@@ -223,6 +227,8 @@ const OrganizationViewComponent = (props) => {
                     list={orgDet.user_details}
                     getOrgDetails={getOrgDetails}
                     admin={get(orgDet, ['user_details', '0'], null)}
+                    setMembersList={setMembersList}
+                    membersList={membersList}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -249,14 +255,11 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
                         orgId={orgId}
-                        admin={get(orgDet, ['user_details', '0'], null)}
-                        getOrgDetails={getOrgDetails}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setMembersList={setMembersList}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>
@@ -288,14 +291,12 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteCollaborator={setOpenInviteCollaborator}
                         setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
                         orgId={orgId}
-                        admin={get(orgDet, ['user_details', '0'], null)}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
                         getOrgDetails={getOrgDetails}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
+                        setMembersList={setMembersList}
+                        setOpenFlash={setOpenFlash}
+                        setAlertMsg={setAlertMsg}
+                        setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>

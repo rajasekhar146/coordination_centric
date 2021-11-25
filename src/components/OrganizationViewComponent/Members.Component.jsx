@@ -31,15 +31,16 @@ const MembersComponent = props => {
     const {
         colorcodes,
         getOrgDetails,
-        admin
+        admin,
+        setMembersList,
+        membersList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-    const [membersList, setMembersList] = useState([])
-    const [openflash, setOpenFlash] = React.useState(false)
-    const [alertMsg, setAlertMsg] = React.useState('')
-    const [subLebel, setSubLabel] = useState('')
-    const [totalPage, setTotalPage] = React.useState(0)
+    
     const [page, setPage] = React.useState(1)
     
 
@@ -54,7 +55,7 @@ const MembersComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [membersList.length, skip])
 
 
     return (
