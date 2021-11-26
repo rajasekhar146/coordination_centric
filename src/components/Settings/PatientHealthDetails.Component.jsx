@@ -145,6 +145,25 @@ const PatientHealthDetails = props => {
         145,
         160,
     ]
+    const weightArray = [
+        45,
+        46,
+        47,
+        49,
+        50,
+        51,
+        52,
+        55,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+    ]
+
+    
 
     const onSubmit = async (data) => {
         data.height = height;
@@ -182,7 +201,7 @@ const PatientHealthDetails = props => {
 
                 <div className="od__row_p">
                     <div className="od_label_p">
-                        Bmi
+                        BMI
                     </div>
                     <div className="od_input_p io_radio">
                         <div className="io_height">
@@ -226,8 +245,8 @@ const PatientHealthDetails = props => {
                                         MenuProps={{ classes: { paper: classes.dropdownStyle } }}
 
                                     >
-                                        {heightArray &&
-                                            heightArray.map(option => (
+                                        {weightArray &&
+                                            weightArray.map(option => (
                                                 <MenuItem value={option} key={option}>
                                                     {option}
                                                 </MenuItem>

@@ -85,6 +85,7 @@ const OrganizationViewComponent = (props) => {
     const [totalPage, setTotalPage] = React.useState(0)
     const [membersList, setMembersList] = useState([])
     const [collaboratorList, setCollaboratorList] = React.useState([])
+    const [patientList, setPatientList] = React.useState([])
 
 
 
@@ -255,7 +256,11 @@ const OrganizationViewComponent = (props) => {
                 <Patient
                     orgDet={orgDet}
                     organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
-
+                    patientList={patientList}
+                    setPatientList={setPatientList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
                 />
             </TabPanel>
             <Modal

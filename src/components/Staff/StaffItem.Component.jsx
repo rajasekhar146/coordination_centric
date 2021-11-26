@@ -246,7 +246,7 @@ const StaffItemComponent = props => {
     }
 
     const handleActivate = async(org, status) => {
-        const res = await memberService.updateStatus(org._id, status, type)
+        const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
@@ -256,6 +256,7 @@ const StaffItemComponent = props => {
             setSkip(1)
             setOpenFlash(true)
             setAlertMsg('Error')
+            setSubLabel('')
         }
     }
 

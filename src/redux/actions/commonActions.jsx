@@ -28,3 +28,10 @@ export const setCopmletPropfilePopup = val => {
     payload: val,
   }
 }
+
+export const setQuickProfileSetup = val => {
+  return {
+    type: ActionTypes.QUICK_PROFILE_SETUP_STEP,
+    payload: val,
+  }
+}

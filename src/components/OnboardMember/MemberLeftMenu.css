@@ -89,3 +89,9 @@
 .Mui-disabled > .MuiStepIcon-text {
     color: #c5bfbf !important;
 }
+
+.MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
+}

@@ -47,7 +47,7 @@ import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
 import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
 import Settings from './components/Settings/Settings.Component'
-// import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component';
+import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component';
 import StaffComponent from './components/Staff/Staff.Component'
 import Collaborators from './components/Collaborators/Collaborators.Component'
 import PatientsComponent from './components/Patients/Patients.Component'
@@ -114,7 +114,7 @@ class Routes extends Component {
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
           <MemberLayoutComponent path="/members/personal-detail/:invitetoken/:referredby/:invitedBy" component={PersonalDetail} />
           <MemberLayoutComponent path="/members/profile-setup/:invitetoken/:referredby/:invitedBy" component={ProfileSetup} />
-          {/* <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />  */}
+          <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} /> 
         </Switch>
       </Router>
     )

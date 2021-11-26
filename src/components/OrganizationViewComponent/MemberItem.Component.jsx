@@ -237,7 +237,7 @@ const MemberItemComponent = props => {
         console.log('menus[0].options', menus[0].options)
     }
 
-    const resendInvite = async(org, status) => {
+    const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(organizationId, status, 'member')
         if (res.status === 200) {
             setSkip(1)
@@ -253,7 +253,7 @@ const MemberItemComponent = props => {
         }
     }
 
-    const cancelInvite = async(org, status) => {
+    const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(organizationId, status, 'member')
         if (res.status === 200) {
             setSkip(1)
@@ -268,27 +268,39 @@ const MemberItemComponent = props => {
         }
     }
 
+    const handleActivate = async(org, status) => {
+        const res = await memberService.updateStatus(organizationId, status)
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setMembersList([])
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+        }
+    }
+
+
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
-            case 'setIsAcceptClicked':
-                // setIsAcceptClicked(true)
-                break
-            case 'setIsRejectClicked':
-                // setIsRejectClicked(true)
-                break
             case 'setIsDeactivateClicked':
-                // setIsDeactivateClicked(true)
+                handleActivate(row, 'inactive')
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
                 break
             case 'setIsCancelInviteClicked':
                 cancelInvite(row, 'cancel')
 
                 break
             case 'setIsActivateClicked':
-                // handleStatus(row, 'active')
-                // setIsActiva/teClicked(true)
+                handleActivate(row, 'active')
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
                 break
             case 'setIsResendClicked':
                 resendInvite(row, 'resend')
