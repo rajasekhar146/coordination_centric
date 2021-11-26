@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom'
 import { commonService } from '../../../services'
 import get from 'lodash.get'
 import { async } from 'rxjs'
+import { setQuickProfileSetup } from '../../../redux/actions/commonActions'
 
 const modalStyle = {
   position: 'absolute',
@@ -75,6 +76,7 @@ const getProfilePic = async profilePicName => {
   }
 }
   useEffect(async () => {
+    dispatch(setQuickProfileSetup({activeStep: 1}))
     const newMemberDetail = member?.member
     if (newMemberDetail) {
       setValue('bio', newMemberDetail.bio);

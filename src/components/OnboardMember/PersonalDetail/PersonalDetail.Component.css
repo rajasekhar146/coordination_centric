@@ -303,3 +303,15 @@ width: 100% !important
 .pdc__sub__main__div{
     padding: 2.5rem 4rem;
 }
+
+.MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
+}
+
+.MuiSvgIcon-root-MuiStepIcon-root {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
+}

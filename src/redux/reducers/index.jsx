@@ -10,7 +10,12 @@ import {
   deleteMemberProfessionalInfoCertificatesReducer,
 } from './memberReducer'
 import { organizationReducer, newOrganizationReducer } from './organizationReducer'
-import { commonReducer, specialtiesReducer, setCompleteProfileReducer } from './commonReducer'
+import {
+  commonReducer,
+  specialtiesReducer,
+  setCompleteProfileReducer,
+  setQuickProfileSetupReducer,
+} from './commonReducer'
 
 const reducers = combineReducers({
   allMembers: memberReducer,
@@ -26,6 +31,7 @@ const reducers = combineReducers({
   isOpenCompletProfilePopup: setCompleteProfileReducer,
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificate: deleteMemberProfessionalInfoCertificatesReducer,
+  quickProfileSetupReducer: setQuickProfileSetupReducer,
 })
 
 export default reducers
