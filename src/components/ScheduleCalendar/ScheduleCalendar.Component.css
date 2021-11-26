@@ -1,0 +1,39 @@
+.rbc-toolbar .rbc-btn-group {
+
+    
+    }
+    
+    .rbc-toolbar {
+    height: 58px;
+    background-color: #E42346;
+    color: #fff;
+    margin-bottom: 0px!important;
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+    
+    }
+    
+    .rbc-row.rbc-month-header {
+    height:50px;
+    line-height: 50px;
+    }
+    
+    .rbc-header + .rbc-header {
+    border-left: none;
+    }
+
+    .main_div{
+        padding: 0 2rem;
+    }
+    .main_div h1{
+        color: #E42346;
+    }
+    
+.calender-wrp {margin-top: 200px;}.App-link {color: #61dafb;}
+@keyframes App-logo-spin {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}.rbc-toolbar .rbc-btn-group {/* display: none; */}.rbc-toolbar {height: 58px;background-color: #E42346;color: #fff;margin-bottom: 0px!important;border-top-left-radius: 25px;border-top-right-radius: 25px;position: relative;}.rbc-row.rbc-month-header {height:50px;line-height: 50px;}.rbc-header + .rbc-header {border-left: none;}
+
+
+.rbc-toolbar > .rbc-btn-group:first-child > button:first-child{/* display: none; */}.rbc-toolbar > .rbc-btn-group:first-child > button:first-child{/* display: none; */}.rbc-toolbar > .rbc-btn-group:first-child > button:nth-child(2){position: absolute;left: 0;}.rbc-toolbar > .rbc-btn-group:first-child > button:nth-child(3){position: absolute;right: 0;}.rbc-toolbar .rbc-btn-group:last-child {position: absolute;right: 0;top:-30px;}.rbc-toolbar .rbc-btn-group:last-child > button:last-child{/* display: none; */}.calnder-wrp{border-radius: 20px;margin-top: 200px;}body{position: relative;}
+
+
+
