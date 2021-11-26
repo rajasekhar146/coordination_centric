@@ -182,7 +182,7 @@ const PatientHealthDetails = props => {
 
                 <div className="od__row_p">
                     <div className="od_label_p">
-                        Bmi
+                        BMI
                     </div>
                     <div className="od_input_p io_radio">
                         <div className="io_height">
