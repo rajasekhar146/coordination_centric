@@ -3,8 +3,9 @@ import { authHeader, handleResponse } from '../helpers'
 import { authenticationService } from '../services'
 import history from '../history'
 import moment from 'moment'
+import * as env from '../environments/environment'
 
-const apiURL = 'https://api.csuite.health'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),
@@ -20,7 +21,8 @@ export const memberService = {
   getPatientRecords,
   invitePatient,
   cancelInvite,
-  resendInvite
+  resendInvite,
+  updateStatus
 }
 
 function inviteMember(data) {
@@ -154,6 +156,25 @@ function cancelInvite(id, status, type) {
   return (
     axios
       .put(`${apiURL}/facilityList/cancelInvite/${id}/${type}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function updateStatus(id, status) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+ 
+  return (
+    axios
+      .put(`${apiURL}/users/updateMemberStatus/${id}/${status}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
