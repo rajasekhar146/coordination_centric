@@ -14,10 +14,14 @@ import get from 'lodash.get'
 import './Guardian.Component.css'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 const GuardianComponent = props => {
   const member = useSelector(state => state.newMember)
   const dispatch = useDispatch()
+  const { invitetoken } = useParams()
+  const { referredby } = useParams()
+  const { invitedBy } = useParams()
   const {
     register,
     handleSubmit,
@@ -31,7 +35,7 @@ const GuardianComponent = props => {
     console.log('memberData.guardian', memberData)
     dispatch(newMember(memberData))
     props.closeScreen()
-    history.push('/members/profile-setup')
+    history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   return (
