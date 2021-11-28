@@ -20,7 +20,7 @@ export const memberService = {
   getPatientRecords,
   invitePatient,
   cancelInvite,
-  resendInvite
+  resendInvite,
 }
 
 function inviteMember(data) {
@@ -130,7 +130,7 @@ function resendInvite(id, status, type) {
   let axiosConfig = {
     headers: authHeader(),
   }
- 
+
   return (
     axios
       .get(`${apiURL}/facilityList/resendInvite/${id}/${type}`, axiosConfig)
@@ -145,12 +145,11 @@ function resendInvite(id, status, type) {
   )
 }
 
-
 function cancelInvite(id, status, type) {
   let axiosConfig = {
     headers: authHeader(),
   }
- 
+
   return (
     axios
       .put(`${apiURL}/facilityList/cancelInvite/${id}/${type}`, null, axiosConfig)
@@ -164,10 +163,6 @@ function cancelInvite(id, status, type) {
       })
   )
 }
-
-
-
-
 
 function getPatientRecords(id, limit, skip) {
   let axiosConfig = {
@@ -187,7 +182,6 @@ function getPatientRecords(id, limit, skip) {
   )
 }
 
-
 function invitePatient(reqData) {
   let axiosConfig = {
     headers: authHeader(),
@@ -205,4 +199,3 @@ function invitePatient(reqData) {
       })
   )
 }
-

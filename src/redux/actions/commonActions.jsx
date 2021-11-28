@@ -21,7 +21,6 @@ export const setSpecialties = specialties => {
   }
 }
 
-
 export const setCopmletPropfilePopup = val => {
   return {
     type: ActionTypes.COMPLETE_PROFILE_POPUP,
@@ -33,5 +32,19 @@ export const setQuickProfileSetup = val => {
   return {
     type: ActionTypes.QUICK_PROFILE_SETUP_STEP,
     payload: val,
+  }
+}
+
+export const calendarAppointmentDate = appointmentDay => {
+  return {
+    type: ActionTypes.CALENDAR_APPOINTMENT_DATE,
+    payload: appointmentDay,
+  }
+}
+
+export const appointmentAvailableTimeSlots = availableTimeSlots => {
+  return {
+    type: ActionTypes.APPOINTMENT_AVAILABLE_TIME_SLOTS,
+    payload: availableTimeSlots,
   }
 }
