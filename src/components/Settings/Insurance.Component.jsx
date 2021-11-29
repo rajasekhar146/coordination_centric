@@ -64,15 +64,16 @@ const InsuranceComponent = props => {
         setSubLabel,
         getMemberDetails
     } = props
-    const [oldPassword, setOldPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
+
     const [policyType, setPolicyType] = useState('')
     const [errMsg, setErrMsg] = useState('')
+    const [insuranceInfo, setInsuranceInfo] = useState(null)
 
     const {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm()
 
@@ -81,7 +82,6 @@ const InsuranceComponent = props => {
         // e.stopPropagation()
         // setIsSubmit(true)
         data.policy_type = policyType;
-        data.newPassword = newPassword;
         const res = settinService.addInsuranceInfo(data)
         res.then(() => {
             // history.push('/resetpasswordsuccess')
@@ -102,6 +102,30 @@ const InsuranceComponent = props => {
         //     }
         // })
     }
+
+    const fetchInsuranceInfo = async () => {
+        const response = await settinService.getInsuranceInfo(userDetails._id).catch(error => {
+
+        })
+        if (get(response, ['data', "status"], '') === 200) {
+            setInsuranceInfo(get(response, ['data', 'data', 'data', '0', 'totalData', '0', 'insurance_info', '0'], null))
+        } else {
+            console.log(response)
+        }
+    }
+
+    useEffect(() => {
+        fetchInsuranceInfo()
+    }, [])
+
+    useEffect(() => {
+        if (insuranceInfo) {
+            setValue('company_name', get(insuranceInfo, ['company_name'], ''))
+            setValue('policy_id', get(insuranceInfo, ['policy_id'], ''))
+            setPolicyType(get(insuranceInfo, ['policy_type'], ''))
+            setValue('policy_validity', get(insuranceInfo, ['policy_validity'], ''))
+        }
+    }, [insuranceInfo])
 
     const ColoredLine = ({ color }) => (
         <hr

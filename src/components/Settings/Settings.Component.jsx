@@ -235,6 +235,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    userDetails={userDetails}
                 />
             </TabPanel>
             <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} />

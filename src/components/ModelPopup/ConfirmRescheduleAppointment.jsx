@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import NameIcon from '../../assets/icons/organization_name.png'
-import EmailIcon from '../../assets/icons/organization_email.png'
-import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
 import { memberService, commonService } from '../../services'
@@ -44,34 +39,22 @@ const styles = theme => ({
 
 
 
-const RejectAppointmentComponent = props => {
+const ConfirmRescheduleComponent = props => {
     const {
-        setOpenFlash,
-        setAlertMsg,
-        setSubLabel,
-        clickCloseButton,
-        selectedAppointment,
-        setIsRescheduleClicked
+        classes
     } = props
 
-    const [activeTab, setActiveTab] = useState('primary')
+    const {
+        selectedAppointment
+    } = props;
 
 
-    const handleReject = async() => {
-        // const res = await appointmentService.confirmAppointment()
-        // if (res.status === 200) {
-        //     setOpenFlash(true);
-        //     setAlertMsg('Confirmed');
-        //     setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
-        //     clickCloseButton()
-        // } else {
-
-        // }
-        setOpenFlash(true);
-        setAlertMsg('Declined');
-        setSubLabel(`This appointmend was cancelled.`)
-        clickCloseButton()
-    }
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
 
 
 
@@ -82,12 +65,18 @@ const RejectAppointmentComponent = props => {
             </div>
             <div className="io__row io__text__center io_width97">
                 <label className="io__title">
-                    Do you want to reject this appointment?
+                    Re-schedule Appointment
+                </label>
+            </div>
+            <div className="io__row io__text__center">
+                <label className="io__conform__title">
+                    Please note that this is not a confirmation of your appointment.
+                    The confirmation will be sent to your email within 24 hours.
 
                 </label>
             </div>
             <div className="io_appointment_details">
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
                             Patient
@@ -100,10 +89,22 @@ const RejectAppointmentComponent = props => {
                     </div>
 
                 </div>
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
-                            Primary - Date and Time
+                            Primary
+                        </label>
+                    </div>
+                    <div>
+                        <label className="io_user_name">
+                            Thu, 7th Oct - 8am
+                        </label>
+                    </div>
+                </div>
+                <div style={{ width: '50%' }} className="io_slot_selector">
+                    <div>
+                        <label className="io_user_label">
+                            Secondary
                         </label>
                     </div>
                     <div>
@@ -113,27 +114,17 @@ const RejectAppointmentComponent = props => {
                     </div>
                 </div>
             </div>
-
             <div className="io__row io__btn io_width97">
                 <div className="io__same__line">
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn" onClick={clickCloseButton}>
-                            Back
+                        <Button className="io__cancel__btn" onClick={props.clickCloseButton}>
+                            Cancel
                         </Button>
                     </div>
-                    <div className="io__cancel">
-                        <Button className="io__cancel__btn io_reschedule_btn" 
-                        onClick={() => {
-                            setIsRescheduleClicked(true)
-                            clickCloseButton()
-                        }}>
-                            Re-schedule
-                        </Button>
-                    </div>
+
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" 
-                        onClick={handleReject}>
-                           Reject
+                        <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
+                            Confirm
                         </Button>
                     </div>
                 </div>
@@ -142,4 +133,4 @@ const RejectAppointmentComponent = props => {
     )
 }
 
-export default withStyles(styles)(RejectAppointmentComponent)
+export default withStyles(styles)(ConfirmRescheduleComponent)

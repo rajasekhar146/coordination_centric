@@ -5,7 +5,12 @@ import get from 'lodash.get'
 import TabPanel from '../TabPanel/TabPanel.Component';
 import UpcomingAppointments from './UpcomingAppointments.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
+import Button from '@mui/material/Button'
 import './Appointment.Component.css'
+import CalenderView from '../../assets/icons/resend_calender.png'
+import GtidView from '../../assets/icons/grid_view.png'
+import Alert from '../Alert/Alert.component'
+
 
 const useStyles = makeStyles(theme => ({
   indicator: {
@@ -56,10 +61,18 @@ const TabItem = withStyles((theme) => ({
 const AppointmentsComponent = () => {
   const classes = useStyles()
   const [value, setValue] = useState('1');
+  const [showGrid, setShowGrid] = useState(true);
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
+  const [subLebel, setSubLabel] = useState('')
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
 
   return (
     <div className="od__main__div">
@@ -70,24 +83,60 @@ const AppointmentsComponent = () => {
         </div>
       </div>
       <div className="od__row">
-        <div className="od__table__org">
-          <Tabs
-            value={value}
-            // textColor="secondary"
-            // indicatorColor="secondary"
-            onChange={handleChange}
-            aria-label="secondary tabs example"
-            inkBarStyle={{ background: 'red' }}
-            TabIndicatorProps={{ className: classes.indicator }}
-          >
-            <TabItem value="1" label="Upcoming" />
-            <TabItem value="2" label="History" />
-          </Tabs>
-          <TabPanel value={value} index={1}>
-            <UpcomingAppointments />
-          </TabPanel>
+        <Tabs
+          value={value}
+          // textColor="secondary"
+          // indicatorColor="secondary"
+          onChange={handleChange}
+          aria-label="secondary tabs example"
+          inkBarStyle={{ background: 'red' }}
+          TabIndicatorProps={{ className: classes.indicator }}
+        >
+          <TabItem value="1" label="Upcoming" />
+          <TabItem value="2" label="History" />
+        </Tabs>
+        <div className="io_view_as">
+          View as: <div className="io_handle_view">
+            <span
+              onClick={() => {
+                setShowGrid(true)
+              }}
+              className={showGrid ? "io_grid_item io_active" : 'io_grid_item'} >
+              <img src={GtidView} alt="grid_view" />
+            </span>
+            <span
+              onClick={() => {
+                setShowGrid(false)
+              }}
+              className={!showGrid ? "io_grid_item io_active" : 'io_grid_item'}>
+              <img src={CalenderView} alt="calender_view" />
+            </span>
+
+          </div>
         </div>
       </div>
+      <TabPanel value={value} index={1}>
+        <UpcomingAppointments
+          showGrid={showGrid}
+          setAlertMsg={setAlertMsg}
+          setSubLabel={setSubLabel}
+          setOpenFlash={setOpenFlash}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <UpcomingAppointments
+          showGrid={showGrid}
+          setAlertMsg={setAlertMsg}
+          setSubLabel={setSubLabel}
+          setOpenFlash={setOpenFlash}
+        />
+      </TabPanel>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+      />
     </div>
   )
 }
