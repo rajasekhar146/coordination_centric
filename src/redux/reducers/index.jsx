@@ -15,6 +15,8 @@ import {
   specialtiesReducer,
   setCompleteProfileReducer,
   setQuickProfileSetupReducer,
+  setCalendarAppointmentDateReducer,
+  setAppointmentAvailableTimeSlotsReducer,
 } from './commonReducer'
 
 const reducers = combineReducers({
@@ -32,6 +34,8 @@ const reducers = combineReducers({
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificate: deleteMemberProfessionalInfoCertificatesReducer,
   quickProfileSetupReducer: setQuickProfileSetupReducer,
+  calendarAppointmentDate: setCalendarAppointmentDateReducer,
+  appointmentAvailableTimeSlots: setAppointmentAvailableTimeSlotsReducer,
 })
 
 export default reducers
