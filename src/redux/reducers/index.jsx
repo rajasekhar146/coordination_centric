@@ -17,6 +17,8 @@ import {
   setQuickProfileSetupReducer,
   setCalendarAppointmentDateReducer,
   setAppointmentAvailableTimeSlotsReducer,
+  setPrimaryAppointmentDateReducer,
+  setSecondaryAppointmentDateReducer,
 } from './commonReducer'
 
 const reducers = combineReducers({
@@ -36,6 +38,8 @@ const reducers = combineReducers({
   quickProfileSetupReducer: setQuickProfileSetupReducer,
   calendarAppointmentDate: setCalendarAppointmentDateReducer,
   appointmentAvailableTimeSlots: setAppointmentAvailableTimeSlotsReducer,
+  primaryAppointmentDate: setPrimaryAppointmentDateReducer,
+  secondaryAppointmentDate: setSecondaryAppointmentDateReducer,
 })
 
 export default reducers
