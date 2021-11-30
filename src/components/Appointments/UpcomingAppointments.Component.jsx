@@ -56,6 +56,8 @@ const Appointments = [
         date: 'Wed, 6th Nov',
         time: '8am - 9am',
         status: 'confirmed',
+        gender: 'female',
+        _id: '61571c7e38f9f7305ef3a64c'
     },
     {
         name: 'Ram',
@@ -64,6 +66,8 @@ const Appointments = [
         date: 'Wed, 6th Nov',
         time: '8am - 9am',
         status: 'pending_acceptance',
+        gender: 'male',
+        _id: '61571c7e38f9f7305ef3a64c'
     },
     {
         name: 'Raj',
@@ -72,6 +76,8 @@ const Appointments = [
         date: 'Wed, 6th Nov',
         time: '8am - 9am',
         status: 'declined',
+        gender: 'male',
+        _id: '61571c7e38f9f7305ef3a64c'
     },
     {
         name: 'Jhon',
@@ -80,6 +86,8 @@ const Appointments = [
         date: 'Wed, 6th Nov',
         time: '8am - 9am',
         status: 'requested_to_reschedule',
+        gender: 'male',
+        _id: '61571c7e38f9f7305ef3a64c'
     }
 ]
 
@@ -128,7 +136,8 @@ const UpcomongAppointmentComponent = props => {
     ]
 
     const getAppointmentList = async () => {
-        const res = await appointmentService.getAppointmentList(userId, limit, skip)
+        const endDate = new Date()
+        const res = await appointmentService.getAppointmentHistory(userId, limit, skip)
         if (res.status === 200) {
             setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {

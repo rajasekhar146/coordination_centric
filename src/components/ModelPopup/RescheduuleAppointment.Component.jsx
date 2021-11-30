@@ -9,7 +9,7 @@ import EmailIcon from '../../assets/icons/organization_email.png'
 import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
-import { memberService, commonService } from '../../services'
+import { appointmentService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -60,20 +60,17 @@ const RescheduuleAppointmentComponent = props => {
     }
 
 
-    const handleSubmit = async() => {
-        // const res = await appointmentService.confirmAppointment()
-        // if (res.status === 200) {
-        //     setOpenFlash(true);
-        //     setAlertMsg('Confirmed');
-        //     setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
-        //     clickCloseButton()
-        // } else {
-
-        // }
-        setOpenFlash(true);
-        setAlertMsg('Requested');
-        setSubLabel(`The re-schedule request was sent to the patient.`)
-        clickCloseButton()
+    const handleSubmit = async () => {
+        const res = await appointmentService.askPatientReschedule(selectedAppointment._id)
+        if (res.status === 200) {
+            setOpenFlash(true);
+            setAlertMsg('Requested');
+            setSubLabel(`The re-schedule request was sent to the patient.`)
+            clickCloseButton()
+        } else {
+            setAlertMsg('Error');
+            // setSubLabel(``)
+        }
     }
 
 
@@ -105,17 +102,17 @@ const RescheduuleAppointmentComponent = props => {
                         </Button>
                     </div>
                     <div className="io__cancel">
-                        <Button 
-                        className="io__cancel__btn io_select_new" 
-                        onClick={selectNewDates}>
+                        <Button
+                            className="io__cancel__btn io_select_new"
+                            onClick={selectNewDates}>
                             Select New Date
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button 
-                        type="submit" 
-                        className="io__Approve__btn" 
-                        onClick={handleSubmit}>
+                        <Button
+                            type="submit"
+                            className="io__Approve__btn"
+                            onClick={handleSubmit}>
                             Ask Patient
                         </Button>
                     </div>

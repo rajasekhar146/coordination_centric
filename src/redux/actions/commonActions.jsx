@@ -48,3 +48,17 @@ export const appointmentAvailableTimeSlots = availableTimeSlots => {
     payload: availableTimeSlots,
   }
 }
+
+export const primaryAppointmentDate = primaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_PRIMARY_DATE,
+    payload: primaryAppointment,
+  }
+}
+
+export const secondaryAppointmentDate = secondaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_SECONDARY_DATE,
+    payload: secondaryAppointment,
+  }
+}

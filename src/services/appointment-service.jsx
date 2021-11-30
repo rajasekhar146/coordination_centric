@@ -8,19 +8,21 @@ const apiURL = env.environment.apiBaseUrl
 
 
 export const appointmentService = {
-    getAppointmentList,
-    confirmAppointment
+    getAppointmentHistory,
+    confirmAppointment,
+    cancelAppointment,
+    askPatientReschedule
 }
 
 
 
-function getAppointmentList(userId, skip, limit) {
+function getAppointmentHistory(userId, endDate, limit) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?skip=${skip}&limit=${limit}`, axiosConfig)
+            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?endDate=${endDate}}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                return data
@@ -43,13 +45,29 @@ function confirmAppointment() {
 }
 
 
-function rejectAppointment() {
+function cancelAppointment() {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
             .put(`${apiURL}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+               return data
+            })
+    )
+}
+
+
+
+function askPatientReschedule(id) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .put(`${apiURL}/appointment/rescheduleAppointment/${id}/by_patient`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                return data

@@ -2,19 +2,11 @@ import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import NameIcon from '../../assets/icons/organization_name.png'
-import EmailIcon from '../../assets/icons/organization_email.png'
-import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
-import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
-import { memberService, commonService } from '../../services'
+import { appointmentService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import CircleIcon from '@mui/icons-material/Circle';
-
 
 const styles = theme => ({
     // root: {
@@ -57,20 +49,17 @@ const RejectAppointmentComponent = props => {
     const [activeTab, setActiveTab] = useState('primary')
 
 
-    const handleReject = async() => {
-        // const res = await appointmentService.confirmAppointment()
-        // if (res.status === 200) {
-        //     setOpenFlash(true);
-        //     setAlertMsg('Confirmed');
-        //     setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
-        //     clickCloseButton()
-        // } else {
+    const handleReject = async () => {
+        const res = await appointmentService.cancelAppointment()
+        if (res.status === 200) {
+            setOpenFlash(true);
+            setAlertMsg('Declined');
+            setSubLabel(`This appointmend was cancelled.`)
+            clickCloseButton()
+        } else {
 
-        // }
-        setOpenFlash(true);
-        setAlertMsg('Declined');
-        setSubLabel(`This appointmend was cancelled.`)
-        clickCloseButton()
+        }
+
     }
 
 
@@ -87,7 +76,7 @@ const RejectAppointmentComponent = props => {
                 </label>
             </div>
             <div className="io_appointment_details">
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
                             Patient
@@ -95,12 +84,12 @@ const RejectAppointmentComponent = props => {
                     </div>
                     <div>
                         <label className="io_user_name">
-                            Mr. John Doe
+                            {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
                         </label>
                     </div>
 
                 </div>
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
                             Primary - Date and Time
@@ -122,18 +111,18 @@ const RejectAppointmentComponent = props => {
                         </Button>
                     </div>
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn io_reschedule_btn" 
-                        onClick={() => {
-                            setIsRescheduleClicked(true)
-                            clickCloseButton()
-                        }}>
+                        <Button className="io__cancel__btn io_reschedule_btn"
+                            onClick={() => {
+                                setIsRescheduleClicked(true)
+                                clickCloseButton()
+                            }}>
                             Re-schedule
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" 
-                        onClick={handleReject}>
-                           Reject
+                        <Button type="submit" className="io__Approve__btn"
+                            onClick={handleReject}>
+                            Reject
                         </Button>
                     </div>
                 </div>
