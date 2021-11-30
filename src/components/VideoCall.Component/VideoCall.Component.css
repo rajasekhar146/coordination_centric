@@ -1,0 +1,144 @@
+.call-widget-wrp {
+    display: block;
+    /* background-color:#3c3a3a; */
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+.call-widget-wrp-2 {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+.call-list-itm {
+    flex: 1;
+}
+
+
+.call-controls-wrp{
+    display: flex;
+    width: 100vw;
+    height: 80px;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0px;
+    z-index:10;
+    background: url(../../assets/call-strip.png);
+    background-size:100%;
+    background-position: 0 -20px;
+}
+.call-controls-wrp-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 25PX;
+}
+.call-btn-wrp {
+    background-color: red;
+    width: 110px;
+    height: 110px;
+    border-radius: 100%;
+    display: flex;
+    padding: 5px;
+    position: absolute;
+    margin: 0 auto;
+    right: 0;
+    left: 0;
+    top: -68px;
+    bottom: 0;
+    align-items: center;
+    cursor: pointer;
+    transition: all 500ms;
+    transform: translate(3px, 0);
+}
+.call-btn-wrp.call-active{
+    top: -100px;
+    background-color: #338d50;
+    width: 80px;
+    height: 80px;
+}
+.call-btn-wrp img {
+ display: inline-block;
+ margin: 0 auto;
+ transition: all 500ms;
+}
+.call-btn-wrp.call-active img {
+    display: inline-block;
+    margin: 0 auto;
+    transform: rotate(-116deg)
+}
+
+  
+   
+   .call-control-innerwrp {
+       position: relative;
+   }
+   .call-conetnt {
+       display: flex;
+       flex-wrap: wrap;
+   }
+   .video-call-content {
+       /* height: 100vh;
+       width: 100vw; */
+       /* flex: 1; */
+   }
+   .video-call-aside-wrp, .video-call-content {
+    flex: 1;
+    height: 100vh;
+   }
+   .local-video {
+       display: flex;
+       /* width: 100vw; */
+       height: 100vh;
+       justify-content: center;
+       align-items: flex-start;
+       position: relative;
+   }
+   .video-tile {
+    flex: 1 1;
+    height: 100%;
+   }
+   .local-video video{
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+   }
+  
+  .wid-tile{
+    height: 45px;
+    width: 45px;
+    background: #e7e7e7;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wid-tile img{
+    cursor: pointer;
+}
+.wid-tile:hover {
+    background: #fff;
+}
+.call-controls-wrp-2 .control {
+    display: flex;
+    align-items: center;
+    gap:15px
+}
+.watingroom-title p{ color: #fff;}
+.timer-wid {
+    background-color: #ffffff78;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.timer-wid p {
+    padding: 0;
+    margin: 0;
+}
+
+.video-workspace{
+    display: flex;
+
+}
