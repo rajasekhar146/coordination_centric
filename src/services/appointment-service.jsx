@@ -11,7 +11,8 @@ export const appointmentService = {
     getAppointmentHistory,
     confirmAppointment,
     cancelAppointment,
-    askPatientReschedule
+    askPatientReschedule,
+    getDoctorsList
 }
 
 
@@ -68,6 +69,20 @@ function askPatientReschedule(id) {
     return (
         axios
             .put(`${apiURL}/appointment/rescheduleAppointment/${id}/by_patient`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+               return data
+            })
+    )
+}
+
+function getDoctorsList(searchParam) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/users/getDoctorlist?limit=${searchParam.pageLimit}&page=${searchParam.pageNo}&sort_field=${searchParam.sortByColoumn}&sort=${searchParam.sortOrder}&search_key=${searchParam.searchKey}&search_value=${searchParam.searchValue}&speciality=${searchParam.speciality}&country=${searchParam.country}&state=${searchParam.state}&city=${searchParam.city}&zipcode=${searchParam.zipcode}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                return data

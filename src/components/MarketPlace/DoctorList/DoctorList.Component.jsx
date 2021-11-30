@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Doctor from '../../../assets/images/doctor1.png'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -21,57 +21,61 @@ const columns = [
   { id: 'action', label: 'Actions', minWidth: '100px', align: 'center', visible: true },
 ]
 
-const doctorList = [
-  {
-    id: 1,
-    name: 'Prakash',
-    speciality: 'Geriatrician',
-    location: 'USA, New Orleans',
-    availability: '8:00am - 6:00pm',
-    pic: Doctor,
-    action: '',
-  },
-  {
-    id: 2,
-    name: 'Prakash',
-    speciality: 'Geriatrician',
-    location: 'USA, New Orleans',
-    availability: '8:00am - 6:00pm',
-    pic: Doctor,
-    action: '',
-  },
-  {
-    id: 3,
-    name: 'Prakash',
-    speciality: 'Geriatrician',
-    location: 'USA, New Orleans',
-    availability: '8:00am - 6:00pm',
-    pic: Doctor,
-    action: '',
-  },
-  {
-    id: 4,
-    name: 'Prakash',
-    speciality: 'Geriatrician',
-    location: 'USA, New Orleans',
-    availability: '8:00am - 6:00pm',
-    pic: Doctor,
-    action: '',
-  },
-  {
-    id: 5,
-    name: 'Prakash',
-    speciality: 'Geriatrician',
-    location: 'USA, New Orleans',
-    availability: '8:00am - 6:00pm',
-    pic: Doctor,
-    action: '',
-  },
-]
-const DoctorListComponent = () => {
+// const doctorList = [
+//   {
+//     id: 1,
+//     name: 'Prakash',
+//     speciality: 'Geriatrician',
+//     location: 'USA, New Orleans',
+//     availability: '8:00am - 6:00pm',
+//     pic: Doctor,
+//     action: '',
+//   },
+//   {
+//     id: 2,
+//     name: 'Prakash',
+//     speciality: 'Geriatrician',
+//     location: 'USA, New Orleans',
+//     availability: '8:00am - 6:00pm',
+//     pic: Doctor,
+//     action: '',
+//   },
+//   {
+//     id: 3,
+//     name: 'Prakash',
+//     speciality: 'Geriatrician',
+//     location: 'USA, New Orleans',
+//     availability: '8:00am - 6:00pm',
+//     pic: Doctor,
+//     action: '',
+//   },
+//   {
+//     id: 4,
+//     name: 'Prakash',
+//     speciality: 'Geriatrician',
+//     location: 'USA, New Orleans',
+//     availability: '8:00am - 6:00pm',
+//     pic: Doctor,
+//     action: '',
+//   },
+//   {
+//     id: 5,
+//     name: 'Prakash',
+//     speciality: 'Geriatrician',
+//     location: 'USA, New Orleans',
+//     availability: '8:00am - 6:00pm',
+//     pic: Doctor,
+//     action: '',
+//   },
+// ]
+const DoctorListComponent = (props) => {
+  console.log("proops",props);
+  
+  const doctorList =props.doctorsList;
   return (
     <div>
       <div>
+  
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
