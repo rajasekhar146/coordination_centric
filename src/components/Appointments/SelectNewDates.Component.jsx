@@ -7,6 +7,7 @@ import Box from '@mui/material/Box'
 import ConfirmReschedulePopup from '../ModelPopup/ConfirmRescheduleAppointment'
 import NavMonthYearComponent from '../Shared/AppointmentCalender/NavMonthYear/NavMonthYear.Component'
 import WeekDaysViewComponent from '../Shared/AppointmentCalender/WeekDaysView/WeekDaysView.Component'
+import history from '../../history'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -55,7 +56,7 @@ const SelectNewDatesComponent = () => {
                         color="error"
                         className="backBtn"
                         onClick={() => {
-                            // history.push('/organizations')
+                            history.push('/appointments')
                         }}
                     >
 

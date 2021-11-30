@@ -11,50 +11,65 @@ export const appointmentService = {
     getAppointmentHistory,
     confirmAppointment,
     cancelAppointment,
-    askPatientReschedule
+    askPatientReschedule,
+    getUpcomingAppointments
 }
 
 
 
-function getAppointmentHistory(userId, endDate, limit) {
+function getAppointmentHistory(userId, endDate) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?endDate=${endDate}}`, axiosConfig)
+            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?endDate=${endDate}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
-               return data
+                return data
             })
     )
 }
 
-function confirmAppointment() {
+function getUpcomingAppointments(userId, startDate) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .put(`${apiURL}`, axiosConfig)
+            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?startDate=${startDate}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
-               return data
+                return data
+            })
+    )
+}
+
+function confirmAppointment(appointmentId, reason = '') {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .put(`${apiURL}/appointment/cancelAppointment/${appointmentId}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                return data
             })
     )
 }
 
 
-function cancelAppointment() {
+function cancelAppointment(appointmentId, reason = '') {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .put(`${apiURL}`, axiosConfig)
+            .put(`${apiURL}/appointment/cancelAppointment/${appointmentId}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
-               return data
+                return data
             })
     )
 }
@@ -70,7 +85,7 @@ function askPatientReschedule(id) {
             .put(`${apiURL}/appointment/rescheduleAppointment/${id}/by_patient`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
-               return data
+                return data
             })
     )
 }

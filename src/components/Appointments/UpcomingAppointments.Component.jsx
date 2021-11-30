@@ -19,7 +19,7 @@ import ScheduleCalendar from '../ScheduleCalendar/ScheduleCalendar.Component';
 import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
-
+import moment from 'moment'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -96,7 +96,8 @@ const UpcomongAppointmentComponent = props => {
         showGrid,
         setOpenFlash,
         setAlertMsg,
-        setSubLabel
+        setSubLabel,
+        type
     } = props
     const [isConfirmClicked, setIsConfirmClicked] = useState(false)
     const [isRejectClicked, setIsRejectClicked] = useState(false)
@@ -136,8 +137,14 @@ const UpcomongAppointmentComponent = props => {
     ]
 
     const getAppointmentList = async () => {
-        const endDate = new Date()
-        const res = await appointmentService.getAppointmentHistory(userId, limit, skip)
+        let res;
+        const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+        const startDate = moment(new Date()).format("YYYY-MM-DD");
+        if (type === 'history') {
+            res = await appointmentService.getAppointmentHistory(userId, endDate, limit, skip)
+        } else if (type === 'upcoming'){
+            res = await appointmentService.getUpcomingAppointments(userId, startDate, limit, skip)
+        }
         if (res.status === 200) {
             setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {

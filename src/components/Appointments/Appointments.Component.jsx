@@ -121,6 +121,7 @@ const AppointmentsComponent = () => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          type="upcoming"
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
@@ -129,6 +130,7 @@ const AppointmentsComponent = () => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          type="history"
         />
       </TabPanel>
       <Alert
