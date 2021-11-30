@@ -10,14 +10,14 @@
     color: #000000; */
     min-width: 85%;
     height: 100%;
-    padding: 10px 0px 0px 60px;
+    padding: 2rem;
 }
 
 .pdc__header__text {
     font-family: Lato;
     font-style: normal;
     font-weight: 800;
-    font-size: 28px;
+    font-size: 24px;
     line-height: 34px;
 
     /* identical to box height, or 121% */
@@ -32,13 +32,12 @@
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 24px;
     display: flex;
     align-items: center;
     letter-spacing: 0.1px;
     color: #8692A6;
-    margin-top: 10px;
 }
 
 .pdc__text__box {
@@ -126,7 +125,7 @@
 }
 
 .pdc__details__div {
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
 }
 
@@ -203,7 +202,7 @@
 }
 
 .pdc__align__right {
-    margin-top: 50px;
+    margin-top: 15px;
     display: flex;
     justify-content: flex-end;
     width: 98%;
@@ -281,20 +280,19 @@
 }
 
 .pdc__row_grid{
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
 
 .pdc__row__four__grid{
-    margin-top: 30px;
+    margin-top: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .pdc__row__two_grid{
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -303,5 +301,17 @@ width: 100% !important
 }
 
 .pdc__sub__main__div{
-    padding: 2rem 4rem;
+    padding: 2.5rem 4rem;
+}
+
+.MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
+}
+
+.MuiSvgIcon-root-MuiStepIcon-root {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
 }

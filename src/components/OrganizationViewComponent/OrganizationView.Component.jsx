@@ -31,6 +31,7 @@ import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
 import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import get from 'lodash.get'
+import Alert from '../Alert/Alert.component'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
@@ -78,7 +79,13 @@ const OrganizationViewComponent = (props) => {
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
     const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
     const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
-
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [membersList, setMembersList] = useState([])
+    const [collaboratorList, setCollaboratorList] = React.useState([])
+    const [patientList, setPatientList] = React.useState([])
 
 
 
@@ -177,6 +184,10 @@ const OrganizationViewComponent = (props) => {
         setOpenInviteCollaboratorSuccess(false)
     }
 
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
+
 
 
 
@@ -222,20 +233,34 @@ const OrganizationViewComponent = (props) => {
                 <Members
                     list={orgDet.user_details}
                     getOrgDetails={getOrgDetails}
-                    admin={get(orgDet, ['user_details', '0'], null)}
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    setMembersList={setMembersList}
+                    membersList={membersList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Collaborator
                     list={orgDet.facility_details}
-                    admin={get(orgDet, ['user_details', '0'], null)}
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    setCollaboratorList={setCollaboratorList}
+                    collaboratorList={collaboratorList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
                 <Patient
                     orgDet={orgDet}
-                    admin={get(orgDet, ['user_details', '0'], null)}
-
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    patientList={patientList}
+                    setPatientList={setPatientList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
                 />
             </TabPanel>
             <Modal
@@ -249,14 +274,8 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
                         orgId={orgId}
-                        admin={get(orgDet, ['user_details', '0'], null)}
-                        getOrgDetails={getOrgDetails}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setMembersList={setMembersList}
                     />
                 </Box>
             </Modal>
@@ -268,12 +287,7 @@ const OrganizationViewComponent = (props) => {
                 <Box sx={successStyle}>
                     <InviteMemberSuccess
                         clickCloseButton={closeInviteSuccessModel}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
+                   
                     />
                 </Box>
             </Modal>
@@ -288,14 +302,13 @@ const OrganizationViewComponent = (props) => {
                         setOpenInviteCollaborator={setOpenInviteCollaborator}
                         setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
                         orgId={orgId}
-                        admin={get(orgDet, ['user_details', '0'], null)}
-                        getOrgDetails={getOrgDetails}
-                    // setSkip={setSkip}
-                    // selectedOrg={selectedOrg}
-                    // setOrganizations={setOrganizations}
-                    // setOpenFlash={setOpenFlash}
-                    // setAlertMsg={setAlertMsg}
-                    // setSubLabel={setSubLabel}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setCollaboratorList={{setCollaboratorList}}
+                        collaboratorList={collaboratorList}
+                        // setMembersList={setMembersList}
+                        // setOpenFlash={setOpenFlash}
+                        // setAlertMsg={setAlertMsg}
+                        // setSubLabel={setSubLabel}
                     />
                 </Box>
             </Modal>
@@ -310,6 +323,12 @@ const OrganizationViewComponent = (props) => {
                     />
                 </Box>
             </Modal>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+            />
         </div >
     )
 }

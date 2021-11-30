@@ -214,8 +214,8 @@ const StaffItemComponent = props => {
         type
     } = props
 
-    const resendInvite = (org, status) => {
-        const res = memberService.resendInvite(org._id, status, 'member')
+    const resendInvite = async(org, status) => {
+        const res = await memberService.resendInvite(org._id, status, type)
         if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
@@ -227,46 +227,57 @@ const StaffItemComponent = props => {
             setOpenFlash(true)
             setAlertMsg('Error')
             // setSubLabel('Another invitation was sended to this Member.')
-            setStaffList([])
         }
     }
-    const cancelInvite = (org, status) => {
-        const res = memberService.cancelInvite(org._id, status, 'member')
+    const cancelInvite = async(org, status) => {
+        const res = await memberService.cancelInvite(org._id, status, type)
 
         if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
             setStaffList([])
             setAlertMsg('Cancelled')
-            setSubLabel('Ivitation Cancelled.')
+            setSubLabel('Invitation Cancelled.')
         } else {
             setSkip(1)
             setOpenFlash(true)
-            setStaffList([])
+            setAlertMsg('Error')
         }
     }
+
+    const handleActivate = async(org, status) => {
+        const res = await memberService.updateStatus(org._id, status)
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setStaffList([])
+           
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+        }
+    }
+
 
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
-            case 'setIsAcceptClicked':
-                // setIsAcceptClicked(true)
-                break
-            case 'setIsRejectClicked':
-                // setIsRejectClicked(true)
-                break
             case 'setIsDeactivateClicked':
-                // setIsDeactivateClicked(true)
+                handleActivate(row, 'inactive')
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
                 break
             case 'setIsCancelInviteClicked':
                 cancelInvite(row, 'cancel')
-
                 break
             case 'setIsActivateClicked':
-                // handleStatus(row, 'active')
-                // setIsActiva/teClicked(true)
+                handleActivate(row, 'active')
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
                 break
             case 'setIsResendClicked':
                 resendInvite(row, 'resend')

@@ -14,10 +14,14 @@ import get from 'lodash.get'
 import './Guardian.Component.css'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 const GuardianComponent = props => {
   const member = useSelector(state => state.newMember)
   const dispatch = useDispatch()
+  const { invitetoken } = useParams()
+  const { referredby } = useParams()
+  const { invitedBy } = useParams()
   const {
     register,
     handleSubmit,
@@ -31,7 +35,7 @@ const GuardianComponent = props => {
     console.log('memberData.guardian', memberData)
     dispatch(newMember(memberData))
     props.closeScreen()
-    history.push('/members/profile-setup')
+    history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   return (
@@ -93,14 +97,18 @@ const GuardianComponent = props => {
 
         <div className="gn__row">
           <div className="gn__column">
-            <div className="gn__label">Phone number
-            <span className="ac__required"> *</span></div>
+            <div className="gn__label">
+              Phone number
+              <span className="ac__required"> *</span>
+            </div>
             <TextField
-              {...register('phone_no', { required: 'Phone number is required.' ,
-              pattern: {
-                value: /\d+/,
-                message: 'This input is number only.',
-              },})}
+              {...register('phone_no', {
+                required: 'Phone number is required.',
+                pattern: {
+                  value: /\d+/,
+                  message: 'This input is number only.',
+                },
+              })}
               margin="normal"
               maxLength={15}
               characterLimit={15}
@@ -120,7 +128,9 @@ const GuardianComponent = props => {
           </div>
 
           <div className="gn__column">
-            <div className="gn__label">Email<span className="ac__required"> *</span></div>
+            <div className="gn__label">
+              Email<span className="ac__required"> *</span>
+            </div>
             <TextField
               {...register('email', {
                 required: 'Guardian Email is required.',

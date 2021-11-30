@@ -15,6 +15,7 @@ export const commonService = {
   getHealthProblems,
   getProfile,
   getSpecializations,
+  getAllOcupations,
 }
 
 function getCountries() {
@@ -59,19 +60,18 @@ function getAllRoles(countryCode) {
   }
   return (
     axios
-      .get(`${apiURL}/utils/getStateByCountryCode?countrycode=${countryCode}`, axiosConfig)
-      //.then(handleResponse)
-      .then(data => {
-        //   console.log('getCountries', data)
-        return { data }
-      })
-      .catch(err => {
-        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-        return null
-      })
+      // .get(`${apiURL}/utils/getStateByCountryCode?countrycode=${countryCode}`, axiosConfig)
+      // //.then(handleResponse)
+      // .then(data => {
+      //   //   console.log('getCountries', data)
+      //   return { data }
+      // })
+      // .catch(err => {
+      //   // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+      //   return null
+      // })
   )
 }
-
 
 function getHealthProblems(countryCode) {
   const axiosConfig = {
@@ -91,7 +91,6 @@ function getHealthProblems(countryCode) {
       })
   )
 }
-
 
 function getProfile(urlData) {
   const axiosConfig = {
@@ -121,6 +120,24 @@ function getSpecializations(searchText) {
       //.then(response => console.log(response))
       .then(data => {
         console.log('getAllSpecializations', data.data)
+        return { data }
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return null
+      })
+  )
+}
+
+function getAllOcupations() {
+  console.log('axiosConfig', axiosConfig)
+
+  return (
+    axios
+      .get(`${apiURL}/occupation/getAllOcupationsBySearch`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        //   console.log('getCountries', data)
         return { data }
       })
       .catch(err => {

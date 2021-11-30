@@ -144,7 +144,7 @@ const TwoFaEnabled = props => {
             onClick={() => {
               handleSubmit()
             }}
-            className={(minutes === 0 & seconds === 0) ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}>
+            className={!verificationCode ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}>
             Verify &nbsp;{' '}
             {
               <label>

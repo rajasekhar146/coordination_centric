@@ -47,11 +47,15 @@ import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
 import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
 import Settings from './components/Settings/Settings.Component'
-// import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component';
+import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component'
 import StaffComponent from './components/Staff/Staff.Component'
 import Collaborators from './components/Collaborators/Collaborators.Component'
 import PatientsComponent from './components/Patients/Patients.Component'
 import TwoFaCodeVerificationFail from './components/EnableTwoFactorAuth/TwoFaCodeVerificationFail.Component'
+import Marketplace from './pages/marketplace'
+import MakeAppointments from './pages/make-a-appointments'
+import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
+
 class Routes extends Component {
   render() {
     return (
@@ -95,7 +99,10 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
           <DefaultLayoutComponentRoute path="/2facodeverificationfail" component={TwoFaCodeVerificationFail} />
-          <DefaultLayoutComponentRoute path="/members/register/:invitetoken/:referredby/:invitedBy" component={MemberSignIn} />
+          <DefaultLayoutComponentRoute
+            path="/members/register/:invitetoken/:referredby/:invitedBy"
+            component={MemberSignIn}
+          />
           <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
@@ -104,17 +111,25 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/patientrecords" component={PatienRecords} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
-          <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
           <MasterLayoutWithOutLefuMenuComponent path="/settings/:userId" component={Settings} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
           <MasterLayoutWithLefuMenuComponent path="/staff" component={StaffComponent} />
           <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
+          <MasterLayoutWithLefuMenuComponent path="/marketplace/make-a-appointments" component={MakeAppointments} />
+          <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Marketplace} />
+          <MasterLayoutWithLefuMenuComponent path="/selectdates" component={SelectNewDatesComponent} />
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
-          <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
-          <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
-          {/* <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />  */}
+          <MemberLayoutComponent
+            path="/members/personal-detail/:invitetoken/:referredby/:invitedBy"
+            component={PersonalDetail}
+          />
+          <MemberLayoutComponent
+            path="/members/profile-setup/:invitetoken/:referredby/:invitedBy"
+            component={ProfileSetup}
+          />
+          <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />
         </Switch>
       </Router>
     )

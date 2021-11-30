@@ -25,6 +25,7 @@ const AcceptanceCriteriaComponent = props => {
   const [activeStep, setActiveStep] = useState(0)
   const [planType, setPlanType] = useState('')
   const [processSteps, setProcessSteps] = useState(steps)
+  const [facilityEmail, setFacilityName] = useState(null)
   const [initialValues, setInitialFormData] = useState(props.props)
   const { referredby } = useParams()
   const { invitetoken } = useParams()
@@ -78,10 +79,10 @@ const AcceptanceCriteriaComponent = props => {
   useEffect(async () => {
     console.log('New AC -- >> ', props.props)
     await fetchCountries()
-    var uFacility = localStorage.getItem('facility')
-
+    var uFacility = JSON.parse(localStorage.getItem('facility'))
+    console.log('uFacility', uFacility)
     if (uFacility != null) {
-      var data = JSON.parse(uFacility)
+      var data = uFacility
       await fetchStates(data.country)
       setValue('fullName', data.fullName)
       setValue('email', data.email)
@@ -100,6 +101,7 @@ const AcceptanceCriteriaComponent = props => {
       setValue('state', data.state)
       setValue('zipcode', data.zipcode)
       setValue('country', data.country)
+      setFacilityName(data.facilityEmail)
     }
 
     const planType = localStorage?.getItem('plan_type')
@@ -183,19 +185,25 @@ const AcceptanceCriteriaComponent = props => {
                     <div className="ac__form">
                       <div className="ac__header__text">Admin's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Full Name <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('fullName', { required: 'Full Name is required', maxLength: 50 })}
+                              {...register('fullName', {
+                                required: 'Full Name is required',
+                                maxLength: 50,
+                                pattern: {
+                                  value: /^[A-Za-z]+$/,
+                                  message: 'This input is characters only.',
+                                },
+                              })}
                               margin="normal"
                               // defaultValue={initialValues ? initialValues.fullName : null}
                               InputProps={{ className: 'ac__text__box' }}
                               // value={fullName}
                               // name="fullName"
-                              
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
                           </div>
@@ -218,7 +226,6 @@ const AcceptanceCriteriaComponent = props => {
                               // value={email}
                               // name="email"
                               // value={initialValues ? initialValues.email : ''}
-                              
                             />
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
@@ -229,18 +236,16 @@ const AcceptanceCriteriaComponent = props => {
                             </div>
                             <TextField
                               {...register('phoneNumber', {
-                                required: 'Phone Number is required',
-                                maxLength: 20,
+                                required: 'Admin Phone Number is required.',
                                 pattern: {
                                   value: /\d+/,
                                   message: 'This input is number only.',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box', maxLength: 15 }}
-                              margin="normal"
-                              // value={phoneNumber}
-                              // name="phoneNumber"
-                              // value={initialValues ? initialValues.phoneNumber : ''}
+                              inputProps={{
+                                maxLength: 15,
+                              }}
+                              InputProps={{ className: 'ac__text__box' }}                             
                             />
                             {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
                           </div>
@@ -251,7 +256,7 @@ const AcceptanceCriteriaComponent = props => {
 
                       <div className="ac__header__text">Organization's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Name <span className="ac__required">*</span>
@@ -286,6 +291,7 @@ const AcceptanceCriteriaComponent = props => {
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               type="email"
+                              disabled={facilityEmail?.length > 0}
                               // value={facilityEmail}
                               // name="facilityEmail"
                               // value={initialValues ? initialValues.facilityEmail : ''}
@@ -300,24 +306,25 @@ const AcceptanceCriteriaComponent = props => {
                             <TextField
                               {...register('facilityPhone', {
                                 required: 'Organization Phone Number is required',
-                                maxLength: 20,
                                 pattern: {
-                                  value: /\d+/,
+                                  value: /\d/,
                                   message: 'This input is number only.',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box', maxLength: 15 }}
+                              maxLength={15}
+                              characterLimit={15}
+                              onInput={e => {
+                                e.target.value = e.target.value.toString().slice(0, 15)
+                              }}
+                              InputProps={{ className: 'ac__text__box' }}
                               style={{ width: '290px', minHeight: '24px' }}
                               margin="normal"
-                              // value={facilityPhone}
-                              // name="facilityPhone"
-                              // value={initialValues ? initialValues.facilityPhone : ''}
                             />
                             {errors.facilityPhone && <p className="ac__required">{errors.facilityPhone.message}</p>}
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Fax Number <span className="ac__required">*</span>
@@ -365,7 +372,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               State <span className="ac__required">*</span>
@@ -384,7 +391,14 @@ const AcceptanceCriteriaComponent = props => {
                               City <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('city', { required: 'City is required ', maxLength: 20 })}
+                              {...register('city', {
+                                required: 'City is required ',
+                                maxLength: 20,
+                                pattern: {
+                                  value: /^[A-Za-z]+$/,
+                                  message: 'This input is characters only.',
+                                },
+                              })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={nip}
@@ -409,7 +423,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               NPI <span className="ac__required">*</span>
@@ -449,7 +463,7 @@ const AcceptanceCriteriaComponent = props => {
                           </div>
                         </div>
 
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField

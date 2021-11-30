@@ -15,7 +15,6 @@ import { memberService } from '../../services'
 const columns = [
     { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'roles', label: 'Roles', minWidth: 200, align: 'left', visible: true },
     { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -34,8 +33,9 @@ const PatientComponent = props => {
     const {
         orgDet,
         colorcodes,
-        admin,
-       
+        organizationId,
+        patientList,
+        setPatientList
     } = props
 
 
@@ -49,7 +49,6 @@ const PatientComponent = props => {
 
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-    const [patientList, setPatientList] = useState([])
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
@@ -57,7 +56,7 @@ const PatientComponent = props => {
     const [page, setPage] = React.useState(1)
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'patient', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
         if (res.status === 200) {
             setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -67,7 +66,7 @@ const PatientComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [patientList.length, skip])
 
     return (
         <div>
@@ -102,7 +101,7 @@ const PatientComponent = props => {
                                     columns={columns}
                                     setAnchorEl={setAnchorEl}
                                     handleClose={handleClose}
-                                    admin={admin}
+                                    organizationId={organizationId}
                                     setSkip={setSkip}
                                     setOpenFlash={setOpenFlash}
                                     setAlertMsg={setAlertMsg}

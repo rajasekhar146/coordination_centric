@@ -23,7 +23,7 @@ import SigninStore from '../../../stores/signinstore'
 import { isUpperCase } from 'is-upper-case'
 import { isLowerCase } from 'is-lower-case'
 import CheckedIcon from '../../../assets/icons/checked.png' //'../../assets/icons/checked.png'
-import UncheckedIcon from '../../../assets/icons/unchecked.png';
+import UncheckedIcon from '../../../assets/icons/unchecked.png'
 import { organizationService } from '../../../services'
 import { useParams } from 'react-router-dom'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
@@ -46,8 +46,8 @@ const MemberSignInComponent = () => {
   const { invitedBy } = useParams()
   //const [member, setMember] = useState({})
   const dispatch = useDispatch()
-  let member = useSelector(state => state.newMember)      
-     
+  let member = useSelector(state => state.newMember)
+
   const [validations, setValidations] = useState({
     passwordLength: false,
     symbol: false,
@@ -100,7 +100,7 @@ const MemberSignInComponent = () => {
     // }
   }
 
-  const handleConfirmPassword = (e) => {
+  const handleConfirmPassword = e => {
     setConfirmPassword(e)
   }
 
@@ -115,8 +115,6 @@ const MemberSignInComponent = () => {
 
   console.log(errors)
 
-  
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   }
@@ -125,34 +123,34 @@ const MemberSignInComponent = () => {
     setShowConfirmPassword(!showConfirmPassword)
   }
 
-
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     // data['first_name'] = '';
     // data['middle_name'] = '';
     // data['last_name'] = '';
     // data['ssn'] = '';
-    
-    console.log(password , confirmPassword)
+
+    console.log(password, confirmPassword)
     if (password === confirmPassword) {
       member.member.password = password
+
       // member.member.dob = '12/12/2020'
       // member.member.gender = 'Male'
       // member.member.ssn = '12345678'
       // member.member.occupation = 'Eye Doctor'
       console.log('memberData', member)
-      await organizationService.registerMember( member.member)
-      .then(res => {
-        dispatch(newMember(member.member))
-        history.push(`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      await organizationService
+        .registerMember(member.member)
+        .then(res => {
+          dispatch(newMember(member.member))
+          history.push(`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     } else {
       setAlertMsg('The password confirmation doesn’t match.')
       setOpenFlash(true)
-  }
-
+    }
   }
 
   const handleMouseDownPassword = event => {
@@ -170,8 +168,7 @@ const MemberSignInComponent = () => {
     const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
     if (data.status_code !== 200) {
       history.push('/error-page')
-    }
-    else {
+    } else {
       // setMember(data.data)
       console.log('data.data', data.data)
       dispatch(newMember(data.data))
@@ -258,7 +255,7 @@ const MemberSignInComponent = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        <div className="ms__pwd__show">Show</div>
+                        <div className="ms__pwd__show">{showPassword ? 'Hide' : 'Show'}</div>
                       </IconButton>
                     </InputAdornment>
                   }
@@ -355,7 +352,7 @@ const MemberSignInComponent = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        <div className="ms__pwd__show">Show</div>
+                        <div className="ms__pwd__show">{showConfirmPassword ? 'Hide' : 'Show'}</div>
                       </IconButton>
                     </InputAdornment>
                   }
@@ -374,9 +371,10 @@ const MemberSignInComponent = () => {
             </div>
             <div>
               {' '}
-              <Button
-                type="submit" className="ms__login__btn"
-              > Register Account </Button>{' '}
+              <Button type="submit" className="ms__login__btn">
+                {' '}
+                Register Account{' '}
+              </Button>{' '}
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ import { memberService } from '../../services'
 const columns = [
     { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'facilityEmail', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'roles', label: 'Role', minWidth: 200, align: 'left', visible: true },
+    // { id: 'roles', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -35,20 +35,24 @@ const CollaboratorComponent = props => {
     const {
         orgDet,
         colorcodes,
-        admin
+        organizationId,
+        setCollaboratorList,
+        collaboratorList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
 
     const [anchorEl, setAnchorEl] = React.useState(null)
-    const [collaboratorList, setCollaboratorList] = React.useState([])
     const [skip, setSkip] = useState(0)
     const [limit, setLimit] = useState(10)
     const handleClose = () => {
         setAnchorEl(null)
     }
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'facility', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
         if (res.status === 200) {
             setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -58,7 +62,7 @@ const CollaboratorComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [collaboratorList.length, skip])
 
     return (
         <div>
@@ -93,7 +97,13 @@ const CollaboratorComponent = props => {
                                     columns={columns}
                                     setAnchorEl={setAnchorEl}
                                     handleClose={handleClose}
-                                // colorcodes={colorcodes}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setCollaboratorList={setCollaboratorList}
+                                    setSkip={setSkip}
+                                    organizationId={organizationId}
+                                    collaboratorList={collaboratorList}
                                 />
                             ))
                             }

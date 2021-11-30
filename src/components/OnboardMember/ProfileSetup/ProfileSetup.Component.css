@@ -3,13 +3,12 @@
     /* height: 100vh; */
     /* min-width: 85%; */
     height: 100%;
-    padding: 10px 60px;
+    padding: 2rem;
 }
 
 .psp__row {
     width: 100%;
     display: flex;
-    margin-top: 20px;
     /* background-color: #A0A4A8; */
 }
 
@@ -17,8 +16,8 @@
     font-family: Lato;
     font-style: normal;
     font-weight: 800;
-    font-size: 28px;
-    line-height: 34px;
+    font-size: 24px;
+    line-height: 34px;  
 
     /* identical to box height, or 121% */
     display: flex;
@@ -47,7 +46,7 @@
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 24px;
 
     /* identical to box height, or 133% */
@@ -63,9 +62,10 @@
 }
 
 .psp__profile__img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 75px;
+    opacity: 0.9
 }
 
 .psp__updload__btn {
@@ -80,11 +80,14 @@
 
     /* identical to box height, or 129% */
     letter-spacing: 0.2px;
+    width: 20%;
 
 }
 
 .psp__image__preview {
-    margin-left: 20px;
+    margin-left: 5%;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .psp__label {
@@ -99,6 +102,7 @@
 
     /* Gray/700 */
     color: #344054;
+    margin-bottom: 10px;
 }
 
 .psp__step__text {
@@ -125,7 +129,7 @@
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-
+    width: 50% !important;
     /* identical to box height, or 150% */
     letter-spacing: 0.1px;
 
@@ -159,6 +163,8 @@
     
     width: 180px !important;
     height: 55px !important;
+    position: absolute !important;
+    right: 5%;
 }
 
 .psp__submit__btn__center__align {
@@ -191,9 +197,12 @@
 }
 
 .psp_sub_div{
-    padding: 5rem;
+    padding: 2.5rem 4rem;
 }
 
-.mar-top-50{
-    margin-top: 50px;
+.mar-top-20{
+    margin-top: 20px;
+}
+.mar-top-30{
+    margin-top: 30px;
 }

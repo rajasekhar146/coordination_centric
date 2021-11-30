@@ -128,9 +128,12 @@
 
 .ac__row {
     width: 100%;
-    display: grid;
+    display: flex;
+}
+
+.ac__row__grid{
     grid-template-columns: 1fr 1fr 1fr;
-    /* background-color: #A0A4A8; */
+    display: grid;
 }
 
 .ac__column {

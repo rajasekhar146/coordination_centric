@@ -2,19 +2,11 @@ import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import NameIcon from '../../assets/icons/organization_name.png'
-import EmailIcon from '../../assets/icons/organization_email.png'
-import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
-import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
-import { memberService, commonService } from '../../services'
+import { appointmentService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import CircleIcon from '@mui/icons-material/Circle';
-
 
 const styles = theme => ({
     // root: {
@@ -46,44 +38,29 @@ const styles = theme => ({
 
 const RejectAppointmentComponent = props => {
     const {
-        classes
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        clickCloseButton,
+        selectedAppointment,
+        setIsRescheduleClicked
     } = props
 
-    const {
-        selectedAppointment
-    } = props;
     const [activeTab, setActiveTab] = useState('primary')
 
-    useEffect(() => {
-        const res = commonService.getAllRoles()
-    }, [])
 
+    const handleReject = async () => {
+        const res = await appointmentService.cancelAppointment()
+        if (res.status === 200) {
+            setOpenFlash(true);
+            setAlertMsg('Declined');
+            setSubLabel(`This appointmend was cancelled.`)
+            clickCloseButton()
+        } else {
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm()
+        }
 
-
-
-
-
-
-    // const onSubmit = (requestData) => {
-    //     setIsSubmit(true)
-    //     requestData.refUserId = admin._id
-    //     const res = memberService.inviteMember(requestData)
-    //     res.then((data) => {
-    //         setOpenInviteMember(false)
-    //         setOpenInviteMemberSuccess(true)
-    //         getOrgDetails()
-    //     }).catch((err) => {
-    //         setIsExist(get(err.response, ['body', 'message'], null))
-    //     })
-    // }
-
+    }
 
 
 
@@ -99,7 +76,7 @@ const RejectAppointmentComponent = props => {
                 </label>
             </div>
             <div className="io_appointment_details">
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
                             Patient
@@ -107,46 +84,45 @@ const RejectAppointmentComponent = props => {
                     </div>
                     <div>
                         <label className="io_user_name">
-                            Mr. John Doe
+                            {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
                         </label>
                     </div>
 
                 </div>
-                <div style={{ width: '50%'}} className="io_slot_selector">
+                <div style={{ width: '50%' }} className="io_slot_selector">
                     <div>
                         <label className="io_user_label">
                             Primary - Date and Time
-
-
                         </label>
                     </div>
                     <div>
-
                         <label className="io_user_name">
                             Thu, 7th Oct - 8am
-
                         </label>
                     </div>
-
                 </div>
-
             </div>
 
             <div className="io__row io__btn io_width97">
                 <div className="io__same__line">
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn" onClick={props.clickCloseButton}>
+                        <Button className="io__cancel__btn" onClick={clickCloseButton}>
                             Back
                         </Button>
                     </div>
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn io_reschedule_btn" onClick={props.clickCloseButton}>
+                        <Button className="io__cancel__btn io_reschedule_btn"
+                            onClick={() => {
+                                setIsRescheduleClicked(true)
+                                clickCloseButton()
+                            }}>
                             Re-schedule
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
-                           Reject
+                        <Button type="submit" className="io__Approve__btn"
+                            onClick={handleReject}>
+                            Reject
                         </Button>
                     </div>
                 </div>

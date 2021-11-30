@@ -48,8 +48,8 @@ const InviteCollaboratorComponent = props => {
         setOpenInviteCollaboratorSuccess,
         setOpenInviteCollaborator,
         orgId,
-        admin,
-        getOrgDetails
+        organizationId,
+        setCollaboratorList,
     } = props;
 
 
@@ -82,7 +82,7 @@ const InviteCollaboratorComponent = props => {
         var orgDetail = {
             facilityName: data.facilityName,
             facilityEmail: data.facilityEmail,
-            refUserId: admin._id
+            refUserId: organizationId
         }
 
         if (currentUserRole === 'admin') {
@@ -90,7 +90,7 @@ const InviteCollaboratorComponent = props => {
                 adminEmail: currentUserEmail,
                 facilityEmail: data.facilityEmail,
                 facilityName: data.facilityName,
-                refUserId: admin._id
+                refUserId: organizationId
             }
         }
 
@@ -98,7 +98,7 @@ const InviteCollaboratorComponent = props => {
         res.then((response) => {
             setOpenInviteCollaborator(false)
             setOpenInviteCollaboratorSuccess(true)
-            getOrgDetails()
+            setCollaboratorList([])
         }).catch((error) => {
             console.log(error.response)
             if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {

@@ -33,7 +33,7 @@
     left: 150%;
 }
 .si_left_signin {
-    left: 166% !important;
+    left: 185% !important;  
 }
 .si__left__200{
     left: 210% !important;
@@ -290,9 +290,10 @@
     width: 180px !important;
     background-color: #DBDDE0 !important;
     border-radius: 10px !important;
-    color: #fff !important;
+    /* color: #fff !important; */
     padding: 10px !important;
     pointer-events: none;
+    color: #E42346 !important;
 }
 
 .evp__label__time {

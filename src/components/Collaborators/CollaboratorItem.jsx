@@ -208,27 +208,42 @@ const CollaboratorComponent = props => {
         index,
         setSkip,
         setOpenFlash,
+        setCollaboratorList,
         setAlertMsg,
         setSubLabel,
-        setCollaboratorList
+        setStaffList,
+        organizationId
     } = props
 
-    const resendInvite = (org, status) => {
-        const res = memberService.resendInvite(org._id, status, 'facility')
-        res.then(res => {
+    const resendInvite = async(org, status) => {
+        const res = await memberService.resendInvite(org._id, status, 'facility')
+        if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
             setCollaboratorList([])
-        })
+            setAlertMsg('Re-sended')
+            setSubLabel('Another invitation was sended to this Member.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            // setSubLabel('Another invitation was sended to this Member.')
+        }
     }
-    const cancelInvite = (org, status) => {
-        const res = memberService.cancelInvite(org._id, status, 'facility')
-        res.then(res => {
-            setSkip(1)
+    const cancelInvite = async(org, status) => {
+        const res = await memberService.cancelInvite(org._id, status, 'facility')
 
+        if (res.status === 200) {
+            setSkip(1)
             setOpenFlash(true)
             setCollaboratorList([])
-        })
+            setAlertMsg('Cancelled')
+            setSubLabel('Invitation Cancelled.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+        }
     }
 
     const handleMenuAction = (e, action, index, orgId) => {

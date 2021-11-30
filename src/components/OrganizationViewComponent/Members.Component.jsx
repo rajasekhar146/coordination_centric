@@ -31,20 +31,21 @@ const MembersComponent = props => {
     const {
         colorcodes,
         getOrgDetails,
-        admin
+        organizationId,
+        setMembersList,
+        membersList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-    const [membersList, setMembersList] = useState([])
-    const [openflash, setOpenFlash] = React.useState(false)
-    const [alertMsg, setAlertMsg] = React.useState('')
-    const [subLebel, setSubLabel] = useState('')
-    const [totalPage, setTotalPage] = React.useState(0)
+    
     const [page, setPage] = React.useState(1)
     
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(admin._id, 'member', limit, skip)
+        const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
             setMembersList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -54,7 +55,7 @@ const MembersComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [membersList.length, skip])
 
 
     return (
@@ -93,7 +94,7 @@ const MembersComponent = props => {
                                     setSubLabel={setSubLabel}
                                     setMembersList={setMembersList}
                                     setSkip={setSkip}
-                                    admin={admin}
+                                    organizationId={organizationId}
                                 />
                             ))
                             }

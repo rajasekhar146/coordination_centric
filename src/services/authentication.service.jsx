@@ -80,8 +80,8 @@ function login(username, password) {
 
         if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')) {
           update2fa(true)
-          localStorage.setItem('currentUser', JSON.stringify(get(err.response, ['data', 'data'], '')))
-          currentUserSubject.next(get(err.response, ['data', 'data'], ''))
+          localStorage.setItem('currentUser', JSON.stringify(get(err, ['response'], '')))
+          currentUserSubject.next(get(err, ['response'], ''))
         }
 
         return err.response?.data
@@ -132,16 +132,19 @@ function twoFactorAuthVerification(code, type, email) {
   let url = `${apiURL}`
 
   if (type === 'email') {
-    url += `/users/twoFactorEmailAuthenticationVerification/${code}`
+    url += `/users/twoFactorEmailAuthenticationVerification/${code}/${email}`
   } else if (type === 'app') {
     url += `/users/twoFactorAuthenticationVerification`
   }
 
-  const dataTosend = type === 'email' ? null : {
-    code,
-    email: email,
-    token: 'base32'
-  }
+  const dataTosend =
+    type === 'email'
+      ? null
+      : {
+          code,
+          email: email,
+          token: 'base32',
+        }
 
   return (
     axios
@@ -164,6 +167,8 @@ function twoFactorAppAuthVerification(data) {
       .post(`${apiURL}/users/twoFactorAuthenticationVerification`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
+        localStorage.setItem('currentUser', JSON.stringify(data))
+        currentUserSubject.next(data)
         return data
       })
   )
@@ -211,17 +216,19 @@ function changePassword(data) {
   )
 }
 
-
 function skipTwoFa(data) {
   let axiosConfig = {
     headers: authHeader(),
   }
   return (
     axios
-      .post(`${apiURL}/users/twoFAStatus`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
+      .post(`${apiURL}/users/disable2fa`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
-        return data
+        const userData = JSON.parse(localStorage.getItem('currentUser'))
+        userData.data.data.twoFactor_auth_type = 'skipped'
+        localStorage.setItem('currentUser', JSON.stringify(userData))
+        currentUserSubject.next(data)
       })
   )
 }
