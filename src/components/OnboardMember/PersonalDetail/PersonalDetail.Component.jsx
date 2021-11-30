@@ -22,6 +22,7 @@ import Guardian from '../../../pages/guardian'
 import ConfirmationPopupModel from '../../ModelPopup/ConfirmationPopupModel.Component'
 import moment from 'moment'
 import { useParams } from 'react-router-dom'
+import { setQuickProfileSetup } from '../../../redux/actions/commonActions'
 
 const style = {
   position: 'absolute',
@@ -80,6 +81,7 @@ const PersonalDetailComponent = () => {
   const { invitetoken } = useParams()
   const { referredby } = useParams()
   const { invitedBy } = useParams()
+  const currentStep = useSelector(state => state.quickProfileSetupReducer)
 
   var {
     register,
@@ -97,7 +99,7 @@ const PersonalDetailComponent = () => {
     const response = await commonService.getStates(selectedCountryCode).catch(error => {
       console.log(error)
     })
-    const tstates = response.data.data.data
+    const tstates = response?.data?.data?.data
 
     setStates(tstates)
   }
@@ -107,7 +109,7 @@ const PersonalDetailComponent = () => {
       console.log(error)
     })
 
-    setOcupations(response.data.data.data)
+    setOcupations(response?.data?.data?.data)
   }
 
   const handleChange = event => {

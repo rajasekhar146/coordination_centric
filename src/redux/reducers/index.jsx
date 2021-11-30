@@ -10,7 +10,14 @@ import {
   deleteMemberProfessionalInfoCertificatesReducer,
 } from './memberReducer'
 import { organizationReducer, newOrganizationReducer } from './organizationReducer'
-import { commonReducer, specialtiesReducer, setCompleteProfileReducer } from './commonReducer'
+import {
+  commonReducer,
+  specialtiesReducer,
+  setCompleteProfileReducer,
+  setQuickProfileSetupReducer,
+  setCalendarAppointmentDateReducer,
+  setAppointmentAvailableTimeSlotsReducer,
+} from './commonReducer'
 
 const reducers = combineReducers({
   allMembers: memberReducer,
@@ -26,6 +33,9 @@ const reducers = combineReducers({
   isOpenCompletProfilePopup: setCompleteProfileReducer,
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificate: deleteMemberProfessionalInfoCertificatesReducer,
+  quickProfileSetupReducer: setQuickProfileSetupReducer,
+  calendarAppointmentDate: setCalendarAppointmentDateReducer,
+  appointmentAvailableTimeSlots: setAppointmentAvailableTimeSlotsReducer,
 })
 
 export default reducers

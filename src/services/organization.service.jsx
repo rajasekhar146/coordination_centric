@@ -23,7 +23,7 @@ export const organizationService = {
   cancelIvitation,
   validateToken,
   registerMember,
-  disableTwoFa
+  disableTwoFa,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -203,7 +203,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
         }
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
-      
+
       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
       else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
       else if (certificateType == 'EULAAgreement') {
@@ -352,7 +352,7 @@ function disableTwoFa(data) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .post(`${apiURL}/users/twoFAStatus`, {twoFactorStatus : false}, axiosConfig)
+      .post(`${apiURL}/users/twoFAStatus`, { twoFactorStatus: false }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
@@ -363,4 +363,3 @@ function disableTwoFa(data) {
       })
   )
 }
-

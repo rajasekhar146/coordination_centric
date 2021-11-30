@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './MemberLeftMenu.css'
 import LeftMenuLogo from '../../assets/images/member_logo.png'
 import Box from '@mui/material/Box'
@@ -9,7 +9,8 @@ import StepContent from '@mui/material/StepContent'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-
+import { setQuickProfileSetup } from '../../redux/actions/commonActions'
+import { useSelector, useDispatch } from 'react-redux'
 const steps = [
   {
     label: 'Personal Detail',
@@ -20,8 +21,9 @@ const steps = [
 ]
 
 const MemberLeftMenu = () => {
-  const [activeStep, setActiveStep] = React.useState(0)
-
+  const currentStep = useSelector(state => state.quickProfileSetupReducer)
+  const { activeStep } = useState(currentStep.activeStep || 0)
+  console.log('activeStep', currentStep)
   return (
     <div className="mlm__main__div">
       <div className="mlm__row">
@@ -35,10 +37,10 @@ const MemberLeftMenu = () => {
       <div className="mlm__row">
         <div className="mlm__quick__setup">
           <Box sx={{ maxWidth: 400 }}>
-            <Stepper activeStep={activeStep} orientation="vertical">
+            <Stepper activeStep={currentStep.activeStep} orientation="vertical">
               {steps.map((step, index) => (
-                <Step key={step.label}>
-                  <StepLabel optional={index === 2 ? <Typography variant="caption">Last step</Typography> : null}>
+                <Step key={step.label} >
+                  <StepLabel disabled optional={index === 2 ? <Typography variant="caption">Last step</Typography> : null}>
                     {step.label}
                   </StepLabel>
                 </Step>

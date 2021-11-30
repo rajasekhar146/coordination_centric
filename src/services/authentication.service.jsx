@@ -137,11 +137,14 @@ function twoFactorAuthVerification(code, type, email) {
     url += `/users/twoFactorAuthenticationVerification`
   }
 
-  const dataTosend = type === 'email' ? null : {
-    code,
-    email: email,
-    token: 'base32'
-  }
+  const dataTosend =
+    type === 'email'
+      ? null
+      : {
+          code,
+          email: email,
+          token: 'base32',
+        }
 
   return (
     axios
@@ -213,7 +216,6 @@ function changePassword(data) {
   )
 }
 
-
 function skipTwoFa(data) {
   let axiosConfig = {
     headers: authHeader(),
@@ -223,8 +225,8 @@ function skipTwoFa(data) {
       .post(`${apiURL}/users/twoFAStatus`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
-        const userData = JSON.parse(localStorage.getItem('currentUser'));
-        userData.data.data.twoFactor_auth_type = 'skipped';
+        const userData = JSON.parse(localStorage.getItem('currentUser'))
+        userData.data.data.twoFactor_auth_type = 'skipped'
         localStorage.setItem('currentUser', JSON.stringify(userData))
         currentUserSubject.next(data)
       })
