@@ -83,6 +83,9 @@ const StaffComponent = props => {
         const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
         if (res.status === 200) {
             setStaffList(get(res, ['data', 'data', '0', 'totalData'], []))
+            const totalPagees = Math.ceil(get(res, ['data', 'data', '0', 'totalData'], []).length / 10)
+            console.log(totalPagees)
+            setTotalPage(totalPagees)
         } else {
 
         }

@@ -7,6 +7,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
+import { memberService } from '../../services'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -204,7 +205,14 @@ const CollaboratorItemComponent = props => {
         row,
         columns,
         handleClose,
-        index
+        index,
+        setSkip,
+        collaboratorList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        setCollaboratorList,
+        organizationId
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -224,15 +232,86 @@ const CollaboratorItemComponent = props => {
         console.log('menus[0].options', menus[0].options)
     }
 
+    const resendInvite = async (org, status) => {
+        const res = await memberService.resendInvite(org._id, status, 'facility')
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setCollaboratorList([])
+            setAlertMsg('Re-sended')
+            setSubLabel('Another invitation was sended to this Member.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+        }
+    }
+
+    const cancelInvite = async (org, status) => {
+        const res = await memberService.cancelInvite(org._id, status, 'facility')
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setCollaboratorList([])
+            setAlertMsg('Cancelled')
+            setSubLabel('Invitation Cancelled.')
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+        }
+    }
+
+    const handleActivate = async(org, status) => {
+        const res = await memberService.updateStatus(org._id, status)
+        if (res.status === 200) {
+            setSkip(1)
+            setOpenFlash(true)
+            setCollaboratorList([])
+           
+        } else {
+            setSkip(1)
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+
+        }
+    }
+
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
+            case 'setIsDeactivateClicked':
+                handleActivate(row, 'inactive')
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                break
+            case 'setIsCancelInviteClicked':
+                cancelInvite(row, 'cancel')
 
+                break
+            case 'setIsActivateClicked':
+                handleActivate(row, 'active')
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                break
+            case 'setIsResendClicked':
+                resendInvite(row, 'resend')
+                break
+            // case 'setIsActivateClicked':
+            //   handleActivate()
+            case 'viewdetails':
+            // routeDirect(orgId)
+
+            default:
+                return null
         }
         setAnchorEl(null)
     }
+
 
     const getTextColor = text => {
         switch (text) {
@@ -246,6 +325,8 @@ const CollaboratorItemComponent = props => {
                 return 'defaultStyle'
         }
     }
+
+    
 
 
 
@@ -267,7 +348,7 @@ const CollaboratorItemComponent = props => {
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small"  />
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>

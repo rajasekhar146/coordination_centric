@@ -60,16 +60,16 @@ function getAllRoles(countryCode) {
   }
   return (
     axios
-      .get(`${apiURL}/utils/getStateByCountryCode?countrycode=${countryCode}`, axiosConfig)
-      //.then(handleResponse)
-      .then(data => {
-        //   console.log('getCountries', data)
-        return { data }
-      })
-      .catch(err => {
-        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-        return null
-      })
+      // .get(`${apiURL}/utils/getStateByCountryCode?countrycode=${countryCode}`, axiosConfig)
+      // //.then(handleResponse)
+      // .then(data => {
+      //   //   console.log('getCountries', data)
+      //   return { data }
+      // })
+      // .catch(err => {
+      //   // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+      //   return null
+      // })
   )
 }
 

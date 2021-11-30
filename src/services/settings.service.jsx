@@ -9,10 +9,12 @@ const axiosConfig = {
 }
 
 export const settinService = {
-  getMemberDetails,
-  updateMemberDetails,
-  addHealthInfo,
-  addInsuranceInfo,
+    getMemberDetails,
+    updateMemberDetails,
+    addHealthInfo,
+    addInsuranceInfo,
+    getHealthInfo,
+    getInsuranceInfo
 }
 
 function getMemberDetails(id) {
@@ -69,18 +71,53 @@ function addHealthInfo(id, reqdata) {
 }
 
 function addInsuranceInfo(info) {
-  console.log('axiosConfig', axiosConfig)
-  return (
-    axios
-      .patch(`${apiURL}/users/updateHealthInfo`, info, axiosConfig)
-      //.then(handleResponse)
-      .then(data => {
-        //   console.log('getCountries', data)
-        return { data }
-      })
-      .catch(err => {
-        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-        return null
-      })
-  )
+    console.log('axiosConfig', axiosConfig)
+    return (
+        axios
+            .patch(`${apiURL}/users/updateHealthInfo`, info, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                //   console.log('getCountries', data)
+                return { data }
+            })
+            .catch(err => {
+                // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+                return null
+            })
+    )
+}
+
+function getHealthInfo(id) {
+    console.log('axiosConfig', axiosConfig)
+    return (
+        axios
+            .get(`${apiURL}/users/getHealthInfo/${id}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                //   console.log('getCountries', data)
+                return { data }
+            })
+            .catch(err => {
+                // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+                return null
+            })
+    )
+}
+
+
+function getInsuranceInfo(id) {
+    console.log('axiosConfig', axiosConfig)
+    return (
+        axios
+            .get(`${apiURL}/users/getPatientInsuranceDetailsById?id=${id}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                //   console.log('getCountries', data)
+                return { data }
+            })
+            .catch(err => {
+                // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+                return null
+            })
+    )
 }

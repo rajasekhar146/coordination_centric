@@ -54,6 +54,8 @@ import PatientsComponent from './components/Patients/Patients.Component'
 import TwoFaCodeVerificationFail from './components/EnableTwoFactorAuth/TwoFaCodeVerificationFail.Component'
 import Marketplace from './pages/marketplace'
 import MakeAppointments from './pages/make-a-appointments'
+import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
+
 class Routes extends Component {
   render() {
     return (
@@ -117,6 +119,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
           <MasterLayoutWithLefuMenuComponent path="/marketplace/make-a-appointments" component={MakeAppointments} />
           <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Marketplace} />
+          <MasterLayoutWithLefuMenuComponent path="/selectdates" component={SelectNewDatesComponent} />
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
           <MemberLayoutComponent
             path="/members/personal-detail/:invitetoken/:referredby/:invitedBy"

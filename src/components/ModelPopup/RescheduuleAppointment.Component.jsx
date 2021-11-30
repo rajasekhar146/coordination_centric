@@ -9,11 +9,12 @@ import EmailIcon from '../../assets/icons/organization_email.png'
 import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
-import { memberService, commonService } from '../../services'
+import { appointmentService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import CircleIcon from '@mui/icons-material/Circle';
+import history from '../../history'
 
 
 const styles = theme => ({
@@ -46,43 +47,31 @@ const styles = theme => ({
 
 const RescheduuleAppointmentComponent = props => {
     const {
-        classes
+        classes,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        clickCloseButton,
+        selectedAppointment
     } = props
 
-    const {
-        selectedAppointment
-    } = props;
-    const [activeTab, setActiveTab] = useState('primary')
-
-    useEffect(() => {
-        const res = commonService.getAllRoles()
-    }, [])
+    const selectNewDates = () => {
+        history.push('/selectdates')
+    }
 
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm()
-
-
-
-
-
-
-    // const onSubmit = (requestData) => {
-    //     setIsSubmit(true)
-    //     requestData.refUserId = admin._id
-    //     const res = memberService.inviteMember(requestData)
-    //     res.then((data) => {
-    //         setOpenInviteMember(false)
-    //         setOpenInviteMemberSuccess(true)
-    //         getOrgDetails()
-    //     }).catch((err) => {
-    //         setIsExist(get(err.response, ['body', 'message'], null))
-    //     })
-    // }
+    const handleSubmit = async () => {
+        const res = await appointmentService.askPatientReschedule(selectedAppointment._id)
+        if (res.status === 200) {
+            setOpenFlash(true);
+            setAlertMsg('Requested');
+            setSubLabel(`The re-schedule request was sent to the patient.`)
+            clickCloseButton()
+        } else {
+            setAlertMsg('Error');
+            // setSubLabel(``)
+        }
+    }
 
 
 
@@ -113,12 +102,17 @@ const RescheduuleAppointmentComponent = props => {
                         </Button>
                     </div>
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn io_select_new" onClick={props.clickCloseButton}>
+                        <Button
+                            className="io__cancel__btn io_select_new"
+                            onClick={selectNewDates}>
                             Select New Date
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
+                        <Button
+                            type="submit"
+                            className="io__Approve__btn"
+                            onClick={handleSubmit}>
                             Ask Patient
                         </Button>
                     </div>

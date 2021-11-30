@@ -301,11 +301,11 @@ function resendInvite(id) {
   )
 }
 
-function cancelIvitation(id) {
+function cancelIvitation(id, type) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .put(`${apiURL}/facilityList/cancelInvite/${id}`, null, axiosConfig)
+      .put(`${apiURL}/facilityList/cancelInvite/${id}/${type}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

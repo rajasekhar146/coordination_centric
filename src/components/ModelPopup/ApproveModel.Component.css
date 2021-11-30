@@ -229,7 +229,36 @@
     justify-content: space-between;
     width: 100%;
 }
-
+.float_container {
+    height: 85px;
+    border-radius: 5px;
+    display: grid;
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 8px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    align-items: center;
+    letter-spacing: 0.1px;
+    color: #25282B;
+    padding-left: 20px;
+    
+}
+.float_container input {
+    font-size: larger;
+    color: #919191;
+    border: none;
+    outline: 0;
+    width: 85%;
+    padding: 0 0 12px 0;
+}
+.patient_appointment {
+    padding-left: 20px !important;
+}
 .pca__main__div {
     width: 100%;
 }

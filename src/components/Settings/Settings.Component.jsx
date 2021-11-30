@@ -174,7 +174,9 @@ const OrganizationViewComponent = () => {
                 inkBarStyle={{ background: 'red' }}
                 TabIndicatorProps={{ className: classes.indicator }}
             >
-                 <TabItem value="0" label="My Details" />
+                {get(userDetails, ['role'], '') === 'doctor' || 'patient' &&
+                    <TabItem value="0" label="My Details" />
+                }
 
                 {get(userDetails, ['role'], '') === 'doctor' && <TabItem value="1" label="Professional Info" />}
                 {get(userDetails, ['role'], '') === 'patient' && <TabItem value="2" label="Health Info" />}
@@ -233,6 +235,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    userDetails={userDetails}
                 />
             </TabPanel>
             <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} />
