@@ -48,6 +48,8 @@
     "moment-timezone": "^0.5.34",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
+    "react-big-calendar": "^0.38.1",
+    "react-datepicker": "^4.3.0",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
     "react-dropzone": "^11.4.2",
