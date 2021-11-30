@@ -9,7 +9,7 @@ const CancelInviteModel = props => {
   const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
 
   const handleSubmit = () => {
-    const res = organizationService.cancelIvitation(selectedOrg.id)
+    const res = organizationService.cancelIvitation(selectedOrg.id, 'facility')
     res.then(res => {
       setOrganizations([])
       setSkip(1)

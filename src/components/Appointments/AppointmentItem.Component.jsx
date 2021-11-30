@@ -45,7 +45,7 @@ const menuList = [
     {
         menu: 'confirmed',
         options: [
-            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -53,9 +53,10 @@ const menuList = [
     {
         menu: 'pending_acceptance',
         options: [
-            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
-            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
@@ -68,16 +69,17 @@ const menuList = [
     {
         menu: 'requested_to_reschedule',
         options: [
-            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
-            { text: 'Reject', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
+
 
 ]
 
 
-const MemberItemComponent = props => {
+const AppointmentItemComponent = props => {
     const classes = useStyles()
 
     const {
@@ -86,7 +88,9 @@ const MemberItemComponent = props => {
         index,
         setIsConfirmClicked,
         setSelectedAppointment,
-        setIsRescheduleClicked
+        setIsRescheduleClicked,
+        setIsViewClicked,
+        setIsRejectClicked
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -111,11 +115,20 @@ const MemberItemComponent = props => {
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
-            case 'setIsConfirmClicked': 
-            setIsConfirmClicked(true)
-            break
-            case 'setIsRescheduleClicked': 
-            setIsRescheduleClicked(true)
+            case 'setIsConfirmClicked':
+                setIsConfirmClicked(true)
+                break
+            case 'setIsRescheduleClicked':
+                setIsRescheduleClicked(true)
+                break
+            case 'setIsViewClicked':
+                setIsViewClicked(true)
+                break
+            case 'setIsViewClicked':
+                setIsViewClicked(true)
+                break
+            case 'setIsRejectClicked':
+                setIsRejectClicked(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
@@ -214,6 +227,7 @@ const MemberItemComponent = props => {
                             aria-controls="long-menu"
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
+                            disabled={row['status'] === 'compleated' || row['status'] === 'cancelled'}
                             onClick={e => handleClick(e, `${row['status']}`)}
                         >
                             <MoreVertRoundedIcon />
@@ -261,4 +275,4 @@ const MemberItemComponent = props => {
     )
 }
 
-export default MemberItemComponent
+export default AppointmentItemComponent

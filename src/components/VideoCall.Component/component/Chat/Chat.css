@@ -1,0 +1,90 @@
+.chat-wrp {
+    width: 30vw;
+    background-color: #25282B;
+    color: #fff;
+    position: relative;
+    height: 100vh;
+}
+.chat-wrp-2 {
+    padding: 15px;
+}
+.chat-header {
+    border-bottom: 1px solid #E8E8E8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+}
+.chat-tile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.chat-tile-img {
+    display: flex;
+    align-items: center;
+}
+.chat-tile-img img{
+    width: 50px;
+}
+.chat-tile-ping {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.chat-tile-ping .ping{ 
+    width: 100%;
+    padding: 25px;
+    border-radius: 11px;
+}
+.chat-tile.woner .triangle-left {
+	width: 0;
+	height: 0;
+	border-top: 8px solid transparent;
+	border-right: 15px solid #EFAD0A;
+	border-bottom: 8px solid transparent;
+}
+.chat-tile.user .triangle-right {
+    width: 0;
+	height: 0;
+	border-top: 8px solid transparent;
+	border-left: 15px solid #E42346;
+	border-bottom: 8px solid transparent;
+}
+
+.chat-tile.woner .ping{
+    background-color: #EFAD0A;
+}
+.chat-inp-wrp{
+    position: absolute;
+    bottom: 100px;
+    width: 93%;
+}
+
+.chat-inp-inner-wrp{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.chat-tile.user .ping{
+    background-color: #E42346;
+}
+.chat-inp-wrp input{
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    padding: 0 15px;
+}
+.send-chat-btn {
+    position: absolute;
+    right:0;
+    line-height: 40px;
+    padding:0 10px ;
+    cursor: pointer;
+}
+.close-chat {
+    cursor: pointer;
+}

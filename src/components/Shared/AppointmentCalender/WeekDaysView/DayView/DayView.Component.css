@@ -7,7 +7,7 @@
 
 .dv__row {
     width: 100%;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     padding: 5px 0px 5px 0px;
 }
@@ -36,7 +36,7 @@
 
 .dv__ats {
     height: 300px;
-    overflow: auto;
+    overflow-x: hidden;
     scrollbar-width: 1px;
 }
 
@@ -48,7 +48,6 @@
     line-height: 20px;
 
     /* or 143% */
-    display: flex;
     align-items: center;
     text-align: center;
     letter-spacing: 0.1px;
@@ -61,6 +60,7 @@
     border-radius: 16.567px;
     padding: 10px;
     cursor: pointer;
+    margin: 2px;
 }
 
 .dv__time__text__selected {
@@ -71,7 +71,7 @@
     line-height: 20px;
 
     /* or 143% */
-    display: flex;
+    display: table;
     align-items: center;
     text-align: center;
     letter-spacing: 0.1px;
@@ -84,4 +84,82 @@
     border-radius: 16.567px;
     padding: 10px;
     cursor: pointer;
+    margin: 5px 0px 5px 0px;
 }
+
+.dv__primary__text {
+    width: 100% !important;
+    display: flex;    
+}
+
+.dv__time__disabled {
+    background: #F5F5F5;
+    box-shadow: -4.14175px 4.14175px 8.2835px rgba(230, 230, 230, 0.2), inset 0.82835px 0.82835px 1.6567px rgba(255, 255, 255, 0.3), inset -0.82835px -0.82835px 1.6567px rgba(230, 230, 230, 0.5);
+    border-radius: 16.567px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* or 143% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Gray Light */
+    color: #CACCCF;
+    padding: 5px 10px 5px 10px;
+    margin: 5px 0px 5px 0px;
+}
+
+.dv__column {
+    width: 100%;
+}
+
+.dv__selected__primary {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 8.6268px;
+    line-height: 10px;
+
+    /* identical to box height, or 150% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.16567px;
+
+    /* Neutral/White */
+    color: #FFFFFF;
+}
+
+
+.dv__secondary__time__text__selected {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* or 143% */
+    display: table;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #fff;
+
+    background: #EFAD0A;
+    box-shadow: -4.14175px 4.14175px 8.2835px rgba(230, 230, 230, 0.2), -4.14175px -4.14175px 8.2835px rgba(255, 255, 255, 0.9), inset 0.82835px 0.82835px 1.6567px rgba(255, 255, 255, 0.3), inset -0.82835px -0.82835px 1.6567px rgba(230, 230, 230, 0.5);
+    border-radius: 16.567px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px 0px 5px 0px;
+}
+
+
+

@@ -132,7 +132,7 @@ function twoFactorAuthVerification(code, type, email) {
   let url = `${apiURL}`
 
   if (type === 'email') {
-    url += `/users/twoFactorEmailAuthenticationVerification/${code}`
+    url += `/users/twoFactorEmailAuthenticationVerification/${code}/${email}`
   } else if (type === 'app') {
     url += `/users/twoFactorAuthenticationVerification`
   }
@@ -222,7 +222,7 @@ function skipTwoFa(data) {
   }
   return (
     axios
-      .post(`${apiURL}/users/twoFAStatus`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
+      .post(`${apiURL}/users/disable2fa`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         const userData = JSON.parse(localStorage.getItem('currentUser'))

@@ -76,116 +76,12 @@ const getValue = val => {
 
 const menuList = [
     {
-        menu: 'sent',
-        options: [
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-        ],
-    },
-    {
-        menu: 'pending_verification',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'cancelled',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-            // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'declined',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
-            // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'active',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
-        ],
-    },
-    {
-        menu: 'inactive',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
-        ],
-    },
-    {
-        menu: 'invited',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            {
-                text: 'Cancel Invite',
-                fnKey: 'setIsCancelInviteClicked',
-                icon: require('../../assets/icons/suspend.png').default,
-            },
-        ],
-    },
-
-    {
-        menu: 'suspended',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
-        ],
-    },
-    {
-        menu: 'verified',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
-        ],
-    },
-    {
         menu: 'open',
         options: [
             { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Invite Patient', fnKey: 'setInvitePatientClicked', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Share', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            { text: 'Archive', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'pending_acceptance',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
-        ],
-    },
-    {
-        menu: 'cancelled',
-        options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
+            { text: 'Invite Patient', fnKey: 'setInvitePatientClicked', icon: require('../../assets/icons/resent_invitation.png').default },
+            { text: 'Share', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/share_icon.png').default },
+            { text: 'Archive', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/suspend.png').default },
         ],
     },
 ]
@@ -194,6 +90,7 @@ const menuList = [
 
 const colorcodes = {
     open: '#12B76A',
+    closed: '#12B76A'
 }
 
 const PatientItemComponent = props => {
@@ -216,7 +113,6 @@ const PatientItemComponent = props => {
         const res = memberService.updateStatus(org._id, status, 'facility')
         res.then(res => {
             setSkip(1)
-
             setOpenFlash(true)
             setCollaboratorList([])
         })
@@ -306,10 +202,10 @@ const PatientItemComponent = props => {
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        <div className={`od__open__status`}>
-                            <CircleIcon fontSize="small" sx={{ color: colorcodes['open'] }} />
-                            <div className={`od__open__label`}>
-                                {column.format && typeof value === 'number' ? column.format('open') : getValue('open')}
+                        <div className={value ? `od__closed__status` : `od__open__status`}>
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value ? 'closed' : 'open'] }} />
+                            <div className={value ? `od__closed__label` : `od__open__label`}>
+                                 {getValue(value ? value : 'open')}
                             </div>
                         </div>
                     </TableCell>

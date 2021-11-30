@@ -10,27 +10,23 @@ import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
 const myEventsList = [
-    {
-        title: 'Jitus', 
-        allDay: true, 
-        start: new Date(2021, 10, 24), 
-        end: new Date(2021, 10, 24) 
-    },
-    {
-        title: 'Abi', 
-        allDay: true, 
-        start: new Date(2021, 10, 24), 
-        end: new Date(2021, 10, 24) 
-    }
+  {
+    title: 'Jitus',
+    allDay: true,
+    start: new Date(2021, 10, 24),
+    end: new Date(2021, 10, 24)
+  },
+  {
+    title: 'Abi',
+    allDay: true,
+    start: new Date(2021, 10, 24),
+    end: new Date(2021, 10, 24)
+  }
 ]
 
 function ScheduleCalendar() {
   return (
-    <div className="main_div">
-     
-<div>
-  
-</div>
+    <div className="io_calender_main">
       <Calendar
         localizer={localizer}
         events={myEventsList}

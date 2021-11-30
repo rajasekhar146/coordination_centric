@@ -14,10 +14,10 @@ import ListItemText from '@mui/material/ListItemText'
 import { setCountries, setAllHealthProblems } from '../../redux/actions/commonActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../services'
+import { settinService } from '../../services'
 import UploadFile from './UploadFile.Component'
 import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from "@material-ui/core/styles";
-import { settinService } from '../../services'
 import get from 'lodash.get'
 import HealthIssueItem from './HealthIssueItem.Component'
 import history from '../../history'
@@ -112,7 +112,6 @@ const PatientHealthDetails = props => {
         const response = await commonService.getCountries().catch(error => {
             console.log(error)
         })
-
         console.log('getCountries', response.data.data)
         setAllCountries(response.data.data.data)
         dispatch(setCountries(response.data.data.data))
@@ -126,9 +125,16 @@ const PatientHealthDetails = props => {
         setAllProblems(get(response, ['data', 'data', 'data'], []))
     }
 
+    const fetchHealthInfo = async () => {
+        const response = await settinService.getHealthInfo(userDetails._id).catch(error => {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         fetchCountries()
         fetchHealthProblems()
+        fetchHealthInfo()
     }, [])
 
     const heightArray = [
@@ -145,6 +151,25 @@ const PatientHealthDetails = props => {
         145,
         160,
     ]
+    const weightArray = [
+        45,
+        46,
+        47,
+        49,
+        50,
+        51,
+        52,
+        55,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+    ]
+
+    
 
     const onSubmit = async (data) => {
         data.height = height;
@@ -226,8 +251,8 @@ const PatientHealthDetails = props => {
                                         MenuProps={{ classes: { paper: classes.dropdownStyle } }}
 
                                     >
-                                        {heightArray &&
-                                            heightArray.map(option => (
+                                        {weightArray &&
+                                            weightArray.map(option => (
                                                 <MenuItem value={option} key={option}>
                                                     {option}
                                                 </MenuItem>

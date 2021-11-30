@@ -21,6 +21,16 @@ const appointmentDateInitialState = {
   },
 }
 
+const primaryppointments = {
+  Day: null,
+  Time: null,
+}
+
+const secondaryAppointment = {
+  Day: null,
+  Time: null,
+}
+
 const weekDays = [0, 1, 2, 3, 4, 5]
 
 const getWeekDays = () => {
@@ -113,6 +123,24 @@ export const setCalendarAppointmentDateReducer = (state = appointmentDateInitial
 export const setAppointmentAvailableTimeSlotsReducer = (state = getWeekDays(), { type, payload }) => {
   switch (type) {
     case ActionTypes.APPOINTMENT_AVAILABLE_TIME_SLOTS:
+      return payload
+    default:
+      return state
+  }
+}
+
+export const setPrimaryAppointmentDateReducer = (state = primaryppointments, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.APPOINTMENT_PRIMARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}
+
+export const setSecondaryAppointmentDateReducer = (state = secondaryAppointment, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.APPOINTMENT_SECONDARY_DATE:
       return payload
     default:
       return state

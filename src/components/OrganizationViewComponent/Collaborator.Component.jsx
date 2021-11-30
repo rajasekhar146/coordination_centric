@@ -15,7 +15,7 @@ import { memberService } from '../../services'
 const columns = [
     { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'facilityEmail', label: 'Email', minWidth: 100, align: 'left', visible: true },
-    { id: 'roles', label: 'Role', minWidth: 200, align: 'left', visible: true },
+    // { id: 'roles', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
@@ -37,7 +37,10 @@ const CollaboratorComponent = props => {
         colorcodes,
         organizationId,
         setCollaboratorList,
-        collaboratorList
+        collaboratorList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
@@ -59,7 +62,7 @@ const CollaboratorComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [])
+    }, [collaboratorList.length, skip])
 
     return (
         <div>
@@ -94,7 +97,13 @@ const CollaboratorComponent = props => {
                                     columns={columns}
                                     setAnchorEl={setAnchorEl}
                                     handleClose={handleClose}
-                                // colorcodes={colorcodes}
+                                    setOpenFlash={setOpenFlash}
+                                    setAlertMsg={setAlertMsg}
+                                    setSubLabel={setSubLabel}
+                                    setCollaboratorList={setCollaboratorList}
+                                    setSkip={setSkip}
+                                    organizationId={organizationId}
+                                    collaboratorList={collaboratorList}
                                 />
                             ))
                             }

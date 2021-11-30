@@ -14,6 +14,7 @@ import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import CircleIcon from '@mui/icons-material/Circle';
+import { appointmentService } from '../../services'
 
 
 const styles = theme => ({
@@ -54,43 +55,34 @@ const roles = [
 
 const ConfimationAppointment = props => {
     const {
-        classes
+        classes,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        clickCloseButton,
+        selectedAppointment
     } = props
 
-    const {
-        selectedAppointment
-    } = props;
-    const [activeTab, setActiveTab] = useState('primary')
-
-    useEffect(() => {
-        const res = commonService.getAllRoles()
-    }, [])
-
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm()
+    const [activeTab, setActiveTab] = useState(null)
 
 
 
 
+    const handleSubmit = async() => {
+        // const res = await appointmentService.confirmAppointment()
+        // if (res.status === 200) {
+        //     setOpenFlash(true);
+        //     setAlertMsg('Confirmed');
+        //     setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
+        //     clickCloseButton()
+        // } else {
 
-
-    // const onSubmit = (requestData) => {
-    //     setIsSubmit(true)
-    //     requestData.refUserId = admin._id
-    //     const res = memberService.inviteMember(requestData)
-    //     res.then((data) => {
-    //         setOpenInviteMember(false)
-    //         setOpenInviteMemberSuccess(true)
-    //         getOrgDetails()
-    //     }).catch((err) => {
-    //         setIsExist(get(err.response, ['body', 'message'], null))
-    //     })
-    // }
+        // }
+        setOpenFlash(true);
+        setAlertMsg('Confirmed');
+        setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
+        clickCloseButton()
+    }
 
 
 
@@ -131,7 +123,10 @@ const ConfimationAppointment = props => {
 
                     </label>
                 </div>
-                <div>
+                <div
+                    onClick={() => {
+                        setActiveTab('primary')
+                    }}>
                     <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
                         <CircleIcon sx={{ color: activeTab === 'primary' ? '#E42346' : '#DCDCDC' }} />
                     </span>
@@ -141,7 +136,11 @@ const ConfimationAppointment = props => {
                 </div>
 
             </div>
-            <div className="io_slot_selector">
+            <div 
+             onClick={() => {
+                setActiveTab('secondary')
+            }}
+             className="io_slot_selector">
                 <div>
                     <label className="io_user_label">
                         Secondary - Date and Time
@@ -161,7 +160,7 @@ const ConfimationAppointment = props => {
             <div className="io__row io__btn io_width97">
                 <div className="io__same__line">
                     <div className="io__cancel">
-                        <Button className="io__cancel__btn" onClick={props.clickCloseButton}>
+                        <Button className="io__cancel__btn" onClick={clickCloseButton}>
                             Close
                         </Button>
                     </div>
