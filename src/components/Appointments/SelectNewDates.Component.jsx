@@ -5,7 +5,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import ConfirmReschedulePopup from '../ModelPopup/ConfirmRescheduleAppointment'
-
+import NavMonthYearComponent from '../Shared/AppointmentCalender/NavMonthYear/NavMonthYear.Component'
+import WeekDaysViewComponent from '../Shared/AppointmentCalender/WeekDaysView/WeekDaysView.Component'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -21,8 +22,24 @@ const confirmAppointment = {
 }
 
 
+// const confirmAppointment = {
+//     position: 'absolute',
+//     top: '50%',
+//     left: '50%',
+//     transform: 'translate(-50%, -50%)',
+//     width: 800,
+//     bgcolor: 'background.paper',
+//     border: '2px solid white',
+//     boxShadow: 24,
+//     borderRadius: 3,
+//     p: 2,
+// }
+
+
+
 const SelectNewDatesComponent = () => {
     const [isOpenConfirmPopup, setIsOpenConfirmPopup] = useState(false)
+    const [selectedDates, setSelectedDates] = useState([])
 
 
     const closeApproveModel = () => {
@@ -58,6 +75,25 @@ const SelectNewDatesComponent = () => {
                 </div>
 
             </div>
+            <NavMonthYearComponent
+            />
+            <WeekDaysViewComponent
+            setSelectedDates={setSelectedDates}
+            />
+            <div className="io__row">
+                <div className="io_next_btn">
+                    <div className="io__approve">
+                        <Button
+                            type="submit"
+                            onClick={() => {
+                                setIsOpenConfirmPopup(true)
+                            }}
+                            className="io__Approve__btn">
+                            Next
+                        </Button>
+                    </div>
+                </div>
+            </div>
             <Modal
                 open={isOpenConfirmPopup}
                 // onClose={setIsAcceptClicked}
@@ -67,8 +103,8 @@ const SelectNewDatesComponent = () => {
                 <Box sx={confirmAppointment}>
                     <ConfirmReschedulePopup
                         clickCloseButton={closeApproveModel}
-                        // setSkip={setSkip}
-                        // selectedAppointment={selectedAppointment}
+                    // setSkip={setSkip}
+                    // selectedAppointment={selectedAppointment}
                     // setOrganizations={setOrganizations}
                     // setOpenFlash={setOpenFlash}
                     // setAlertMsg={setAlertMsg}

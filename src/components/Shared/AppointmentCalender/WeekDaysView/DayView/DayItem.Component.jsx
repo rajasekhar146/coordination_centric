@@ -2,14 +2,16 @@ import React from 'react'
 import './DayView.Component.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { appointmentAvailableTimeSlots } from '../../../../../redux/actions/commonActions' //'../../../redux/actions/commonActions'
-import DayItem from './DayItem.Component'
 
 const DayViewComponent = props => {
-  const { day, dayDesc, availableTimeSlots } = props.avaliableAppointmentDay
-  console.log('props >> day', day, availableTimeSlots)
-  const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
+  const {
+    ats,
+    day,
+  } = props
   const dispatch = useDispatch()
-  console.log('DayViewComponent >> rweekDaysAvailablities', rweekDaysAvailablities)
+  const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
+
+
   const handleSelectedTime = (newDay, id, availableTimeSlot) => {
     console.log('handleSelectedTime', newDay, id, availableTimeSlot)
     const rdayAvailablities = rweekDaysAvailablities.map(ra => {
@@ -36,21 +38,13 @@ const DayViewComponent = props => {
     console.log('new >> rdayAvailablities', rdayAvailablities)
   }
   return (
-    <div className="dv__main__div">
-      <div className="dv__row">
-        <div className="dv__day__desc">{dayDesc}</div>
-      </div>
-      <hr className="dv__hr__section" />
-      <div className="dv__ats">
-        {availableTimeSlots &&
-          availableTimeSlots.map(ats => (
-            <DayItem
-              ats={ats}
-              day={day}
-              
-            />
-
-          ))}
+    <div className="dv__row">
+      <div
+        className={ats.isSelected ? 'dv__time__text__selected' : 'dv__time__text'}
+        key={ats.availabilityId}
+        onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlot)}
+      >
+        {ats.availableTimeSlot}
       </div>
     </div>
   )

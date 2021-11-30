@@ -255,7 +255,7 @@ const CollaboratorItemComponent = props => {
             setOpenFlash(true)
             setCollaboratorList([])
             setAlertMsg('Cancelled')
-            setSubLabel('Ivitation Cancelled.')
+            setSubLabel('Invitation Cancelled.')
         } else {
             setSkip(1)
             setOpenFlash(true)

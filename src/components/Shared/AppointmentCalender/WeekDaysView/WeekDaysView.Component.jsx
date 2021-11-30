@@ -7,7 +7,7 @@ import './WeekDaysView.Component.css'
 import RoundedBackArrow from '../../../../assets/icons/round_back_arrow.png'
 import RoundedNextArrow from '../../../../assets/icons/round_next_arrow.png'
 
-const availablities = [
+const availablities = [ 
   { availabilityId: 1, availableTimeSlot: '08:00am - 09:00am', isSelected: false },
   { availabilityId: 2, availableTimeSlot: '09:00am - 10:00am', isSelected: false },
   { availabilityId: 3, availableTimeSlot: '10:00am - 11:00am', isSelected: false },

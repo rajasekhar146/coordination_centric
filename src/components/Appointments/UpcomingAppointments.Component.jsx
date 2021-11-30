@@ -114,7 +114,7 @@ const UpcomongAppointmentComponent = props => {
     const closeAppointmentInfoModel = () => {
         setIsViewClicked(false)
     }
-    
+
 
 
     const columns = [
@@ -230,10 +230,9 @@ const UpcomongAppointmentComponent = props => {
                                 clickCloseButton={closeRescheduleModel}
                                 // setSkip={setSkip}
                                 selectedAppointment={selectedAppointment}
-                            // setOrganizations={setOrganizations}
-                            // setOpenFlash={setOpenFlash}
-                            // setAlertMsg={setAlertMsg}
-                            // setSubLabel={setSubLabel}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
                             />
                         </Box>
                     </Modal>

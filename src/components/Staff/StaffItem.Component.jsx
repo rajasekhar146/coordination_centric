@@ -237,7 +237,7 @@ const StaffItemComponent = props => {
             setOpenFlash(true)
             setStaffList([])
             setAlertMsg('Cancelled')
-            setSubLabel('Ivitation Cancelled.')
+            setSubLabel('Invitation Cancelled.')
         } else {
             setSkip(1)
             setOpenFlash(true)

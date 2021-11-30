@@ -254,7 +254,7 @@ const PatientItemComponent = props => {
             setOpenFlash(true)
             setPatientList([])
             setAlertMsg('Cancelled')
-            setSubLabel('Ivitation Cancelled.')
+            setSubLabel('Invitation Cancelled.')
         } else {
             setSkip(1)
             setOpenFlash(true)
