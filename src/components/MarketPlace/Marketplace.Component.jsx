@@ -43,6 +43,7 @@ const MarketplaceComponent = () => {
               speciality: doc.speciality,
               location: [doc.country, doc.state, doc.city].filter(n => n).join(','),
               availability: getAvailabilityFromObject(doc.availabilities),
+              availabilityArray:doc.availabilities?.days,
               pic: '',
               action: '',
             }

@@ -58,7 +58,9 @@ const availablities = [
 
 const weekDays = [0, 1, 2, 3, 4, 5]
 
-const WeekDaysViewComponent = () => {
+const WeekDaysViewComponent = (props) => {
+  const doctorId = props.id;
+  const doctorName =props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
@@ -194,7 +196,7 @@ const WeekDaysViewComponent = () => {
 
       <Modal open={IsClickedAppointment} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={confirmAppointment}>
-          <PatientConfimationAppointmentComponent
+          <PatientConfimationAppointmentComponent id={doctorId} name={doctorName}
             clickCloseButton={clickCloseButton}
             clickConfirmButton={clickConfirmButton}
           />
