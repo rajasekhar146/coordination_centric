@@ -182,9 +182,35 @@ const DoctorsearchComponent = props => {
               </FormControl>
             </div>
             <div className="ds__status__menu">
-              <select className="ds__dropdown__menu">
-                <option>All Locations</option>
-              </select>
+             
+                <Select 
+                  labelId="mutiple-select-label"
+                  multiple
+                  value={selected}
+                  onChange={handleChange}
+                  MenuProps={MenuProps}
+                  className="ds__dropdown__menu"
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                <TextField margin="normal"  placeholder="State"   inputProps={{ className: 'pas__problem__textbox' }} />
+                     
+                    </ListItemIcon>
+                  </MenuItem>
+                    <MenuItem >
+                      <ListItemIcon>
+                      <TextField margin="normal" placeholder="City"  inputProps={{ className: 'pas__problem__textbox' }} />
+
+                      </ListItemIcon>
+                    </MenuItem>
+                    <MenuItem >
+                      <ListItemIcon>
+                      <TextField margin="normal"   placeholder="Zipcode"   inputProps={{ className: 'pas__problem__textbox' }} />
+
+                      </ListItemIcon>
+                    </MenuItem>
+                </Select>
+
             </div>
           </div>
         </div>
