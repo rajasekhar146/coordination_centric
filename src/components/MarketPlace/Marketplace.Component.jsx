@@ -5,6 +5,7 @@ import HighlightedDoctorsComponent from './HighlightedDoctors/HighlightedDoctors
 import './Marketplace.Component.css'
 import { appointmentService } from '../../services';
 import moment from 'moment'
+import get from 'lodash.get';
 const MarketplaceComponent = () => {
   const [doctorsList,setDoctorsList] = useState([]);
   const [searchText,setSearchText] =useState("");
@@ -31,7 +32,7 @@ const MarketplaceComponent = () => {
       res => {
         console.log("Get doctorslist",res);
         if(res.status=== 200){
-          let doctors = res?.data?.data?.list;
+          let doctors = get(res, ['data', 'data', 'list'], []);
           const doctorsArray = [];
           doctors.forEach(doc => {
             
@@ -62,10 +63,6 @@ const MarketplaceComponent = () => {
     let SecondHStart = moment(oneDayAvail.second_half_starting_time).format("h:mm a");
     let SecondHEnd = moment(oneDayAvail.second_half_ending_time).format("h:mm a");
     return firstHStart +" - "+firstHEnd+ ",\n "+SecondHStart+"-"+SecondHEnd;
-    
-
-    
-
     } else {
       return null;
     }
