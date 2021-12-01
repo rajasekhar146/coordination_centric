@@ -55,6 +55,7 @@ import TwoFaCodeVerificationFail from './components/EnableTwoFactorAuth/TwoFaCod
 import Marketplace from './pages/marketplace'
 import MakeAppointments from './pages/make-a-appointments'
 import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
+import VideoCallComponent from './components/VideoCall.Component/VideoCall.Component';
 
 class Routes extends Component {
   render() {
@@ -104,6 +105,7 @@ class Routes extends Component {
             component={MemberSignIn}
           />
           <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
+          <DefaultLayoutComponentRoute path="/video-call" component={VideoCallComponent} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
