@@ -3,13 +3,16 @@ import './TopDoctor.Component.css'
 import Button from '@mui/material/Button'
 import history from '../../../history'
 import Doctor from '../../../assets/images/doctor1.png'
+import ViewImageComponent from '../../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 const TopDoctorComponent = props => {
-  const { id, name, speciality, pic } = props.doctor
+  const { id, name, speciality, profilePic } = props.doctor
   return (
     <div className="tdl__main__div">
       <div className="tdl__row">
         <div>
           <img src={Doctor} alt={speciality} className="tdl__image" />
+          {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"tdl__image"} /> */}
+          {/* profilePic */}
         </div>
       </div>
       <div className="tdl__row">

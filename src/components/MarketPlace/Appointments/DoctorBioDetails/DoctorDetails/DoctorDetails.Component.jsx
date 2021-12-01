@@ -3,11 +3,12 @@ import Doctor from '../../../../../assets/images/doctor1.png'
 import './DoctorDetails.Component.css'
 import ViewImageComponent from '../../../../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 const  DoctorDetailsComponent= (props) => {
+  console.log("DoctorDetailsComponent",props);
   return (
     <div className="db__main__div">
       <div className="db__row">
         {/* <img src={Doctor} alt="Doctor" className="db__pic" /> */}
-        <ViewImageComponent category={'doctors_certificate'} pic={props.pic} />
+        <ViewImageComponent category={'doctors_certificate'} pic={props.pic} imageClass={"db__pic"} />
       </div>
       <div className="db__row db__details__background__white">
         <div className="db__details">

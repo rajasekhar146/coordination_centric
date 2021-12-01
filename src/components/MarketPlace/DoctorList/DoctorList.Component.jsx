@@ -11,6 +11,7 @@ import TablePagination from '@mui/material/TablePagination'
 import './DoctorList.Component.css'
 import Button from '@mui/material/Button'
 import history from '../../../history'
+import ViewImageComponent from '../../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 
 const columns = [
   { id: 'id', label: 'ID', minWidth: '0px', align: 'left', visible: false },
@@ -129,7 +130,8 @@ const DoctorListComponent = (props) => {
                   doctorList.map(row => {
                    return( <TableRow key={row} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell align="center">
-                        <img src={Doctor} alt={row.speciality} className="dl__pic" />
+                        {/* <img src={Doctor} alt={row.speciality} className="dl__pic" /> */}
+                        <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} />
                       </TableCell>
                       <TableCell component="th" scope="row" align="left">
                         {row.name}
