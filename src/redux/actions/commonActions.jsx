@@ -62,3 +62,10 @@ export const secondaryAppointmentDate = secondaryAppointment => {
     payload: secondaryAppointment,
   }
 }
+
+export const setFlashMsg = data => {
+  return {
+      type: ActionTypes.SET_FLAG_MESSAGE,
+      payload: data,
+  }
+}

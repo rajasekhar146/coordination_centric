@@ -12,6 +12,11 @@ import Box from '@mui/material/Box'
 import PatientConfimationAppointmentComponent from '../../../ModelPopup/PatientConfimationAppointment.Component'
 import ProblemAndSymptomsComponent from '../../../ModelPopup/ProblemAndSymptoms.Component'
 import AppointmentApproveRequest from '../../../ModelPopup/AppointmentApproveRequest'
+import get from 'lodash.get'
+import { authenticationService, appointmentService } from '../../../../services'
+import { setFlashMsg } from '../../../../redux/actions/commonActions'
+import { useHistory } from 'react-router-dom'
+
 
 const confirmAppointment = {
   position: 'absolute',
@@ -19,6 +24,18 @@ const confirmAppointment = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+const confirmPopupWithoutSecondary = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -58,7 +75,16 @@ const availablities = [
 
 const weekDays = [0, 1, 2, 3, 4, 5]
 
-const WeekDaysViewComponent = () => {
+const WeekDaysViewComponent = (props) => {
+  const {
+    appointmentDetails,
+  } = props;
+  const history = useHistory()
+
+  const currentUser = authenticationService.currentUserValue
+  const role = get(currentUser, ['data', 'data', 'role'], '')
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
+
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
@@ -148,9 +174,30 @@ const WeekDaysViewComponent = () => {
     setClickedAppointment(false)
   }
 
-  const clickConfirmButton = () => {
-    setClickedAppointment(false)
-    setClickedConfirm(true)
+  const clickConfirmButton = async () => {
+    if (role === 'doctor') {
+      const reqData = {
+        primaryStartTime: '2018-08-20 06:56:23',
+        primaryEndTime: '2018-08-20 06:56:23',
+        secondaryStartTime: '2018-08-20 06:56:23',
+        secondaryEndTime: '2018-08-20 06:56:23'
+      }
+      const res = await appointmentService.rescheduleAppointmentbyDoctor(reqData)
+      if (res.status === 200) {
+        dispatch(setFlashMsg({
+          openFlash: true,
+          alertMsg: 'Re-scheduled',
+          subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+        }))
+        history.push('/appointments')
+      } else {
+        // setAlertMsg('Error');
+        // setSubLabel(``)
+      }
+      setClickedAppointment(false)
+    } else {
+      setClickedConfirm(true)
+    }
   }
 
   const clickBackButton = () => {
@@ -193,10 +240,12 @@ const WeekDaysViewComponent = () => {
       </div>
 
       <Modal open={IsClickedAppointment} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={confirmAppointment}>
+        <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
           <PatientConfimationAppointmentComponent
+            appointmentDetails={appointmentDetails}
             clickCloseButton={clickCloseButton}
             clickConfirmButton={clickConfirmButton}
+
           />
         </Box>
       </Modal>

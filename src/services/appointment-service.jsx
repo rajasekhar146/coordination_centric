@@ -8,36 +8,24 @@ const apiURL = env.environment.apiBaseUrl
 
 
 export const appointmentService = {
-    getAppointmentHistory,
     confirmAppointment,
-    cancelAppointment,
+    rejectAppointment,
     askPatientReschedule,
-    getUpcomingAppointments
+    getDoctorsList,
+    getAppointments,
+    rescheduleAppointmentbyDoctor
 }
 
 
 
-function getAppointmentHistory(userId, endDate) {
+function getAppointments(userId, date, type, skip, limit) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?endDate=${endDate}`, axiosConfig)
-            //.then(handleResponse)
-            .then(data => {
-                return data
-            })
-    )
-}
-
-function getUpcomingAppointments(userId, startDate) {
-    let axiosConfig = {
-        headers: authHeader(),
-    }
-    return (
-        axios
-            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?startDate=${startDate}`, axiosConfig)
+            .get(`${apiURL}/appointment/getAppointment/${userId}?date=${date}&type=${type}&skip=${skip}&limit=${limit}
+            `, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
@@ -60,13 +48,16 @@ function confirmAppointment(appointmentId, reason = '') {
 }
 
 
-function cancelAppointment(appointmentId, reason = '') {
+function rejectAppointment(appointmentId) {
     let axiosConfig = {
         headers: authHeader(),
     }
+    const reqBody = {
+       id: appointmentId
+    }
     return (
         axios
-            .put(`${apiURL}/appointment/cancelAppointment/${appointmentId}`, axiosConfig)
+            .put(`${apiURL}/appointment/declineAppointment`, reqBody, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
@@ -82,10 +73,40 @@ function askPatientReschedule(id) {
     }
     return (
         axios
-            .put(`${apiURL}/appointment/rescheduleAppointment/${id}/by_patient`, axiosConfig)
+            .put(`${apiURL}/appointment/rescheduleAppointment/${id}/patient`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
+            })
+    )
+}
+
+
+
+function rescheduleAppointmentbyDoctor(data) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .post(`${apiURL}/appointment/makeAppointment`, data, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                return data
+            })
+    )
+}
+
+function getDoctorsList(searchParam) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/users/getDoctorlist?limit=${searchParam.pageLimit}&page=${searchParam.pageNo}&sort_field=${searchParam.sortByColoumn}&sort=${searchParam.sortOrder}&search_key=${searchParam.searchKey}&search_value=${searchParam.searchValue}&speciality=${searchParam.speciality}&country=${searchParam.country}&state=${searchParam.state}&city=${searchParam.city}&zipcode=${searchParam.zipcode}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+               return data
             })
     )
 }

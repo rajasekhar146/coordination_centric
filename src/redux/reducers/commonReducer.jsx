@@ -31,6 +31,12 @@ const secondaryAppointment = {
   Time: null,
 }
 
+const flagMsg = {
+  openFlash: true,
+  alertMsg: 'Re-scheduled',
+  subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+}
+
 const weekDays = [0, 1, 2, 3, 4, 5]
 
 const getWeekDays = () => {
@@ -141,6 +147,16 @@ export const setPrimaryAppointmentDateReducer = (state = primaryppointments, { t
 export const setSecondaryAppointmentDateReducer = (state = secondaryAppointment, { type, payload }) => {
   switch (type) {
     case ActionTypes.APPOINTMENT_SECONDARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}
+
+
+export const setFlashMsgReducer = (state = flagMsg, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_FLAG_MESSAGE:
       return payload
     default:
       return state

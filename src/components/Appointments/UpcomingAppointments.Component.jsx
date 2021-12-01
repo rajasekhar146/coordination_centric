@@ -97,7 +97,8 @@ const UpcomongAppointmentComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        type
+        type,
+        handleNavigation
     } = props
     const [isConfirmClicked, setIsConfirmClicked] = useState(false)
     const [isRejectClicked, setIsRejectClicked] = useState(false)
@@ -140,11 +141,7 @@ const UpcomongAppointmentComponent = props => {
         let res;
         const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
         const startDate = moment(new Date()).format("YYYY-MM-DD");
-        if (type === 'history') {
-            res = await appointmentService.getAppointmentHistory(userId, endDate, limit, skip)
-        } else if (type === 'upcoming'){
-            res = await appointmentService.getUpcomingAppointments(userId, startDate, limit, skip)
-        }
+        res = await appointmentService.getAppointments(userId, endDate, type, limit, skip)
         if (res.status === 200) {
             setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -249,6 +246,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                handleNavigation={handleNavigation}
                             />
                         </Box>
                     </Modal>
