@@ -138,7 +138,7 @@ const DoctorListComponent = (props) => {
                       <TableCell align="left">{row.location}</TableCell>
                       <TableCell align="left">{row.availability}</TableCell>
                       <TableCell align="center">
-                        <Button className="dl__button" onClick={() => history.push({pathname:'/marketplace/make-a-appointments',state:{id:row.id}})}>
+                        <Button className="dl__button" onClick={() => history.push({pathname:'/marketplace/make-a-appointments',state:{id:row.id,name:row.name,availability:row.availabilityArray}})}>
                           Book
                         </Button>
                       </TableCell>

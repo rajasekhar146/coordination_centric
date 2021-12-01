@@ -33,7 +33,9 @@ const DoctorBioDetailsComponent = (props) => {
         if(res?.data?.status=== 200){
         let obj = {
           name:info.first_name.charAt(0).toUpperCase() + info.first_name.slice(1)+" "+info.last_name,
-          bioText:styleBioText(info?.biograhpy_object?.blocks?.[0])
+          bioText:styleBioText(info?.biograhpy_object?.blocks?.[0]),
+          profilePic : info.profilePic,
+          speciality:info.speciality
 
         }
 
@@ -47,6 +49,8 @@ const DoctorBioDetailsComponent = (props) => {
       })
   }
   const styleBioText=(bioObject)=>{
+    if(!bioObject)
+    return ;
     let text = bioObject.text;
     let style= bioObject.inlineStyleRanges;
     style.forEach(element => {
@@ -81,7 +85,7 @@ const DoctorBioDetailsComponent = (props) => {
       </div>
       <div className="dbd__row">
         <div className="dbd__doctor__bio__details">
-          <DoctorDetailsComponent />
+          <DoctorDetailsComponent  name={doctorInfo?.name} pic={doctorInfo?.profilePic} speciality={doctorInfo?.speciality}/>
         </div>
         <div className="dbd__bio__details">
           <div className="dbd__doctor__section">

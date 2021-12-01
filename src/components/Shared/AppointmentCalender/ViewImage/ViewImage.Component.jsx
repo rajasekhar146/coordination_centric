@@ -36,7 +36,7 @@ const ViewImageComponent = props => {
 
   return (
     <div>
-      {picUrl && <img src={picUrl ? picUrl : `data:image/png;base64,${picUrl}`} alt="profile" className="io_profile" />}
+      {picUrl && <img style={{width: 250,height:200}} src={picUrl ? `data:image/png;base64,${picUrl}`:null} alt="profile" className="io_profile" />}
     </div>
   )
 }
