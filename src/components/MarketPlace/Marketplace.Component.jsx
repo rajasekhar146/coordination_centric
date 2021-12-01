@@ -24,7 +24,7 @@ const MarketplaceComponent = () => {
       sortOrder: 'desc',
       searchKey: 'name',
       searchValue: searchText,
-      speciality: '[]',
+      speciality: JSON.stringify(searchSpecialists),
       country: '',
       state: '',
       city: '',
@@ -44,7 +44,7 @@ const MarketplaceComponent = () => {
               location: [doc.country, doc.state, doc.city].filter(n => n).join(','),
               availability: getAvailabilityFromObject(doc.availabilities),
               availabilityArray:doc.availabilities?.days,
-              pic: '',
+              pic: doc.profilePic,
               action: '',
             }
             console.log('new', newObj)

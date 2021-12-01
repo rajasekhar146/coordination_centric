@@ -3,13 +3,13 @@ import get from 'lodash.get'
 import { commonService } from '../../../../services' //'../../services'
 
 const ViewImageComponent = props => {
-  const { pic, category } = props
-
+  const { pic, category,imageClass } = props
+console.log("ViewImageComponent",props);
   const [picUrl, setPicUrl] = useState('')
 
   useEffect(async () => {
     await getImage()
-  }, [])
+  }, [props.pic])
   const arrayBufferToBase64 = buffer => {
     let binary = ''
     const bytes = new Uint8Array(buffer)
@@ -36,7 +36,7 @@ const ViewImageComponent = props => {
 
   return (
     <div>
-      {picUrl && <img style={{width: 250,height:200}} src={picUrl ? `data:image/png;base64,${picUrl}`:null} alt="profile" className="io_profile" />}
+      {picUrl && <img  className={imageClass} src={picUrl ? `data:image/png;base64,${picUrl}`:null} alt="profile"  />}
     </div>
   )
 }
