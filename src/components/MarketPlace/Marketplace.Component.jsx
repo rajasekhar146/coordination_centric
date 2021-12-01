@@ -11,14 +11,18 @@ const MarketplaceComponent = () => {
   const [searchText, setSearchText] = useState('')
   const [searchSpecialists, setSearchSpecialists] = useState([])
 
+  const [searchState,setSearchState] =useState("");
+  const [searchCity,setSearchCity] =useState("");
+  const [searchZipcode,setSearchZipcode] = useState("");
+
   useEffect(() => {
     getDoctorsList()
     console.log('Fired', searchSpecialists)
-  }, [searchText, searchSpecialists])
+  }, [searchText, searchSpecialists,searchState,searchCity,searchZipcode])
 
   const getDoctorsList = () => {
     const searchParam = {
-      pageLimit: 20,
+      pageLimit: 2000,
       pageNo: 1,
       sortByColoumn: 'name',
       sortOrder: 'desc',
@@ -26,9 +30,9 @@ const MarketplaceComponent = () => {
       searchValue: searchText,
       speciality: JSON.stringify(searchSpecialists),
       country: '',
-      state: '',
-      city: '',
-      zipcode: '',
+      state: searchState,
+      city: searchCity,
+      zipcode: searchZipcode,
     }
     appointmentService.getDoctorsList(searchParam).then(
       res => {
@@ -75,13 +79,20 @@ const MarketplaceComponent = () => {
   return (
     <div className="mp__main__div">
       <div className="mp__title__text">Highlighted Doctors</div>
+      
+      <HighlightedDoctorsComponent />
       <DoctorsearchComponent
         searchText={searchText}
         setSearchText={setSearchText}
         searchSpecialists={searchSpecialists}
         setSearchSpecialists={setSearchSpecialists}
+        searchState= {searchState}
+        setSearchState = {setSearchState}
+        searchCity ={searchCity}
+        setSearchCity = {setSearchCity}
+        searchZipcode = {searchZipcode}
+        setSearchZipcode = {setSearchZipcode}
       />
-      <HighlightedDoctorsComponent />
       <DoctorListComponent doctorsList={doctorsList} />
     </div>
   )

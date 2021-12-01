@@ -19,7 +19,7 @@ const columns = [
   { id: 'Name', label: 'Name', minWidth: '200px', align: 'left', visible: true },
   { id: 'specilaty', label: 'Specilaty', minWidth: '160px', align: 'left', visible: true },
   { id: 'location', label: 'Location', minWidth: '160px', align: 'left', visible: true },
-  { id: 'availability', label: 'Availability', minWidth: '120px', align: 'left', visible: true },
+  { id: 'availability', label: 'Availability', minWidth: '120px', align: 'left', visible: false },
   { id: 'action', label: 'Actions', minWidth: '100px', align: 'center', visible: true },
 ]
 
@@ -138,7 +138,7 @@ const DoctorListComponent = (props) => {
                       </TableCell>
                       <TableCell align="left">{row.speciality}</TableCell>
                       <TableCell align="left">{row.location}</TableCell>
-                      <TableCell align="left">{row.availability}</TableCell>
+                      {/* <TableCell align="left">{row.availability}</TableCell> */}
                       <TableCell align="center">
                         <Button className="dl__button" onClick={() => history.push({pathname:'/marketplace/make-a-appointments',state:{id:row.id,name:row.name,availability:row.availabilityArray}})}>
                           Book

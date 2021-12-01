@@ -72,6 +72,7 @@ const DoctorsearchComponent = props => {
   const isAllSelected = specialists.length > 0 && selected.length === specialists.length
   const handleChange = event => {
     const value = event.target.value
+    console.log("handleChange",value);
     if (value[value.length - 1] === 'all') {
       setSelected(selected.length === specialists.length ? [] : specialists)
       return
@@ -125,7 +126,7 @@ const DoctorsearchComponent = props => {
     setSpecialties([...uniqueSpecialities])
   }, [])
   return (
-    <div className="ds__section">
+    <div className="ds__section" style={{marginBottom:20}}>
       <div className="ds__row__div">
         <div className="ds__column__div" style={{ width: '30%' }}>
           <TextField
@@ -146,7 +147,7 @@ const DoctorsearchComponent = props => {
           <div className="ds__menu">
             <div className="ds__spl__menu">
               <FormControl className={classes.formControl}>
-                <Select s
+                <Select
                   labelId="mutiple-select-label"
                   multiple
                   value={selected}
@@ -155,6 +156,7 @@ const DoctorsearchComponent = props => {
                   MenuProps={MenuProps}
                   className="ds__dropdown__menu"
                 >
+                  
                   <MenuItem
                     value="all"
                     classes={{
@@ -186,26 +188,26 @@ const DoctorsearchComponent = props => {
                 <Select 
                   labelId="mutiple-select-label"
                   multiple
-                  value={selected}
-                  onChange={handleChange}
+                  value={[props.searchState,props.searchCity,props.searchZipcode]}
+                  renderValue={selected =>selected.filter(x=>x).join(', ')}
+                  // onChange={handleChange}
                   MenuProps={MenuProps}
                   className="ds__dropdown__menu"
                 >
                   <MenuItem>
                     <ListItemIcon>
-                <TextField margin="normal"  placeholder="State"   inputProps={{ className: 'pas__problem__textbox' }} />
-                     
+                <TextField margin="normal" defaultValue={props.searchState}  placeholder="State"   inputProps={{ className: 'pas__problem__textbox' }}  onChange={(e)=>{props.setSearchState(e.target.value)}}/>
                     </ListItemIcon>
                   </MenuItem>
                     <MenuItem >
                       <ListItemIcon>
-                      <TextField margin="normal" placeholder="City"  inputProps={{ className: 'pas__problem__textbox' }} />
+                      <TextField margin="normal" defaultValue={props.searchCity}  placeholder="City"  inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{props.setSearchCity(e.target.value)}}/>
 
                       </ListItemIcon>
                     </MenuItem>
                     <MenuItem >
                       <ListItemIcon>
-                      <TextField margin="normal"   placeholder="Zipcode"   inputProps={{ className: 'pas__problem__textbox' }} />
+                      <TextField margin="normal"   placeholder="Zipcode" defaultValue={props.searchZipcode}   inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{props.setSearchZipcode(e.target.value)}}/>
 
                       </ListItemIcon>
                     </MenuItem>

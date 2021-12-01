@@ -22,9 +22,9 @@ const  DoctorDetailsComponent= (props) => {
           
           </div>
           })}
-          <div className="db__row">
+          {/* <div className="db__row">
             <div className="db__description">[Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam]</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
