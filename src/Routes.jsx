@@ -56,7 +56,6 @@ import Marketplace from './pages/marketplace'
 import MakeAppointments from './pages/make-a-appointments'
 import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
 import VideoCallComponent from './components/VideoCall.Component/VideoCall.Component';
-
 class Routes extends Component {
   render() {
     return (

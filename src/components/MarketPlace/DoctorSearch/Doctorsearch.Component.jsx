@@ -8,15 +8,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import Button from '@mui/material/Button'
 import './Doctorsearch.Component.css'
 
-const handleSearchText = e => {
-  // setSearchText(e.target.value)
-  // getOrganization(e.target.value, searchDate, searchStatus)
-}
-const DoctorsearchComponent = () => {
-  const [searchText, setSearchText] = React.useState('')
+
+const DoctorsearchComponent = (props) =>{
+    const handleSearchText = e => {
+      props.setSearchText(e.target.value)
+      // getOrganization(e.target.value, searchDate, searchStatus)
+    } 
+  // const [searchText, setSearchText] = React.useState('')
 
   const handleClear = () => {
-    setSearchText('')
+    props.setSearchText('')
   }
 
   const StyledMenu = styled(props => (
@@ -49,7 +50,7 @@ const DoctorsearchComponent = () => {
             margin="normal"
             placeholder="Search"
             onChange={e => handleSearchText(e)}
-            value={searchText}
+            value={props.searchText}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
