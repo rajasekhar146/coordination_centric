@@ -14,6 +14,7 @@ export const appointmentService = {
   getDoctorsList,
   getAllSpecializations,
   getHighlightedDoctorsList,
+  MakeAppointments
 }
 
 function getAppointmentHistory(userId, endDate, limit) {
@@ -124,5 +125,18 @@ function getAllSpecializations() {
         .then(data => {
           return data
         })
+    )
+  }
+
+function MakeAppointments(appointmentRequest) {
+    let axiosConfig = {
+        headers: authHeader(),
+      }
+    return (axios
+      .post(`${apiURL}/appointment/makeAppointment`, appointmentRequest, axiosConfig)
+      
+      .then(response => {
+        return response
+      })
     )
   }

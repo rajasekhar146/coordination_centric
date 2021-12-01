@@ -12,6 +12,7 @@ import Box from '@mui/material/Box'
 import PatientConfimationAppointmentComponent from '../../../ModelPopup/PatientConfimationAppointment.Component'
 import ProblemAndSymptomsComponent from '../../../ModelPopup/ProblemAndSymptoms.Component'
 import AppointmentApproveRequest from '../../../ModelPopup/AppointmentApproveRequest'
+import { appointmentService } from '../../../../services'
 
 const confirmAppointment = {
   position: 'absolute',
@@ -161,7 +162,38 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
+    let PrimaryTiming = primaryDate?.Time?.split("-");
+    let primaryStart =  moment(primaryDate.Day+" "+ PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryEnd =  moment(primaryDate.Day+" "+ PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+
+    let SecondaryTiming = secondaryDate?.Time?.split("-");
+    let secondaryStart =  moment(secondaryDate.Day+" "+ SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryEnd =  moment(secondaryDate.Day+" "+ SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+
+
+    let appointmentRequest = {
+
+        "primaryStartTime":primaryStart,
+        "primaryEndTime":primaryEnd,
+        "secondaryStartTime":secondaryStart,
+        "secondaryEndTime":secondaryEnd,
+        "doctorId":doctorId,
+        "appointmentReason":"health issue",
+        "email":[
+           "test@yopmail.com",
+           "test@yopmail.com"
+        ],
+        "documents":[]}
+    console.log("appointmentRequest",appointmentRequest);       
+    appointmentService.MakeAppointments(appointmentRequest).then(
+      res => {
+        console.log("makeAppointment",res);
+      },error=>{
+        console.log("Makeappointment",error);
+      })
+    
     setClickedConfirm(false)
+
     setClickedSubmit(true)
   }
 
