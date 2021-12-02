@@ -110,6 +110,7 @@ const WeekDaysViewComponent = (props) => {
 
   const [appointmentReason, setAppointmentReason] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [appointmentReasonErr, setappointmentReasonErr] = useState(false);
 
 
   const getAwailablities = async (selectedDate) => {
@@ -267,6 +268,22 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
+    if(appointmentReason == ''){
+      setappointmentReasonErr(true);
+      return false; 
+    
+    }
+    let result, isEmailError = 0;
+    invitedMembers.map(inputsField => {
+        result = inputsField.validator;
+        if(result == false){
+          isEmailError++;
+        }
+    })
+
+    if(isEmailError > 0 ){
+      return false;
+    }
     const reqData = {
       primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
       primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
@@ -339,15 +356,16 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent
-            clickBackButton={clickBackButton}
-            clickSubmitButton={clickSubmitButton}
-            invitedMembers={invitedMembers}
-            setInvitedMembers={setInvitedMembers}
-            appointmentReason={appointmentReason}
-            setAppointmentReason={setAppointmentReason}
-            selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
+          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} 
+          clickSubmitButton={clickSubmitButton} 
+          invitedMembers={invitedMembers}
+          setInvitedMembers = {setInvitedMembers}
+          appointmentReason = {appointmentReason}
+          setAppointmentReason = {setAppointmentReason}
+          selectedFiles = {selectedFiles}
+          setSelectedFiles = {setSelectedFiles}
+          appointmentReasonErr = {appointmentReasonErr}
+          setappointmentReasonErr = {setappointmentReasonErr}
           />
         </Box>
       </Modal>

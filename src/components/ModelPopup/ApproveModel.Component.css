@@ -531,3 +531,22 @@
 .pas__problem__label{
     margin-bottom: 10px;
 }
+
+.error{
+    color: red;
+    font-size: 12px;
+    font-family: Lato;
+}
+.reason_error{
+    position: absolute;
+    margin-top: -15px;
+    color: red;
+    font-size: 12px;
+    font-family: Lato;
+}
+.relative{
+    position: relative;
+}
+.mar-top-30{
+    margin-top: 30px;
+}

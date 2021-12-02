@@ -28,14 +28,16 @@ const UploadFile = (props) => {
     const {
         file,
         setReportsArray,
-        reportsArray = []
+        reportsArray = [],
+        index,
+        selectedFiles,
+        setSelectedFiles
     } = props;
     const [imgUrl, setImgUrl] = useState('')
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState("");
 
     const [fileSize, setFileSize] = useState(0);
-
     useEffect(() => {
         const formData = new FormData()
         formData.append(`image`, file)
@@ -56,18 +58,24 @@ const UploadFile = (props) => {
         })
     }, [])
 
+const delImageHandle = (file , index) =>{
+  var images = [...reportsArray];
+  images.splice(index , 1);
+  setReportsArray(images);
 
+  var selFiles = [...selectedFiles];
+  selFiles.splice(index,1);
+  setSelectedFiles(selFiles)
+}
 
     return (
         <div className="od_dropzone_progress mb_25">
             <div className="">
-                {/* <span>
-                <div className="" onClick={()=>{
-                    delImg = true;
+                <div className="close_icon" onClick={()=>{
+                    delImageHandle(file , index)
                 }}>
-                <CloseIcon/>
+                <CloseIcon className="svg_icons"/>
             </div>
-                    </span> */}
                 <span className="io_delete">
                     {progress === 100
                         ? <img className="upload_icon" src={UploadSuccess} alt="upload" />
