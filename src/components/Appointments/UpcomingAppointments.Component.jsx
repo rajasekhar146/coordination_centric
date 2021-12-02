@@ -16,13 +16,26 @@ import RescheduuleAppointment from '../ModelPopup/RescheduuleAppointment.Compone
 import RejectAppointment from '../ModelPopup/RejectAppointment.Component'
 import AppointmentInfoPopup from '../ModelPopup/AppointmentInfoPopup'
 import ScheduleCalendar from '../ScheduleCalendar/ScheduleCalendar.Component';
+import PatientReschedule from '../ModelPopup/PatientRescheduleModel'
 import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
 import moment from 'moment'
-import { forEach } from 'lodash'
 
 const confirmAppointment = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 450,
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    boxShadow: 24,
+    borderRadius: 3,
+    p: 2,
+}
+
+const termsAndCondition = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -49,48 +62,6 @@ const appointmentInfo = {
     p: 2,
 }
 
-const Appointments = [
-    {
-        name: 'Rajasekhar',
-        profile: require('../../assets/icons/default_profile_image.png').default,
-        location: 'chenni',
-        date: 'Wed, 6th Nov',
-        time: '8am - 9am',
-        status: 'confirmed',
-        gender: 'female',
-        _id: '61571c7e38f9f7305ef3a64c'
-    },
-    {
-        name: 'Ram',
-        profile: require('../../assets/icons/default_profile_image.png').default,
-        location: 'chenni',
-        date: 'Wed, 6th Nov',
-        time: '8am - 9am',
-        status: 'pending_acceptance',
-        gender: 'male',
-        _id: '61571c7e38f9f7305ef3a64c'
-    },
-    {
-        name: 'Raj',
-        profile: require('../../assets/icons/default_profile_image.png').default,
-        location: 'chenni',
-        date: 'Wed, 6th Nov',
-        time: '8am - 9am',
-        status: 'declined',
-        gender: 'male',
-        _id: '61571c7e38f9f7305ef3a64c'
-    },
-    {
-        name: 'Jhon',
-        profile: require('../../assets/icons/default_profile_image.png').default,
-        location: 'chenni',
-        date: 'Wed, 6th Nov',
-        time: '8am - 9am',
-        status: 'requested_to_reschedule',
-        gender: 'male',
-        _id: '61571c7e38f9f7305ef3a64c'
-    }
-]
 
 const UpcomongAppointmentComponent = props => {
     const {
@@ -106,6 +77,7 @@ const UpcomongAppointmentComponent = props => {
     const [isResheduleClicked, setIsRescheduleClicked] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
     const [isViewClicked, setIsViewClicked] = useState(false)
+    const [patientReschedule, setPatientReschedule] = useState(false)
     const [appointmentList, setAppointmentList] = useState([])
     const currentUser = authenticationService.currentUserValue
     const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -113,6 +85,7 @@ const UpcomongAppointmentComponent = props => {
     const [skip, setSkip] = useState(10)
     
     const role = get(currentUser, ['data', 'data', 'role'], '')
+
     const closeConformModel = () => {
         setIsConfirmClicked(false)
     }
@@ -125,6 +98,9 @@ const UpcomongAppointmentComponent = props => {
 
     const closeAppointmentInfoModel = () => {
         setIsViewClicked(false)
+    }
+    const closePatientReschedule = () => {
+        setPatientReschedule(false)
     }
 
 
@@ -152,7 +128,7 @@ const UpcomongAppointmentComponent = props => {
             const appointmentsTemp =get(res, ['data', 'data'], []); 
             let appointmentsArray =[];
             appointmentsTemp.forEach(element => {
-                let recordNew:any ={};
+                let recordNew = {};
                 if(role ==="doctor"){
                     recordNew = {
                         name: element?.userId?.first_name ||"" + " "+ (element?.userId?.last_name ||""),
@@ -230,6 +206,8 @@ const UpcomongAppointmentComponent = props => {
                                         setIsRescheduleClicked={setIsRescheduleClicked}
                                         setIsViewClicked={setIsViewClicked}
                                         setIsRejectClicked={setIsRejectClicked}
+                                        setPatientReschedule={setPatientReschedule}
+                                        role={role}
                                     />
                                 ))
                                 }
@@ -303,6 +281,24 @@ const UpcomongAppointmentComponent = props => {
                             // setOpenFlash={setOpenFlash}
                             // setAlertMsg={setAlertMsg}
                             // setSubLabel={setSubLabel}
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={patientReschedule}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={termsAndCondition}>
+                            <PatientReschedule
+                                clickCloseButton={closePatientReschedule}
+                                // setSkip={setSkip}
+                                selectedAppointment={selectedAppointment}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
+                                handleNavigation={handleNavigation}
                             />
                         </Box>
                     </Modal>

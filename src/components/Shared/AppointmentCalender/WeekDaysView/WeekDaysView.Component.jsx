@@ -83,6 +83,7 @@ const weekDays = [0, 1, 2, 3, 4, 5]
 const WeekDaysViewComponent = (props) => {
   const {
     appointmentDetails,
+    type
   } = props;
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
@@ -247,11 +248,19 @@ const WeekDaysViewComponent = (props) => {
     
     const res = await appointmentService.makeAppointment(reqData)
     if (res.status === 200) {
-      dispatch(setFlashMsg({
-        openFlash: true,
-        alertMsg: 'Re-scheduled',
-        subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
-      }))
+      if (type === 'reschedule') {
+        dispatch(setFlashMsg({
+          openFlash: true,
+          alertMsg: 'Well done!',
+          subLabel: 'Your appointment was successfuly re-scheduled, wait 24h for doctor confirmation.'
+        }))
+      } else {
+        dispatch(setFlashMsg({
+          openFlash: true,
+          alertMsg: 'Re-scheduled',
+          subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+        }))
+      }
       history.push('/appointments')
       setClickedConfirm(false)
       setClickedSubmit(true)

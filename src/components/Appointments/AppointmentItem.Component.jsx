@@ -54,12 +54,17 @@ const menuList = [
         ],
     },
     {
-        menu: 'pending_acceptance',
-        options: [
+        menu: 'pending',
+        doctorOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+        patientOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
@@ -93,7 +98,9 @@ const AppointmentItemComponent = props => {
         setSelectedAppointment,
         setIsRescheduleClicked,
         setIsViewClicked,
-        setIsRejectClicked
+        setIsRejectClicked,
+        setPatientReschedule,
+        role
     } = props
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -107,7 +114,14 @@ const AppointmentItemComponent = props => {
         setAnchorEl(event.currentTarget)
         const menus = menuList.filter(m => m.menu === status.toLowerCase())
         console.log('menus', menus)
-        if (menus.length > 0) setMenuOptions(menus[0].options)
+        if (menus.length > 0) {
+            if(status === 'pending') {
+               role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
+            } else {
+                setMenuOptions(menus[0].options)
+            }
+            
+        }
         else setMenuOptions([])
 
         console.log('menus[0].options', menus[0].options)
@@ -133,6 +147,8 @@ const AppointmentItemComponent = props => {
                 break
             case 'setIsRejectClicked':
                 setIsRejectClicked(true)
+            case 'setPatientReschedule':
+                setPatientReschedule(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
@@ -166,16 +182,13 @@ const AppointmentItemComponent = props => {
                 return 'Cancelled'
                 break
             case 'pending':
-                    return 'Pending'
-                    break
+                return 'Pending acceptance'
+                break
             case 'accepted':
-                    return 'Accepted'
-                    break
+                return 'Accepted'
+                break
             case 'declined':
                 return 'Declined'
-                break
-            case 'pending_acceptance':
-                return 'Pending acceptance'
                 break
             case 'requested_to_reschedule':
                 return 'Requested to Re-schedule'
@@ -187,7 +200,7 @@ const AppointmentItemComponent = props => {
 
     const colorcodes = {
         confirmed: '#12B76A',
-        pending_acceptance: '#7A5AF8',
+        pending: '#7A5AF8',
         cancelled: '#757500',
         declined: '#B42318',
         requested_to_reschedule: '#B42318'
@@ -213,7 +226,7 @@ const AppointmentItemComponent = props => {
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
-                                {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
+                                {getValue(value)}
                             </div>
                         </div>
                     </TableCell>
