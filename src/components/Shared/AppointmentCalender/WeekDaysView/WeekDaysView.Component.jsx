@@ -222,6 +222,13 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickConfirmButton = async () => {
+
+    if(role === "patient")
+    {
+      setClickedAppointment(false)
+      setClickedConfirm(true)
+      return false;
+    }
     const reqData = {
       primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
       primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
@@ -236,6 +243,7 @@ const WeekDaysViewComponent = (props) => {
     } else if(role === 'patient') {
       reqData.doctorId = appointmentUserId
     }
+    
     const res = await appointmentService.makeAppointment(reqData)
     if (res.status === 200) {
       dispatch(setFlashMsg({
@@ -258,43 +266,34 @@ const WeekDaysViewComponent = (props) => {
     setClickedConfirm(false)
   }
 
-  // const clickSubmitButton = () => {
-  //   let PrimaryTiming = primaryDate?.Time?.split("-");
-  //   let primaryStart = moment(primaryDate.Day + " " + PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-  //   let primaryEnd = moment(primaryDate.Day + " " + PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-
-  //   let SecondaryTiming = secondaryDate?.Time?.split("-");
-  //   let secondaryStart = moment(secondaryDate.Day + " " + SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-  //   let secondaryEnd = moment(secondaryDate.Day + " " + SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-
-
-  //   let appointmentRequest = {
-
-  //     "primaryStartTime": primaryStart,
-  //     "primaryEndTime": primaryEnd,
-  //     "secondaryStartTime": secondaryStart,
-  //     "secondaryEndTime": secondaryEnd,
-  //     "doctorId": doctorId,
-  //     "appointmentReason": appointmentReason,
-  //     "email": invitedMembers.map(x => x.email),
-  //     "documents": selectedFiles.map(x => x.path)
-  //   }
-  //   console.log("appointmentRequest", appointmentRequest);
-  //   appointmentService.MakeAppointments(appointmentRequest).then(
-  //     res => {
-  //       console.log("makeAppointment", res);
-  //       setClickedConfirm(false)
-  //       setClickedSubmit(true)
-  //     }, error => {
-  //       console.log("Makeappointment", error);
-  //     })
-
-
-
-  // }
+  const clickSubmitButton = () => {
+    const reqData = {
+      primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      appointmentReason: appointmentReason,
+      email: invitedMembers.map(x => x.email),
+      documents: selectedFiles.map(x => x.path)
+    }
+    console.log("appointmentRequest", reqData);
+    appointmentService.makeAppointment(reqData).then(
+      res => {
+        console.log("makeAppointment", res);
+        setClickedConfirm(false)
+        setClickedSubmit(true)
+        
+        
+       
+      }, error => {
+        console.log("Makeappointment", error);
+      })
+    
+}
 
   const clickRequestClose = () => {
     setClickedSubmit(false)
+    history.push('/appointments')
   }
 
   return (
@@ -342,7 +341,7 @@ const WeekDaysViewComponent = (props) => {
         <Box sx={problemAndSymptoms}>
           <ProblemAndSymptomsComponent
             clickBackButton={clickBackButton}
-            // clickSubmitButton={clickSubmitButton}
+            clickSubmitButton={clickSubmitButton}
             invitedMembers={invitedMembers}
             setInvitedMembers={setInvitedMembers}
             appointmentReason={appointmentReason}
