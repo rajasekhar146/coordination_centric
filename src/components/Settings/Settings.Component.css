@@ -293,6 +293,7 @@
 .io_delete {
     position: absolute;
     right: 38px;
+    top: 16px;
 }
 .io_link {
     padding: 6px 10px 6px 10px;
@@ -598,3 +599,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: 20px;
 }
+.close_icon{
+    float: right;
+    position: absolute;
+    right: 0;
+    z-index : 1;
+    cursor: pointer;
+}
+
+.svg_icons {
+    transform: scale(0.8);
+    color: #727374;
+  }
