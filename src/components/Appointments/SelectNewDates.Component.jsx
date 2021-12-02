@@ -84,6 +84,7 @@ const SelectNewDatesComponent = () => {
             <NavMonthYearComponent
             />
             <WeekDaysViewComponent
+                id={appointmentDetails._id}
                 appointmentDetails={appointmentDetails}
             />
             {/* <div className="io__row">
