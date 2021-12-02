@@ -5,24 +5,22 @@ import TextField from '@mui/material/TextField'
 import UploadIcon from '../../assets/icons/upload.png'
 import Dropzone from 'react-dropzone'
 import UploadFile from '../Settings/UploadFile.Component'
+import CloseIcon from '@mui/icons-material/Close';
 
-const ProblemAndSymptomsComponent = props => {
+const ProblemAndSymptomsComponent = (props) => {
   const setInvitedMembers = props.setInvitedMembers;
   const invitedMembers = props.invitedMembers;
   const appointmentReason =props.appointmentReason; 
    const  setAppointmentReason = props.setAppointmentReason;
    const selectedFiles = props.selectedFiles;
    const setSelectedFiles = props.setSelectedFiles;
+   const setappointmentReasonErr = props.setappointmentReasonErr;
+   const appointmentReasonErr = props.appointmentReasonErr;
   // const [invitedMembers, setInvitedMembers] = useState(0);
   const [inputValues, setInputValues] = useState({});
-  const [counter, setCounter] = useState(0);
   const [imgCounter, setImgCounter] = useState(0);
-  const [imgInputValues, setimgInputValues] = useState({});
-
-  
   const [reportsArray, setReportsArray] = useState([]);
   const [showUpload, setshowUpload] = useState(false);
-  const [delImg, setDelImg] = useState(false);
 
 
   const handleAddMembers = () => {
@@ -30,6 +28,7 @@ const ProblemAndSymptomsComponent = props => {
     var members = [...invitedMembers]
     const newMember = {
       email: '',
+      validator : true
     }
     members.push(newMember)
     console.log('members', members)
@@ -37,41 +36,48 @@ const ProblemAndSymptomsComponent = props => {
   }
   const handleDrop = (files) => {
     files.forEach((file, index) => {
-      console.log('index', index)
         selectedFiles.push(file)
         setSelectedFiles([...selectedFiles])
     });
+}
+const handleClose = (e, index) =>{
+  var members = [...invitedMembers]
+  members.splice(index , 1);
+  setInvitedMembers(members)
 }
 
   useEffect(() => {
     var members = {
       email: '',
+      validator: true
     }
     setInvitedMembers([members])
   }, [])
 
-  const handleClick = () => {
-    setCounter(counter + 1);
-    console.log(counter);
-  };
 
   const imgHandleClick = () => {
     setImgCounter(imgCounter + 1);
     setshowUpload(!showUpload)
   };
 
-  const handleOnChange = (e) => {
-    const abc = {};
-    abc[e.target.className] = e.target.value;
-    setInputValues({ ...inputValues, ...abc });
-  };
 
   const updateInviteEmail = (email,index)=>{
+    const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
     let emailArray = [...invitedMembers];
     emailArray[index].email = email;
+    emailArray[index].validator = emailValidation;
     setInvitedMembers(emailArray);
 
   }
+  const appointmentHanlde = (event)=>{
+    if(!event.target.value){
+      setappointmentReasonErr(true) 
+    }else{
+      setappointmentReasonErr(false) 
+      setAppointmentReason(event.target.value)
+    }
+  }
+
   return (
     <div className="pas__main__div">
       <div className="pas__row">
@@ -97,11 +103,17 @@ const ProblemAndSymptomsComponent = props => {
             placeholder="e.g. Feel pain in my chest"
             inputProps={{ className: 'pas__problem__textbox' }}
             defaultValue= {appointmentReason}
-            onChange={(e)=>setAppointmentReason(e.target.value)}
+            onChange={appointmentHanlde}
           />
         </div>
       </div>
-      <div className="pas__row">
+      {
+         appointmentReasonErr && <span className="reason_error">
+           Reason is required
+         </span>
+               }
+     
+      <div className="pas__row mar-top-30">
         <div className="pas__problem__label">Do you want to invite someone to join the appointment?</div>
       </div>
       <div className="pas__row">
@@ -109,20 +121,22 @@ const ProblemAndSymptomsComponent = props => {
       </div>
       <div className="">
       {invitedMembers && invitedMembers.map((c, index) => { return (
-        <div className="mar-bot-10">
-        <TextField margin="normal" key={index} inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{updateInviteEmail(e.target.value,index)}}/>
+        <div className="mar-bot-10 relative">
+          {index > 0 && 
+           <div className="close_icon">
+             <span onClick={ (e)=> handleClose(e,index) }> 
+             <CloseIcon className="svg_icons"/>
+             </span>
+            </div>
+      }
+        <TextField margin="normal" key={index} value={c.email} inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{updateInviteEmail(e.target.value,index)}}/>
+
+        {!c.validator && 
+        <span className="error"> Invalid mail
+          </span>}
+          
         </div>
         )})}
-      {/* {Object.keys(inputValues).map((c) => {
-        return <p>{inputValues[c]}</p>;
-      })}
-      {Array.from(Array(counter)).map((c, index) => {
-        return ( 
-          <div className="mar-bot-10">
-          <TextField margin="normal" onChange={(e)=>{updateInviteEmail(e.target.value,index)}} key={c} inputProps={{ className: 'pas__problem__textbox' }} />
-          </div>
-        );
-      })} */}
        <div className="pas__row">
         <div className="pas__invite__button">
       <Button onClick={handleAddMembers}>+ &nbsp;Invite more people</Button>
@@ -135,11 +149,14 @@ const ProblemAndSymptomsComponent = props => {
       </div>
       
           <div className="od_input_p">
-          {selectedFiles && selectedFiles.map((file) => (
+          {selectedFiles && selectedFiles.map((file , index) => (
               <UploadFile
                   file={file}
                   setReportsArray={setReportsArray}
                   reportsArray={reportsArray}
+                  index = {index}
+                  setSelectedFiles = {setSelectedFiles}
+                  selectedFiles  = {selectedFiles}
               />
           ))
           }

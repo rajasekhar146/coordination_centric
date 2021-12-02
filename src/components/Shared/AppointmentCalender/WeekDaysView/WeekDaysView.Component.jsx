@@ -81,6 +81,7 @@ const WeekDaysViewComponent = (props) => {
 
   const [appointmentReason,setAppointmentReason] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [appointmentReasonErr, setappointmentReasonErr] = useState(false);
 
 
   useEffect(async () => {
@@ -169,13 +170,29 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
+    if(appointmentReason == ''){
+      setappointmentReasonErr(true);
+      return false; 
+    
+    }
+    let result, isEmailError = 0;
+    invitedMembers.map(inputsField => {
+        result = inputsField.validator;
+        if(result == false){
+          isEmailError++;
+        }
+    })
+
+    if(isEmailError > 0 ){
+      return false;
+    }
     let PrimaryTiming = primaryDate?.Time?.split("-");
-    let primaryStart =  moment(primaryDate.Day+" "+ PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let primaryEnd =  moment(primaryDate.Day+" "+ PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryStart =  moment(primaryDate.Day+" "+ PrimaryTiming[0].trim(), ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryEnd =  moment(primaryDate.Day+" "+ PrimaryTiming[1].trim(), ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
     let SecondaryTiming = secondaryDate?.Time?.split("-");
-    let secondaryStart =  moment(secondaryDate.Day+" "+ SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let secondaryEnd =  moment(secondaryDate.Day+" "+ SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryStart =  moment(secondaryDate.Day+" "+ SecondaryTiming[0].trim(), ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryEnd =  moment(secondaryDate.Day+" "+ SecondaryTiming[1].trim(), ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
 
     let appointmentRequest = {
@@ -250,6 +267,8 @@ const WeekDaysViewComponent = (props) => {
           setAppointmentReason = {setAppointmentReason}
           selectedFiles = {selectedFiles}
           setSelectedFiles = {setSelectedFiles}
+          appointmentReasonErr = {appointmentReasonErr}
+          setappointmentReasonErr = {setappointmentReasonErr}
           />
         </Box>
       </Modal>
