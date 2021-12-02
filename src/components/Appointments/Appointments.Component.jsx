@@ -10,6 +10,8 @@ import './Appointment.Component.css'
 import CalenderView from '../../assets/icons/resend_calender.png'
 import GtidView from '../../assets/icons/grid_view.png'
 import Alert from '../Alert/Alert.component'
+import { useSelector, useDispatch } from 'react-redux'
+import { setFlashMsg } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -58,13 +60,15 @@ const TabItem = withStyles((theme) => ({
 
 
 
-const AppointmentsComponent = () => {
+const AppointmentsComponent = (props) => {
+  const dispatch = useDispatch()
+
   const classes = useStyles()
   const [value, setValue] = useState('1');
   const [showGrid, setShowGrid] = useState(true);
-  const [openflash, setOpenFlash] = React.useState(false)
-  const [alertMsg, setAlertMsg] = React.useState('')
-  const [subLebel, setSubLabel] = useState('')
+  const [openflash, setOpenFlash] = React.useState(useSelector(state => state.flashMsgObj.openFlash))
+  const [alertMsg, setAlertMsg] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
+  const [subLebel, setSubLabel] = useState(useSelector(state => state.flashMsgObj.subLabel))
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -72,6 +76,11 @@ const AppointmentsComponent = () => {
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
+    dispatch(setFlashMsg({
+      openFlash: false,
+      alertMsg: '',
+      subLabel: ''
+    }))
   }
 
   return (
@@ -121,6 +130,7 @@ const AppointmentsComponent = () => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          type="upcoming"
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
@@ -129,6 +139,7 @@ const AppointmentsComponent = () => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          type="history"
         />
       </TabPanel>
       <Alert

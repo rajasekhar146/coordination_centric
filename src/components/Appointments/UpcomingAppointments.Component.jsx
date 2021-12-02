@@ -19,7 +19,8 @@ import ScheduleCalendar from '../ScheduleCalendar/ScheduleCalendar.Component';
 import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
-
+import moment from 'moment'
+import { forEach } from 'lodash'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -96,7 +97,9 @@ const UpcomongAppointmentComponent = props => {
         showGrid,
         setOpenFlash,
         setAlertMsg,
-        setSubLabel
+        setSubLabel,
+        type,
+        handleNavigation
     } = props
     const [isConfirmClicked, setIsConfirmClicked] = useState(false)
     const [isRejectClicked, setIsRejectClicked] = useState(false)
@@ -108,7 +111,8 @@ const UpcomongAppointmentComponent = props => {
     const userId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(0)
     const [skip, setSkip] = useState(10)
-
+    
+    const role = get(currentUser, ['data', 'data', 'role'], '')
     const closeConformModel = () => {
         setIsConfirmClicked(false)
     }
@@ -136,10 +140,47 @@ const UpcomongAppointmentComponent = props => {
     ]
 
     const getAppointmentList = async () => {
-        const endDate = new Date()
-        const res = await appointmentService.getAppointmentHistory(userId, limit, skip)
+        let res;
+        let date;
+        if (type === 'upcoming') {
+            date = moment(new Date()).format("YYYY-MM-DD");
+        } else {
+            date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+        }
+        res = await appointmentService.getAppointments(userId, date, type, limit, skip)
         if (res.status === 200) {
-            setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
+            const appointmentsTemp =get(res, ['data', 'data'], []); 
+            let appointmentsArray =[];
+            appointmentsTemp.forEach(element => {
+                let recordNew:any ={};
+                if(role ==="doctor"){
+                    recordNew = {
+                        name: element?.userId?.first_name ||"" + " "+ (element?.userId?.last_name ||""),
+                        profile:element?.userId?.profilePic,
+                        location: 'Online',
+                        date:  element?.startTime ? moment(element?.startTime).format('ddd, Do MMM'):"",
+                        time: (element.startTime ? moment(element.startTime).format('h:mm a'):"")+ " - "+(element.endTime ? moment(element.endTime).format('h:mm a'):''),
+                        status: element.status,
+                        gender: element?.userId?.gender,
+                        _id: element.userId._id
+                    }
+                 
+            } else {
+                recordNew = {
+                    name: element?.doctorId?.first_name||"" + " "+element?.doctorId?.last_name||"",
+                    profile:element?.doctorId?.profilePic,
+                    location: 'Online',
+                    date:  moment(element.startTime).format('ddd, Do MMM'),
+                    time:element.startTime? moment(element.startTime).format('h:mm a'):""+ " - "+element.endTime?moment(element.endTime).format('h:mm a'):"",
+                    status: element.status,
+                    gender: 'male',
+                    _id: element?.doctorId?._id
+                }
+            }
+                appointmentsArray.push(recordNew);
+            });
+            setAppointmentList(appointmentsArray);
+            // setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
 
         }
@@ -169,6 +210,7 @@ const UpcomongAppointmentComponent = props => {
                                                     fontWeight: 'bold',
                                                     fontSize: 14,
                                                     visibility: column.visible ? 'visible' : 'hidden',
+                                                    textTransform:'capitalize'
                                                 }}
                                             >
                                                 {column.label}
@@ -178,7 +220,7 @@ const UpcomongAppointmentComponent = props => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {Appointments.map((row, index) => (
+                                {appointmentList.map((row, index) => (
                                     <AppointmentItem
                                         row={row}
                                         index={index}
@@ -242,6 +284,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                handleNavigation={handleNavigation}
                             />
                         </Box>
                     </Modal>

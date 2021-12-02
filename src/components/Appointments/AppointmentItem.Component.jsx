@@ -7,6 +7,9 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
+import { useDispatch } from 'react-redux'
+import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
+import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +57,7 @@ const menuList = [
         menu: 'pending_acceptance',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -92,7 +95,7 @@ const AppointmentItemComponent = props => {
         setIsViewClicked,
         setIsRejectClicked
     } = props
-
+    const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
     const [menuOptions, setMenuOptions] = React.useState([])
@@ -113,6 +116,7 @@ const AppointmentItemComponent = props => {
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
+        dispatch(setAppointmentDetails(row))
         console.log('orgId', orgId)
         switch (action) {
             case 'setIsConfirmClicked':
@@ -155,14 +159,20 @@ const AppointmentItemComponent = props => {
     const getValue = val => {
         switch (val) {
             case 'confirmed':
-                return 'confirmed'
+                return 'Confirmed'
                 break
 
             case 'cancelled':
-                return 'cancelled'
+                return 'Cancelled'
                 break
+            case 'pending':
+                    return 'Pending'
+                    break
+            case 'accepted':
+                    return 'Accepted'
+                    break
             case 'declined':
-                return 'declined'
+                return 'Declined'
                 break
             case 'pending_acceptance':
                 return 'Pending acceptance'
@@ -215,7 +225,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                <img className="ap_profile" src={value} alt="profile" />
+                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
+                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
                             </div>
                         </div>
                     </TableCell>

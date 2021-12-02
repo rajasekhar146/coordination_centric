@@ -6,10 +6,15 @@ import {
   primaryAppointmentDate,
   secondaryAppointmentDate,
 } from '../../../../../redux/actions/commonActions' //'../../../redux/actions/commonActions'
+import get from 'lodash.get'
 
 const DayViewComponent = props => {
-  const { day, dayDesc, availableTimeSlots } = props.avaliableAppointmentDay
-  var rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
+  const {
+    setAvaliableAppointmentDays,
+    avaliableAppointmentDay
+  } = props
+  const { day, dayDesc, availableTimeSlots = [] } = avaliableAppointmentDay
+  var rweekDaysAvailablities = props.avaliableAppointmentDays
   const [availableTimes, setAvailableTimes] = useState([])
   const primaryDate = useSelector(state => state.primaryAppointmentDate)
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
@@ -17,11 +22,11 @@ const DayViewComponent = props => {
 
   useEffect(() => {
     setAvailableTimes(availableTimeSlots)
-  }, [])
+  }, [availableTimeSlots.length])
 
-  const handleSelectedTime = (newDay, id, availableTimeSlot) => {
+  const handleSelectedTime = (newDay, id, availableTimeSlot, type) => {
     var newWeekDaysAvailablities = []
-    var isUnselected = false
+    let isUnselected
     console.log('availableTimeSlot', availableTimeSlot)
     const selectedDay = rweekDaysAvailablities.filter(ad => ad.day === newDay)
 
@@ -45,23 +50,35 @@ const DayViewComponent = props => {
         else newWeekDaysAvailablities.push(wda)
       })
       setAvailableTimes(newATS)
+      setAvaliableAppointmentDays([...newWeekDaysAvailablities])
     }
 
     var selectedDate = {
       Day: newDay,
-      Time: availableTimeSlot,
+      Time: {
+        startTime: availableTimeSlot.startTime,
+        endTime: availableTimeSlot.endTime
+      }
     }
 
     if (!isUnselected) {
       selectedDate = {
         Day: null,
-        Time: null,
+        Time: {
+          startTime: null,
+          endTime: null
+        }
+
       }
     }
 
     if (primaryDate.Day === null) {
       dispatch(primaryAppointmentDate(selectedDate))
+    } else if (type === 'primary') {
+      dispatch(primaryAppointmentDate(selectedDate))
     } else if (secondaryDate.Day === null) {
+      dispatch(secondaryAppointmentDate(selectedDate))
+    } else if (type === 'secondary') {
       dispatch(secondaryAppointmentDate(selectedDate))
     }
 
@@ -80,38 +97,65 @@ const DayViewComponent = props => {
         {availableTimes &&
           availableTimes.map(ats => (
             <div className="dv__row">
-              {ats.isEnabled && ats.availableTimeSlot === primaryDate.Time && day === primaryDate.Day ? (
+              {get(ats, ['availableTimeSlots', 'startTime'], null) === primaryDate.Time.startTime && day === primaryDate.Day ?
+                <div
+                  className={ats.isSelected ? 'dv__time__text__selected' : 'dv__time__text'}
+                  key={ats.availabilityId}
+                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, 'primary')}
+                >
+                  {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Primary</div> : null}
+                  <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
+                </div> : get(ats, ['availableTimeSlots', 'startTime'], null) === secondaryDate.Time.startTime && day === secondaryDate.Day ?
+                  <div
+                    className="dv__secondary__time__text__selected"
+                    key={ats.availabilityId}
+                    onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, 'secondary')}
+                  >
+                    {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Secondary</div> : null}
+                    <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
+                  </div> : !ats.isEnabled ?  <div className="dv__time__disabled">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
+                    :
+                    <div
+                      className="dv__time__text"
+                      key={ats.availabilityId}
+                      onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, null)}
+                    >
+                      <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
+                    </div>
+              }
+
+              {/* {ats.isEnabled && get(ats, ['availableTimeSlots', 'startTime'], null) === primaryDate.Time.startTime && day === primaryDate.Day ? (
                 <div
                   className="dv__time__text__selected"
                   key={ats.availabilityId}
-                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlot)}
+                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, 'primary')}
                 >
                   {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Primary</div> : null}
-                  <div className="dv__primary__text">{ats.availableTimeSlot}</div>
+                  <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
                 </div>
-              ) : null}
+              ) : null} */}
 
-              {ats.isEnabled && ats.availableTimeSlot === secondaryDate.Time && day === secondaryDate.Day ? (
+              {/* {ats.isEnabled && get(ats, ['availableTimeSlots', 'startTime'], null) === secondaryDate.Time.startTime && day === secondaryDate.Day ? (
                 <div
                   className="dv__secondary__time__text__selected"
                   key={ats.availabilityId}
-                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlot)}
+                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, 'secondary')}
                 >
                   {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Secondary</div> : null}
-                  <div className="dv__primary__text">{ats.availableTimeSlot}</div>
+                  <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
                 </div>
-              ) : null}
-              {ats.isEnabled ? (
+              ) : null} */}
+              {/* {ats.isEnabled ? (
                 <div
                   className="dv__time__text"
                   key={ats.availabilityId}
-                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlot)}
+                  onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, null)}
                 >
                   {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Primary</div> : null}
-                  <div className="dv__primary__text">{ats.availableTimeSlot}</div>
+                  <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
                 </div>
               ) : null}
-              {!ats.isEnabled ? <div className="dv__time__disabled">{ats.availableTimeSlot}</div> : null}
+              {!ats.isEnabled ? <div className="dv__time__disabled">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div> : null} */}
             </div>
           ))}
       </div>

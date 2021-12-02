@@ -7,6 +7,9 @@ import Box from '@mui/material/Box'
 import ConfirmReschedulePopup from '../ModelPopup/ConfirmRescheduleAppointment'
 import NavMonthYearComponent from '../Shared/AppointmentCalender/NavMonthYear/NavMonthYear.Component'
 import WeekDaysViewComponent from '../Shared/AppointmentCalender/WeekDaysView/WeekDaysView.Component'
+import history from '../../history'
+import { useDispatch, useSelector } from 'react-redux'
+
 
 const confirmAppointment = {
     position: 'absolute',
@@ -38,6 +41,8 @@ const confirmAppointment = {
 
 
 const SelectNewDatesComponent = () => {
+    const appointmentDetails = useSelector(state => state.appointmentDetails)
+
     const [isOpenConfirmPopup, setIsOpenConfirmPopup] = useState(false)
     const [selectedDates, setSelectedDates] = useState([])
 
@@ -55,13 +60,14 @@ const SelectNewDatesComponent = () => {
                         color="error"
                         className="backBtn"
                         onClick={() => {
-                            // history.push('/organizations')
+                            history.push('/appointments')
                         }}
                     >
 
                         <ArrowBackIosNewIcon style={{ fontSize: '10', marginRight: '4' }} /> Back
                     </Button>
-                    <h5 className="orgTitle">Mr. John Doe</h5>
+                    <h5 className="orgTitle">{`${appointmentDetails.gender === 'male' ? 'Mr.' : 'Ms.'} ${appointmentDetails.name}`}
+                    </h5>
 
                 </div>
 
@@ -78,9 +84,10 @@ const SelectNewDatesComponent = () => {
             <NavMonthYearComponent
             />
             <WeekDaysViewComponent
-            setSelectedDates={setSelectedDates}
+                id={appointmentDetails._id}
+                appointmentDetails={appointmentDetails}
             />
-            <div className="io__row">
+            {/* <div className="io__row">
                 <div className="io_next_btn">
                     <div className="io__approve">
                         <Button
@@ -93,7 +100,7 @@ const SelectNewDatesComponent = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Modal
                 open={isOpenConfirmPopup}
                 // onClose={setIsAcceptClicked}

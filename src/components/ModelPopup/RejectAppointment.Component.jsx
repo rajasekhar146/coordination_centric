@@ -50,7 +50,7 @@ const RejectAppointmentComponent = props => {
 
 
     const handleReject = async () => {
-        const res = await appointmentService.cancelAppointment()
+        const res = await appointmentService.rejectAppointment(selectedAppointment._id)
         if (res.status === 200) {
             setOpenFlash(true);
             setAlertMsg('Declined');
