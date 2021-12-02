@@ -46,8 +46,10 @@ const roles = [
 ]
 
 const PatientConfimationAppointment = props => {
-  console.log("doctorId",props)
-  const doctorName = props.name;
+  const {
+    appointmentDetails,
+    role
+  } = props
   const { classes } = props
   const primaryDate = useSelector(state => state.primaryAppointmentDate)
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
@@ -88,8 +90,8 @@ const PatientConfimationAppointment = props => {
 
       <div className="pca__row">
         <div className="pca__doctor__column pca__card">
-          <label className="pca__label">Doctor</label>
-          <label className="pca__value__text">{doctorName}</label>
+          <label className="pca__label">{role === 'doctor' ? 'Patient' : 'Doctor'}</label>
+          <label className="pca__value__text">{appointmentDetails.name}</label>
         </div>
         <div className="pca__primary__column pca__card">
           <label className="pca__label">Primary - Date and Time</label>

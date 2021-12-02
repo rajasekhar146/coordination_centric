@@ -89,8 +89,8 @@ const WeekDaysViewComponent = (props) => {
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const userId = get(currentUser, ['data', 'data', '_id'], '')
 
-  const doctorId = props.id;
-  const doctorName = props.name;
+  const appointmentUserId = props.id;
+  // const doctorName = props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
@@ -222,29 +222,35 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickConfirmButton = async () => {
-    if (role === 'doctor') {
-      const reqData = {
-        primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
-        primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
-        secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
-        secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
-      }
-      const res = await appointmentService.rescheduleAppointmentbyDoctor(reqData)
-      if (res.status === 200) {
-        dispatch(setFlashMsg({
-          openFlash: true,
-          alertMsg: 'Re-scheduled',
-          subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
-        }))
-        history.push('/appointments')
-      } else {
-        // setAlertMsg('Error');
-        // setSubLabel(``)
-      }
-      setClickedAppointment(false)
-    } else {
-      setClickedConfirm(true)
+    const reqData = {
+      primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
+      appointmentReason: appointmentReason,
+      email: invitedMembers.map(x => x.email),
+      documents: selectedFiles.map(x => x.path)
     }
+    if (role === 'doctor') {
+      reqData.patientId = appointmentUserId
+    } else if(role === 'patient') {
+      reqData.doctorId = appointmentUserId
+    }
+    const res = await appointmentService.makeAppointment(reqData)
+    if (res.status === 200) {
+      dispatch(setFlashMsg({
+        openFlash: true,
+        alertMsg: 'Re-scheduled',
+        subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+      }))
+      history.push('/appointments')
+      setClickedConfirm(false)
+      setClickedSubmit(true)
+    } else {
+      console.log("Makeappointment", res.error);
+    }
+    setClickedAppointment(false)
+
   }
 
   const clickBackButton = () => {
@@ -252,40 +258,40 @@ const WeekDaysViewComponent = (props) => {
     setClickedConfirm(false)
   }
 
-  const clickSubmitButton = () => {
-    let PrimaryTiming = primaryDate?.Time?.split("-");
-    let primaryStart = moment(primaryDate.Day + " " + PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let primaryEnd = moment(primaryDate.Day + " " + PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+  // const clickSubmitButton = () => {
+  //   let PrimaryTiming = primaryDate?.Time?.split("-");
+  //   let primaryStart = moment(primaryDate.Day + " " + PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+  //   let primaryEnd = moment(primaryDate.Day + " " + PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
-    let SecondaryTiming = secondaryDate?.Time?.split("-");
-    let secondaryStart = moment(secondaryDate.Day + " " + SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let secondaryEnd = moment(secondaryDate.Day + " " + SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-
-
-    let appointmentRequest = {
-
-      "primaryStartTime": primaryStart,
-      "primaryEndTime": primaryEnd,
-      "secondaryStartTime": secondaryStart,
-      "secondaryEndTime": secondaryEnd,
-      "doctorId": doctorId,
-      "appointmentReason": appointmentReason,
-      "email": invitedMembers.map(x => x.email),
-      "documents": selectedFiles.map(x => x.path)
-    }
-    console.log("appointmentRequest", appointmentRequest);
-    appointmentService.MakeAppointments(appointmentRequest).then(
-      res => {
-        console.log("makeAppointment", res);
-        setClickedConfirm(false)
-        setClickedSubmit(true)
-      }, error => {
-        console.log("Makeappointment", error);
-      })
+  //   let SecondaryTiming = secondaryDate?.Time?.split("-");
+  //   let secondaryStart = moment(secondaryDate.Day + " " + SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+  //   let secondaryEnd = moment(secondaryDate.Day + " " + SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
 
+  //   let appointmentRequest = {
 
-  }
+  //     "primaryStartTime": primaryStart,
+  //     "primaryEndTime": primaryEnd,
+  //     "secondaryStartTime": secondaryStart,
+  //     "secondaryEndTime": secondaryEnd,
+  //     "doctorId": doctorId,
+  //     "appointmentReason": appointmentReason,
+  //     "email": invitedMembers.map(x => x.email),
+  //     "documents": selectedFiles.map(x => x.path)
+  //   }
+  //   console.log("appointmentRequest", appointmentRequest);
+  //   appointmentService.MakeAppointments(appointmentRequest).then(
+  //     res => {
+  //       console.log("makeAppointment", res);
+  //       setClickedConfirm(false)
+  //       setClickedSubmit(true)
+  //     }, error => {
+  //       console.log("Makeappointment", error);
+  //     })
+
+
+
+  // }
 
   const clickRequestClose = () => {
     setClickedSubmit(false)
@@ -324,8 +330,8 @@ const WeekDaysViewComponent = (props) => {
         <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
           <PatientConfimationAppointmentComponent
             appointmentDetails={appointmentDetails}
-            id={doctorId}
-            name={doctorName}
+            id={appointmentUserId}
+            role={role}
             clickCloseButton={clickCloseButton}
             clickConfirmButton={clickConfirmButton}
 
@@ -334,8 +340,9 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
-            clickSubmitButton={clickSubmitButton}
+          <ProblemAndSymptomsComponent
+            clickBackButton={clickBackButton}
+            // clickSubmitButton={clickSubmitButton}
             invitedMembers={invitedMembers}
             setInvitedMembers={setInvitedMembers}
             appointmentReason={appointmentReason}

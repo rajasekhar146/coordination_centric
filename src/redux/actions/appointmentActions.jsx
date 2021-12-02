@@ -7,3 +7,10 @@ export const setAppointmentDetails = data => {
         payload: data,
     }
 }
+
+export const setDoctorDetials = data => {
+    return {
+        type: ActionTypes.SET_DOCTOR_DETAILS,
+        payload: data,
+    }
+  }

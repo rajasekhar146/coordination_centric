@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Doctor from '../../../assets/images/doctor1.png'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -12,6 +12,7 @@ import './DoctorList.Component.css'
 import Button from '@mui/material/Button'
 import history from '../../../history'
 import ViewImageComponent from '../../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
+import DoctorItem from './DoctorItem.Component'
 
 const columns = [
   { id: 'id', label: 'ID', minWidth: '0px', align: 'left', visible: false },
@@ -73,7 +74,7 @@ const columns = [
 
 
 const DoctorListComponent = (props) => {
-  console.log("proops",props);
+  console.log("proops", props);
   const [doctorList, setDoctorList] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -86,21 +87,24 @@ const DoctorListComponent = (props) => {
   };
 
 
-  
+
   // const doctorList =props.doctorsList;
 
-  useEffect(()=>{
+  useEffect(() => {
     setDoctorList(props.doctorsList);
-  },[props.doctorsList])
+  }, [props.doctorsList])
 
-  useEffect(()=>{
+  useEffect(() => {
     let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     setDoctorList(result);
-  },[page,rowsPerPage])
+  }, [page, rowsPerPage])
+
+ 
+
   return (
     <div>
       <div>
-  
+
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <TableContainer id="scrollableDiv">
             <Table stickyHeader aria-label="sticky table">
@@ -126,38 +130,26 @@ const DoctorListComponent = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {doctorList &&
-                  doctorList.map(row => {
-                   return( <TableRow key={row} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="center">
-                        {/* <img src={Doctor} alt={row.speciality} className="dl__pic" /> */}
-                        <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" align="left">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="left">{row.speciality}</TableCell>
-                      <TableCell align="left">{row.location}</TableCell>
-                      {/* <TableCell align="left">{row.availability}</TableCell> */}
-                      <TableCell align="center">
-                        <Button className="dl__button" onClick={() => history.push({pathname:'/marketplace/make-a-appointments',state:{id:row.id,name:row.name,availability:row.availabilityArray}})}>
-                          Book
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                )} )}
+                {
+                  doctorList &&
+                  doctorList.map(row => (
+                    <DoctorItem
+                    row={row}
+                     />
+                  ))
+                }
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-  component="div"
-  rowsPerPageOptions={[5, 10, 25]}
-  count={props.doctorsList.length}
-  page={page}
-  onPageChange={handleChangePage}
-  rowsPerPage={rowsPerPage}
-  onRowsPerPageChange={handleChangeRowsPerPage}
-/>
+            component="div"
+            rowsPerPageOptions={[5, 10, 25]}
+            count={props.doctorsList.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Paper>
       </div>
     </div>
