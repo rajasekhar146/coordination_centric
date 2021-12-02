@@ -139,9 +139,13 @@ const UpcomongAppointmentComponent = props => {
 
     const getAppointmentList = async () => {
         let res;
-        const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
-        const startDate = moment(new Date()).format("YYYY-MM-DD");
-        res = await appointmentService.getAppointments(userId, endDate, type, limit, skip)
+        let date;
+        if (type === 'upcoming') {
+            date = moment(new Date()).format("YYYY-MM-DD");
+        } else {
+            date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+        }
+        res = await appointmentService.getAppointments(userId, date, type, limit, skip)
         if (res.status === 200) {
             setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {

@@ -42,10 +42,13 @@ export const calendarAppointmentDate = appointmentDay => {
   }
 }
 
-export const appointmentAvailableTimeSlots = availableTimeSlots => {
+export const appointmentAvailableTimeSlots = (availableTimeSlots, selectedDate) => {
   return {
     type: ActionTypes.APPOINTMENT_AVAILABLE_TIME_SLOTS,
-    payload: availableTimeSlots,
+    payload: {
+      availableTimeSlots,
+      selectedDate
+    }
   }
 }
 

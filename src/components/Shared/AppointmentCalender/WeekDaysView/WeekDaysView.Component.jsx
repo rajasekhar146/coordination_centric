@@ -14,7 +14,11 @@ import ProblemAndSymptomsComponent from '../../../ModelPopup/ProblemAndSymptoms.
 import AppointmentApproveRequest from '../../../ModelPopup/AppointmentApproveRequest'
 import get from 'lodash.get'
 import { authenticationService, appointmentService } from '../../../../services'
-import { setFlashMsg } from '../../../../redux/actions/commonActions'
+import {
+  setFlashMsg,
+  primaryAppointmentDate,
+  secondaryAppointmentDate,
+} from '../../../../redux/actions/commonActions'
 import { useHistory } from 'react-router-dom'
 
 const confirmAppointment = {
@@ -72,6 +76,8 @@ const availablities = [
   { availabilityId: 15, availableTimeSlot: '09:00pm - 10:00pm', isSelected: false, isEnabled: true },
 ]
 
+
+
 const weekDays = [0, 1, 2, 3, 4, 5]
 
 const WeekDaysViewComponent = (props) => {
@@ -79,7 +85,6 @@ const WeekDaysViewComponent = (props) => {
     appointmentDetails,
   } = props;
   const history = useHistory()
-
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -107,16 +112,50 @@ const WeekDaysViewComponent = (props) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
 
+  const getAwailablities = async (selectedDate) => {
+    const startDate = moment(new Date()).subtract(30, 'days').format("YYYY-MM-DD");
+    const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+
+    const res = await appointmentService.getAppointmentsForAwailability('619c928e26e7fb15ff163f61', startDate, endDate)
+    if (res.status === 200) {
+      console.log(res)
+      dispatch(appointmentAvailableTimeSlots(get(res, ['data', 'data'], null), selectedDate))
+    } else {
+
+    }
+  }
+
   useEffect(async () => {
     const selectedYear = selectedCalender.calenderDate.Year
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
     //const day = selectedYear + '-' + selectedMonth + '-' + selectedDay
     const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
-    await getWeekDays(selectedDate)
+    // await getWeekDays(selectedDate)
+    getAwailablities(selectedDate)
     console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
     console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
   }, [selectedCalender])
+
+  useEffect(() => {
+    setAvaliableAppointmentDays([...rweekDaysAvailablities])
+    return () => {
+      dispatch(primaryAppointmentDate({
+        Day: null,
+        Time: {
+          startTime: null,
+          endTime: null
+        }
+      }))
+      dispatch(secondaryAppointmentDate({
+        Day: null,
+        Time: {
+          startTime: null,
+          endTime: null
+        }
+      }))
+    }
+  }, [rweekDaysAvailablities.length])
 
   const getSelectedDate = (year, month, day) => {
     const selectedDay = year + '-' + month + '-' + day
@@ -136,7 +175,7 @@ const WeekDaysViewComponent = (props) => {
     })
     setAvaliableAppointmentDays(weekDaysAvailablities)
     console.log('weekDaysAvailablities', weekDaysAvailablities)
-    dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
+    // dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
   }
 
   const moveBack = async () => {
@@ -185,10 +224,10 @@ const WeekDaysViewComponent = (props) => {
   const clickConfirmButton = async () => {
     if (role === 'doctor') {
       const reqData = {
-        primaryStartTime: '2018-08-20 06:56:23',
-        primaryEndTime: '2018-08-20 06:56:23',
-        secondaryStartTime: '2018-08-20 06:56:23',
-        secondaryEndTime: '2018-08-20 06:56:23'
+        primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
+        primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
+        secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
+        secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
       }
       const res = await appointmentService.rescheduleAppointmentbyDoctor(reqData)
       if (res.status === 200) {
@@ -260,7 +299,11 @@ const WeekDaysViewComponent = (props) => {
         {avaliableAppointmentDays &&
           avaliableAppointmentDays.map(aas => (
             <div className="wdv__column">
-              <DayViewComponent avaliableAppointmentDay={aas} />
+              <DayViewComponent
+                avaliableAppointmentDay={aas}
+                avaliableAppointmentDays={avaliableAppointmentDays}
+                setAvaliableAppointmentDays={setAvaliableAppointmentDays}
+              />
             </div>
           ))}
         <img src={RoundedNextArrow} alt="next" style={{ cursor: 'pointer' }} onClick={() => moveNext()} />

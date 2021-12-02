@@ -12,10 +12,9 @@ export const appointmentService = {
     askPatientReschedule,
     getDoctorsList,
     getAppointments,
-    getAppointmentHistory,
+    getAppointmentsForAwailability,
     getAllSpecializations,
     getHighlightedDoctorsList,
-    rescheduleAppointmentbyDoctor,
     makeAppointment
 }
 
@@ -154,9 +153,7 @@ function getAllSpecializations() {
     )
 }
 
-
-
-function makeAppointment(data) {
+function makeAppointment(appointmentRequest) {
     let axiosConfig = {
         headers: authHeader(),
     }
@@ -170,16 +167,19 @@ function makeAppointment(data) {
 }
 
 
-function getAppointmentHistory(userId, endDate, limit) {
+
+function getAppointmentsForAwailability(userId, startDate, endDate) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?endDate=${endDate}}`, axiosConfig)
+            .get(`${apiURL}/appointment/getAppointmentHistory/${userId}?startDate=${startDate}&endDate=${endDate}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
             })
     )
 }
+
+

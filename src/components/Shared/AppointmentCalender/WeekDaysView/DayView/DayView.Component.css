@@ -71,7 +71,6 @@
     line-height: 20px;
 
     /* or 143% */
-    display: table;
     align-items: center;
     text-align: center;
     letter-spacing: 0.1px;
@@ -143,9 +142,7 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 20px;
-
     /* or 143% */
-    display: table;
     align-items: center;
     text-align: center;
     letter-spacing: 0.1px;

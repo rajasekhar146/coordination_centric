@@ -61,9 +61,6 @@ const TabItem = withStyles((theme) => ({
 
 
 const AppointmentsComponent = (props) => {
-  const {
-    handleNavigation
-  } = props;
   const dispatch = useDispatch()
 
   const classes = useStyles()
@@ -134,7 +131,6 @@ const AppointmentsComponent = (props) => {
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
           type="upcoming"
-          handleNavigation={handleNavigation}
         />
       </TabPanel>
       <TabPanel value={value} index={2}>

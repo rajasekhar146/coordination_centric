@@ -55,9 +55,20 @@ const PatientConfimationAppointment = props => {
   const [activeTab, setActiveTab] = useState('primary')
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const res = commonService.getAllRoles()
-  }, [])
+  // useEffect(() => {
+  //   const res = commonService.getAllRoles()
+  // }, [])
+
+  // const onSubmit = () => {
+  //   const res = await appointmentService.makeAppointment(requestData)
+  //   if (res.status === 200) {
+  //     // (get(res, ['data', 'data', '0', 'totalData'], []))
+  //     setIsSubmit(true)
+  //     setOpenInvitePatientSuccess(true)
+  //   } else {
+
+  //   }
+  // }
 
 
   return (
@@ -84,13 +95,13 @@ const PatientConfimationAppointment = props => {
           <label className="pca__label">Primary - Date and Time</label>
           <label className="pca__value__text">
             {' '}
-            <label className="pca__value__text">{`${primaryDate.Day} ${primaryDate.Time}`}</label>
+            <label className="pca__value__text">{`${primaryDate.Day} - ${primaryDate.Time.startTime}`}</label>
           </label>
         </div>
         {secondaryDate.Day &&
           <div className="pca__primary__column pca__card">
             <label className="pca__label">Secondary - Date and Time</label>
-            <label className="pca__value__text">{`${secondaryDate.Day} ${secondaryDate.Time}`}</label>
+            <label className="pca__value__text">{`${secondaryDate.Day} - ${secondaryDate.Time.startTime}`}</label>
           </div>
         }
 
