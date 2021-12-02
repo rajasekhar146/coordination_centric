@@ -7,13 +7,19 @@ import Dropzone from 'react-dropzone'
 import UploadFile from '../Settings/UploadFile.Component'
 
 const ProblemAndSymptomsComponent = props => {
-  const [invitedMembers, setInvitedMembers] = useState(0);
+  const setInvitedMembers = props.setInvitedMembers;
+  const invitedMembers = props.invitedMembers;
+  const appointmentReason =props.appointmentReason; 
+   const  setAppointmentReason = props.setAppointmentReason;
+   const selectedFiles = props.selectedFiles;
+   const setSelectedFiles = props.setSelectedFiles;
+  // const [invitedMembers, setInvitedMembers] = useState(0);
   const [inputValues, setInputValues] = useState({});
   const [counter, setCounter] = useState(0);
   const [imgCounter, setImgCounter] = useState(0);
   const [imgInputValues, setimgInputValues] = useState({});
 
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  
   const [reportsArray, setReportsArray] = useState([]);
   const [showUpload, setshowUpload] = useState(false);
   const [delImg, setDelImg] = useState(false);
@@ -21,7 +27,7 @@ const ProblemAndSymptomsComponent = props => {
 
   const handleAddMembers = () => {
     console.log('Clicked')
-    var members = invitedMembers
+    var members = [...invitedMembers]
     const newMember = {
       email: '',
     }
@@ -59,6 +65,13 @@ const ProblemAndSymptomsComponent = props => {
     abc[e.target.className] = e.target.value;
     setInputValues({ ...inputValues, ...abc });
   };
+
+  const updateInviteEmail = (email,index)=>{
+    let emailArray = [...invitedMembers];
+    emailArray[index].email = email;
+    setInvitedMembers(emailArray);
+
+  }
   return (
     <div className="pas__main__div">
       <div className="pas__row">
@@ -83,6 +96,8 @@ const ProblemAndSymptomsComponent = props => {
             margin="normal"
             placeholder="e.g. Feel pain in my chest"
             inputProps={{ className: 'pas__problem__textbox' }}
+            defaultValue= {appointmentReason}
+            onChange={(e)=>setAppointmentReason(e.target.value)}
           />
         </div>
       </div>
@@ -90,25 +105,27 @@ const ProblemAndSymptomsComponent = props => {
         <div className="pas__problem__label">Do you want to invite someone to join the appointment?</div>
       </div>
       <div className="pas__row">
-        {Array.from(Array(invitedMembers)).map((c, index) => { return (
-
-            <TextField margin="normal" key={c.email} inputProps={{ className: 'pas__problem__textbox' }} />
-        )})}
+       
       </div>
       <div className="">
-      {Object.keys(inputValues).map((c) => {
+      {invitedMembers && invitedMembers.map((c, index) => { return (
+        <div className="mar-bot-10">
+        <TextField margin="normal" key={index} inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{updateInviteEmail(e.target.value,index)}}/>
+        </div>
+        )})}
+      {/* {Object.keys(inputValues).map((c) => {
         return <p>{inputValues[c]}</p>;
       })}
       {Array.from(Array(counter)).map((c, index) => {
         return ( 
           <div className="mar-bot-10">
-          <TextField margin="normal" onChange={handleOnChange} key={c} inputProps={{ className: 'pas__problem__textbox' }} />
+          <TextField margin="normal" onChange={(e)=>{updateInviteEmail(e.target.value,index)}} key={c} inputProps={{ className: 'pas__problem__textbox' }} />
           </div>
         );
-      })}
+      })} */}
        <div className="pas__row">
         <div className="pas__invite__button">
-      <Button onClick={handleClick}>+ &nbsp;Invite more people</Button>
+      <Button onClick={handleAddMembers}>+ &nbsp;Invite more people</Button>
       </div>
       </div>
 
@@ -116,8 +133,9 @@ const ProblemAndSymptomsComponent = props => {
    <div className="pas__row">
         <div className="pas__problem__label">Supporting Documents</div>
       </div>
+      
           <div className="od_input_p">
-          {selectedFiles.map((file) => (
+          {selectedFiles && selectedFiles.map((file) => (
               <UploadFile
                   file={file}
                   setReportsArray={setReportsArray}

@@ -75,6 +75,13 @@ const WeekDaysViewComponent = (props) => {
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const [IsClickedConfirm, setClickedConfirm] = useState(false)
   const [IsClickedSubmit, setClickedSubmit] = useState(false)
+  const [invitedMembers, setInvitedMembers] = useState([{
+    email: '',
+  }]);
+
+  const [appointmentReason,setAppointmentReason] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
 
   useEffect(async () => {
     const selectedYear = selectedCalender.calenderDate.Year
@@ -178,23 +185,22 @@ const WeekDaysViewComponent = (props) => {
         "secondaryStartTime":secondaryStart,
         "secondaryEndTime":secondaryEnd,
         "doctorId":doctorId,
-        "appointmentReason":"health issue",
-        "email":[
-           "test@yopmail.com",
-           "test@yopmail.com"
-        ],
-        "documents":[]}
+        "appointmentReason":appointmentReason,
+        "email":invitedMembers.map(x=>x.email),
+        "documents":selectedFiles.map(x=>x.path)
+      }
     console.log("appointmentRequest",appointmentRequest);       
     appointmentService.MakeAppointments(appointmentRequest).then(
       res => {
         console.log("makeAppointment",res);
+        setClickedConfirm(false)
+        setClickedSubmit(true)
       },error=>{
         console.log("Makeappointment",error);
       })
     
-    setClickedConfirm(false)
-
-    setClickedSubmit(true)
+  
+    
   }
 
   const clickRequestClose = () => {
@@ -236,7 +242,15 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} clickSubmitButton={clickSubmitButton} />
+          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} 
+          clickSubmitButton={clickSubmitButton} 
+          invitedMembers={invitedMembers}
+          setInvitedMembers = {setInvitedMembers}
+          appointmentReason = {appointmentReason}
+          setAppointmentReason = {setAppointmentReason}
+          selectedFiles = {selectedFiles}
+          setSelectedFiles = {setSelectedFiles}
+          />
         </Box>
       </Modal>
 
