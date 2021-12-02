@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import headerImage from '../../assets/images/header_image.png'
 import './NavBar.Component.css'
 import EventNoteIcon from '@mui/icons-material/EventNote'
@@ -24,6 +24,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import ProfileImage from '../../assets/icons/default_profile_image.png'
 import history from '../../history'
 import { authenticationService } from '../../services'
+import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 
 const profileMenus = [
   { label: 'Profile', icon: ProfileImage },
@@ -73,6 +74,7 @@ const NavBarComponent = () => {
   const [name, setName] = React.useState('')
   const [role, setRole] = React.useState()
   const [userId, setUserId] = React.useState('')
+  const [profilePic,setProfilePic] = React.useState("");
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -108,6 +110,7 @@ const NavBarComponent = () => {
     }
     setName(fullName)
     setRole(roleName)
+    setProfilePic(data.profilePic);
 
   }, [])
 
@@ -142,7 +145,8 @@ const NavBarComponent = () => {
           >
             <div className="nb__profile__dropdown">
               <div>
-                <img src={ProfileImage} alt="Profile" className="nb__profile__image" />
+                {/* <img src={ProfileImage} alt="Profile" className="nb__profile__image" /> */}
+                <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} />
               </div>
               <div className="nb__profile__content">
                 <div className="nb__profile__name">{name}</div>

@@ -73,6 +73,8 @@
 
 .nb__profile__image {
     width: 48px !important;
+    height: 48px;
+    border-radius: 50%;
 }
 
 .nb__profile__dropdown > div {

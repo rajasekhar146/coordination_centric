@@ -1,5 +1,6 @@
 .dl__pic {
-    width: 50% !important;
+    width: 70px !important;
+    height: 70px;
     border-radius: 50% !important;
 }
 

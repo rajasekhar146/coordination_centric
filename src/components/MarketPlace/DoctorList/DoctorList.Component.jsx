@@ -91,7 +91,8 @@ const DoctorListComponent = (props) => {
   // const doctorList =props.doctorsList;
 
   useEffect(() => {
-    setDoctorList(props.doctorsList);
+    let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    setDoctorList(result);
   }, [props.doctorsList])
 
   useEffect(() => {

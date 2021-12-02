@@ -26,17 +26,22 @@ console.log("ViewImageComponent",props);
     }
     console.log('image >> urlData', urlData)
     const response = await commonService.getProfile(urlData).catch(error => {
-      console.log(error)
+      setPicUrl(null);
+      console.log("wqeqweqweqe",error)
     })
     console.log('image >> response', response)
     if (response && response.data.status === 200) {
       setPicUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
+    } else {
+      console.log("wqeqweqweqe");
+      setPicUrl(null);
     }
   }
 
   return (
     <div>
-      {picUrl && <img  className={imageClass} src={picUrl ? `data:image/png;base64,${picUrl}`:null} alt="profile"  />}
+      {picUrl ? <img  className={imageClass} src={picUrl ? `data:image/png;base64,${picUrl}`:require('../../../../assets/icons/default_profile_image.png').default} alt="profile"  />:
+       <img  className={imageClass} src={require('../../../../assets/icons/default_profile_image.png').default} alt="profile"  />}
     </div>
   )
 }
