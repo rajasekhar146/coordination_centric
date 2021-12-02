@@ -19,7 +19,7 @@ import ScheduleCalendar from '../ScheduleCalendar/ScheduleCalendar.Component';
 import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
-
+import moment from 'moment'
 
 const confirmAppointment = {
     position: 'absolute',
@@ -96,7 +96,9 @@ const UpcomongAppointmentComponent = props => {
         showGrid,
         setOpenFlash,
         setAlertMsg,
-        setSubLabel
+        setSubLabel,
+        type,
+        handleNavigation
     } = props
     const [isConfirmClicked, setIsConfirmClicked] = useState(false)
     const [isRejectClicked, setIsRejectClicked] = useState(false)
@@ -136,8 +138,14 @@ const UpcomongAppointmentComponent = props => {
     ]
 
     const getAppointmentList = async () => {
-        const endDate = new Date()
-        const res = await appointmentService.getAppointmentHistory(userId, limit, skip)
+        let res;
+        let date;
+        if (type === 'upcoming') {
+            date = moment(new Date()).format("YYYY-MM-DD");
+        } else {
+            date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+        }
+        res = await appointmentService.getAppointments(userId, date, type, limit, skip)
         if (res.status === 200) {
             setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
         } else {
@@ -242,6 +250,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                handleNavigation={handleNavigation}
                             />
                         </Box>
                     </Modal>

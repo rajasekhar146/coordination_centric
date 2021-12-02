@@ -12,7 +12,14 @@ import Box from '@mui/material/Box'
 import PatientConfimationAppointmentComponent from '../../../ModelPopup/PatientConfimationAppointment.Component'
 import ProblemAndSymptomsComponent from '../../../ModelPopup/ProblemAndSymptoms.Component'
 import AppointmentApproveRequest from '../../../ModelPopup/AppointmentApproveRequest'
-import { appointmentService } from '../../../../services'
+import get from 'lodash.get'
+import { authenticationService, appointmentService } from '../../../../services'
+import {
+  setFlashMsg,
+  primaryAppointmentDate,
+  secondaryAppointmentDate,
+} from '../../../../redux/actions/commonActions'
+import { useHistory } from 'react-router-dom'
 
 const confirmAppointment = {
   position: 'absolute',
@@ -20,6 +27,18 @@ const confirmAppointment = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+const confirmPopupWithoutSecondary = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -57,11 +76,21 @@ const availablities = [
   { availabilityId: 15, availableTimeSlot: '09:00pm - 10:00pm', isSelected: false, isEnabled: true },
 ]
 
+
+
 const weekDays = [0, 1, 2, 3, 4, 5]
 
 const WeekDaysViewComponent = (props) => {
+  const {
+    appointmentDetails,
+  } = props;
+  const history = useHistory()
+  const currentUser = authenticationService.currentUserValue
+  const role = get(currentUser, ['data', 'data', 'role'], '')
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
+
   const doctorId = props.id;
-  const doctorName =props.name;
+  const doctorName = props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
@@ -79,9 +108,22 @@ const WeekDaysViewComponent = (props) => {
     email: '',
   }]);
 
-  const [appointmentReason,setAppointmentReason] = useState("");
+  const [appointmentReason, setAppointmentReason] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
 
+
+  const getAwailablities = async (selectedDate) => {
+    const startDate = moment(new Date()).subtract(30, 'days').format("YYYY-MM-DD");
+    const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+
+    const res = await appointmentService.getAppointmentsForAwailability('619c928e26e7fb15ff163f61', startDate, endDate)
+    if (res.status === 200) {
+      console.log(res)
+      dispatch(appointmentAvailableTimeSlots(get(res, ['data', 'data'], null), selectedDate))
+    } else {
+
+    }
+  }
 
   useEffect(async () => {
     const selectedYear = selectedCalender.calenderDate.Year
@@ -89,10 +131,31 @@ const WeekDaysViewComponent = (props) => {
     const selectedDay = selectedCalender.calenderDate.Day
     //const day = selectedYear + '-' + selectedMonth + '-' + selectedDay
     const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
-    await getWeekDays(selectedDate)
+    // await getWeekDays(selectedDate)
+    getAwailablities(selectedDate)
     console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
     console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
   }, [selectedCalender])
+
+  useEffect(() => {
+    setAvaliableAppointmentDays([...rweekDaysAvailablities])
+    return () => {
+      dispatch(primaryAppointmentDate({
+        Day: null,
+        Time: {
+          startTime: null,
+          endTime: null
+        }
+      }))
+      dispatch(secondaryAppointmentDate({
+        Day: null,
+        Time: {
+          startTime: null,
+          endTime: null
+        }
+      }))
+    }
+  }, [rweekDaysAvailablities.length])
 
   const getSelectedDate = (year, month, day) => {
     const selectedDay = year + '-' + month + '-' + day
@@ -112,7 +175,7 @@ const WeekDaysViewComponent = (props) => {
     })
     setAvaliableAppointmentDays(weekDaysAvailablities)
     console.log('weekDaysAvailablities', weekDaysAvailablities)
-    dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
+    // dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
   }
 
   const moveBack = async () => {
@@ -158,9 +221,30 @@ const WeekDaysViewComponent = (props) => {
     setClickedAppointment(false)
   }
 
-  const clickConfirmButton = () => {
-    setClickedAppointment(false)
-    setClickedConfirm(true)
+  const clickConfirmButton = async () => {
+    if (role === 'doctor') {
+      const reqData = {
+        primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
+        primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
+        secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD/MM/YYYY HH:mm'),
+        secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD/MM/YYYY HH:mm'),
+      }
+      const res = await appointmentService.rescheduleAppointmentbyDoctor(reqData)
+      if (res.status === 200) {
+        dispatch(setFlashMsg({
+          openFlash: true,
+          alertMsg: 'Re-scheduled',
+          subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+        }))
+        history.push('/appointments')
+      } else {
+        // setAlertMsg('Error');
+        // setSubLabel(``)
+      }
+      setClickedAppointment(false)
+    } else {
+      setClickedConfirm(true)
+    }
   }
 
   const clickBackButton = () => {
@@ -170,37 +254,37 @@ const WeekDaysViewComponent = (props) => {
 
   const clickSubmitButton = () => {
     let PrimaryTiming = primaryDate?.Time?.split("-");
-    let primaryStart =  moment(primaryDate.Day+" "+ PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let primaryEnd =  moment(primaryDate.Day+" "+ PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryStart = moment(primaryDate.Day + " " + PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryEnd = moment(primaryDate.Day + " " + PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
     let SecondaryTiming = secondaryDate?.Time?.split("-");
-    let secondaryStart =  moment(secondaryDate.Day+" "+ SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
-    let secondaryEnd =  moment(secondaryDate.Day+" "+ SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryStart = moment(secondaryDate.Day + " " + SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryEnd = moment(secondaryDate.Day + " " + SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
 
 
     let appointmentRequest = {
 
-        "primaryStartTime":primaryStart,
-        "primaryEndTime":primaryEnd,
-        "secondaryStartTime":secondaryStart,
-        "secondaryEndTime":secondaryEnd,
-        "doctorId":doctorId,
-        "appointmentReason":appointmentReason,
-        "email":invitedMembers.map(x=>x.email),
-        "documents":selectedFiles.map(x=>x.path)
-      }
-    console.log("appointmentRequest",appointmentRequest);       
+      "primaryStartTime": primaryStart,
+      "primaryEndTime": primaryEnd,
+      "secondaryStartTime": secondaryStart,
+      "secondaryEndTime": secondaryEnd,
+      "doctorId": doctorId,
+      "appointmentReason": appointmentReason,
+      "email": invitedMembers.map(x => x.email),
+      "documents": selectedFiles.map(x => x.path)
+    }
+    console.log("appointmentRequest", appointmentRequest);
     appointmentService.MakeAppointments(appointmentRequest).then(
       res => {
-        console.log("makeAppointment",res);
+        console.log("makeAppointment", res);
         setClickedConfirm(false)
         setClickedSubmit(true)
-      },error=>{
-        console.log("Makeappointment",error);
+      }, error => {
+        console.log("Makeappointment", error);
       })
-    
-  
-    
+
+
+
   }
 
   const clickRequestClose = () => {
@@ -215,7 +299,11 @@ const WeekDaysViewComponent = (props) => {
         {avaliableAppointmentDays &&
           avaliableAppointmentDays.map(aas => (
             <div className="wdv__column">
-              <DayViewComponent avaliableAppointmentDay={aas} />
+              <DayViewComponent
+                avaliableAppointmentDay={aas}
+                avaliableAppointmentDays={avaliableAppointmentDays}
+                setAvaliableAppointmentDays={setAvaliableAppointmentDays}
+              />
             </div>
           ))}
         <img src={RoundedNextArrow} alt="next" style={{ cursor: 'pointer' }} onClick={() => moveNext()} />
@@ -233,23 +321,27 @@ const WeekDaysViewComponent = (props) => {
       </div>
 
       <Modal open={IsClickedAppointment} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={confirmAppointment}>
-          <PatientConfimationAppointmentComponent id={doctorId} name={doctorName}
+        <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
+          <PatientConfimationAppointmentComponent
+            appointmentDetails={appointmentDetails}
+            id={doctorId}
+            name={doctorName}
             clickCloseButton={clickCloseButton}
             clickConfirmButton={clickConfirmButton}
+
           />
         </Box>
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} 
-          clickSubmitButton={clickSubmitButton} 
-          invitedMembers={invitedMembers}
-          setInvitedMembers = {setInvitedMembers}
-          appointmentReason = {appointmentReason}
-          setAppointmentReason = {setAppointmentReason}
-          selectedFiles = {selectedFiles}
-          setSelectedFiles = {setSelectedFiles}
+          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
+            clickSubmitButton={clickSubmitButton}
+            invitedMembers={invitedMembers}
+            setInvitedMembers={setInvitedMembers}
+            appointmentReason={appointmentReason}
+            setAppointmentReason={setAppointmentReason}
+            selectedFiles={selectedFiles}
+            setSelectedFiles={setSelectedFiles}
           />
         </Box>
       </Modal>

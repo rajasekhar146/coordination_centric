@@ -2,12 +2,6 @@ import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import NameIcon from '../../assets/icons/organization_name.png'
-import EmailIcon from '../../assets/icons/organization_email.png'
-import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
-import { useForm } from 'react-hook-form'
 import ResendCalender from '../../assets/icons/resend_calender.png'
 import { memberService, commonService } from '../../services'
 import get from 'lodash.get'
@@ -16,8 +10,7 @@ import FormControl from '@material-ui/core/FormControl'
 import CircleIcon from '@mui/icons-material/Circle'
 import { useSelector, useDispatch } from 'react-redux'
 import ProblemAndSymptomsComponent from './ProblemAndSymptoms.Component'
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
+import { appointmentService } from '../../services'
 
 const styles = theme => ({
   root: {
@@ -58,26 +51,25 @@ const PatientConfimationAppointment = props => {
   const { classes } = props
   const primaryDate = useSelector(state => state.primaryAppointmentDate)
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
-
   const { selectedAppointment, clickCloseButton, clickConfirmButton } = props
   const [activeTab, setActiveTab] = useState('primary')
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const res = commonService.getAllRoles()
-  }, [])
+  // useEffect(() => {
+  //   const res = commonService.getAllRoles()
+  // }, [])
 
-  // const onSubmit = (requestData) => {
+  // const onSubmit = () => {
+  //   const res = await appointmentService.makeAppointment(requestData)
+  //   if (res.status === 200) {
+  //     // (get(res, ['data', 'data', '0', 'totalData'], []))
   //     setIsSubmit(true)
-  //     requestData.refUserId = admin._id
-  //     const res = memberService.inviteMember(requestData)
-  //     res.then((data) => {
-  //         setOpenInviteMember(false)
-  //         setOpenInviteMemberSuccess(true)
-  //         getOrgDetails()
-  //     }).catch((err) => {
-  //         setIsExist(get(err.response, ['body', 'message'], null))
-  //     })
+  //     setOpenInvitePatientSuccess(true)
+  //   } else {
+
+  //   }
   // }
+
 
   return (
     <div className="pca__main__div">
@@ -103,13 +95,16 @@ const PatientConfimationAppointment = props => {
           <label className="pca__label">Primary - Date and Time</label>
           <label className="pca__value__text">
             {' '}
-            <label className="pca__value__text">{`${primaryDate.Day} ${primaryDate.Time}`}</label>
+            <label className="pca__value__text">{`${primaryDate.Day} - ${primaryDate.Time.startTime}`}</label>
           </label>
         </div>
-        <div className="pca__primary__column pca__card">
-          <label className="pca__label">Secondary - Date and Time</label>
-          <label className="pca__value__text">{`${secondaryDate.Day} ${secondaryDate.Time}`}</label>
-        </div>
+        {secondaryDate.Day &&
+          <div className="pca__primary__column pca__card">
+            <label className="pca__label">Secondary - Date and Time</label>
+            <label className="pca__value__text">{`${secondaryDate.Day} - ${secondaryDate.Time.startTime}`}</label>
+          </div>
+        }
+
       </div>
       <div className="pca__row">
         <div className="pca__help__text">
