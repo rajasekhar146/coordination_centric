@@ -56,6 +56,7 @@ import Marketplace from './pages/marketplace'
 import MakeAppointments from './pages/make-a-appointments'
 import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
 import VideoCallComponent from './components/VideoCall.Component/VideoCall.Component';
+import RescheduleAppointment from './components/MarketPlace/RescheduleAppointment'
 class Routes extends Component {
   render() {
     return (
@@ -120,6 +121,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
           <MasterLayoutWithLefuMenuComponent path="/marketplace/make-a-appointments" component={MakeAppointments} />
           <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Marketplace} />
+          <MasterLayoutWithLefuMenuComponent path="/reschedule_appointment" component={RescheduleAppointment} />
           <MasterLayoutWithLefuMenuComponent path="/selectdates" component={SelectNewDatesComponent} />
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
           <MemberLayoutComponent

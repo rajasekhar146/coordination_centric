@@ -39,9 +39,9 @@ const secondaryAppointment = {
 }
 
 const flagMsg = {
-  openFlash: true,
-  alertMsg: 'Re-scheduled',
-  subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
+  openFlash: false,
+  alertMsg: '',
+  subLabel: ''
 }
 
 const weekDays = [0, 1, 2, 3, 4, 5]
@@ -72,9 +72,12 @@ const createTimeSlot = (item, appointments) => {
   let secondHalffStartTime = moment(new Date(item.second_half_starting_time), "HH:mm")
   let secondHalfEndTime = moment(new Date(item.second_half_ending_time), "HH:mm");
   let availabilityId = 1
+  console.log('date1', moment(new Date(startTime), "HH:mm").format("HH:mm"))
+  console.log('date1', moment(new Date(), "HH:mm").format("HH:mm"))
+
   while (startTime < endTime) {
     const disableIndex = appointments.findIndex(i => {
-      return moment(new Date(i.startTime), "HH:mm").format("HH:mm") ===  moment(new Date(item.first_half_starting_time), "HH:mm").format("HH:mm")
+      return moment(new Date(i.startTime), "HH:mm").format("HH:mm") === moment(new Date(item.first_half_starting_time), "HH:mm").format("HH:mm")
 
     })
     //Push times
@@ -120,7 +123,7 @@ const getAvailabilites = (data, day, appointments) => {
   if (filteredArray.length) {
     availablities = createTimeSlot(get(filteredArray, ['0'], {}), appointments)
   }
-  
+
   return availablities;
 }
 
