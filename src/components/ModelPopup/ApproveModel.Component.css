@@ -468,7 +468,7 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
-
+    margin: 10px 0;
     /* identical to box height, or 143% */
 
     /* Primary/Default */
@@ -517,4 +517,17 @@
     border-radius: 8px !important;
     width: 100% !important;
     color: #fff !important;
+}
+
+.mar-bot-10{
+    margin-top: 10px;
+}
+.od_input_p{
+    width: 98% !important;
+}
+.od_dropzone_prof{
+    height : 125px !important;
+}
+.pas__problem__label{
+    margin-bottom: 10px;
 }

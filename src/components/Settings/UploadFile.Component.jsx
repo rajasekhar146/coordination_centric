@@ -4,6 +4,7 @@ import UploadFileIcon from '../../assets/icons/uploadfile.png'
 import LinearProgress from '@mui/material/LinearProgress';
 import UploadSuccess from '../../assets/icons/upload_success.png'
 import DeleteIcon from '../../assets/icons/delete_icon.png'
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -60,6 +61,13 @@ const UploadFile = (props) => {
     return (
         <div className="od_dropzone_progress mb_25">
             <div className="">
+                {/* <span>
+                <div className="" onClick={()=>{
+                    delImg = true;
+                }}>
+                <CloseIcon/>
+            </div>
+                    </span> */}
                 <span className="io_delete">
                     {progress === 100
                         ? <img className="upload_icon" src={UploadSuccess} alt="upload" />
@@ -73,13 +81,14 @@ const UploadFile = (props) => {
                 <div className="io_filesize">
                     <label >{fileSize}</label>
                 </div>
-                <div className="io_progressbar">
-                    <LinearProgress variant="determinate" value={progress} />
-
-                </div>
-                <label className="io_p_value">{progress}%</label>
+                {progress < 100 &&
+                <><div className="io_progressbar">
+                        <LinearProgress variant="determinate" value={progress} />
+                    </div><label className="io_p_value">{progress}%</label></>
+            }
 
             </div>
+
         </div>
     );
 }

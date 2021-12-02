@@ -17,7 +17,6 @@ import { authenticationService, appointmentService } from '../../../../services'
 import { setFlashMsg } from '../../../../redux/actions/commonActions'
 import { useHistory } from 'react-router-dom'
 
-
 const confirmAppointment = {
   position: 'absolute',
   top: '50%',
@@ -85,6 +84,8 @@ const WeekDaysViewComponent = (props) => {
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const userId = get(currentUser, ['data', 'data', '_id'], '')
 
+  const doctorId = props.id;
+  const doctorName = props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
@@ -98,6 +99,13 @@ const WeekDaysViewComponent = (props) => {
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const [IsClickedConfirm, setClickedConfirm] = useState(false)
   const [IsClickedSubmit, setClickedSubmit] = useState(false)
+  const [invitedMembers, setInvitedMembers] = useState([{
+    email: '',
+  }]);
+
+  const [appointmentReason, setAppointmentReason] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
 
   useEffect(async () => {
     const selectedYear = selectedCalender.calenderDate.Year
@@ -206,8 +214,38 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
-    setClickedConfirm(false)
-    setClickedSubmit(true)
+    let PrimaryTiming = primaryDate?.Time?.split("-");
+    let primaryStart = moment(primaryDate.Day + " " + PrimaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let primaryEnd = moment(primaryDate.Day + " " + PrimaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+
+    let SecondaryTiming = secondaryDate?.Time?.split("-");
+    let secondaryStart = moment(secondaryDate.Day + " " + SecondaryTiming[0], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+    let secondaryEnd = moment(secondaryDate.Day + " " + SecondaryTiming[1], ["YYYY-MM-DD h:mm a"]).format("YYYY-MM-DD HH:mm:ss");
+
+
+    let appointmentRequest = {
+
+      "primaryStartTime": primaryStart,
+      "primaryEndTime": primaryEnd,
+      "secondaryStartTime": secondaryStart,
+      "secondaryEndTime": secondaryEnd,
+      "doctorId": doctorId,
+      "appointmentReason": appointmentReason,
+      "email": invitedMembers.map(x => x.email),
+      "documents": selectedFiles.map(x => x.path)
+    }
+    console.log("appointmentRequest", appointmentRequest);
+    appointmentService.MakeAppointments(appointmentRequest).then(
+      res => {
+        console.log("makeAppointment", res);
+        setClickedConfirm(false)
+        setClickedSubmit(true)
+      }, error => {
+        console.log("Makeappointment", error);
+      })
+
+
+
   }
 
   const clickRequestClose = () => {
@@ -243,6 +281,8 @@ const WeekDaysViewComponent = (props) => {
         <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
           <PatientConfimationAppointmentComponent
             appointmentDetails={appointmentDetails}
+            id={doctorId}
+            name={doctorName}
             clickCloseButton={clickCloseButton}
             clickConfirmButton={clickConfirmButton}
 
@@ -251,7 +291,15 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} clickSubmitButton={clickSubmitButton} />
+          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
+            clickSubmitButton={clickSubmitButton}
+            invitedMembers={invitedMembers}
+            setInvitedMembers={setInvitedMembers}
+            appointmentReason={appointmentReason}
+            setAppointmentReason={setAppointmentReason}
+            selectedFiles={selectedFiles}
+            setSelectedFiles={setSelectedFiles}
+          />
         </Box>
       </Modal>
 

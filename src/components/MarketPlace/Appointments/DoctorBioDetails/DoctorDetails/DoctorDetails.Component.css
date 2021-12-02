@@ -17,7 +17,8 @@
 }
 
 .db__pic {
-    width: 300px;
+    width: 250px;
+    height: 300px;
 }
 
 .db__doctor__name {
@@ -46,6 +47,8 @@
     
     /* Primary/Default */
     color: #E42346;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
 
 .db__description {
