@@ -150,7 +150,7 @@ const DoctorsearchComponent = props => {
                 <Select
                   labelId="mutiple-select-label"
                   multiple
-                  value={selected}
+                  value={selected.length>0?selected:["Speciality"]}
                   onChange={handleChange}
                   renderValue={selected => selected.join(', ')}
                   MenuProps={MenuProps}
@@ -188,7 +188,7 @@ const DoctorsearchComponent = props => {
                 <Select 
                   labelId="mutiple-select-label"
                   multiple
-                  value={[props.searchState,props.searchCity,props.searchZipcode]}
+                  value={(props.searchState||props.searchCity||props.searchZipcode) ?[props.searchState,props.searchCity,props.searchZipcode]:["Locations"]}
                   renderValue={selected =>selected.filter(x=>x).join(', ')}
                   // onChange={handleChange}
                   MenuProps={MenuProps}
