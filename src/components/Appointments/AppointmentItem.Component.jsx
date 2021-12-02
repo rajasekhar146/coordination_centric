@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { useDispatch } from 'react-redux'
 import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
+import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 
 
 const useStyles = makeStyles(theme => ({
@@ -158,14 +159,20 @@ const AppointmentItemComponent = props => {
     const getValue = val => {
         switch (val) {
             case 'confirmed':
-                return 'confirmed'
+                return 'Confirmed'
                 break
 
             case 'cancelled':
-                return 'cancelled'
+                return 'Cancelled'
                 break
+            case 'pending':
+                    return 'Pending'
+                    break
+            case 'accepted':
+                    return 'Accepted'
+                    break
             case 'declined':
-                return 'declined'
+                return 'Declined'
                 break
             case 'pending_acceptance':
                 return 'Pending acceptance'
@@ -218,7 +225,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                <img className="ap_profile" src={value} alt="profile" />
+                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
+                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
                             </div>
                         </div>
                     </TableCell>
