@@ -7,6 +7,7 @@ import {
   secondaryAppointmentDate,
 } from '../../../../../redux/actions/commonActions' //'../../../redux/actions/commonActions'
 import get from 'lodash.get'
+import moment from 'moment'
 
 const DayViewComponent = props => {
   const {
@@ -84,7 +85,7 @@ const DayViewComponent = props => {
 
     //if(dispatch(secondaryAppointmentDate(selectedDate))
 
-    dispatch(appointmentAvailableTimeSlots(newWeekDaysAvailablities))
+    dispatch(appointmentAvailableTimeSlots(newWeekDaysAvailablities, null, true))
   }
 
   return (
@@ -99,11 +100,11 @@ const DayViewComponent = props => {
             <div className="dv__row">
               {get(ats, ['availableTimeSlots', 'startTime'], null) === primaryDate.Time.startTime && day === primaryDate.Day ?
                 <div
-                  className={ats.isSelected ? 'dv__time__text__selected' : 'dv__time__text'}
+                  className={ats.isSelected || primaryDate.Time.startTime && day === primaryDate.Day ? 'dv__time__text__selected' : 'dv__time__text'}
                   key={ats.availabilityId}
                   onClick={() => handleSelectedTime(day, ats.availabilityId, ats.availableTimeSlots, 'primary')}
                 >
-                  {ats.isSelected ? <div className="dv__primary__text dv__selected__primary">Primary</div> : null}
+                  {ats.isSelected || primaryDate.Time.startTime && day === primaryDate.Day ? <div className="dv__primary__text dv__selected__primary">Primary</div> : null}
                   <div className="dv__primary__text">{`${ats.availableTimeSlots.startTime} - ${ats.availableTimeSlots.endTime}`}</div>
                 </div> : get(ats, ['availableTimeSlots', 'startTime'], null) === secondaryDate.Time.startTime && day === secondaryDate.Day ?
                   <div
