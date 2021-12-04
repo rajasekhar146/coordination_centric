@@ -19,6 +19,7 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import { commonService } from '../../../services'
 import { setCountries } from '../../../redux/actions/commonActions'
+import get from 'lodash.get'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const AcceptanceCriteriaComponent = props => {
@@ -47,8 +48,10 @@ const AcceptanceCriteriaComponent = props => {
     const response = await commonService.getStates(selectedCountryCode).catch(error => {
       console.log(error)
     })
-
-    setStates(response.data.data.data)
+    const data = get(response, ['data', 'data', 'data'], null)
+    setStates(data)
+    if (data.length > 0) setValue('state', data[0].statecode)
+    // setValue('state', data[0].statecode)
   }
   const onSubmit = data => {
     const admin = {
@@ -58,8 +61,8 @@ const AcceptanceCriteriaComponent = props => {
     }
     console.log('form data', data)
     SigninStore.set({ organisationName: data.facilityName })
-
-    data.planType = planType == 'P' ? 'premium' : 'free'
+    
+    // data.planType = plan == 'P' ? 'premium' : 'free'
 
     data.admin = [admin]
 
@@ -69,6 +72,15 @@ const AcceptanceCriteriaComponent = props => {
 
     if (invitedBy != '0') data.invited_by = invitedBy
 
+    var uFacility = JSON.parse(localStorage.getItem('facility'))
+
+    if(uFacility.planType === 'free') data.planType = 'free'
+    else {
+      data.planType = uFacility.planType
+      data.subscription_price= uFacility.subscription_price
+      data.subscription_price_id= uFacility.subscription_price_id
+    }
+    console.log('uFacility >> AC page', data)
     localStorage.setItem('facility', JSON.stringify(data))
 
     dispatch(newOrganization(data))
@@ -245,7 +257,7 @@ const AcceptanceCriteriaComponent = props => {
                               inputProps={{
                                 maxLength: 15,
                               }}
-                              InputProps={{ className: 'ac__text__box' }}                             
+                              InputProps={{ className: 'ac__text__box' }}
                             />
                             {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
                           </div>
@@ -358,7 +370,7 @@ const AcceptanceCriteriaComponent = props => {
                               Country <span className="ac__required">*</span>
                             </div>
                             <select
-                              {...register('country')}
+                              {...register('country', { required: 'Country is required' })}
                               className="ac__dropdown"
                               onChange={e => fetchStates(e.target.value)}
                             >
@@ -369,6 +381,7 @@ const AcceptanceCriteriaComponent = props => {
                                   </option>
                                 ))}
                             </select>
+                            {errors.country && <p className="ac__required">{errors.country.message}</p>}
                           </div>
                         </div>
 
@@ -377,7 +390,7 @@ const AcceptanceCriteriaComponent = props => {
                             <div className="ac__label">
                               State <span className="ac__required">*</span>
                             </div>
-                            <select {...register('state')} className="ac__dropdown">
+                            <select {...register('state', { required: 'State is required' })} className="ac__dropdown">
                               {states &&
                                 states.map(c => (
                                   <option value={c.statecode} key={c.statecode} className="ac__dropdown">
@@ -385,6 +398,7 @@ const AcceptanceCriteriaComponent = props => {
                                   </option>
                                 ))}
                             </select>
+                            {errors.state && <p className="ac__required">{errors.state.message}</p>}
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">

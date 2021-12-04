@@ -65,7 +65,8 @@ const BankInformationComponent = () => {
   const [cardCVV, setCardCVV] = useState(null)
   const [country, setCountry] = useState(null)
   const [countries, setAllCountries] = useState([])
-
+  const [facility, setFacility] = useState({})
+  const [message, setMessage] = useState(null)
   var sigPad = {}
 
   const {
@@ -79,6 +80,7 @@ const BankInformationComponent = () => {
   const [activeStep, setActiveStep] = React.useState(2)
 
   const onSubmit = data => {
+    setMessage(null)
     console.log('card data', data)
     getCardDetail(data)
     //history.push('/terms-condition')
@@ -102,6 +104,7 @@ const BankInformationComponent = () => {
   }
 
   const handleCardSection = () => {
+    setMessage(null)
     clearFormData()
     setCardSection(!cardSection)
   }
@@ -120,7 +123,7 @@ const BankInformationComponent = () => {
   const getCardDetail = async data => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'))
     const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
-
+    var updatedFacility = facility
     if (cardSection) {
       const ncardExpiry = data.expiry.split('/')
       const cardDetail = {
@@ -130,28 +133,50 @@ const BankInformationComponent = () => {
       await paymentService
         .generateToken(cardDetail)
         .then(response => {
-          const customerId = get(response, ['data', 'data', 'card', 'id'], '')
-          const tokenId = get(response, ['data', 'data', 'id'], '')
-          const saveDetail = {
-            email: currentUserEmail,
-            token: tokenId,
-            type: 'card',
-            customerId: '',
-            default: false,
+          console.log('response >> card >> ', response)
+          if (response.status === 200) {
+            const customerId = get(response, ['data', 'data', 'card', 'id'], '')
+            const tokenId = get(response, ['data', 'data', 'id'], '')
+            const saveDetail = {
+              email: currentUserEmail,
+              token: tokenId,
+              type: 'card',
+              customerId: '',
+              default: false,
+            }
+            console.log('saveDetail', saveDetail)
+            paymentService
+              .savePaymentMethod(saveDetail)
+              .then(response => {
+                console.log('savePaymentMethod >> response >> ', response)
+                const sCustomerId = get(response, ['data', 'data', 'stripe_customer_id'], '')
+                const sPaymentId = get(response, ['data', 'data', 'stripe_payment_id'], '')
+                updatedFacility.stripePayment = [
+                  {
+                    stripePaymentMethodID: sPaymentId,
+                    default: true,
+                    type: 'card',
+                  },
+                ]
+                updatedFacility.stripeCustomerID = sCustomerId
+                localStorage.setItem('facility', JSON.stringify(updatedFacility))
+                console.log('success', response)
+                console.log('success >> ', sCustomerId, sPaymentId)
+                history.push('/terms-condition')
+              })
+              .catch(err => {
+                console.log('Save Card Detail >> Err Response', err)
+              })
+          } else {
+            const msg = get(response, ['data', 'message'], '')
+            console.log('msg', msg)
+            setMessage(msg)
           }
-          console.log(saveDetail)
-          paymentService
-            .savePaymentMethod(saveDetail)
-            .then(response => {
-              console.log('success', response)
-              history.push('/terms-condition')
-            })
-            .catch(err => {
-              console.log('Save Card Detail >> Err Response', err)
-            })
         })
         .catch(err => {
           console.log('Card Detail >> Err Response', err)
+          const msg = get(err, ['data', 'message'], '')
+          setMessage(msg)
         })
     } else {
       const bankDetail = {
@@ -171,28 +196,47 @@ const BankInformationComponent = () => {
         .generateBankToken(bankDetail)
         .then(response => {
           console.log('Bank Token', response)
-          const customerId = get(response, ['data', 'data', 'bank_account', 'id'], '')
-          const tokenId = get(response, ['data', 'data', 'id'], '')
-          const saveDetail = {
-            email: currentUserEmail,
-            token: tokenId,
-            type: 'account',
-            customerId: '',
-            default: false,
-          }
+          if (response.status === 200) {
+            const customerId = get(response, ['data', 'data', 'bank_account', 'id'], '')
+            const tokenId = get(response, ['data', 'data', 'id'], '')
+            const saveDetail = {
+              email: currentUserEmail,
+              token: tokenId,
+              type: 'account',
+              customerId: '',
+              default: false,
+            }
 
-          paymentService
-            .savePaymentMethod(saveDetail)
-            .then(response => {
-              console.log('success', response)
-              history.push('/terms-condition')
-            })
-            .catch(err => {
-              console.log('Save Card Detail >> Err Response', err)
-            })
+            paymentService
+              .savePaymentMethod(saveDetail)
+              .then(response => {
+                const sCustomerId = get(response, ['data', 'data', 'stripe_customer_id'], '')
+                const sPaymentId = get(response, ['data', 'data', 'stripe_payment_id'], '')
+                updatedFacility.stripePayment = [
+                  {
+                    stripePaymentMethodID: sPaymentId,
+                    default: true,
+                    type: 'account',
+                  },
+                ]
+                updatedFacility.stripeCustomerID = sCustomerId
+                localStorage.setItem('facility', JSON.stringify(updatedFacility))
+                console.log('success', response)
+                console.log('success >> ', sCustomerId, sPaymentId)
+                history.push('/terms-condition')
+              })
+              .catch(err => {
+                console.log('Save Card Detail >> Err Response', err)
+              })
+          } else {
+            const msg = get(response, ['data', 'message'], '')
+            setMessage(msg)
+          }
         })
         .catch(err => {
           console.log('Card Detail >> Err Response', err)
+          const msg = get(err, ['data', 'message'], '')
+          setMessage(msg)
         })
     }
 
@@ -218,6 +262,9 @@ const BankInformationComponent = () => {
   // }
   useEffect(async () => {
     await fetchCountries()
+    var updateFacility = JSON.parse(localStorage.getItem('facility'))
+    console.log('Bank >> updateFacility', updateFacility)
+    setFacility(updateFacility)
     //loadStripe.setLoadParameters({advancedFraudSignals: false});
     //createToken()
     // const LoadExternalScript = () => {
@@ -231,7 +278,7 @@ const BankInformationComponent = () => {
     //   externalScript.src = `https://js.stripe.com/v3/`;
     // };
     // LoadExternalScript();
-  })
+  }, [])
 
   return (
     <div className="ob__main__section">
@@ -258,14 +305,14 @@ const BankInformationComponent = () => {
                 <div className="ac__title__text">Banking Information</div>
                 <div className="ac__subtitle__text">Please provide us your prefered payment method.</div>
                 <div>
-                  <div className="ac__form">
-                    <div className="ac__header__text">Organization Banking Info</div>
-                    <div id="my-node">
-                      <div className="bi__content__section">
-                        <div className="bi__left__section"></div>
-                        <div className="bi__content__center">
-                          {cardSection ? (
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="ac__form">
+                      <div className="ac__header__text">Organization Banking Info</div>
+                      <div id="my-node">
+                        <div className="bi__content__section">
+                          <div className="bi__left__section"></div>
+                          <div className="bi__content__center">
+                            {cardSection ? (
                               <div id="div_cc">
                                 <div className="ac__row">
                                   <div className="ac__label">Name on card</div>
@@ -367,27 +414,18 @@ const BankInformationComponent = () => {
                                   <div className="ac__label">Country or Region</div>
                                 </div>
                                 <div className="ac__row">
-                                <select
-                                {...register('country')}
-                                className="bi__dropdown"
-                              >
-                                {countries &&
-                                  countries.map(c => (
-                                    <option value={c.code} key={c.code} className="bi__dropdown">
-                                      {c.name}
-                                    </option>
-                                  ))}
-                              </select>
+                                  <select {...register('country')} className="bi__dropdown">
+                                    {countries &&
+                                      countries.map(c => (
+                                        <option value={c.code} key={c.code} className="bi__dropdown">
+                                          {c.name}
+                                        </option>
+                                      ))}
+                                  </select>
                                 </div>
                                 {errors.country && <p className="ac__required ml_15">{errors.country.message}</p>}
                               </div>
-                              <Button type="submit" id="continue" className="ac__next__btn continue_creditcard_btn">
-                                Pay & Continue
-                                <ArrowForwardIosRoundedIcon />
-                              </Button>
-                            </form>
-                          ) : (
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            ) : (
                               <div id="div_dc">
                                 <div className="ac__row">
                                   <div className="ac__label">
@@ -452,64 +490,64 @@ const BankInformationComponent = () => {
                                   />
                                   {errors.name && <p className="ac__required ml_15">{errors.name.message}</p>}
                                 </div>
-                                <Button type="submit" id="continue" className="ac__next__btn continue_btn">
+                                {/*} <Button type="submit" id="continue" className="ac__next__btn continue_btn">
                                   Pay & Continue
                                   <ArrowForwardIosRoundedIcon />
+                                  </Button> */}
+                              </div>
+                            )}
+
+                            <div className="ac__row">
+                              <div className="bi__or__pay__text">
+                                {' '}
+                                <Button onClick={handleCardSection} color="inherit">
+                                  Or pay with {cardSection ? 'Direct' : 'Credit'} card
                                 </Button>
                               </div>
-                            </form>
-                          )}
-
-                          <div className="ac__row">
-                            <div className="bi__or__pay__text">
-                              {' '}
-                              <Button onClick={handleCardSection} color="inherit">
-                                Or pay with {cardSection ? 'Direct' : 'Credit'} card
-                              </Button>
+                            </div>
+                            <div className="ac__gap__bottom__div"></div>
+                            <div className="ac__row">
+                              <FormGroup>
+                                <div className="ac__column">
+                                  <FormControlLabel
+                                    className="bi__checkbox__text"
+                                    control={<Checkbox defaultChecked />}
+                                    label="Auto Renew Subscription?"
+                                  />
+                                </div>
+                                <div className="ac__column">
+                                  <FormControlLabel
+                                    className="bi__checkbox__text"
+                                    control={<Checkbox defaultChecked />}
+                                    label="I have read and agree with the Subscription Aggrement"
+                                  />
+                                </div>
+                              </FormGroup>
                             </div>
                           </div>
-                          <div className="ac__gap__bottom__div"></div>
-                          <div className="ac__row">
-                            <FormGroup>
-                              <div className="ac__column">
-                                <FormControlLabel
-                                  className="bi__checkbox__text"
-                                  control={<Checkbox defaultChecked />}
-                                  label="Auto Renew Subscription?"
-                                />
-                              </div>
-                              <div className="ac__column">
-                                <FormControlLabel
-                                  className="bi__checkbox__text"
-                                  control={<Checkbox defaultChecked />}
-                                  label="I have read and agree with the Subscription Aggrement"
-                                />
-                              </div>
-                            </FormGroup>
-                          </div>
+                          <div className="bi__left__section"></div>
                         </div>
-                        <div className="bi__left__section"></div>
-                      </div>
-                    </div>
-
-                    <div className="ac__gap__div"></div>
-
-                    <div className="ac__row">
-                      <div className="ac__column ac__left__action">
-                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                          Back
-                        </Button>
                       </div>
 
-                      {/* <div className="ac__column ac__right__action">
-                        <Button type="submit" for="continue" className="ac__next__btn">
-                          Pay & Continue
-                          <ArrowForwardIosRoundedIcon />
-                        </Button>
-                      </div> */}
-                    </div>
-                  </div>
+                      <div className="ac__gap__div"></div>
 
+                      <div className="ac__row">
+                        <div className="ac__column ac__left__action">
+                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                            Back
+                          </Button>
+                        </div>
+                        {message && message.length > 0 ? <div className="bi__error">{message}</div> : null}
+
+                        <div className="ac__column ac__right__action">
+                          <Button type="submit" for="continue" className="ac__next__btn">
+                            Pay & Continue
+                            <ArrowForwardIosRoundedIcon />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                   <div className="ac__gap__bottom__div"></div>
                 </div>
               </div>

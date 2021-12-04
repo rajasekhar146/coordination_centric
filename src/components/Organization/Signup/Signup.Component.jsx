@@ -6,40 +6,79 @@ import tickPremiumIcon from '../../../assets/icons/tick__premium__icon.png'
 import history from '../../../history'
 import { useParams } from 'react-router-dom'
 import { organizationService } from '../../../services'
+import get from 'lodash.get'
 
 const SignupComponent = () => {
   const [selectedPlan, setSelectedPlan] = useState('M')
   const { referredby } = useParams()
   const { invitetoken } = useParams()
   const { invitedBy } = useParams()
+  const [plans, setPlans] = useState([])
+  const [planPrice, setPlanPrice] = useState(null)
 
   const handleFreePlan = planType => {
     localStorage.setItem('plan_type', planType)
+    const priceDet = plans.filter(p => p.interval === selectedPlan)
+    const selectedSubscriptionId = get(priceDet[0], ['priceId'], null)
+    const selectedPlanPrice = get(priceDet[0], ['priceAmount'], null)
+    const interval = get(priceDet[0], ['interval'], null)
+
+    var uFacility = JSON.parse(localStorage.getItem('facility'))
+    if (planType === 'P') {
+      uFacility.planType = interval === 'Y' ? 'year' : 'month'
+      uFacility.subscription_price_id = selectedSubscriptionId
+      uFacility.subscription_price = selectedPlanPrice
+    }
+    else uFacility.planType = 'free'
+    localStorage.setItem('facility', JSON.stringify(uFacility))
+    console.log('Page >> uFacility', uFacility)
     history.push(`/acceptance-criteria/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
   useEffect(async () => {
+    const params = {
+      userId: '6195f999b39e32b8a4274b4d'
+    }
+    const payRes = await organizationService.paymentSubscription(params).catch(err => {console.log(err)})
+    console.log('payRes', payRes.status)
     console.log('referredBy', referredby, 'inviteToken', invitetoken)
     const tokenResponse = await organizationService.validateToken(invitetoken)
     console.log('token >> response', tokenResponse)
     const data = tokenResponse?.data ? tokenResponse.data : tokenResponse.response.data
-    console.log('token >> data', data)
+    var facility = get(data, ['data'], null)
+    console.log('token >> data', facility)
+    localStorage.setItem('facility', JSON.stringify(facility))
     if (data.status_code !== 200) {
       history.push('/error-page')
     }
-    // .then(data => {
-    //   const response = data.response.data
-    //   console.log('tokan data >> ', response.status_code)
-    //   if(response.status_code !== 200 ){
-    //     history.push('/error-page')
-    //   }
-    // })
-    // .catch(err => {
-    //   console.log('tokan data err >> ', err)
-    //   history.push('/error-page')
-    // })
+
+    const response = await organizationService.getPrices().catch(err => {
+      console.log(err)
+    })
+    console.log('prices >> response', response)
+    const prices = get(response, ['data', 'data', 'data'], false)
+    var listPrices = []
+    prices.map(p => {
+      const recurring = p.recurring
+      const nPrice = {
+        priceId: p.id,
+        priceAmount: p.unit_amount / 100,
+        interval: recurring.interval === 'month' ? 'M' : 'Y',
+      }
+      if (recurring.interval === 'month') setPlanPrice(nPrice.priceAmount)
+      listPrices.push(nPrice)
+    })
+    console.log('prices >> data', listPrices)
+    setPlans(listPrices)
   }, [])
 
+  const handleSelectedPlan = pType => {
+    setSelectedPlan(pType)
+    const priceDet = plans.filter(p => p.interval === pType)
+    const selectedPlanPrice = get(priceDet[0], ['priceAmount'], null)
+    setPlanPrice(selectedPlanPrice)
+    console.log('selectedPlanPrice', selectedPlanPrice)
+  }
   return (
     <div className="su__main__div">
       <div className="su__row">
@@ -56,14 +95,14 @@ const SignupComponent = () => {
             <div className="su__select__plan">
               <Button
                 className={selectedPlan == 'M' ? 'su__plan__button__active' : 'su__plan__button'}
-                onClick={e => setSelectedPlan('M')}
+                onClick={e => handleSelectedPlan('M')}
               >
                 MONTHLY
               </Button>
               &nbsp;&nbsp;&nbsp;
               <Button
                 className={selectedPlan == 'Y' ? 'su__plan__button__active' : 'su__plan__button'}
-                onClick={e => setSelectedPlan('Y')}
+                onClick={e => handleSelectedPlan('Y')}
               >
                 YEARLY
               </Button>
@@ -115,7 +154,7 @@ const SignupComponent = () => {
           </div>
           <div className="su__column__premium">
             <div className="su__row">
-              <div className="su__plan__premium__amount">$100</div>
+              <div className="su__plan__premium__amount">${planPrice}</div>
               <div className="su__plan__premium__amount__month">/month</div>
             </div>
             <div className="su__row su__premiun__text">Premium</div>
