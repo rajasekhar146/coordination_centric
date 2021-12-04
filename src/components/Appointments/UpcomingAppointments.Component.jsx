@@ -17,6 +17,7 @@ import RejectAppointment from '../ModelPopup/RejectAppointment.Component'
 import AppointmentInfoPopup from '../ModelPopup/AppointmentInfoPopup'
 import ScheduleCalendar from '../ScheduleCalendar/ScheduleCalendar.Component';
 import PatientReschedule from '../ModelPopup/PatientRescheduleModel'
+import CancelAppointmentPopup from '../ModelPopup/CancelAppointmentPopup'
 import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
@@ -28,6 +29,19 @@ const confirmAppointment = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 450,
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    boxShadow: 24,
+    borderRadius: 3,
+    p: 2,
+}
+
+const rejectAppointment = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
     bgcolor: 'background.paper',
     border: '2px solid white',
     boxShadow: 24,
@@ -78,12 +92,13 @@ const UpcomongAppointmentComponent = props => {
     const [selectedAppointment, setSelectedAppointment] = useState(null)
     const [isViewClicked, setIsViewClicked] = useState(false)
     const [patientReschedule, setPatientReschedule] = useState(false)
+    const [cancelAppointment, setCancelAppointment] = useState(false)
     const [appointmentList, setAppointmentList] = useState([])
     const currentUser = authenticationService.currentUserValue
     const userId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(0)
-    const [skip, setSkip] = useState(10)
-    
+    const [skip, setSkip] = useState(20)
+
     const role = get(currentUser, ['data', 'data', 'role'], '')
 
     const closeConformModel = () => {
@@ -125,34 +140,40 @@ const UpcomongAppointmentComponent = props => {
         }
         res = await appointmentService.getAppointments(userId, date, type, limit, skip)
         if (res.status === 200) {
-            const appointmentsTemp =get(res, ['data', 'data'], []); 
-            let appointmentsArray =[];
+            const appointmentsTemp = get(res, ['data', 'data'], []);
+            let appointmentsArray = [];
             appointmentsTemp.forEach(element => {
                 let recordNew = {};
-                if(role ==="doctor"){
+                if (role === "doctor") {
                     recordNew = {
-                        name: element?.userId?.first_name ||"" + " "+ (element?.userId?.last_name ||""),
-                        profile:element?.userId?.profilePic,
+                        name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
+                        profile: element?.userId?.profilePic,
                         location: 'Online',
-                        date:  element?.startTime ? moment(element?.startTime).format('ddd, Do MMM'):"",
-                        time: (element.startTime ? moment(element.startTime).format('h:mm a'):"")+ " - "+(element.endTime ? moment(element.endTime).format('h:mm a'):''),
+                        date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
+                        time: (element.startTime ? moment(element.startTime).format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).format('h:mm a') : ''),
                         status: element.status,
                         gender: element?.userId?.gender,
-                        _id: element.userId._id
+                        _id: element.userId._id,
+                        appointmentid: element._id,
+                        startTime: element.startTime,
+                        endTime: element.endTime
                     }
-                 
-            } else {
-                recordNew = {
-                    name: element?.doctorId?.first_name||"" + " "+element?.doctorId?.last_name||"",
-                    profile:element?.doctorId?.profilePic,
-                    location: 'Online',
-                    date:  moment(element.startTime).format('ddd, Do MMM'),
-                    time:element.startTime? moment(element.startTime).format('h:mm a'):""+ " - "+element.endTime?moment(element.endTime).format('h:mm a'):"",
-                    status: element.status,
-                    gender: 'male',
-                    _id: element?.doctorId?._id
+
+                } else {
+                    recordNew = {
+                        name: element?.doctorId?.first_name || "" + " " + element?.doctorId?.last_name || "",
+                        profile: element?.doctorId?.profilePic,
+                        location: 'Online',
+                        date: moment(element.startTime).format('ddd, Do MMM'),
+                        time: element.startTime ? moment(element.startTime).format('h:mm a') : "" + " - " + element.endTime ? moment(element.endTime).format('h:mm a') : "",
+                        status: element.status,
+                        gender: 'male',
+                        _id: element?.doctorId?._id,
+                        appointmentid: element._id,
+                        startTime: element.startTime,
+                        endTime: element.endTime
+                    }
                 }
-            }
                 appointmentsArray.push(recordNew);
             });
             setAppointmentList(appointmentsArray);
@@ -186,7 +207,7 @@ const UpcomongAppointmentComponent = props => {
                                                     fontWeight: 'bold',
                                                     fontSize: 14,
                                                     visibility: column.visible ? 'visible' : 'hidden',
-                                                    textTransform:'capitalize'
+                                                    textTransform: 'capitalize'
                                                 }}
                                             >
                                                 {column.label}
@@ -207,7 +228,12 @@ const UpcomongAppointmentComponent = props => {
                                         setIsViewClicked={setIsViewClicked}
                                         setIsRejectClicked={setIsRejectClicked}
                                         setPatientReschedule={setPatientReschedule}
+                                        setCancelAppointment={setCancelAppointment}
                                         role={role}
+                                        setAlertMsg={setAlertMsg}
+                                        setSubLabel={setSubLabel}
+                                        setOpenFlash={setOpenFlash}
+                                        type={type}
                                     />
                                 ))
                                 }
@@ -237,7 +263,7 @@ const UpcomongAppointmentComponent = props => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={confirmAppointment}>
+                        <Box sx={rejectAppointment}>
                             <RejectAppointment
                                 clickCloseButton={closeRejectModel}
                                 setIsRescheduleClicked={setIsRescheduleClicked}
@@ -292,6 +318,24 @@ const UpcomongAppointmentComponent = props => {
                     >
                         <Box sx={termsAndCondition}>
                             <PatientReschedule
+                                clickCloseButton={closePatientReschedule}
+                                // setSkip={setSkip}
+                                selectedAppointment={selectedAppointment}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
+                                handleNavigation={handleNavigation}
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={cancelAppointment}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={termsAndCondition}>
+                            <CancelAppointmentPopup
                                 clickCloseButton={closePatientReschedule}
                                 // setSkip={setSkip}
                                 selectedAppointment={selectedAppointment}
