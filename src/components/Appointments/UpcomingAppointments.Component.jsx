@@ -233,6 +233,7 @@ const UpcomongAppointmentComponent = props => {
                                         setAlertMsg={setAlertMsg}
                                         setSubLabel={setSubLabel}
                                         setOpenFlash={setOpenFlash}
+                                        type={type}
                                     />
                                 ))
                                 }

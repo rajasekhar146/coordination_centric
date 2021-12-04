@@ -58,6 +58,9 @@ const menuList = [
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
         menu: 'pending',
@@ -72,6 +75,9 @@ const menuList = [
             { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
         menu: 'declined',
@@ -79,6 +85,9 @@ const menuList = [
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
         menu: 'request_to_reschedule',
@@ -87,6 +96,9 @@ const menuList = [
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
 
 
@@ -110,6 +122,7 @@ const AppointmentItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        type
     } = props
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -126,8 +139,8 @@ const AppointmentItemComponent = props => {
         if (menus.length > 0) {
             if (status === 'pending') {
                 role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
-            } else {
-                setMenuOptions(menus[0].options)
+            } else if(type === 'history') {
+                setMenuOptions(menus[0].historyOptions)
             }
 
         }
