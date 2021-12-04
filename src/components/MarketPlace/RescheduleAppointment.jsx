@@ -84,9 +84,8 @@ const RescheduleAppointment = () => {
             <NavMonthYearComponent
             />
             <WeekDaysViewComponent
-                id={appointmentDetails._id}
                 appointmentDetails={appointmentDetails}
-                type="reschedule"
+                type="rescheduleByPatient"
             />
             {/* <div className="io__row">
                 <div className="io_next_btn">

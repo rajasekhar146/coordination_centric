@@ -348,11 +348,11 @@ function registerMember(data) {
   )
 }
 
-function disableTwoFa(data) {
+function disableTwoFa() {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .post(`${apiURL}/users/twoFAStatus`, { twoFactorStatus: false }, axiosConfig)
+      .get(`${apiURL}//users/disable2fa`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)

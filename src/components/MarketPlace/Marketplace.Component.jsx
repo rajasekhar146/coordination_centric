@@ -42,7 +42,7 @@ const MarketplaceComponent = () => {
           const doctorsArray = [];
           doctors.forEach(doc => {
             let newObj = {
-              id: doc._id,
+              _id: doc._id,
               name: doc.name,
               speciality: doc.speciality,
               location: [doc.country, doc.state, doc.city].filter(n => n).join(','),

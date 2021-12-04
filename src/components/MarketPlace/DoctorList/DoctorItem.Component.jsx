@@ -23,7 +23,7 @@ const DoctorListComponent = (props) => {
         dispatch(setDoctorDetials(row))
         history.push({
             pathname:'/marketplace/make-a-appointments',
-            state:{id:row.id,name:row.name,availability:row.availabilityArray}
+            state:{id:row._id,name:row.name,availability:row.availabilityArray}
         })
       }
 

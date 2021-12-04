@@ -15,6 +15,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import CircleIcon from '@mui/icons-material/Circle';
 import { appointmentService } from '../../services'
+import moment from 'moment'
 
 
 const styles = theme => ({
@@ -60,28 +61,51 @@ const ConfimationAppointment = props => {
         setAlertMsg,
         setSubLabel,
         clickCloseButton,
-        selectedAppointment
+        selectedAppointment,
     } = props
 
     const [activeTab, setActiveTab] = useState(null)
+    const [secondarySlots, setSecondarySlots] = useState(null)
+    const [selectedSlotId, setSelectedSlot] = useState(null)
+
+
+    useEffect(async () => {
+        const res = await appointmentService.getSecondaryAppointment(selectedAppointment.appointmentid)
+        if (res.status === 200) {
+            const element = get(res, ['data', 'data'], {})
+            const recordNew = {
+                name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
+                profile: element?.userId?.profilePic,
+                location: 'Online',
+                date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
+                time: (element.startTime ? moment(element.startTime).format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).format('h:mm a') : ''),
+                status: element.status,
+                gender: element?.userId?.gender,
+                _id: element.userId._id,
+                slotId: element._id,
+                startTime: element.startTime,
+                endTime: element.endTime
+            }
+            setSecondarySlots(recordNew)
+        } else {
+
+        }
+    }, [])
 
 
 
 
-    const handleSubmit = async() => {
-        // const res = await appointmentService.confirmAppointment()
-        // if (res.status === 200) {
-        //     setOpenFlash(true);
-        //     setAlertMsg('Confirmed');
-        //     setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
-        //     clickCloseButton()
-        // } else {
-
-        // }
-        setOpenFlash(true);
-        setAlertMsg('Confirmed');
-        setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
-        clickCloseButton()
+    const handleApprove = async () => {
+        const res = await appointmentService.confirmAppointment(selectedSlotId)
+        if (res.status === 200) {
+            setOpenFlash(true);
+            setAlertMsg('Confirmed');
+            setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
+            clickCloseButton()
+        } else {
+            setAlertMsg('Error');
+            // setSubLabel(``)
+        }
     }
 
 
@@ -126,6 +150,7 @@ const ConfimationAppointment = props => {
                 <div
                     onClick={() => {
                         setActiveTab('primary')
+                        setSelectedSlot(selectedAppointment.appointmentid)
                     }}>
                     <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
                         <CircleIcon sx={{ color: activeTab === 'primary' ? '#E42346' : '#DCDCDC' }} />
@@ -136,11 +161,12 @@ const ConfimationAppointment = props => {
                 </div>
 
             </div>
-            <div 
-             onClick={() => {
-                setActiveTab('secondary')
-            }}
-             className="io_slot_selector">
+            <div
+                onClick={() => {
+                    setActiveTab('secondary')
+                    setSelectedSlot(secondarySlots.slotId)
+                }}
+                className="io_slot_selector">
                 <div>
                     <label className="io_user_label">
                         Secondary - Date and Time
@@ -152,7 +178,7 @@ const ConfimationAppointment = props => {
                         <CircleIcon sx={{ color: activeTab === 'secondary' ? '#E42346' : '#DCDCDC' }} />
                     </span>
                     <label className="io_user_name">
-                        {`${selectedAppointment.date} ${selectedAppointment.time}`}
+                        {`${get(secondarySlots, ['date'], '')} ${get(secondarySlots, ['time'], '')}`}
                     </label>
                 </div>
 
@@ -165,7 +191,7 @@ const ConfimationAppointment = props => {
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" onClick={handleSubmit}>
+                        <Button type="submit" className="io__Approve__btn" onClick={handleApprove}>
                             Confirm
                         </Button>
                     </div>

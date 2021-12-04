@@ -10,7 +10,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useDispatch } from 'react-redux'
 import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
 import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
-
+// import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
+import { appointmentService } from '../../services'
+import moment from 'moment'
+import {
+    primaryAppointmentDate,
+    secondaryAppointmentDate,
+  } from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -46,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 
 const menuList = [
     {
-        menu: 'confirmed',
+        menu: 'accepted',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
@@ -71,11 +77,11 @@ const menuList = [
         menu: 'declined',
         options: [
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
         ],
     },
     {
-        menu: 'requested_to_reschedule',
+        menu: 'request_to_reschedule',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
@@ -100,7 +106,10 @@ const AppointmentItemComponent = props => {
         setIsViewClicked,
         setIsRejectClicked,
         setPatientReschedule,
-        role
+        role,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -115,12 +124,12 @@ const AppointmentItemComponent = props => {
         const menus = menuList.filter(m => m.menu === status.toLowerCase())
         console.log('menus', menus)
         if (menus.length > 0) {
-            if(status === 'pending') {
-               role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
+            if (status === 'pending') {
+                role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
             } else {
                 setMenuOptions(menus[0].options)
             }
-            
+
         }
         else setMenuOptions([])
 
@@ -152,6 +161,15 @@ const AppointmentItemComponent = props => {
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
+        dispatch(primaryAppointmentDate({
+            Day: moment(new Date(row.startTime)).format('YYYY-MM-DD'),
+            Time: {
+                startTime: moment(new Date(row.startTime), "HH:mm").format("HH:mm"),
+                endTime: moment(new Date(row.endTime), "HH:mm").format("HH:mm")
+            }
+        }))
+        // dispatch(setAppointmentDetails(row))
+
     }
 
     const handleClose = () => {
@@ -174,7 +192,7 @@ const AppointmentItemComponent = props => {
 
     const getValue = val => {
         switch (val) {
-            case 'confirmed':
+            case 'accepted':
                 return 'Confirmed'
                 break
 
@@ -190,7 +208,7 @@ const AppointmentItemComponent = props => {
             case 'declined':
                 return 'Declined'
                 break
-            case 'requested_to_reschedule':
+            case 'request_to_reschedule':
                 return 'Requested to Re-schedule'
                 break
             default:
@@ -198,12 +216,14 @@ const AppointmentItemComponent = props => {
         }
     }
 
+
+
     const colorcodes = {
-        confirmed: '#12B76A',
+        accepted: '#12B76A',
         pending: '#7A5AF8',
         cancelled: '#757500',
         declined: '#B42318',
-        requested_to_reschedule: '#B42318'
+        request_to_reschedule: '#F79009'
     }
 
     return (
