@@ -24,6 +24,9 @@ export const organizationService = {
   validateToken,
   registerMember,
   disableTwoFa,
+  getPrices,
+  subscriptionOrganization,
+  paymentSubscription,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -157,6 +160,22 @@ function signupOrganization(bodyMsg) {
       })
       .catch(err => {
         console.log(err.response)
+      })
+  )
+}
+
+function subscriptionOrganization(bodyMsg) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/payment/Subscription`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+      .catch(err => {
+        console.log(err.response)
+        return err.response
       })
   )
 }
@@ -353,6 +372,37 @@ function disableTwoFa(data) {
   return (
     axios
       .post(`${apiURL}/users/twoFAStatus`, { twoFactorStatus: false }, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function getPrices() {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .get(`${apiURL}/payment/prices`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function paymentSubscription(bodyMsg){
+  // const response = organizationService.subscriptionOrganization(params).catch(err => {
+  //   console.log(err)
+  // })
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/payment/subscription`, bodyMsg, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
