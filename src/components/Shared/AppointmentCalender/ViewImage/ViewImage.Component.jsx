@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import get from 'lodash.get'
 import { commonService } from '../../../../services' //'../../services'
+import CloseIcon from '@mui/icons-material/Close';
 
 const ViewImageComponent = props => {
-  const { pic, category,imageClass } = props
+  const { pic, category,imageClass,showClose,handleClose } = props
 console.log("ViewImageComponent",props);
   const [picUrl, setPicUrl] = useState('')
 
@@ -40,6 +41,8 @@ console.log("ViewImageComponent",props);
 
   return (
     <div>
+      {showClose &&      
+      <CloseIcon style={{float:"right", cursor:"pointer"}} onClick={handleClose} />}
       {picUrl ? <img  className={imageClass} src={picUrl ? `data:image/png;base64,${picUrl}`:require('../../../../assets/icons/default_profile_image.png').default} alt="profile"  />:
        <img  className={imageClass} src={require('../../../../assets/icons/default_profile_image.png').default} alt="profile"  />}
     </div>
