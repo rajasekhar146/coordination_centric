@@ -371,7 +371,7 @@ function disableTwoFa() {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .get(`${apiURL}//users/disable2fa`, axiosConfig)
+      .get(`${apiURL}/users/disable2fa`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
