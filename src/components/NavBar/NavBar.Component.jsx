@@ -25,7 +25,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import ProfileImage from '../../assets/icons/default_profile_image.png'
 import history from '../../history'
-import { authenticationService, notificationService } from '../../services'
+import { authenticationService, notificationService,appointmentService } from '../../services'
 import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import { get } from 'lodash'
@@ -33,6 +33,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import eventBus from "./../../helpers/eventbus";
+import Alert from '../Alert/Alert.component';
+
+import { useSelector, useDispatch } from 'react-redux'
+import { setFlashMsg } from '../../redux/actions/commonActions'
+
 
 const profileMenus = [
   { label: 'Profile', icon: ProfileImage },
@@ -114,6 +119,9 @@ const StyledMenuNotification = styled(props => (
 }))
 
 const NavBarComponent = () => {
+
+  const dispatch = useDispatch()
+
   const [anchorEl, setAnchorEl] = React.useState(null)
 
   const [anchorElNotification,setAnchorElNotification ] = React.useState(null)
@@ -129,6 +137,9 @@ const NavBarComponent = () => {
   const [notificationList,setNotificationList] = React.useState([])
   const [notificationUnReadcount,setNotificationUnReadcount] = React.useState(0);
 
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState("")
+  const [subLebel, setSubLabel] = useState("")
 
   useEffect(()=>{
     eventBus.on("notification", (data) =>
@@ -184,8 +195,7 @@ const NavBarComponent = () => {
       notificationsArray.forEach(element => {
         messageArray= messageArray.concat(element.data.filter(x=>!x.is_read));
       });
-      // messageArray= messageArray.sort((a,b) => (a.created_date_time > b.created_date_time) ? 1 : ((b.created_date_time > a.created_date_time) ? -1 : 0))
-      // messageArray=messageArray.sort((a, b) => a.created_date_time - b.created_date_time);
+      
 
       console.log("messageArray",messageArray);
       setNotificationList(messageArray);
@@ -194,9 +204,38 @@ const NavBarComponent = () => {
     })
   }
 
-  const MarkAsUnread = (notificationId)   =>{
+  const confirmAppointment =async (appointmentId)=>{
+    const res = await appointmentService.confirmAppointment(appointmentId)
+    console.log("RES",res);
+    if (res.status === 200) {
+      setOpenFlash(true);
+      setAlertMsg('Confirm Appointment');
+      setSubLabel(get(res,["data","message"]));
+    } else {
+
+    }
+  }
+
+  const declineAppointment =async (appointmentId)=>{
+    const res = await appointmentService.rejectAppointment(appointmentId)
+    console.log(res);
+    if (res.status === 200) {
+      setOpenFlash(true);
+      setAlertMsg('Declined');
+      setSubLabel(get(res,["data","message"]));
+    } else {
+      
+    }
+  }
+
+
+  const viewAppointment = (appointmentId)=>{
+    console.log("View Appointment",appointmentId);
+  }
+
+  const MarkAsRead = (notificationId)   =>{
 notificationService.notificationMakeRead(notificationId).then(res=>{
-  console.log("MarkAsUnread",res);
+  console.log("MarkAsRead",res);
   getNotificationList();
 
 },error=>{
@@ -241,8 +280,16 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
     setProfilePic(data.profilePic);
 
   }, [])
-
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+    dispatch(setFlashMsg({
+      openFlash: false,
+      alertMsg: '',
+      subLabel: ''
+    }))
+  }
   return (
+    <>
     <div className="nb__main_div">
       <div className="nb__column__left">
         <div className="nb__logo">
@@ -258,17 +305,17 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
         <div className="nb__message">
           <MessageOutlinedIcon />
         </div>
+        {notificationUnReadcount>0 &&(
         <div className="notificationUnReadcount">{notificationUnReadcount}</div>
-        <div className="nb__notification" style ={openNotification?{backgroundColor:"#E42346"}:{backgroundColor:"#fff"}}>
+        ) }
+        <div className={notificationUnReadcount>0? "nb__notification nb__notification_countNanZero":"nb__notification nb__notification_countzero"} style ={openNotification?{backgroundColor:"#E42346"}:{backgroundColor:"#fff"}}>
           
         <Button
             id="notification-button"
             aria-controls="demo-customized-menu"
-            // aria-haspopup="true"
-            // aria-expanded={open ? 'true' : undefined}
             disableElevation
             onClick={handleNotificationClick}
-            // endIcon={<KeyboardArrowDownIcon />}
+            
           > 
           <NotificationImportantOutlinedIcon style ={openNotification?{fill:"#fff"}:{fill:"#000"}} />
           
@@ -284,7 +331,9 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
           >
            
             <div className="nb__profile__menu notifications">
-
+            {notificationUnReadcount ==0 && (
+              <div>No notification found </div>
+            )}
               {notificationList && notificationList.map((item)=>{
                 return (
                   <div className="row" key={item}>
@@ -311,24 +360,24 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
                       <span className="meesage-text">{item.message}</span>
                      
                       </div>
-                      <CloseIcon  className="close-icon" onClick={()=>{MarkAsUnread(item._id)}}/>
+                      <CloseIcon  className="close-icon" onClick={()=>{MarkAsRead(item._id)}}/>
                       </div>
 
                       {(item.module_slug =="new_appointment" || item.module_slug == "reschedule_appointment")&&(
                       <div className="button-section">
-                        <button className="button button-view">
+                        <button className="button button-view" onClick={()=>{MarkAsRead(item._id);viewAppointment(item.appointmentId); history.push(`/viewApointment/${item.appointmentId}`)}}>
                           <RemoveRedEyeOutlinedIcon style={{fontSize:14,marginRight:5}}/>
                           View</button>
 
-                          <button className="button button-decline">
+                          <button className="button button-decline" onClick={()=>{MarkAsRead(item._id);declineAppointment(item.appointmentId)}}>
                           <CloseIcon style={{fontSize:14,marginRight:5}}/>
-                          Decline</button>
+                          Reject</button>
 
-                          <button className="button button-accept">
+                          <button className="button button-accept" onClick={()=>{MarkAsRead(item._id);confirmAppointment(item.appointmentId)}}>
                           <DoneOutlinedIcon style={{fontSize:14,marginRight:5}}/>
-                          Accept</button>
+                          Approve</button>
                       </div>
-                      )}
+                       )}
                       
                   </div>
                   
@@ -391,7 +440,17 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
           </StyledMenu>
         </div>
       </div>
+     
     </div>
+    
+     <Alert
+     handleCloseFlash={handleCloseFlash}
+     alertMsg={alertMsg}
+     openflash={openflash}
+     subLebel={subLebel}
+   />
+   
+   </>
   )
 }
 

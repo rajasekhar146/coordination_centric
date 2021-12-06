@@ -144,6 +144,7 @@ const WeekDaysViewComponent = (props) => {
   const [appointmentReason, setAppointmentReason] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false);
+  const [reportsArray, setReportsArray] = useState([]);
 
 
   const getAwailablities = async (selectedDate) => {
@@ -347,7 +348,7 @@ const WeekDaysViewComponent = (props) => {
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email);
-    reqData.documents = selectedFiles.map(x => x.path)
+    reqData.documents = reportsArray.map(x => x)
 
 
     if (role === 'doctor') {
@@ -415,13 +416,8 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
-            clickSubmitButton={clickSubmitButton}
-          clickSubmitButton={clickSubmitButton} 
-            clickSubmitButton={clickSubmitButton}
-          clickSubmitButton={clickSubmitButton} 
-            clickSubmitButton={clickSubmitButton}
-            clickSubmitButton={clickSubmitButton}
+          <ProblemAndSymptomsComponent
+            clickBackButton={clickBackButton}
             clickSubmitButton={clickSubmitButton}
             invitedMembers={invitedMembers}
             setInvitedMembers={setInvitedMembers}
@@ -431,6 +427,8 @@ const WeekDaysViewComponent = (props) => {
             setSelectedFiles={setSelectedFiles}
             appointmentReasonErr={appointmentReasonErr}
             setappointmentReasonErr={setappointmentReasonErr}
+            reportsArray = {reportsArray}
+            setReportsArray = {setReportsArray}
           />
         </Box>
       </Modal>

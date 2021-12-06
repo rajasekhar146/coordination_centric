@@ -18,10 +18,11 @@ const ProblemAndSymptomsComponent = (props) => {
   const setSelectedFiles = props.setSelectedFiles;
   const setappointmentReasonErr = props.setappointmentReasonErr;
   const appointmentReasonErr = props.appointmentReasonErr;
+  const setReportsArray = props.setReportsArray;
+  const reportsArray = props.reportsArray;
   // const [invitedMembers, setInvitedMembers] = useState(0);
   const [inputValues, setInputValues] = useState({});
   const [imgCounter, setImgCounter] = useState(0);
-  const [reportsArray, setReportsArray] = useState([]);
   const [showUpload, setshowUpload] = useState(false);
 
 
@@ -117,9 +118,9 @@ const ProblemAndSymptomsComponent = (props) => {
       </div>
      
 
-      <div className="pas__row mar-top-30">
+      {/* <div className="pas__row mar-top-30">
         <div className="pas__problem__label">Do you want to invite someone to join the appointment?</div>
-      </div>
+      </div> */}
       <div className="pas__row">
 
       </div>

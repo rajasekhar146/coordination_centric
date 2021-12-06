@@ -166,3 +166,97 @@
     right: 160px;
     margin-bottom: 25px;
 }
+
+.summary-page{
+
+}
+
+.row-details{
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    border-top: 1px solid #E4E7EC;
+    padding: 20px;
+    min-height: 25px;
+}
+
+.row-title{
+    font-family: 'Lato';
+    font-weight: 700;
+    font-size: 16px;
+}
+.row-data{
+    font-family: 'Lato';
+    font-size: 16px;
+    color: #52575C;
+    font-weight: 400;
+}
+
+.docs-view{
+    display: block;
+    padding: 18px 10px;
+    background: white;
+    margin-bottom: 15px;
+    width: 400px;
+    border-radius: 6px;
+}
+
+.show_img_div{
+    height: 500px;
+    object-fit: cover;
+    width: 500px;
+    border-radius: 0px;
+}
+.right{
+    float: right;
+    cursor: pointer;
+}
+
+.view_appointment_back{
+    height: 45px;
+    width: 110px !important;
+    border-radius: 100px;
+    padding: 10px !important;
+    margin-right:50px;
+    cursor: pointer;
+    background:#F6F8FB
+}
+
+.arrow_align{
+    float: left;
+    margin-top: 3px;
+    font-size: 12px;
+}
+
+.view-header{
+    display: inline-flex;
+    margin-bottom: 25px;
+}
+
+.view-app{
+    background: #F6F8FB;
+    padding: 1rem;
+}
+
+.galary_icon{
+    margin-right: 10px;
+    position: absolute;
+}
+
+.align__img__name{
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+.flex-dr{
+    display: flex;
+    align-items: center;
+}
+
+.mar-right-10{
+    margin-right: 10px;
+}
+
+.align_status{
+    margin-top: 10px;
+    margin-left: 50px;
+}

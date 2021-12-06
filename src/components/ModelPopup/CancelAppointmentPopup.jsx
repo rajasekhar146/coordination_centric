@@ -2,29 +2,18 @@ import React, { useState, useEffect } from 'react'
 import '../InviteOrganization/InviteOrganization.Component.css'
 import './ApproveModel.Component.css'
 import Button from '@mui/material/Button'
-import ResendCalender from '../../assets/icons/resend_calender.png'
-import { appointmentService } from '../../services'
-import get from 'lodash.get'
-import { withStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
 import ReScheduleIcon from '../../assets/icons/reject_org.png'
 import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import history from '../../history'
 
 
 const CancelAppointment = props => {
     const {
         clickCloseButton,
+        clickConfirmButton
     } = props
 
     const [isChecked, setIsChecked] = useState(true)
 
-
-    const handleReSchedule = async () => {
-        history.push('reschedule_appointment')
-    }
 
 
 
@@ -45,17 +34,17 @@ const CancelAppointment = props => {
                 </label>
             </div>
             <div className="io__row io_info_label">
-                <label>
+                <p className="justify-text">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum tellus lorem
                     libero, nisl. Justo, elementum id adipiscing diam blandit. Dignissim purus
                     aliquet ut nisl. Volutpat auctor urna, tristique id elementum ut curabitur.
                     Egestas semper sem posuere ac lobortis urna arcu felis. Nisi ut id lacus hendrerit
                     viverra eleifend mauris ipsum. Massa, aliquam urna faucibus ac et. Dui nibh nisl pharetra, est pulvinar. Aenean purus in mollis sollicitudin vitae. Eget sagittis quis eu amet donec. Nullam cum sed orci magnis cras. Mi viverra sem vitae condimentum curabitur varius pharetra.
-                </label>
+                </p>
             </div>
             <div className="io__row">
                 <FormGroup>
-                    <div className="ac__column">
+                    <div className="ac__column flex">
                         <label className="container">
                             <span className="io_terms_conditions">
                                 I agree to cancel the appointment and I am aware of the Coordination
@@ -86,7 +75,7 @@ const CancelAppointment = props => {
                     </div>
                     <div className="io__approve">
                         <Button type="submit" className={isChecked ? 'io__Approve__btn' : 'io__disable__btn'}
-                            onClick={handleReSchedule}>
+                            onClick={clickConfirmButton}>
                             Next
                         </Button>
                     </div>

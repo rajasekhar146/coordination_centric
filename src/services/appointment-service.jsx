@@ -17,7 +17,9 @@ export const appointmentService = {
     getHighlightedDoctorsList,
     makeAppointment,
     rescheduleAppointment,
-    getSecondaryAppointment
+    getSecondaryAppointment,
+    cancelAppointment,
+    getAppointmentById
 }
 
 
@@ -72,13 +74,13 @@ function rejectAppointment(appointmentId) {
 }
 
 
-function cancelAppointment() {
+function cancelAppointment(appointmentId , reason) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .put(`${apiURL}`, axiosConfig)
+            .put(`${apiURL}/appointment/cancelAppointment/${appointmentId}/${reason}`, null, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
@@ -221,4 +223,17 @@ function getSecondaryAppointment(id) {
                 return data
             })
     )
+}
+
+function getAppointmentById(id) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/appointment/viewAppointmentByAppointmentId/${id}`, axiosConfig)
+            .then(data => {
+                return data
+            })
+    ) 
 }
