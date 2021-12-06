@@ -1,4 +1,5 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import VideoCallReducer from "./video-call-reducer";
 import {
   memberReducer,
   newMemberReducer,
@@ -32,6 +33,7 @@ const reducers = combineReducers({
   memberAvaliabilities: memberAvailabilitiesReducer,
   memberSpecialties: memberSpecialtiesReducer,
   specialties: specialtiesReducer,
+  videoCallReducer:VideoCallReducer,
   isOpenCompletProfilePopup: setCompleteProfileReducer,
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificate: deleteMemberProfessionalInfoCertificatesReducer,
