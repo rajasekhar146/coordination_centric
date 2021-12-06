@@ -5,7 +5,7 @@ import RightSideControl from './RightSideControl/RightSideControl';
 import VideoButtons from './VideoButtons';
 import LeaveRoomButton from './LeaveRoomButton';
 import './CallControl.css';
-
+import {useSelector} from 'react-redux';
 export default function CallControl({
   watingList,
   toggleWatingList,
@@ -28,14 +28,15 @@ export default function CallControl({
   room
 }) {
 
-
+    const videoCallReducer = useSelector(state => state.videoCallReducer);
     return (
-        <div className="call-controls-wrp">
+        <div className={ !videoCallReducer.isFullScreen ? 'call-controls-wrp bg':'call-controls-wrp'}>
                 <div className="call-controls-wrp-2">
                     <LeaveRoomButton room={room} isCallActive={isCallActive} callStartAndHandel={callStartAndHandel}/>
                  
                     {/* <CallButton isCallActive={isCallActive} callStartAndHandel={callStartAndHandel}/> */}
-                    <div className="call-controls">
+                    {!videoCallReducer.isFullScreen && (
+                        <div className="call-controls">
                         <LeftSideControl 
                             watingList={watingList} 
                             toggleWatingList={toggleWatingList} 
@@ -57,9 +58,10 @@ export default function CallControl({
                            toggleShare={toggleShare}
                            toggleShareFun={toggleShareFun}
                            setToggleShare={setToggleShare}
-                           roomToken={roomToken}
                         />
                     </div>
+                    )}
+                    
                 </div>
         </div>
     )

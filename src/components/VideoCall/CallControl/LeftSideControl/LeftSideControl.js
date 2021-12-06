@@ -3,7 +3,7 @@ import WatingListWidget from './WatingListWidget/WatingListWidget';
 import MicButton from '../MicButton';
 import { connect } from 'react-redux';
 import CameraButton from '../CameraButton';
-import './LeftSideControl.css'
+import './LeftSideControl.css';
 
 const LeftSideControl = ({
     watingList,
@@ -13,6 +13,7 @@ const LeftSideControl = ({
     room,
    connectOnlyWithAudio
 })=>{
+
     return (
         <div className="left-side-control">
             <WatingListWidget 

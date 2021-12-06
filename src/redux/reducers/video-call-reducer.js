@@ -10,6 +10,7 @@ const initState = {
   participants: [],
   messages:[],
   isShowVideoCallMeeting:false,
+  isFullScreen:false,
 };
 
 const VideoCallReducer = (state = initState, action) => {
@@ -58,6 +59,11 @@ const VideoCallReducer = (state = initState, action) => {
         return {
           ...state,
           isShowVideoCallMeeting: action.isShowVideoCallMeeting,
+        };
+      case Actions.SET_TOGGLE_FULL_SCREEN:
+        return {
+          ...state,
+          isFullScreen: action.isFullScreen,
         };
     default:
       return state;

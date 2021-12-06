@@ -8,6 +8,7 @@ const Actions = {
     SET_PARTICIPANTS: "SET_PARTICIPANTS",
     SET_MESSAGES: "SET_MESSAGES",
     SET_SHOW_VIDEO_MEETING: "SET_SHOW_VIDEO_MEETING",
+    SET_TOGGLE_FULL_SCREEN:"SET_TOGGLE_FULL_SCREEN",
   };
   
   export const setIdentity = (identity) => {
@@ -68,6 +69,12 @@ const Actions = {
     return {
       type: Actions.SET_SHOW_VIDEO_MEETING,
       isShowVideoCallMeeting,
+    };
+  };
+  export const setIsFullScreen = (isFullScreen) => {
+    return {
+      type: Actions.SET_TOGGLE_FULL_SCREEN,
+      isFullScreen,
     };
   };
   
