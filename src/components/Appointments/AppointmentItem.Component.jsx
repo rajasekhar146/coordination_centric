@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux'
 import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
 import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 // import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
-import { appointmentService } from '../../services'
 import moment from 'moment'
 import {
     primaryAppointmentDate,
@@ -58,7 +57,7 @@ const menuList = [
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
-            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         ],
         historyOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
@@ -263,9 +262,8 @@ const AppointmentItemComponent = props => {
         rescheduled: '#F79009'
     }
 
-    const handleRowClick = (i, row) =>{
-        history.push(`/viewApointment`)
-        console.log('---------index' , i , row)
+    const handleRowClick = async(i, row) =>{
+       // history.push(`/viewApointment/${row.appointmentid}`)
     }
     return (
         <TableRow
