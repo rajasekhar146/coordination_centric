@@ -3,7 +3,7 @@ import React from 'react'
 import './App.css';
 import {useState} from 'react';
 import { getTokenFn, onMessageListener } from './firebase';
-import {Button, Row, Col, Toast} from 'react-bootstrap';
+// import {Button, Row, Col, Toast} from 'react-bootstrap';
 import CloseIcon from '@mui/icons-material/Close';
 import eventBus from "./helpers/eventbus";
   // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,9 +35,9 @@ function App() {
         <div className="toast-header">
           {notification.title}
           
-          <Button onClick={()=>{setShow(false)}} className="close">
+          <button onClick={()=>{setShow(false)}} className="close">
             <CloseIcon  />
-            </Button>
+            </button>
           
         </div>
         <div className="toast-body"></div>
