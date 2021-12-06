@@ -1,0 +1,8 @@
+.call-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.watingroom-title {
+    width: 105px;
+}

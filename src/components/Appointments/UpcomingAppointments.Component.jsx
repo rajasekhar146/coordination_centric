@@ -408,7 +408,9 @@ const UpcomongAppointmentComponent = props => {
                     </Modal>
                 </Paper>
                 :
-                <ScheduleCalendar />
+                <ScheduleCalendar
+                    appointmentList={appointmentList}
+                />
 
             }
 
