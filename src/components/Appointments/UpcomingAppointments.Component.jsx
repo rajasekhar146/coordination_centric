@@ -22,6 +22,7 @@ import { appointmentService } from '../../services'
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
 import moment from 'moment'
+import CancelAppointmentReasonPopup from '../ModelPopup/CancelAppointmentReasonPopup';
 
 const confirmAppointment = {
     position: 'absolute',
@@ -62,6 +63,18 @@ const termsAndCondition = {
     p: 2,
 }
 
+const cancelPopup = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 450,
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    boxShadow: 24,
+    borderRadius: 3,
+    p: 2,
+}
 
 const appointmentInfo = {
     position: 'absolute',
@@ -93,6 +106,7 @@ const UpcomongAppointmentComponent = props => {
     const [isViewClicked, setIsViewClicked] = useState(false)
     const [patientReschedule, setPatientReschedule] = useState(false)
     const [cancelAppointment, setCancelAppointment] = useState(false)
+    const [cancelAppointmentReason, setCancelAppointmentReason] = useState(false)
     const [appointmentList, setAppointmentList] = useState([])
     const currentUser = authenticationService.currentUserValue
     const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -100,6 +114,8 @@ const UpcomongAppointmentComponent = props => {
     const [skip, setSkip] = useState(20)
 
     const role = get(currentUser, ['data', 'data', 'role'], '')
+    const [cancelReasonInput, setcancelReasonInput] = useState();
+    const [cancelReasonInputErr, setcancelReasonInputErr] = useState();
 
     const closeConformModel = () => {
         setIsConfirmClicked(false)
@@ -121,9 +137,36 @@ const UpcomongAppointmentComponent = props => {
     const closeCancelTermsAndConds = () => {
         setCancelAppointment(false)
     }
+    const closeAppointmentReasonPopup = () =>{
+        setCancelAppointmentReason(false)
+    }
+    const handleNextPopup = () =>{
+        setCancelAppointmentReason(true);
+        setCancelAppointment(false)
+
+    }
+
+    const closeCancelReason = () =>{
+        setCancelAppointment(true)
+        setCancelAppointmentReason(false);
+    }
+    const submitCancelReason = async() =>{
+        if(!cancelReasonInput){
+            setcancelReasonInputErr(true);
+        }else{
+            setCancelAppointmentReason(false);
+            setcancelReasonInputErr(false);
+            let res = await appointmentService.cancelAppointment(selectedAppointment.appointmentid, cancelReasonInput);
+            if(res.data){
+                setOpenFlash(true)
+                setAlertMsg('Canceled')
+                setSubLabel(get(res, ['data', 'message'], ''));
+            }
+            getAppointmentList();
+        }
 
 
-
+    }
     const columns = [
         { id: 'profile', label: 'profile', minWidth: 50, align: 'left', visible: true },
         { id: 'name', label: 'name', minWidth: 50, align: 'left', visible: true },
@@ -341,12 +384,25 @@ const UpcomongAppointmentComponent = props => {
                         <Box sx={termsAndCondition}>
                             <CancelAppointmentPopup
                                 clickCloseButton={closeCancelTermsAndConds}
-                                // setSkip={setSkip}
-                                selectedAppointment={selectedAppointment}
-                                setOpenFlash={setOpenFlash}
-                                setAlertMsg={setAlertMsg}
-                                setSubLabel={setSubLabel}
-                                handleNavigation={handleNavigation}
+                                clickConfirmButton={handleNextPopup}
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={cancelAppointmentReason}
+                        clickCloseButton={closeAppointmentReasonPopup}
+
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={cancelPopup}>
+                            <CancelAppointmentReasonPopup
+                                clickCloseButton={closeCancelReason}
+                                submitCancelReason = {submitCancelReason}
+                                cancelReasonInput = {cancelReasonInput}
+                                setcancelReasonInput = {setcancelReasonInput}
+                                setcancelReasonInputErr = {setcancelReasonInputErr}
+                                cancelReasonInputErr = {cancelReasonInputErr}
                             />
                         </Box>
                     </Modal>

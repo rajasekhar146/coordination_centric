@@ -166,3 +166,27 @@
     right: 160px;
     margin-bottom: 25px;
 }
+
+.summary-page{
+
+}
+
+.row-details{
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    border-top: 1px solid #E4E7EC;
+    padding: 20px;
+    min-height: 25px;
+}
+
+.row-title{
+    font-family: 'Lato';
+    font-weight: 700;
+    font-size: 16px;
+}
+.row-data{
+    font-family: 'Lato';
+    font-size: 16px;
+    color: #52575C;
+    font-weight: 400;
+}
