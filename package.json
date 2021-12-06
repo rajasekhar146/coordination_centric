@@ -27,6 +27,7 @@
     "env-cmd": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "firebase": "^8.2.1",
     "highcharts": "^9.2.2",
     "highcharts-react-official": "^3.1.0",
     "html-to-image": "^1.9.0",
@@ -73,7 +74,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
     "build:development": "env-cmd -f .env.development npm run-script build",
     "build:uat": "env-cmd -f .env.uat npm run-script build",

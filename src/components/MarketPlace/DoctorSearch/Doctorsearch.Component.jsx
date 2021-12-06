@@ -71,7 +71,13 @@ const DoctorsearchComponent = props => {
   const [specialists, setSpecialties] = useState([])
   const isAllSelected = specialists.length > 0 && selected.length === specialists.length
   const handleChange = event => {
-    const value = event.target.value
+    let value = event.target.value
+    if(value && value.length>0 && value[0]=="Speciality"){
+    value.splice(0, 1);
+    }
+    else{ 
+    // value =["Speciality"];
+    }
     console.log("handleChange",value);
     if (value[value.length - 1] === 'all') {
       setSelected(selected.length === specialists.length ? [] : specialists)

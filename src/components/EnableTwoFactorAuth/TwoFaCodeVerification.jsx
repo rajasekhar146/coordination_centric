@@ -7,10 +7,12 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import TextField from '@mui/material/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 import { authenticationService } from '../../services'
+import { notificationService } from '../../services'
 import get from 'lodash.get'
 import useStore from '../../hooks/use-store';
 import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
+import {getTokenFn} from '../../firebase'
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +42,7 @@ const TwoFaEnabled = props => {
   const dispatch = useDispatch()
   const currentUser = authenticationService.currentUserValue
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
-
+  const [FCMToken, setFCMToken] = useState("");
 
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
@@ -54,10 +56,30 @@ const TwoFaEnabled = props => {
   } = signinStoreData;
 
 
+  useEffect(()=>{
+    addDevice(FCMToken);
+  },[FCMToken])
 
-  useEffect(() => {
+
+  const addDevice = (FCMToken)=>{
+    if(!FCMToken)
+    return;
+    let devieInfo = {
+      'deviceId':'',
+      'fcmId':FCMToken, 
+      'deviceType': 'web'
+    }
+    notificationService.addDevice(devieInfo).then((res)=>{
+      console.log("Add device",res);
+    },error=>{
+      console.log("Add device",error);
+    })
+  }
+  useEffect(async() => {
     var twoFaVerfied = localStorage.getItem('twoFaVerfied')
     if (twoFaVerfied) {
+    let fcmToken = await getTokenFn(setFCMToken);
+    console.log("fcmToken",fcmToken);
       history.push(`/dashboard`)
     }
   }, [])
@@ -82,11 +104,13 @@ const TwoFaEnabled = props => {
     }
   }, [minutes, seconds])
 
-  const handleSubmit = () => {
+  const handleSubmit =  () => {
     const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type, email)
     res
-      .then(() => {
+      .then(async() => {
         localStorage.setItem('twoFaVerfied', true)
+        let fcmToken = await getTokenFn(setFCMToken);
+    console.log("fcmToken",fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {
