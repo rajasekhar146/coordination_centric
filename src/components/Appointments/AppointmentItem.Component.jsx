@@ -17,6 +17,8 @@ import {
     primaryAppointmentDate,
     secondaryAppointmentDate,
   } from '../../redux/actions/commonActions'
+  import ViewAppointmentComponent from './ViewAppointment.Component'
+  import history from '../../history'
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -239,8 +241,15 @@ const AppointmentItemComponent = props => {
         request_to_reschedule: '#F79009'
     }
 
+    const handleRowClick = (i, row) =>{
+        history.push(`/viewApointment`)
+        console.log('---------index' , i , row)
+    }
     return (
         <TableRow
+        onClick = {()=>{
+            handleRowClick(index,row)
+        }}
             hover
             role="checkbox"
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
