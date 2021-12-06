@@ -35,6 +35,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #e42346;
 }
+
+.notification-popup{
+  position: fixed;
+    top:10px;
+    right:10px;
+    z-index: 999;
+}
 .toast {
   
   padding:20px;
@@ -50,10 +57,8 @@ body {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 0.25rem;
-    position: fixed;
-    top:10px;
-    right:10px;
     z-index: 999;
+    margin-bottom: 10px;
 }
 .toast-header {
   display: -ms-flexbox;
