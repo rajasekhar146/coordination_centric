@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './Appointment.Component.css'
+// import './Appointment.Component.css'
 import Button from '@mui/material/Button'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import Modal from '@mui/material/Modal'
@@ -40,7 +40,7 @@ const confirmAppointment = {
 
 
 
-const SelectNewDatesComponent = () => {
+const RescheduleAppointment = () => {
     const appointmentDetails = useSelector(state => state.appointmentDetails)
 
     const [isOpenConfirmPopup, setIsOpenConfirmPopup] = useState(false)
@@ -84,8 +84,8 @@ const SelectNewDatesComponent = () => {
             <NavMonthYearComponent
             />
             <WeekDaysViewComponent
-                id={appointmentDetails._id}
                 appointmentDetails={appointmentDetails}
+                type="rescheduleByPatient"
             />
             {/* <div className="io__row">
                 <div className="io_next_btn">
@@ -123,4 +123,4 @@ const SelectNewDatesComponent = () => {
     )
 }
 
-export default SelectNewDatesComponent
+export default RescheduleAppointment

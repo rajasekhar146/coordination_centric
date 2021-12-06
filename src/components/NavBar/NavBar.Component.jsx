@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import headerImage from '../../assets/images/header_image.png'
 import './NavBar.Component.css'
 import EventNoteIcon from '@mui/icons-material/EventNote'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 import NotificationImportantOutlinedIcon from '@mui/icons-material/NotificationImportantOutlined'
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
+
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
@@ -23,7 +25,14 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import ProfileImage from '../../assets/icons/default_profile_image.png'
 import history from '../../history'
-import { authenticationService } from '../../services'
+import { authenticationService, notificationService } from '../../services'
+import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
+import { get } from 'lodash'
+import CloseIcon from '@mui/icons-material/Close';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import eventBus from "./../../helpers/eventbus";
 
 const profileMenus = [
   { label: 'Profile', icon: ProfileImage },
@@ -67,17 +76,138 @@ const StyledMenu = styled(props => (
   },
 }))
 
+
+const StyledMenuNotification = styled(props => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color: theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+      },
+    },
+  },
+}))
+
 const NavBarComponent = () => {
   const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const [anchorElNotification,setAnchorElNotification ] = React.useState(null)
+
+  const openNotification = Boolean(anchorElNotification)
+
+
   const open = Boolean(anchorEl)
   const [name, setName] = React.useState('')
   const [role, setRole] = React.useState()
   const [userId, setUserId] = React.useState('')
+  const [profilePic,setProfilePic] = React.useState("");
+  const [notificationList,setNotificationList] = React.useState([])
+  const [notificationUnReadcount,setNotificationUnReadcount] = React.useState(0);
 
+
+  useEffect(()=>{
+    eventBus.on("notification", (data) =>
+    // console.log("Nav Bar component",data)
+    {getNotificationList();}
+      // this.setState({ message: data.message })
+    );
+  },[])
+
+  const notificationsListObj = [{
+    "is_read":false,
+    "created_date_time":1638547274254,
+    "_id":"61aa3f4a06451c3cf61b0959",
+    "to":"619dddc172deaf29e7a0ea8b",
+    "from":{
+    "profilePic":"2275311637306342499.jfif",
+    "_id":"6195076bb39e32b8a4274b46",
+    "first_name":"Karthika",
+    "last_name":"GK",
+    "email":"karthikagk@yopmail.com",
+    "role":"doctor"
+    },
+    "title":"Confirm Appointment",
+    "appointmentId":"61aa3c0dac74ea34b490569a",
+    "message":"Your Appoinment has been Confirmed",
+    "module_slug":"confirm_appointment",
+    "__v":0
+    }]
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
   }
 
+  useEffect(()=>{
+    getNotificationList();
+  },[])
+
+  const handleNotificationClick = event => {
+    setAnchorElNotification(event.currentTarget)
+    getNotificationList();
+  }
+
+
+
+  const getNotificationList= ()=>{
+    notificationService.getNotificationList({
+      "limit": 1000,
+      "skip": 0
+    }).then(res=>{
+      console.log("getNotifications",res);
+      let notificationsArray = get(res,["data","data","notificationList"]);
+      setNotificationUnReadcount(get(res,["data","data","unReadCount"]));
+      let messageArray = [];
+      notificationsArray.forEach(element => {
+        messageArray= messageArray.concat(element.data.filter(x=>!x.is_read));
+      });
+      // messageArray= messageArray.sort((a,b) => (a.created_date_time > b.created_date_time) ? 1 : ((b.created_date_time > a.created_date_time) ? -1 : 0))
+      // messageArray=messageArray.sort((a, b) => a.created_date_time - b.created_date_time);
+
+      console.log("messageArray",messageArray);
+      setNotificationList(messageArray);
+    },error=>{
+      console.log("getNotifications",error);
+    })
+  }
+
+  const MarkAsUnread = (notificationId)   =>{
+notificationService.notificationMakeRead(notificationId).then(res=>{
+  console.log("MarkAsUnread",res);
+  getNotificationList();
+
+},error=>{
+  console.log("MarkAsUnread",error);
+})
+  }
+
+  const handleNotificationClose =action =>{
+    setAnchorElNotification(null);
+  }
+ 
   const handleClose = action => {
     setAnchorEl(null)
     console.log('action', action)
@@ -108,6 +238,7 @@ const NavBarComponent = () => {
     }
     setName(fullName)
     setRole(roleName)
+    setProfilePic(data.profilePic);
 
   }, [])
 
@@ -127,8 +258,86 @@ const NavBarComponent = () => {
         <div className="nb__message">
           <MessageOutlinedIcon />
         </div>
-        <div className="nb__notification">
-          <NotificationImportantOutlinedIcon />
+        <div className="notificationUnReadcount">{notificationUnReadcount}</div>
+        <div className="nb__notification" style ={openNotification?{backgroundColor:"#E42346"}:{backgroundColor:"#fff"}}>
+          
+        <Button
+            id="notification-button"
+            aria-controls="demo-customized-menu"
+            // aria-haspopup="true"
+            // aria-expanded={open ? 'true' : undefined}
+            disableElevation
+            onClick={handleNotificationClick}
+            // endIcon={<KeyboardArrowDownIcon />}
+          > 
+          <NotificationImportantOutlinedIcon style ={openNotification?{fill:"#fff"}:{fill:"#000"}} />
+          
+          </Button>
+          <StyledMenuNotification
+            id="demo-customized-menu"
+            MenuListProps={{
+              'aria-labelledby': 'demo-customized-button',
+            }}
+            anchorEl={anchorElNotification}
+            open={openNotification}
+            onClose={e => handleNotificationClose('Close')}
+          >
+           
+            <div className="nb__profile__menu notifications">
+
+              {notificationList && notificationList.map((item)=>{
+                return (
+                  <div className="row" key={item}>
+               
+                    <div className="message-section">
+                    <div className="message-body">
+                      <div className="message-icon">
+                    
+                    {(item.module_slug === 'confirm_appointment' || 
+                      item.module_slug === 'reschedule_appointment' ||
+                      item.module_slug === 'cancel_appointment' ||
+                      item.module_slug === 'decline_appointment'||
+                      item.module_slug === 'new_appointment') ?
+                     <EventNoteIcon /> :                    
+                        <AccountTreeOutlinedIcon/>
+                      
+
+                    }   
+                      
+                      {/* <AccountTreeOutlinedIcon/>           */}
+                        </div>
+                      <div className="message-content">
+                      <span className="meesage-title">{item.title}</span>
+                      <span className="meesage-text">{item.message}</span>
+                     
+                      </div>
+                      <CloseIcon  className="close-icon" onClick={()=>{MarkAsUnread(item._id)}}/>
+                      </div>
+
+                      {(item.module_slug =="new_appointment" || item.module_slug == "reschedule_appointment")&&(
+                      <div className="button-section">
+                        <button className="button button-view">
+                          <RemoveRedEyeOutlinedIcon style={{fontSize:14,marginRight:5}}/>
+                          View</button>
+
+                          <button className="button button-decline">
+                          <CloseIcon style={{fontSize:14,marginRight:5}}/>
+                          Decline</button>
+
+                          <button className="button button-accept">
+                          <DoneOutlinedIcon style={{fontSize:14,marginRight:5}}/>
+                          Accept</button>
+                      </div>
+                      )}
+                      
+                  </div>
+                  
+                  <Divider sx={{ my: 0.5 }} />
+                </div>)
+              })}
+              
+            </div>
+            </StyledMenuNotification>
         </div>
         <div className="nb__profile">
           <Button
@@ -142,7 +351,8 @@ const NavBarComponent = () => {
           >
             <div className="nb__profile__dropdown">
               <div>
-                <img src={ProfileImage} alt="Profile" className="nb__profile__image" />
+                {/* <img src={ProfileImage} alt="Profile" className="nb__profile__image" /> */}
+                <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} />
               </div>
               <div className="nb__profile__content">
                 <div className="nb__profile__name">{name}</div>

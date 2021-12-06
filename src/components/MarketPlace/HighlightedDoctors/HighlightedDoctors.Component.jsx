@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import './HighlightedDoctors.Component.css'
 import Doctor from '../../../assets/images/doctor1.png'
 import TopDoctorComponent from '../TopDoctor/TopDoctor.Component'
-
+import {appointmentService} from '../../../services'
+import get from 'lodash.get'
 const TopDoctorList = [
   {
     id: 1,
@@ -37,11 +38,18 @@ const TopDoctorList = [
 ]
 
 const HighlightedDoctorsComponent = () => {
+  const [doctors, setDoctors] = useState([])
+  useEffect( async () => {
+    const response = await appointmentService.getHighlightedDoctorsList().catch(err => {console.log(err)})
+    const data = get(response, ['data', 'data'], '')
+    setDoctors(data)
+    console.log('high', data)
+  }, [])
   return (
     <div className="hd__main__div">
       <div className="hd__row">
-        {TopDoctorList &&
-          TopDoctorList.map(doctor => {
+        {doctors &&
+          doctors.map(doctor => {
             return <TopDoctorComponent doctor={doctor} />
           })}
       </div>

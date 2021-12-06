@@ -174,7 +174,10 @@ const OrganizationViewComponent = () => {
                 inkBarStyle={{ background: 'red' }}
                 TabIndicatorProps={{ className: classes.indicator }}
             >
-                {get(userDetails, ['role'], '') === 'doctor' || 'patient' &&
+                {get(userDetails, ['role'], '') === 'doctor' &&
+                    <TabItem value="0" label="My Details" />
+                }
+                {get(userDetails, ['role'], '') === 'patient' &&
                     <TabItem value="0" label="My Details" />
                 }
 

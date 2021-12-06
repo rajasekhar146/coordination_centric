@@ -7,7 +7,16 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
-
+import { useDispatch } from 'react-redux'
+import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
+import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
+// import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
+import { appointmentService } from '../../services'
+import moment from 'moment'
+import {
+    primaryAppointmentDate,
+    secondaryAppointmentDate,
+} from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -43,37 +52,66 @@ const useStyles = makeStyles(theme => ({
 
 const menuList = [
     {
-        menu: 'confirmed',
+        menu: 'accepted',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
-        menu: 'pending_acceptance',
-        options: [
+        menu: 'pending',
+        doctorOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        patientOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
+        ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
         menu: 'declined',
         options: [
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
     {
-        menu: 'requested_to_reschedule',
+        menu: 'request_to_reschedule',
+        options: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
+    },
+    {
+        menu: 'rescheduled',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
     },
+
 
 
 ]
@@ -90,9 +128,16 @@ const AppointmentItemComponent = props => {
         setSelectedAppointment,
         setIsRescheduleClicked,
         setIsViewClicked,
-        setIsRejectClicked
+        setIsRejectClicked,
+        setPatientReschedule,
+        setCancelAppointment,
+        role,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        type
     } = props
-
+    const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
     const [menuOptions, setMenuOptions] = React.useState([])
@@ -104,7 +149,16 @@ const AppointmentItemComponent = props => {
         setAnchorEl(event.currentTarget)
         const menus = menuList.filter(m => m.menu === status.toLowerCase())
         console.log('menus', menus)
-        if (menus.length > 0) setMenuOptions(menus[0].options)
+        if (menus.length > 0) {
+            if (status === 'pending') {
+                role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
+            } else if (type === 'history') {
+                setMenuOptions(menus[0].historyOptions)
+            } else {
+                setMenuOptions(menus[0].options)
+            }
+
+        }
         else setMenuOptions([])
 
         console.log('menus[0].options', menus[0].options)
@@ -113,6 +167,7 @@ const AppointmentItemComponent = props => {
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
+        dispatch(setAppointmentDetails(row))
         console.log('orgId', orgId)
         switch (action) {
             case 'setIsConfirmClicked':
@@ -129,9 +184,24 @@ const AppointmentItemComponent = props => {
                 break
             case 'setIsRejectClicked':
                 setIsRejectClicked(true)
+                break
+            case 'setPatientReschedule':
+                setPatientReschedule(true)
+                break
+            case 'setCancelAppointment':
+                setCancelAppointment(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
+        dispatch(primaryAppointmentDate({
+            Day: moment(new Date(row.startTime)).format('YYYY-MM-DD'),
+            Time: {
+                startTime: moment(new Date(row.startTime), "HH:mm").format("HH:mm"),
+                endTime: moment(new Date(row.endTime), "HH:mm").format("HH:mm")
+            }
+        }))
+        // dispatch(setAppointmentDetails(row))
+
     }
 
     const handleClose = () => {
@@ -154,33 +224,41 @@ const AppointmentItemComponent = props => {
 
     const getValue = val => {
         switch (val) {
-            case 'confirmed':
-                return 'confirmed'
+            case 'accepted':
+                return 'Confirmed'
                 break
 
             case 'cancelled':
-                return 'cancelled'
+                return 'Cancelled'
                 break
-            case 'declined':
-                return 'declined'
-                break
-            case 'pending_acceptance':
+            case 'pending':
                 return 'Pending acceptance'
                 break
-            case 'requested_to_reschedule':
+            case 'accepted':
+                return 'Accepted'
+                break
+            case 'declined':
+                return 'Declined'
+                break
+            case 'request_to_reschedule':
                 return 'Requested to Re-schedule'
                 break
+            case 'rescheduled':
+                return 'Rescheduled'
             default:
                 return null
         }
     }
 
+
+
     const colorcodes = {
-        confirmed: '#12B76A',
-        pending_acceptance: '#7A5AF8',
+        accepted: '#12B76A',
+        pending: '#7A5AF8',
         cancelled: '#757500',
         declined: '#B42318',
-        requested_to_reschedule: '#B42318'
+        request_to_reschedule: '#F79009',
+        rescheduled: '#F79009'
     }
 
     return (
@@ -203,7 +281,7 @@ const AppointmentItemComponent = props => {
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
                             <div className={`od__${value?.toLowerCase()}__label`}>
-                                {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
+                                {getValue(value)}
                             </div>
                         </div>
                     </TableCell>
@@ -215,7 +293,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                <img className="ap_profile" src={value} alt="profile" />
+                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
+                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
                             </div>
                         </div>
                     </TableCell>

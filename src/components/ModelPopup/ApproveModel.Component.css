@@ -35,6 +35,24 @@
     letter-spacing: 0.1px;
     color: #FFFFFF !important;
 }
+
+.io__disable__btn {
+    width: 100%;
+    background-color: #DBDDE0 !important;
+    height: 44px;
+    border-radius: 12px !important;
+    border: 1px solid #E42346;
+    padding: 10px 18px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+    color: #FFFFFF !important;
+    pointer-events: none;
+}
 .io__text__center {
     text-align: center;
 }
@@ -468,7 +486,7 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
-
+    margin: 10px 0;
     /* identical to box height, or 143% */
 
     /* Primary/Default */
@@ -517,4 +535,74 @@
     border-radius: 8px !important;
     width: 100% !important;
     color: #fff !important;
+}
+
+.mar-bot-10{
+    margin-top: 10px;
+}
+.od_input_p{
+    width: 98% !important;
+}
+.od_dropzone_prof{
+    height : 125px !important;
+}
+.pas__problem__label{
+    margin-bottom: 10px;
+}
+
+.error{
+    color: red;
+    font-size: 12px;
+    font-family: Lato;
+}
+.reason_error{
+    position: absolute;
+    margin-top: -15px;
+    color: red;
+    font-size: 12px;
+    font-family: Lato;
+}
+.relative{
+    position: relative;
+}
+.mar-top-30{
+    margin-top: 30px;
+}
+.io_width_50 {
+    width: 50%;
+}
+.width_70 {
+    width: 70%;
+}
+.width_80 {
+    width: 80%;
+}
+.io__head_info {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;  
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #A0A4A8; 
+}
+.io_info_label {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.1px;
+    color: #25282B;
+}
+.io_terms_conditions {
+    font-family: Lato !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    line-height: 16px !important;
+    letter-spacing: 0.1px;
+    color: #52575C !important;
+    display: flex;
 }

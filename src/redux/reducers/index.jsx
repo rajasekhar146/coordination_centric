@@ -20,7 +20,10 @@ import {
   setAppointmentAvailableTimeSlotsReducer,
   setPrimaryAppointmentDateReducer,
   setSecondaryAppointmentDateReducer,
+  setFlashMsgReducer,
+
 } from './commonReducer'
+import { appointmentDetailsReducer, doctorDetailsReducer } from './appointmentReducer'
 
 const reducers = combineReducers({
   allMembers: memberReducer,
@@ -42,6 +45,9 @@ const reducers = combineReducers({
   appointmentAvailableTimeSlots: setAppointmentAvailableTimeSlotsReducer,
   primaryAppointmentDate: setPrimaryAppointmentDateReducer,
   secondaryAppointmentDate: setSecondaryAppointmentDateReducer,
+  appointmentDetails: appointmentDetailsReducer,
+  flashMsgObj: setFlashMsgReducer,
+  doctorDetails: doctorDetailsReducer
 })
 
 export default reducers

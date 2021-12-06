@@ -34,7 +34,7 @@ const OrganisationItem = props => {
     setIsCancelInviteClicked,
     setSubLabel,
     setIsActivateClicked,
-    role
+    role,
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -52,22 +52,33 @@ const OrganisationItem = props => {
     console.log('menus[0].options', menus[0].options)
   }
 
-  const handleClose = (e) => {
+  const handleClose = e => {
     e.preventDefault()
     e.stopPropagation()
     setAnchorEl(null)
   }
 
   const handleActivate = org => {
-    const res = organizationService.updateOrganization(org.id, 'active')
-    res.then(() => {
-      setOrganizations([])
-      setSkip(1)
-      setAlertMsg('Activated')
-      setSubLabel('This account was successfully activated.')
-      setOpenFlash(true)
-      setIsActivateClicked(false)
+    const params = {
+      facilityId: org.id,
+    }
+    console.log('handleActivate', params)
+    const response = organizationService.subscriptionOrganization(params).catch(err => {
+      console.log(err)
     })
+    console.log('handleActivate >> 1 ', response)
+    if(response.status === 200) {
+      const res = organizationService.updateOrganization(org.id, 'active').catch(err => {console.log(err)})
+      console.log('handleActivate >> 2 ', res)
+      if(res.status === 200) {
+        setOrganizations([])
+        setSkip(1)
+        setAlertMsg('Activated')
+        setSubLabel('This account was successfully activated.')
+        setOpenFlash(true)
+        setIsActivateClicked(false)
+      }
+    }    
   }
 
   const handleResend = org => {
@@ -158,7 +169,10 @@ const OrganisationItem = props => {
       }}
       hover
       role="checkbox"
-      style={{ width: '100%' }} tabIndex={-1} key={row.id}>
+      style={{ width: '100%' }}
+      tabIndex={-1}
+      key={row.id}
+    >
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
@@ -198,16 +212,16 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-            // PaperProps={{
-            //     style: {
-            //         maxHeight: ITEM_HEIGHT * 4.5,
-            //         width: '20ch',
-            //         boxShadow:
-            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-            //         border: '1px solid #9fa2a3',
-            //         left: '-75px'
-            //     },
-            // }}
+              // PaperProps={{
+              //     style: {
+              //         maxHeight: ITEM_HEIGHT * 4.5,
+              //         width: '20ch',
+              //         boxShadow:
+              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+              //         border: '1px solid #9fa2a3',
+              //         left: '-75px'
+              //     },
+              // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem
@@ -223,8 +237,7 @@ const OrganisationItem = props => {
               ))}
             </Menu>
           </TableCell>
-        ) :  column.id === 'invited_facilityName' && role !== 'superadmin' ? 
-        null : column.id == 'id' ? null : (
+        ) : column.id === 'invited_facilityName' && role !== 'superadmin' ? null : column.id == 'id' ? null : (
           <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
             {column.format && typeof value === 'number' ? column.format(value) : value}
           </TableCell>
