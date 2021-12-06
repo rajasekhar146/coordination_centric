@@ -46,6 +46,7 @@ const VerificationCodePage = props => {
   useEffect(() => {
     var twoFaVerfied = localStorage.getItem('twoFaVerfied')
     if (twoFaVerfied) {
+      
       history.push(`/dashboard`)
     }
   }, [])
