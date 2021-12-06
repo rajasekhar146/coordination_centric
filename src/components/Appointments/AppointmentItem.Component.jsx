@@ -16,7 +16,7 @@ import moment from 'moment'
 import {
     primaryAppointmentDate,
     secondaryAppointmentDate,
-  } from '../../redux/actions/commonActions'
+} from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -73,7 +73,7 @@ const menuList = [
         patientOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
-            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         ],
         historyOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
@@ -130,6 +130,7 @@ const AppointmentItemComponent = props => {
         setIsViewClicked,
         setIsRejectClicked,
         setPatientReschedule,
+        setCancelAppointment,
         role,
         setOpenFlash,
         setAlertMsg,
@@ -151,7 +152,7 @@ const AppointmentItemComponent = props => {
         if (menus.length > 0) {
             if (status === 'pending') {
                 role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
-            } else if(type === 'history') {
+            } else if (type === 'history') {
                 setMenuOptions(menus[0].historyOptions)
             } else {
                 setMenuOptions(menus[0].options)
@@ -186,6 +187,9 @@ const AppointmentItemComponent = props => {
                 break
             case 'setPatientReschedule':
                 setPatientReschedule(true)
+                break
+            case 'setCancelAppointment':
+                setCancelAppointment(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
