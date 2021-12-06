@@ -118,6 +118,10 @@ const UpcomongAppointmentComponent = props => {
         setPatientReschedule(false)
     }
 
+    const closeCancelTermsAndConds = () => {
+        setCancelAppointment(false)
+    }
+
 
 
     const columns = [
@@ -336,7 +340,7 @@ const UpcomongAppointmentComponent = props => {
                     >
                         <Box sx={termsAndCondition}>
                             <CancelAppointmentPopup
-                                clickCloseButton={closePatientReschedule}
+                                clickCloseButton={closeCancelTermsAndConds}
                                 // setSkip={setSkip}
                                 selectedAppointment={selectedAppointment}
                                 setOpenFlash={setOpenFlash}

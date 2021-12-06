@@ -16,12 +16,7 @@ import history from '../../history'
 
 const CancelAppointment = props => {
     const {
-        setOpenFlash,
-        setAlertMsg,
-        setSubLabel,
         clickCloseButton,
-        selectedAppointment,
-        setIsRescheduleClicked,
     } = props
 
     const [isChecked, setIsChecked] = useState(true)
@@ -40,12 +35,12 @@ const CancelAppointment = props => {
             </div>
             <div className="io__row io__text__center io_width_50">
                 <label className="io__title">
-                    Appointment Re-schedule Terms & Conditions
+                    Appointment Canceling Terms & Conditions
                 </label>
             </div>
-            <div className="io__row io__text__center width_70">
+            <div className="io__row io__text__center width_80">
                 <label className="io__head_info">
-                    Please read carefuly and accept this terms before requesting a re-schedule of your appointment.
+                    Please read carefuly and accept this terms before canceling your appointment.
 
                 </label>
             </div>
@@ -63,7 +58,8 @@ const CancelAppointment = props => {
                     <div className="ac__column">
                         <label className="container">
                             <span className="io_terms_conditions">
-                                I agree to re-schedule my appointment and I am aware of the Coordination Centric Terms & Conditions.
+                                I agree to cancel the appointment and I am aware of the Coordination
+                                 Centric Terms & Conditions.
                             </span>
 
                             <input
