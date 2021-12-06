@@ -117,9 +117,9 @@ const ProblemAndSymptomsComponent = (props) => {
       </div>
      
 
-      <div className="pas__row mar-top-30">
+      {/* <div className="pas__row mar-top-30">
         <div className="pas__problem__label">Do you want to invite someone to join the appointment?</div>
-      </div>
+      </div> */}
       <div className="pas__row">
 
       </div>

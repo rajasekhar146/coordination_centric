@@ -13,8 +13,8 @@ const myEventsList = [
   {
     title: 'Jitus',
     allDay: true,
-    start: new Date(2021, 10, 24),
-    end: new Date(2021, 10, 24)
+    start: new Date(2021, 11, 24),
+    end: new Date(2021, 11, 24)
   },
   {
     title: 'Abi',
