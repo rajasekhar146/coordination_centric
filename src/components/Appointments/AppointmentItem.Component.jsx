@@ -263,7 +263,7 @@ const AppointmentItemComponent = props => {
     }
 
     const handleRowClick = async(i, row) =>{
-       // history.push(`/viewApointment/${row.appointmentid}`)
+       history.push(`/viewApointment/${row.appointmentid}`)
     }
     return (
         <TableRow
