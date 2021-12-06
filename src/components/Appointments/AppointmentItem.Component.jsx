@@ -16,7 +16,7 @@ import {
     primaryAppointmentDate,
     secondaryAppointmentDate,
   } from '../../redux/actions/commonActions'
-  import ViewAppointmentComponent from './ViewAppointment.Component'
+//   import ViewAppointmentComponent from './ViewAppointment.Component'
   import history from '../../history'
 
 const useStyles = makeStyles(theme => ({
