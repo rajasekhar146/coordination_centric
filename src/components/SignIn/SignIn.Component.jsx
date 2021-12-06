@@ -72,12 +72,14 @@ const SignInComponent = () => {
         setIsValidPassword(true)
         setIsValidEmail(true)
         setIsValidUser(true)
-        if (user.status_code === 400) {
+        if (!user) {
+          history.push('/signin')
+        } else if (user.status_code === 400) {
           setIsValidUser(false)
           IsValidUser = false
           setAlertMsg(get(user, ['message'], ''))
           setOpenFlash(true)
-          setErrMsg(user.message)
+          // setErrMsg(user.message)
           if (user.message.includes('Password')) {
             setIsValidPassword(false)
             setIsValidEmail(true)
@@ -188,7 +190,7 @@ const SignInComponent = () => {
                   })}
                   type={showPassword ? 'text' : 'password'}
                   onChange={handleChange()}
-                  placeholder="password"
+                  placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

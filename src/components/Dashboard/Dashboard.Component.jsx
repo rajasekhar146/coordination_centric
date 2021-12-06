@@ -114,14 +114,14 @@ const DashboardComponent = () => {
   const [isOpen2FA, setIsOpen2FA] = useState(false)
   const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.isOpenCompletProfilePopup))
   const currentUser = authenticationService.currentUserValue
-  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
 
   useEffect(() => {
     // var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
     // console.log("name", IsShow2FAPopup, twoFactor_auth_type)
 
-    if (twoFactor_auth_type === 'none') {
+    if (!last_login_time) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }

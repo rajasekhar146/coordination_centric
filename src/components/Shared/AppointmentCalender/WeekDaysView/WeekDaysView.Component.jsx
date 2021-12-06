@@ -415,13 +415,8 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
-            clickSubmitButton={clickSubmitButton}
-          clickSubmitButton={clickSubmitButton} 
-            clickSubmitButton={clickSubmitButton}
-          clickSubmitButton={clickSubmitButton} 
-            clickSubmitButton={clickSubmitButton}
-            clickSubmitButton={clickSubmitButton}
+          <ProblemAndSymptomsComponent
+            clickBackButton={clickBackButton}
             clickSubmitButton={clickSubmitButton}
             invitedMembers={invitedMembers}
             setInvitedMembers={setInvitedMembers}
