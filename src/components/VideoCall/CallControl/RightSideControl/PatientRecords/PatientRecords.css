@@ -1,0 +1,47 @@
+
+
+.video-aside-wrp {
+    width: 50vw;
+    background-color: #F6F8FB;
+    position: relative;
+    height: 100vh;
+    display: flex;
+}
+
+
+.work-space {
+    margin: 30px 20px ;
+}
+
+.video-call-aside-wrp {
+
+}
+.left-short-menu {
+    background-color: white;
+    border-top-left-radius: 15px;
+    box-shadow: -1px 0px 4px #afaaaa;
+    border-bottom-left-radius: 15px;
+    padding: 40px 10px;
+}
+.short-menu-list {
+    margin: 0;
+    padding: 0;
+}
+
+.short-menu-list li{
+    list-style: none;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.short-menu-list li svg path{
+    fill:#000;
+}
+
+.short-menu-list li:hover svg path{
+    fill:#E42346;
+}
+.work-space .title {
+    color: #E42346;
+    font-size: 26px;
+    margin-bottom: 40px;
+}
