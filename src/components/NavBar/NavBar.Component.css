@@ -51,6 +51,19 @@
     margin-left: 0px !important;
     /* position: absolute; */
 }
+
+.nb__notification_countzero {
+    display: flex;
+    margin-left: 20px !important;
+    /* position: absolute; */
+}
+
+.nb__notification_countNanZero {
+    display: flex;
+    margin-left: 0px !important;
+    /* position: absolute; */
+}
+
 .nb__profile {
     width: 250px;
     margin-left: 20px;
@@ -151,6 +164,7 @@
 
 .notifications {
     max-height: 360px;
+    width: 360px;
     box-shadow: none !important;
 }
 .message-section {
@@ -215,7 +229,7 @@
     
     top: -16px;
     position: relative;
-    right: -7px;
+    right: -48px;
     fill: #bcbcbc !important;
     cursor: pointer;
 
@@ -230,7 +244,7 @@
     border: none;
     padding: 9px 15px;
     margin-top: 10px;
-    
+    cursor: pointer;
 }
 .button-view {
     

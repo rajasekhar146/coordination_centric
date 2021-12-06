@@ -38,15 +38,17 @@
     /* display: none; */
 }
 .rbc-toolbar > .rbc-btn-group:first-child > button:first-child{
-    /* display: none; */
+    display: none;
 }
 .rbc-toolbar > .rbc-btn-group:first-child > button:nth-child(2){
     position: absolute;
-    left: 0;
+    left: 30px;
+    top: 15px;    
 }
 .rbc-toolbar > .rbc-btn-group:first-child > button:nth-child(3){
     position: absolute;
-    right: 0;
+    right: 30px;
+    top: 15px;
 }.rbc-toolbar .rbc-btn-group:last-child {
     position: absolute;
     right: 0;top:-30px;
