@@ -235,3 +235,9 @@
     /* Neutral/Black */
     color: #25282B;
 }
+
+.bi__error {
+    width: 100%;
+    text-align: center;
+    color: #E42346;
+}

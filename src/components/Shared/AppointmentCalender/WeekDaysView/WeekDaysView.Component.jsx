@@ -18,8 +18,13 @@ import {
   setFlashMsg,
   primaryAppointmentDate,
   secondaryAppointmentDate,
+  // getWeekDays
 } from '../../../../redux/actions/commonActions'
 import { useHistory } from 'react-router-dom'
+import { getWeekDays } from '../../../../stores/appointmentslotstore'
+import AppointmentSlotsStore from '../../../../stores/appointmentslotstore'
+import useStore from '../../../../hooks/use-store';
+
 
 const confirmAppointment = {
   position: 'absolute',
@@ -88,13 +93,36 @@ const WeekDaysViewComponent = (props) => {
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
-  const userId = get(currentUser, ['data', 'data', '_id'], '')
+
+
+  const getUserId = (role) => {
+    switch (role) {
+      case 'doctor':
+        return get(currentUser, ['data', 'data', '_id'], '')
+      default:
+        return appointmentDetails._id
+    }
+  }
+
+  const userId = getUserId(role)
+
 
   const appointmentUserId = props.id;
   // const doctorName = props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
+
+
+  const [appointmentSlotsData] = useStore(AppointmentSlotsStore);
+
+  const {
+    appointmentSlots,
+  } = appointmentSlotsData;
+
+
+
+
   const [avaliableAppointmentDays, setAvaliableAppointmentDays] = useState([])
   const [currentDay, setCurrentDay] = useState('')
   const [currentDate, setCurrentDate] = useState('')
@@ -105,6 +133,10 @@ const WeekDaysViewComponent = (props) => {
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const [IsClickedConfirm, setClickedConfirm] = useState(false)
   const [IsClickedSubmit, setClickedSubmit] = useState(false)
+  const [selectedYear, setSelectedYear] = useState(null)
+  const [selectedMonth, setSelectedMonth] = useState(null)
+  const [selectedDay, setSelectedday] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(null)
   const [invitedMembers, setInvitedMembers] = useState([{
     email: '',
   }]);
@@ -115,29 +147,40 @@ const WeekDaysViewComponent = (props) => {
 
 
   const getAwailablities = async (selectedDate) => {
-    const startDate = moment(new Date()).subtract(30, 'days').format("YYYY-MM-DD");
-    const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+    const startDate = moment(new Date()).format("YYYY-MM-DD");
+    const endDate = moment(new Date()).add(5, 'days').format("YYYY-MM-DD");
 
-    const res = await appointmentService.getAppointmentsForAwailability('619c928e26e7fb15ff163f61', startDate, endDate)
+    const res = await appointmentService.getAppointmentsForAwailability(userId, startDate, endDate)
     if (res.status === 200) {
-      console.log(res)
+      // console.log('data123', get(res, ['data', 'data'], null), selectedDate)
+      // getWeekDays(get(res, ['data', 'data'], null), selectedDate)
+      console.log()
       dispatch(appointmentAvailableTimeSlots(get(res, ['data', 'data'], null), selectedDate))
     } else {
 
     }
   }
 
-  useEffect(async () => {
-    const selectedYear = selectedCalender.calenderDate.Year
-    const selectedMonth = selectedCalender.calenderDate.Month
-    const selectedDay = selectedCalender.calenderDate.Day
-    //const day = selectedYear + '-' + selectedMonth + '-' + selectedDay
-    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
-    // await getWeekDays(selectedDate)
-    getAwailablities(selectedDate)
-    console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
-    console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
+  useEffect(() => {
+    setSelectedYear(selectedCalender.calenderDate.Year)
+    setSelectedMonth(selectedCalender.calenderDate.Month)
+    setSelectedday(selectedCalender.calenderDate.Day)
+    setSelectedDate(getSelectedDate(selectedYear, selectedMonth, selectedDay))
   }, [selectedCalender])
+  console.log('moment date', selectedDay)
+  // moment(selectedDate).add(d, 'd')
+
+
+  useEffect(async () => {
+    if (selectedDate) {
+      getAwailablities(selectedDate)
+      console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
+      console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
+    }
+    //const day = selectedYear + '-' + selectedMonth + '-' + selectedDay
+    // await getWeekDays(selectedDate)
+
+  }, [moment(selectedDate).format('YYYY-MM-DD')])
 
   useEffect(() => {
     setAvaliableAppointmentDays([...rweekDaysAvailablities])
@@ -160,8 +203,8 @@ const WeekDaysViewComponent = (props) => {
   }, [rweekDaysAvailablities.length])
 
   const getSelectedDate = (year, month, day) => {
-    const selectedDay = year + '-' + month + '-' + day
-    return moment(selectedDay)
+    // const selectedDay = year + '-' + month + '-' + day
+    return moment(new Date())
   }
   const getWeekDays = async selectedDay => {
     var weekDaysAvailablities = []
@@ -181,42 +224,46 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const moveBack = async () => {
-    console.log('useEffect Week Days', selectedCalender)
-    const selectedYear = selectedCalender.calenderDate.Year
-    const selectedMonth = selectedCalender.calenderDate.Month
-    const selectedDay = selectedCalender.calenderDate.Day
-    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    // console.log('useEffect Week Days', selectedCalender)
+    // const selectedYear = selectedCalender.calenderDate.Year
+    // const selectedMonth = selectedCalender.calenderDate.Month
+    // const selectedDay = selectedCalender.calenderDate.Day
+    // const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
 
-    const newSelectedDate = moment(selectedDate).add(-5, 'd')
-    const newDay = newSelectedDate.format('MMMM, YYYY')
-    console.log(newSelectedDate.format('dddd, DD'))
-    setCurrentDate(newDay)
-    setCurrentDay(newSelectedDate)
-    const calenderDay = {
-      Year: newSelectedDate.format('YYYY'),
-      Month: newSelectedDate.format('MM'),
-      Day: newSelectedDate.format('DD'),
-    }
-    dispatch(calendarAppointmentDate(calenderDay))
+    // const newSelectedDate = moment(selectedDate).add(-5, 'd')
+    // const newDay = newSelectedDate.format('MMMM, YYYY')
+    // console.log(newSelectedDate.format('dddd, DD'))
+    // setCurrentDate(newDay)
+    // setCurrentDay(newSelectedDate)
+    // const calenderDay = {
+    //   Year: newSelectedDate.format('YYYY'),
+    //   Month: newSelectedDate.format('MM'),
+    //   Day: newSelectedDate.format('DD'),
+    // }
+    // dispatch(calendarAppointmentDate(calenderDay))
+    setSelectedday(moment().add(-1, 'days').format('DD'))
   }
   const moveNext = async () => {
-    console.log('useEffect Week Days', selectedCalender)
-    const selectedYear = selectedCalender.calenderDate.Year
-    const selectedMonth = selectedCalender.calenderDate.Month
-    const selectedDay = selectedCalender.calenderDate.Day
-    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    // console.log('useEffect Week Days', selectedCalender)
+    // const selectedYear = selectedCalender.calenderDate.Year
+    // const selectedMonth = selectedCalender.calenderDate.Month
+    // const selectedDay = selectedCalender.calenderDate.Day
+    // const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
 
-    const newSelectedDate = moment(selectedDate).add(5, 'd')
-    const newDay = newSelectedDate.format('MMMM, YYYY')
-    console.log(newSelectedDate.format('dddd, DD'))
-    setCurrentDate(newDay)
-    setCurrentDay(newSelectedDate)
-    const calenderDay = {
-      Year: newSelectedDate.format('YYYY'),
-      Month: newSelectedDate.format('MM'),
-      Day: newSelectedDate.format('DD'),
-    }
-    dispatch(calendarAppointmentDate(calenderDay))
+    // const newSelectedDate = moment(selectedDate).add(5, 'd')
+    // const newDay = newSelectedDate.format('MMMM, YYYY')
+    // console.log(newSelectedDate.format('dddd, DD'))
+    // setCurrentDate(newDay)
+    // setCurrentDay(newSelectedDate)
+    // const calenderDay = {
+    //   Year: newSelectedDate.format('YYYY'),
+    //   Month: newSelectedDate.format('MM'),
+    //   Day: newSelectedDate.format('DD'),
+    // }
+    // dispatch(calendarAppointmentDate(calenderDay))
+    setSelectedDate(moment(selectedDate).add(1, 'd'))
+    // getSelectedDate
+
   }
 
   const clickCloseButton = () => {
@@ -225,42 +272,40 @@ const WeekDaysViewComponent = (props) => {
 
   const clickConfirmButton = async () => {
 
-    if(role === "patient")
-    {
+    if (role === "patient" && type !== 'rescheduleByPatient') {
       setClickedAppointment(false)
       setClickedConfirm(true)
       return false;
     }
-    const reqData = {
-      primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      appointmentReason: appointmentReason,
-      email: invitedMembers.map(x => x.email),
-      documents: selectedFiles.map(x => x.path)
+    const reqData = {};
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.Time.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
     }
+    reqData.appointmentReason = appointmentReason
+    reqData.email = invitedMembers.map(x => x.email);
+    reqData.documents = selectedFiles.map(x => x.path)
+
     if (role === 'doctor') {
-      reqData.patientId = appointmentUserId
-    } else if(role === 'patient') {
-      reqData.doctorId = appointmentUserId
+      reqData.patientId = appointmentDetails._id
+      reqData.doctorId = userId
+    } else if (role === 'patient') {
+      reqData.doctorId = appointmentDetails._id
     }
-    
-    const res = await appointmentService.makeAppointment(reqData)
+    let res;
+    if ((role === 'doctor' || type === 'rescheduleByPatient')) {
+      res = await appointmentService.rescheduleAppointment(reqData, appointmentDetails.appointmentid, type)
+    } else {
+      res = await appointmentService.makeAppointment(reqData)
+    }
     if (res.status === 200) {
-      if (type === 'reschedule') {
-        dispatch(setFlashMsg({
-          openFlash: true,
-          alertMsg: 'Well done!',
-          subLabel: 'Your appointment was successfuly re-scheduled, wait 24h for doctor confirmation.'
-        }))
-      } else {
-        dispatch(setFlashMsg({
-          openFlash: true,
-          alertMsg: 'Re-scheduled',
-          subLabel: 'Your appointment was re-scheduled to Thu, 7th Oct 2021 at 9 am.'
-        }))
-      }
+      dispatch(setFlashMsg({
+        openFlash: true,
+        alertMsg: 'Well done!',
+        subLabel: 'Your appointment was successfuly re-scheduled, wait 24h for doctor confirmation.'
+      }))
       history.push('/appointments')
       setClickedConfirm(false)
       setClickedSubmit(true)
@@ -277,45 +322,50 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
-    if(appointmentReason == ''){
+    if (appointmentReason == '') {
       setappointmentReasonErr(true);
-      return false; 
-    
+      return false;
     }
     let result, isEmailError = 0;
     invitedMembers.map(inputsField => {
-        result = inputsField.validator;
-        if(result == false){
-          isEmailError++;
-        }
+      result = inputsField.validator;
+      if (result == false) {
+        isEmailError++;
+      }
     })
 
-    if(isEmailError > 0 ){
+    if (isEmailError > 0) {
       return false;
     }
-    const reqData = {
-      primaryStartTime: moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      primaryEndTime: moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      secondaryStartTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      secondaryEndTime: moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss'),
-      appointmentReason: appointmentReason,
-      email: invitedMembers.map(x => x.email),
-      documents: selectedFiles.map(x => x.path)
+
+    const reqData = {};
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.Time.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    }
+    reqData.appointmentReason = appointmentReason
+    reqData.email = invitedMembers.map(x => x.email);
+    reqData.documents = selectedFiles.map(x => x.path)
+
+
+    if (role === 'doctor') {
+      reqData.patientId = appointmentDetails.id
+    } else if (role === 'patient') {
+      reqData.doctorId = appointmentDetails._id
     }
     console.log("appointmentRequest", reqData);
+
     appointmentService.makeAppointment(reqData).then(
       res => {
         console.log("makeAppointment", res);
         setClickedConfirm(false)
         setClickedSubmit(true)
-        
-        
-       
       }, error => {
         console.log("Makeappointment", error);
       })
-    
-}
+  }
 
   const clickRequestClose = () => {
     setClickedSubmit(false)
@@ -365,16 +415,22 @@ const WeekDaysViewComponent = (props) => {
       </Modal>
       <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent clickBackButton={clickBackButton} 
+          <ProblemAndSymptomsComponent clickBackButton={clickBackButton}
+            clickSubmitButton={clickSubmitButton}
           clickSubmitButton={clickSubmitButton} 
-          invitedMembers={invitedMembers}
-          setInvitedMembers = {setInvitedMembers}
-          appointmentReason = {appointmentReason}
-          setAppointmentReason = {setAppointmentReason}
-          selectedFiles = {selectedFiles}
-          setSelectedFiles = {setSelectedFiles}
-          appointmentReasonErr = {appointmentReasonErr}
-          setappointmentReasonErr = {setappointmentReasonErr}
+            clickSubmitButton={clickSubmitButton}
+          clickSubmitButton={clickSubmitButton} 
+            clickSubmitButton={clickSubmitButton}
+            clickSubmitButton={clickSubmitButton}
+            clickSubmitButton={clickSubmitButton}
+            invitedMembers={invitedMembers}
+            setInvitedMembers={setInvitedMembers}
+            appointmentReason={appointmentReason}
+            setAppointmentReason={setAppointmentReason}
+            selectedFiles={selectedFiles}
+            setSelectedFiles={setSelectedFiles}
+            appointmentReasonErr={appointmentReasonErr}
+            setappointmentReasonErr={setappointmentReasonErr}
           />
         </Box>
       </Modal>

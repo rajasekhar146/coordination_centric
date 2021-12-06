@@ -15,7 +15,9 @@ export const appointmentService = {
     getAppointmentsForAwailability,
     getAllSpecializations,
     getHighlightedDoctorsList,
-    makeAppointment
+    makeAppointment,
+    rescheduleAppointment,
+    getSecondaryAppointment
 }
 
 
@@ -35,13 +37,13 @@ function getAppointments(userId, date, type, skip, limit) {
     )
 }
 
-function confirmAppointment(appointmentId, reason = '') {
+function confirmAppointment(appointmentId) {
     let axiosConfig = {
         headers: authHeader(),
     }
     return (
         axios
-            .put(`${apiURL}/appointment/cancelAppointment/${appointmentId}`, axiosConfig)
+            .put(`${apiURL}/appointment/confirmAppointment/${appointmentId}`, null, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
@@ -90,7 +92,7 @@ function askPatientReschedule(id) {
     }
     return (
         axios
-            .put(`${apiURL}/appointment/rescheduleAppointment/${id}/by_patient`, axiosConfig)
+            .put(`${apiURL}/appointment/rescheduleAppointment/${id}/patient`, null, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data
@@ -183,3 +185,40 @@ function getAppointmentsForAwailability(userId, startDate, endDate) {
 }
 
 
+
+function rescheduleAppointment(appointmentRequest, id, type) {
+
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    let url = `${apiURL}`
+    if (type !== 'rescheduleByPatient') {
+        url += `/appointment/rescheduleAppointment/${id}/doctor`
+    } else {
+        url += `/appointment/rescheduleAppointment/${id}/patient`
+    }
+    return (
+        axios
+            .put(url, appointmentRequest, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                return data
+            })
+    )
+}
+
+
+
+function getSecondaryAppointment(id) {
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/appointment/getSecondaryAppointment/${id}`, axiosConfig)
+            //.then(handleResponse)
+            .then(data => {
+                return data
+            })
+    )
+}

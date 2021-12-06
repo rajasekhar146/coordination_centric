@@ -61,7 +61,7 @@ const RescheduuleAppointmentComponent = props => {
 
 
     const handleSubmit = async () => {
-        const res = await appointmentService.askPatientReschedule(selectedAppointment._id)
+        const res = await appointmentService.askPatientReschedule(selectedAppointment.appointmentid)
         if (res.status === 200) {
             setOpenFlash(true);
             setAlertMsg('Requested');
