@@ -2,10 +2,17 @@ import React,{useEffect,useState} from 'react';
 import ReactDOM from 'react-dom';
 // import ParticipantsSection from './ParticipantsSection/ParticipantsSection';
 // import ChatSection from './ChatSection/ChatSection';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import VideoSection from './VideoSection/VideoSection';
 import Chat from './Chat/Chat';
 import {connect} from 'react-redux';
-import {setIdentity, setTwilioAccessToken, setRoomId, setShowVideoCallMeeting} from '../../redux/actions/video-call-actions';
+import {setIdentity, 
+        setTwilioAccessToken, 
+        setRoomId, 
+        setShowVideoCallMeeting,
+        setIsFullScreen
+        } from '../../redux/actions/video-call-actions';
 import { connectToRoom, getTokenFromTwilio } from './utils/TwilioUtils';
 import Overlay from './Overlay';
 import {useHistory} from 'react-router-dom';
@@ -16,11 +23,23 @@ import {useSelector,useDispatch} from 'react-redux';
 import { Provider } from 'react-redux'
 import store from '../../redux/store';
 import './VideoCall.css';
+import {v4 as uuidv4} from 'uuid';
 
 const callEnd = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-end.mp3");
 const callStart = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-start.mp3");
 
-const  VideoCallWidget=({identity,roomId, setTwilioAccessTokenAction, twilioAccessToken, showOverlay})=>{
+const  VideoCallWidget=({
+  identity,
+  roomId,
+  isFullScreen,
+  showOverlay,
+  setRoomIdAction,
+  setIdentityAction,
+  setTwilioAccessTokenAction,
+  setShowVideoCallMeetingAction,
+  setIsFullScreenAction,
+  })=>{
+console.log("Random ID", uuidv4())
 
   const watingList = [
     {
@@ -37,25 +56,22 @@ const  VideoCallWidget=({identity,roomId, setTwilioAccessTokenAction, twilioAcce
     }
 ]
 
-    const initialVideoCallData=()=>{
+    const initialVideoCallData= async()=>{
       try{
         let userName = JSON.parse(localStorage.getItem('currentUser')).data.data.first_name;
-        if(userName){
-          dispatch(setIdentity(userName))
-          let meetingUrl = window.location.pathname;
-          let meetingUrlSplit = meetingUrl.split('/');
-          if(meetingUrl.includes('video-call') && meetingUrlSplit.length === 3){
-            dispatch(setRoomId(meetingUrlSplit[2]))
-          }
-          dispatch(setShowVideoCallMeeting(true));
-          getTokenFromTwilio(setTwilioAccessTokenAction,identity,roomId,showOverlay);
-        }
+        setIdentityAction(userName)
+        let meetingUrl = window.location.pathname;
+        let meetingUrlSplit = meetingUrl.split('/');
+        setRoomIdAction(meetingUrlSplit[2]);
+         getTokenFromTwilio(meetingUrlSplit[2],userName,setTwilioAccessTokenAction);
+         console.log(">>>>>>>> Path deatils >>>>>>>", roomId, ">>>>>>>>>>", identity)
+        setShowVideoCallMeetingAction(true)
+       
       }catch{
         console.log("User not found")
       }
     }
-    const videoCallReducer = useSelector(state => state.videoCallReducer)
-    const dispatch = useDispatch();
+  
     const history = useHistory();
     const [isCallActive, setIsCallActive] = useState(false);
     const [toggleWatingList, setToggleWatingList] = useState(false);
@@ -65,7 +81,10 @@ const  VideoCallWidget=({identity,roomId, setTwilioAccessTokenAction, twilioAcce
     const [toggleChat, setToggleChat] = useState(false);
     const [toggleExtend, setToggleExtend] = useState(false);
     const [toggleShare, setToggleShare] = useState(false);
-
+    
+    const toggleFullScreen = ()=>{
+      setIsFullScreenAction(!isFullScreen)
+    }
   
     const toggleShareFun = ()=>{
       setToggleShare(!toggleShare)
@@ -106,12 +125,17 @@ const closeChatFun = ()=>{
     useEffect(() => {
       initialVideoCallData();
     },[])
+
+  
     ReactDOM.render(
       <>
     
       <Provider store={store}>
-                        <div className="room_container">
-                                                    <CallControl 
+                        <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
+                          <div className="full-screen" onClick={toggleFullScreen}> 
+                              <FullscreenIcon/>
+                          </div>
+                                                    <CallControl
                                                     room={room}
                                                     setRoom={setRoom}
                                                     watingList={watingList}
@@ -152,8 +176,13 @@ const mapStoreStateToProps=(state)=>{
 }
 const mapActionsToProps=(dispatch)=>{
     return {
-       setTwilioAccessTokenAction:(token)=> dispatch(setTwilioAccessToken(token))
+      setRoomIdAction:(roomId)=> dispatch(setRoomId(roomId)),
+      setIdentityAction:(identity)=> dispatch(setIdentity(identity)),
+      setTwilioAccessTokenAction:(token)=> dispatch(setTwilioAccessToken(token)),
+      setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
+      setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting))
     }
 }
+
 
 export default connect(mapStoreStateToProps,mapActionsToProps)(VideoCallWidget)

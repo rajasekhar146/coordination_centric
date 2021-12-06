@@ -23,7 +23,7 @@ const videoConstraints = {
   },
 };
 let dataChannel = null;
-export const getTokenFromTwilio = async(setAccessToken,identity,roomId,showOverlay)=>{
+export const getTokenFromTwilio = async(roomId,identity,setAccessToken,)=>{
   console.log("I Got the request")
     const randomId = uuidv4();
     //const response = await axios.get(`https://videocall-service-3612-dev.twil.io/token-service?identity=${randomId}jitu`)

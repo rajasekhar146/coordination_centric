@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import RoomLabel from './RoomLabel';
 import TwilioRoom from './TwilioRoom/TwilioRoom';
 import {connectToRoom} from '../utils/TwilioUtils';
-
+import {useSelector} from 'react-redux';
 const Videos = ({room,setRoom,roomId,twilioAccessToken}) =>{
+    const videoCallReducer = useSelector(state => state.videoCallReducer);
     useEffect(() => {
        if(twilioAccessToken){
            connectToRoom(twilioAccessToken,roomId,setRoom)
@@ -12,7 +13,10 @@ const Videos = ({room,setRoom,roomId,twilioAccessToken}) =>{
     }, [twilioAccessToken])
     return (
         <div className="videos_container">
-                <RoomLabel roomId={roomId}/>
+            {
+            !videoCallReducer.isFullScreen && <RoomLabel roomId={roomId}/>
+            }
+                
                 {room && <TwilioRoom room={room}/>}
         </div>
     )

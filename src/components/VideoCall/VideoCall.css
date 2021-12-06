@@ -1,4 +1,5 @@
 /* ----------------------------------------------------------------- */
+
 .call-widget-wrp {
   display: block;
   /* background-color:#3c3a3a; */
@@ -15,6 +16,17 @@
 .call-list-itm {
   flex: 1;
 }
+.full-screen{
+  height: 40px;
+  width: 40px;
+  background: #fff;
+  position: absolute;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
 
 .call-controls-wrp{
@@ -26,6 +38,8 @@
   position: absolute;
   bottom: 0px;
   z-index: 10;
+}
+.bg{
   background: url(../../assets/call-strip.png);
   background-size: 100%;
   background-position: 0 -4px;
@@ -145,14 +159,32 @@ transition: all 500ms;
 
 }
 
+/* ----------------- Min screen css ------------------------------------------------ */
+.video_section_container .videos_container .room .participants .participant .video_track_container .video,
+.video_section_container .videos_container .room .participants .participant .video_track_container .video video{
+  transition: all 400ms;
+}
+#min-screen .video_section_container .videos_container .room .participants .participant .video_track_container .video,
+#min-screen .video_section_container .videos_container .room .participants .participant .video_track_container .video video{
+  width: 251px;
+
+}
 /* ----------------------------------------------------------------- */
 
 
 .room_container {
-    width: 100%;
+  width: 100vw;
     height: 100vh;
     display: flex;
     position: relative;
+    transition: all 400ms;
+  }
+
+  #min-screen.room_container {
+    width: 300px;
+  }
+  #min-screen.call-controls-wrp.call-controls-wrp-2.call-controls{
+    display: none;
   }
   .call-controls-wrp {
     position: absolute;
@@ -437,6 +469,9 @@ transition: all 500ms;
   
   .participant {
     flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   /* .identity {

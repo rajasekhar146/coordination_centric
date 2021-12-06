@@ -4,6 +4,7 @@ import PatientRecordsWid from './PatientRecordsWid/PatientRecordsWid';
 import ChatWid from './ChatWid/ChatWid';
 import ExtendWid from './ExtendWid/ExtendWid';
 import ShareWid from './ShareWid/ShareWid';
+import {useSelector} from 'react-redux';
 import './RightSideControl.css';
 export default function RightSideControl({
     isCallActive,
@@ -16,9 +17,9 @@ export default function RightSideControl({
     toggleShare,
     toggleShareFun,
     setToggleShare,
-    roomToken,
 }) {
 //------------- Count down ---------------------
+const videoCallReducer = useSelector(state => state.videoCallReducer);
 const TimeOutTem = () => <span>Call ended time Out ..! </span>;
 const CallEnd = () => <span>Call ended </span>;
 // Renderer callback with condition
@@ -36,19 +37,26 @@ if (completed || !isCallActive) {
   }
 };
     return (
-        <div className="right-side-control">         
-        {/* {videoToken} */}
-        {roomToken}
+      <>
             {
-                isCountDown ? (<div className="timer-wid"><Countdown date={Date.now() + 9000} renderer={renderer} /></div>): null
+            !videoCallReducer.isFullScreen && (
+                                                <div className="right-side-control">         
+                                                {/* {videoToken} */}
+                                               
+                                                    {
+                                                        isCountDown ? (<div className="timer-wid"><Countdown date={Date.now() + 9000} renderer={renderer} /></div>): null
+                                                    }
+                                                    {/* <InviteWid/> */}
+                                                    {/* <CallExtendConfirm/> */}
+                                                    <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/>
+                                                    <ChatWid toggleChatFun={toggleChatFun}/>
+                                                    <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>
+                                                    <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/>
+                                                
+                                                </div>
+                                              )
             }
-            {/* <InviteWid/> */}
-            {/* <CallExtendConfirm/> */}
-            <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/>
-            <ChatWid toggleChatFun={toggleChatFun}/>
-            <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>
-            <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/>
-        
-        </div>
+      </>
+      
     )
 }
