@@ -147,12 +147,12 @@ const WeekDaysViewComponent = (props) => {
 
 
   const getAwailablities = async (selectedDate) => {
-    const startDate = moment(new Date()).subtract(30, 'days').format("YYYY-MM-DD");
-    const endDate = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+    const startDate = moment(new Date()).format("YYYY-MM-DD");
+    const endDate = moment(new Date()).add(5, 'days').format("YYYY-MM-DD");
 
     const res = await appointmentService.getAppointmentsForAwailability(userId, startDate, endDate)
     if (res.status === 200) {
-      console.log('data123', get(res, ['data', 'data'], null), selectedDate)
+      // console.log('data123', get(res, ['data', 'data'], null), selectedDate)
       // getWeekDays(get(res, ['data', 'data'], null), selectedDate)
       console.log()
       dispatch(appointmentAvailableTimeSlots(get(res, ['data', 'data'], null), selectedDate))
@@ -169,6 +169,8 @@ const WeekDaysViewComponent = (props) => {
   }, [selectedCalender])
   console.log('moment date', selectedDay)
   // moment(selectedDate).add(d, 'd')
+
+
   useEffect(async () => {
     if (selectedDate) {
       getAwailablities(selectedDate)

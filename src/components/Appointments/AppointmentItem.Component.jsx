@@ -93,6 +93,17 @@ const menuList = [
         menu: 'request_to_reschedule',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+        historyOptions: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+        ]
+    },
+    {
+        menu: 'rescheduled',
+        options: [
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Approve', fnKey: 'setIsConfirmClicked', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -100,6 +111,7 @@ const menuList = [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
         ]
     },
+
 
 
 ]
@@ -141,6 +153,8 @@ const AppointmentItemComponent = props => {
                 role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
             } else if(type === 'history') {
                 setMenuOptions(menus[0].historyOptions)
+            } else {
+                setMenuOptions(menus[0].options)
             }
 
         }
@@ -169,6 +183,7 @@ const AppointmentItemComponent = props => {
                 break
             case 'setIsRejectClicked':
                 setIsRejectClicked(true)
+                break
             case 'setPatientReschedule':
                 setPatientReschedule(true)
         }
@@ -224,6 +239,8 @@ const AppointmentItemComponent = props => {
             case 'request_to_reschedule':
                 return 'Requested to Re-schedule'
                 break
+            case 'rescheduled':
+                return 'Rescheduled'
             default:
                 return null
         }
@@ -236,7 +253,8 @@ const AppointmentItemComponent = props => {
         pending: '#7A5AF8',
         cancelled: '#757500',
         declined: '#B42318',
-        request_to_reschedule: '#F79009'
+        request_to_reschedule: '#F79009',
+        rescheduled: '#F79009'
     }
 
     return (
