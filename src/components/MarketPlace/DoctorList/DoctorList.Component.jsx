@@ -138,7 +138,15 @@ const DoctorListComponent = (props) => {
                     row={row}
                      />
                   ))
-                }
+
+                 
+                } 
+            {(!doctorList|| doctorList && doctorList.length == 0) && (
+              <div style={{padding:10}}>
+                <span>No records found</span>
+              </div>
+            )}
+
               </TableBody>
             </Table>
           </TableContainer>
