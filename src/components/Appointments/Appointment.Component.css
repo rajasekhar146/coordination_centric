@@ -58,11 +58,36 @@
     padding: 2px 8px  2px 6px !important;
 }
 
+
 .od__request_to_reschedule__label {
     padding-left: 6px;
     color: #B54708;
     font-family: Lato;
 }
+
+.od__rescheduled__status {
+    background: #FFF5D9;
+    border-radius: 16px;
+    text-transform: capitalize;
+    line-height: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    width: fit-content;
+    padding: 2px 8px  2px 6px !important;
+}
+
+
+.od__rescheduled__label {
+    padding-left: 6px;
+    color: #B54708;
+    font-family: Lato;
+}
+
 
 
 .od__requested_to_reschedule__status {
