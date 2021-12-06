@@ -11,12 +11,13 @@ import { useDispatch } from 'react-redux'
 import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
 import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 // import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
-import { appointmentService } from '../../services'
 import moment from 'moment'
 import {
     primaryAppointmentDate,
     secondaryAppointmentDate,
-} from '../../redux/actions/commonActions'
+  } from '../../redux/actions/commonActions'
+//   import ViewAppointmentComponent from './ViewAppointment.Component'
+  import history from '../../history'
 
 const useStyles = makeStyles(theme => ({
     menuItem: {
@@ -56,7 +57,7 @@ const menuList = [
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
-            { text: 'Cancel Appointment', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         ],
         historyOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
@@ -261,8 +262,14 @@ const AppointmentItemComponent = props => {
         rescheduled: '#F79009'
     }
 
+    const handleRowClick = async(i, row) =>{
+       // history.push(`/viewApointment/${row.appointmentid}`)
+    }
     return (
         <TableRow
+        onClick = {()=>{
+            handleRowClick(index,row)
+        }}
             hover
             role="checkbox"
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
