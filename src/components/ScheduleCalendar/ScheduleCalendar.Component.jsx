@@ -8,6 +8,8 @@ import './ScheduleCalendar.Component.css'
 // import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import React, { useEffect, useState } from 'react'
+import history from '../../history'
+
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
 
@@ -26,7 +28,8 @@ const ScheduleCalendar = (props) => {
           title: appointment.name,
           start: new Date(appointment.startTime),
           end: new Date(appointment.endTime),
-          status: appointment.status
+          status: appointment.status,
+          appointmentid: appointment.appointmentid
         }
       ))
       serCalenderAppointments(formattesData)
@@ -37,17 +40,17 @@ const ScheduleCalendar = (props) => {
   const colorcodes = {
     accepted: '#DAFBE8',
     pending: '#F4F3FF',
-    cancelled: '#FDE8E6',
-    declined: '#FDE8E6',
-    request_to_reschedule: '#F79009',
+    cancelled: '#FEF3F2',
+    declined: '#FEF3F2',
+    request_to_reschedule: '#FFF5D9',
     rescheduled: '#F79009'
   }
 
   const textColor = {
     accepted: '#027A48',
     pending: '#5925DC',
-    cancelled: '#B42318',
-    declined: '#FDE8E6',
+    cancelled: '#E74F48',
+    declined: '#E74F48',
     request_to_reschedule: '#F79009',
     rescheduled: '#F79009'
   }
@@ -79,6 +82,9 @@ const ScheduleCalendar = (props) => {
         endAccessor="end"
         style={{ height: 715 }}
         timeslots={1}
+        onSelectEvent={(event) => {
+          history.push(`/video-call/${event.appointmentid}`)
+        }}
         // components = {{toolbar : CustomToolbar}}
         eventPropGetter={(event) => {
           const backgroundColor = colorcodes[event.status];
@@ -98,6 +104,7 @@ const ScheduleCalendar = (props) => {
             style: style
           };
         }}
+
       />
     </div>
   )

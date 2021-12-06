@@ -202,7 +202,6 @@
     color: #A0A4A8 !important;
     height: 48px !important;
     padding: 12px !important;
-    text-transform: lowercase !important;
 }
 
 .si__left__image__logo {
@@ -410,3 +409,7 @@ input[type="email"] {
     text-transform: lowercase;
 }
 
+::-webkit-input-placeholder {
+    text-transform: initial;
+ }
+ 
