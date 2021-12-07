@@ -1,4 +1,4 @@
-.db__main__div{
+.dashboard__main__div{
     background: #F6F8FB;
     height: 100vh;
     padding: 20px;
@@ -147,4 +147,31 @@
 .io__complete {
     margin-top: 20px !important;
     margin-bottom: 40px !important;
+}
+.db_stats_label_fields {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+.db_stats_value {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.2px;
+    color: #E42346;
+}
+.db_stats_label{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.1px;
+    color: #25282B;
 }

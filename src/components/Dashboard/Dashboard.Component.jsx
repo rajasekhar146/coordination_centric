@@ -13,6 +13,23 @@ import get from 'lodash.get'
 import CompleateProfile from './CompleateProfile.Component'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCopmletPropfilePopup } from '../../redux/actions/commonActions'
+import dashboardComponentConfig from './DashboardComponentConfig'
+import ActivePatient from './ActivePatient'
+import ActiveOrganizations from './ActiveOrganizations'
+import ActivePatientsperOrganization from './ActivePatientsperOrganization'
+import UnassignedReadings from './UnassignedReadings'
+import UnassignedReadingsperOrg from './UnassignedReadingsperOrg'
+import ActiveUsers from './ActiveUsers'
+import TotalUsers from './TotalUsers'
+import Alerts from './Alerts'
+import Readings from './Readings'
+import Adherence from './Adherence'
+import Appointments from './Appointments'
+import LastLoggedIn from './LastLoggedIn'
+import ReadingsFromLastweek from './ReadingsFromLastweek'
+import TotalAppointments from './TotalAppointments'
+import OrderstoExpireinXdays from './OrderstoExpireinXdays'
+
 
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
@@ -109,6 +126,100 @@ const completModelStyle = {
   p: 4,
 }
 
+
+const componenetsMap = {
+  ActivePatient: {
+    component: ActivePatient,
+    componentProps: {
+
+    },
+  },
+  ActiveOrganizations: {
+    component: ActiveOrganizations,
+    componentProps: {
+
+    },
+  },
+  ActivePatientsperOrganization: {
+    component: ActivePatientsperOrganization,
+    componentProps: {
+
+    },
+  },
+  TotalAppointments: {
+    component: TotalAppointments,
+    componentProps: {
+
+    },
+  },
+  UnassignedReadings: {
+    component: UnassignedReadings,
+    componentProps: {
+
+    },
+  },
+  UnassignedReadingsperOrg: {
+    component: UnassignedReadingsperOrg,
+    componentProps: {
+
+    },
+  },
+  ActiveUsers: {
+    component: ActiveUsers,
+    componentProps: {
+
+    },
+  },
+  TotalUsers: {
+    component: TotalUsers,
+    componentProps: {
+
+    },
+  },
+  Alerts: {
+    component: Alerts,
+    componentProps: {
+
+    },
+  },
+  Readings: {
+    component: Readings,
+    componentProps: {
+
+    },
+  },
+  Adherence: {
+    component: Adherence,
+    componentProps: {
+
+    },
+  },
+  Appointments: {
+    component: Appointments,
+    componentProps: {
+
+    },
+  },
+  LastLoggedIn: {
+    component: LastLoggedIn,
+    componentProps: {
+
+    },
+  },
+  ReadingsFromLastweek: {
+    component: ReadingsFromLastweek,
+    componentProps: {
+
+    },
+  },
+  OrderstoExpireinXdays: {
+    component: OrderstoExpireinXdays,
+    componentProps: {
+
+    },
+  },
+};
+
 const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState(false)
@@ -116,15 +227,17 @@ const DashboardComponent = () => {
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
+  const role = get(currentUser, ['data', 'data', 'role'], '')
+  const [elementsStats, setElementStats] = useState([])
+
+
 
   useEffect(() => {
-    // var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
-    // console.log("name", IsShow2FAPopup, twoFactor_auth_type)
-
     if (!last_login_time) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }
+    setElementStats(dashboardComponentConfig[role])
   }, [])
 
   const close2FaModel = () => {
@@ -136,60 +249,43 @@ const DashboardComponent = () => {
     setIsOpen2FA(false)
   }
 
+
+  const checkDoctorOrPatent = () => {
+    switch(role) {
+        case 'doctor':
+        case 'patient':
+            return true
+        break;
+        default:
+            return false
+    }
+}
+
+
+
   return (
-    <div className="db__main__div">
+    <div className="dashboard__main__div">
       <div className="io__flex__spcebetween">
-        <Card
-          sx={{
-            width: '49%',
-            background: '#fff',
-            boxShadow: '0 2px 4px #00000029',
-            borderRadius: '4px',
-          }}
-        >
-          <CardContent>
-            <Typography component="div" variant="h6">
-              User Breakdown
-            </Typography>
-            <div className="io__flex__spcebetween ">
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>TOTAL USERS</label>
-              </div>
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>NEW DOCTORS</label>
-              </div>
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>NEW PATIENTS</label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card
-          sx={{
-            width: '49%',
-            background: '#fff',
-            boxShadow: '0 2px 4px #00000029',
-            borderRadius: '4px',
-          }}
-        >
-          <CardContent>
-            <Typography component="div" variant="h6">
-              Notifications
-            </Typography>
-            <div className="io__flex__spcebetween ">
-              <div>
-                <h4 className="io__dashboard__card">5</h4>
-                <label>DOCTOR REQUESTS</label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="io__flex__spcebetween">
-        <Card
+        {
+          elementsStats.map((elem, index) => {
+            const component = componenetsMap[elem];
+            const componentProp = component.componentProps;
+            if (component) {
+              const CompName = component.component;
+              return (
+                <CompName
+                  key={index}
+                  componentProp={componentProp}
+                  role={role}
+                  checkDoctorOrPatent={checkDoctorOrPatent}
+                />
+              );
+            }
+            return null;
+          })
+        }
+
+        {/* <Card
           sx={{
             width: '49%',
             background: '#fff',
@@ -218,7 +314,7 @@ const DashboardComponent = () => {
             </Typography>
             <ReactHighcharts highcharts={Highcharts} options={options}></ReactHighcharts>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
       <Modal
         open={isOpen2FA}
@@ -233,20 +329,6 @@ const DashboardComponent = () => {
           />
         </Box>
       </Modal>
-     
-      {/* <Modal
-        open={isOpenCompleateProfile}
-        // onClose={closeApproveModel}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={completModelStyle}>
-          <CompleateProfile
-            clickCloseButton={close2FaModel}
-            userId={userId}
-          />
-        </Box>
-      </Modal> */}
     </div>
   )
 }
