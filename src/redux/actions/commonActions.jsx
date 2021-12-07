@@ -42,14 +42,10 @@ export const calendarAppointmentDate = appointmentDay => {
   }
 }
 
-export const appointmentAvailableTimeSlots = (availableTimeSlots, selectedDate, selectedTime) => {
+export const appointmentAvailableTimeSlots = availableTimeSlots => {
   return {
     type: ActionTypes.APPOINTMENT_AVAILABLE_TIME_SLOTS,
-    payload: {
-      availableTimeSlots,
-      selectedDate,
-      selectedTime
-    }
+    payload: availableTimeSlots,
   }
 }
 
@@ -69,7 +65,7 @@ export const secondaryAppointmentDate = secondaryAppointment => {
 
 export const setFlashMsg = data => {
   return {
-      type: ActionTypes.SET_FLAG_MESSAGE,
-      payload: data,
+    type: ActionTypes.SET_FLAG_MESSAGE,
+    payload: data,
   }
 }
