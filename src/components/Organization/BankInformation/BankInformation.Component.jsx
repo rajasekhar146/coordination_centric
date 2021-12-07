@@ -209,7 +209,7 @@ const BankInformationComponent = () => {
               token: tokenId,
               type: 'account',
               customerId: '',
-              default: TrustProductsEvaluationsPage,
+              // default: TrustProductsEvaluationsPage,
               organizationName: orgName,
             }
 

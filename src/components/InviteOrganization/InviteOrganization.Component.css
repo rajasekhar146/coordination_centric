@@ -115,8 +115,8 @@
 }
 .io__flex__spcebetween {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 .io__invite__org__btn {
