@@ -14,7 +14,8 @@ const config = {
         'TotalUsers',
         'Alerts',
         'Readings',
-        'OrderstoExpireinXdays'
+        'OrderstoExpireinXdays',
+        'OrganizationOnboardings'
     ],
     doctor: [
         'ActivePatient',
