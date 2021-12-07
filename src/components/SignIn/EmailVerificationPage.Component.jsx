@@ -130,6 +130,7 @@ const EmailVerificationPage = props => {
             placeholder="Enter your code"
             inputProps={{ style: { textAlign: 'center' } }}
             value={verificationCode}
+            inputProps={{ maxLength: 6 }}
             onChange={e => {
               setVerificationCode(e.target.value)
             }}
