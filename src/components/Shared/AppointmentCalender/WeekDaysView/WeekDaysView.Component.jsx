@@ -85,6 +85,8 @@ const WeekDaysViewComponent = (props) => {
     }
   }
 
+  console.log('WeekDaysViewComponent', props)
+
   const userId = getUserId(role)
   const appointmentUserId = props.id;
   const [days, setDays] = useState([])
@@ -205,6 +207,7 @@ const WeekDaysViewComponent = (props) => {
      
       resAvailabilities[0].days.map(d => {
         console.log('resAvailabilities[0].days', d)
+        console.log(' moment(d.first_half_ending_time)',  moment(d.first_half_ending_time))
         const aDate = moment(d.first_half_ending_time).format('YYYY-MM-DD')
         const fhStartHour = moment(d.first_half_starting_time).format('HH')
         const fhStartMinute = moment(d.first_half_starting_time).format('mm')
@@ -407,11 +410,11 @@ const WeekDaysViewComponent = (props) => {
       return false;
     }
     const reqData = {};
-    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    if (secondaryDate.Day && secondaryDate.startTime) {
-      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.timings.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email);
@@ -424,6 +427,7 @@ const WeekDaysViewComponent = (props) => {
       reqData.doctorId = appointmentDetails._id
     }
     let res;
+    console.log('role', role)
     if ((role === 'doctor' || type === 'rescheduleByPatient')) {
       res = await appointmentService.rescheduleAppointment(reqData, appointmentDetails.appointmentid, type)
     } else {
