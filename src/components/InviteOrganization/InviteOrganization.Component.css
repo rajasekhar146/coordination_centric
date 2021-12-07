@@ -116,6 +116,7 @@
 .io__flex__spcebetween {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .io__invite__org__btn {

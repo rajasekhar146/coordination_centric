@@ -29,7 +29,7 @@ import LastLoggedIn from './LastLoggedIn'
 import ReadingsFromLastweek from './ReadingsFromLastweek'
 import TotalAppointments from './TotalAppointments'
 import OrderstoExpireinXdays from './OrderstoExpireinXdays'
-
+import OrganizationOnboardings from './OrganizationOnboardings'
 
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
@@ -218,6 +218,13 @@ const componenetsMap = {
 
     },
   },
+  OrganizationOnboardings: {
+    component: OrganizationOnboardings,
+    componentProps: {
+
+    },
+    
+  }
 };
 
 const DashboardComponent = () => {

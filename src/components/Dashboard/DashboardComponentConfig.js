@@ -5,7 +5,8 @@ const config = {
         'ActivePatientsperOrganization',
         'TotalAppointments',
         'UnassignedReadings',
-        'UnassignedReadingsperOrg'
+        'UnassignedReadingsperOrg',
+        'OrganizationOnboardings'
     ],
     admin: [
         'ActivePatient',

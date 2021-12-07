@@ -175,3 +175,22 @@
     letter-spacing: 0.1px;
     color: #25282B;
 }
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+.db_org_graph {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: 0.2px;
+    color: #25282B;
+    margin-left: 6px;
+}
