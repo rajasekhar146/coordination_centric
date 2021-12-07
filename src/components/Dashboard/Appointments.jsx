@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
 import AppointmentsIcon from '../../assets/icons/appointments.png'
-
+import get from 'lodash.get'
 
 const styles = theme => ({
     superAdminCard: {
@@ -30,7 +30,8 @@ const styles = theme => ({
 const Appointments = (props) => {
     const {
         classes,
-        checkDoctorOrPatent
+        checkDoctorOrPatent,
+        dashboardDetails
     } = props
 
     return (
@@ -50,7 +51,7 @@ const Appointments = (props) => {
                     <label className="db_stats_label">
                     Appointments
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{get(dashboardDetails, ['totalAppointmentCount'], '')}</label>
                 </div>
             </CardContent>
         </Card>

@@ -30,6 +30,7 @@ import ReadingsFromLastweek from './ReadingsFromLastweek'
 import TotalAppointments from './TotalAppointments'
 import OrderstoExpireinXdays from './OrderstoExpireinXdays'
 import OrganizationOnboardings from './OrganizationOnboardings'
+import { dashboardService } from '../../services'
 
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
@@ -223,7 +224,7 @@ const componenetsMap = {
     componentProps: {
 
     },
-    
+
   }
 };
 
@@ -236,6 +237,7 @@ const DashboardComponent = () => {
   const userId = get(currentUser, ['data', 'data', '_id'], '')
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const [elementsStats, setElementStats] = useState([])
+  const [dashboardDetails, setDashboardDetails] = useState(null)
 
 
 
@@ -245,6 +247,7 @@ const DashboardComponent = () => {
       // localStorage.setItem('IsShow2FAPopup', false)
     }
     setElementStats(dashboardComponentConfig[role])
+    getDashboardDetails()
   }, [])
 
   const close2FaModel = () => {
@@ -257,16 +260,28 @@ const DashboardComponent = () => {
   }
 
 
-  const checkDoctorOrPatent = () => {
-    switch(role) {
-        case 'doctor':
-        case 'patient':
-            return true
-        break;
-        default:
-            return false
+  const getDashboardDetails = async () => {
+    const res = await dashboardService.getDashboardDetails(role)
+    if (res.status === 200) {
+      setDashboardDetails(get(res, ['data', 'data'], {}))
+    } else {
+
     }
-}
+  }
+
+
+
+
+  const checkDoctorOrPatent = () => {
+    switch (role) {
+      case 'doctor':
+      case 'patient':
+        return true
+        break;
+      default:
+        return false
+    }
+  }
 
 
 
@@ -285,6 +300,7 @@ const DashboardComponent = () => {
                   componentProp={componentProp}
                   role={role}
                   checkDoctorOrPatent={checkDoctorOrPatent}
+                  dashboardDetails={dashboardDetails}
                 />
               );
             }
