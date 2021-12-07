@@ -337,7 +337,12 @@ const WeekDaysViewComponent = (props) => {
         day: currentDate.format('YYYY-MM-DD'),
       }
       console.log('newDayAvailability', newDayAvailability)
-      if(newDayAvailability) availabilityDayDetail = newDayAvailability
+      console.log('newDayAvailability >> ', newDayAvailability)
+      if(newDayAvailability) availabilityDayDetail = {
+        dayDesc: currentDate.format('dddd, DD'),
+        availableTimeSlots: newDayAvailability.availableTimeSlots,
+        day: currentDate.format('YYYY-MM-DD')
+        }
       
       weekDaysAvailablities.push(availabilityDayDetail)
     })
@@ -476,11 +481,11 @@ const WeekDaysViewComponent = (props) => {
     }
 
     const reqData = {};
-    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    if (secondaryDate.Day && secondaryDate.Time.startTime) {
-      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.timings.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email);
