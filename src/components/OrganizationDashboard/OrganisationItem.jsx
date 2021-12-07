@@ -67,10 +67,12 @@ const OrganisationItem = props => {
       console.log(err)
     })
     console.log('handleActivate >> 1 ', response)
-    if(response.status === 200) {
-      const res = organizationService.updateOrganization(org.id, 'active').catch(err => {console.log(err)})
+    if (response.status === 200) {
+      const res = organizationService.updateOrganization(org.id, 'active').catch(err => {
+        console.log(err)
+      })
       console.log('handleActivate >> 2 ', res)
-      if(res.status === 200) {
+      if (res.status === 200) {
         setOrganizations([])
         setSkip(1)
         setAlertMsg('Activated')
@@ -78,7 +80,7 @@ const OrganisationItem = props => {
         setOpenFlash(true)
         setIsActivateClicked(false)
       }
-    }    
+    }
   }
 
   const handleResend = org => {

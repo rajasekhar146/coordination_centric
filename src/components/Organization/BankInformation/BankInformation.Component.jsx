@@ -121,8 +121,11 @@ const BankInformationComponent = () => {
   }
 
   const getCardDetail = async data => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-    const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+    const currentUser = JSON.parse(localStorage.getItem('facility'))
+    const currentUserEmail = get(currentUser, ['email'], '')
+    const orgName = get(currentUser, ['facilityName'], '')
+    console.log('currentUser ', currentUser)
+    console.log('currentUserEmail, orgName ', currentUserEmail, orgName)
     var updatedFacility = facility
     if (cardSection) {
       const ncardExpiry = data.expiry.split('/')
@@ -142,7 +145,8 @@ const BankInformationComponent = () => {
               token: tokenId,
               type: 'card',
               customerId: '',
-              default: false,
+              default: true,
+              organizationName: orgName,
             }
             console.log('saveDetail', saveDetail)
             paymentService
@@ -204,7 +208,8 @@ const BankInformationComponent = () => {
               token: tokenId,
               type: 'account',
               customerId: '',
-              default: false,
+              default: TrustProductsEvaluationsPage,
+              organizationName: orgName,
             }
 
             paymentService
@@ -512,14 +517,7 @@ const BankInformationComponent = () => {
                                   <FormControlLabel
                                     className="bi__checkbox__text"
                                     control={<Checkbox defaultChecked />}
-                                    label="Auto Renew Subscription?"
-                                  />
-                                </div>
-                                <div className="ac__column">
-                                  <FormControlLabel
-                                    className="bi__checkbox__text"
-                                    control={<Checkbox defaultChecked />}
-                                    label="I have read and agree with the Subscription Aggrement"
+                                    label="I have read and agree with the Subscription Agreement"
                                   />
                                 </div>
                               </FormGroup>
