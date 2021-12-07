@@ -46,17 +46,14 @@ const roles = [
 ]
 
 const PatientConfimationAppointment = props => {
-  const {
-    appointmentDetails,
-    role
-  } = props
+  const { appointmentDetails, role } = props
   const { classes } = props
   const primaryDate = useSelector(state => state.primaryAppointmentDate)
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const { selectedAppointment, clickCloseButton, clickConfirmButton } = props
   const [activeTab, setActiveTab] = useState('primary')
   const dispatch = useDispatch()
-
+  console.log('primaryDate', primaryDate, 'secondaryDate', secondaryDate)
   // useEffect(() => {
   //   const res = commonService.getAllRoles()
   // }, [])
@@ -71,7 +68,6 @@ const PatientConfimationAppointment = props => {
 
   //   }
   // }
-
 
   return (
     <div className="pca__main__div">
@@ -97,16 +93,15 @@ const PatientConfimationAppointment = props => {
           <label className="pca__label">Primary - Date and Time</label>
           <label className="pca__value__text">
             {' '}
-            <label className="pca__value__text">{`${primaryDate.Day} - ${primaryDate.Time.startTime}`}</label>
+            <label className="pca__value__text">{`${primaryDate.Day} - ${primaryDate.timings.startTime}`}</label>
           </label>
         </div>
-        {secondaryDate.Day &&
+        {secondaryDate.Day && (
           <div className="pca__primary__column pca__card">
             <label className="pca__label">Secondary - Date and Time</label>
-            <label className="pca__value__text">{`${secondaryDate.Day} - ${secondaryDate.Time.startTime}`}</label>
+            <label className="pca__value__text">{`${secondaryDate.Day} - ${secondaryDate.timings.startTime}`}</label>
           </div>
-        }
-
+        )}
       </div>
       <div className="pca__row">
         <div className="pca__help__text">
