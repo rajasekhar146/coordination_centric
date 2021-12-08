@@ -28,6 +28,7 @@
 
     /* Primary/Default */
     color: #E42346;
+    text-transform: capitalize;
 }
 
 .od__serach__text {
