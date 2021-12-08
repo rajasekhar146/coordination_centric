@@ -142,8 +142,10 @@ function getOrganizationDetails(orgId) {
         console.log('getOrganizationDetails - ', data)
         if (data?.data?.data) {
           const res = get(data, ['data', 'data', '0', 'totalData', '0'], {})
+          const payment = get(data, ['data', 'payment'], {})
+
           console.log('Result >> ', res)
-          return res
+          return {data:res,payment:payment}
         } else {
           return null
         }
