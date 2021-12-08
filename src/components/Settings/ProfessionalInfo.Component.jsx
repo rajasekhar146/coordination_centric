@@ -78,6 +78,7 @@ const PersonalInfo = props => {
   const mProfessionalInfo = useSelector(state => state.memberProfessionalInfo)
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const mAvaliabilities = useSelector(state => state.memberAvaliabilities)
+  console.log('mAvaliabilities', mAvaliabilities)
   // const [openflash, setOpenFlash] = useState(false)
   // const [alertMsg, setAlertMsg] = useState('')
   // const [subLabel, setSubLabel] = useState('')
@@ -178,7 +179,7 @@ const PersonalInfo = props => {
       setPCToggleOn(services?.consultation)
 
       const specialization = mpInfo.specialization
-      
+
       var tSpecialization = []
       specialization.map(s => {
         const nSpl = {
@@ -299,58 +300,58 @@ const PersonalInfo = props => {
     const defaultValues = [
       {
         day: 'Monday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-15 07:00:00',
+        first_half_ending_time: '2021-11-15 12:00:00',
+        second_half_starting_time: '2021-11-15 12:00:00',
+        second_half_ending_time: '2021-11-15 22:00:00',
         is_available: true,
       },
       {
         day: 'Tuesday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-16 07:00:00',
+        first_half_ending_time: '2021-11-16 12:00:00',
+        second_half_starting_time: '2021-11-16 12:00:00',
+        second_half_ending_time: '2021-11-16 22:00:00',
         is_available: true,
       },
       {
         day: 'Wednesday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-17 07:00:00',
+        first_half_ending_time: '2021-11-17 12:00:00',
+        second_half_starting_time: '2021-11-17 12:00:00',
+        second_half_ending_time: '2021-11-17 22:00:00',
         is_available: true,
       },
       {
         day: 'Thursday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-18 07:00:00',
+        first_half_ending_time: '2021-11-18 12:00:00',
+        second_half_starting_time: '2021-11-18 12:00:00',
+        second_half_ending_time: '2021-11-18 22:00:00',
         is_available: true,
       },
       {
         day: 'Friday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-19 07:00:00',
+        first_half_ending_time: '2021-11-19 12:00:00',
+        second_half_starting_time: '2021-11-19 12:00:00',
+        second_half_ending_time: '2021-11-19 22:00:00',
         is_available: true,
       },
       {
         day: 'Saturday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-20 07:00:00',
+        first_half_ending_time: '2021-11-20 12:00:00',
+        second_half_starting_time: '2021-11-20 12:00:00',
+        second_half_ending_time: '2021-11-20 22:00:00',
         is_available: true,
       },
       {
         day: 'Sunday',
-        first_half_starting_time: '2021-11-14 07:00:00.000',
-        first_half_ending_time: '2021-11-14 12:00:00.000',
-        second_half_starting_time: '2021-11-14 12:00:00.000',
-        second_half_ending_time: '2021-11-14 22:00:00.000',
+        first_half_starting_time: '2021-11-21 07:00:00',
+        first_half_ending_time: '2021-11-21 12:00:00',
+        second_half_starting_time: '2021-11-21 12:00:00',
+        second_half_ending_time: '2021-11-21 22:00:00',
         is_available: true,
       },
     ]
@@ -381,9 +382,9 @@ const PersonalInfo = props => {
   }
 
   const getOpObj = option => {
-    if (!option.id) option = specialities.find(op => op.id === option);
-    return option;
-  };
+    if (!option.id) option = specialities.find(op => op.id === option)
+    return option
+  }
 
   return (
     <div className="io_p_info">

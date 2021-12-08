@@ -27,6 +27,7 @@ export const organizationService = {
   getPrices,
   subscriptionOrganization,
   paymentSubscription,
+  downloadFile
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -185,7 +186,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
   const currentUser = authenticationService?.currentUserValue
   console.log('currentUser', currentUser)
   var myHeaders = new Headers()
-  myHeaders.append('x-access-token', `${currentUser.data.token}`)
+  myHeaders.append('x-access-token', `${currentUser?.data?.token}`)
   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
 
   var urlencoded = new URLSearchParams()
@@ -410,6 +411,18 @@ function paymentSubscription(bodyMsg){
       })
       .catch(err => {
         return err
+      })
+  )
+}
+
+function downloadFile(fileObj) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/files/download_url`, fileObj, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
       })
   )
 }

@@ -34,6 +34,7 @@ const InviteOrganizationComponent = props => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm()
 
@@ -177,6 +178,9 @@ const InviteOrganizationComponent = props => {
                   message: 'This input is number only.',
                 },
               })}
+              onChange={e => {
+                setValue('facilityPhone', e.target.value.replace(/[^0-9]/g, ''))
+              }}
               margin="normal"
               InputProps={{
                 maxLength: 15,

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 // import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import { authenticationService } from '../../services'
+import { authenticationService, notificationService } from '../../services'
 import history from '../../history'
 import LoginLeftImage from '../../assets/images/login_left_img.png'
 import './SignIn.Component.css'
@@ -20,6 +20,7 @@ import FormControl from '@mui/material/FormControl'
 import { get } from 'lodash'
 import Alert from '../Alert/Alert.component'
 import SigninStore from '../../stores/signinstore'
+import { getTokenFn } from '../../firebase'
 
 
 const SignInComponent = () => {
@@ -31,9 +32,28 @@ const SignInComponent = () => {
   const [IsValidPassword, setIsValidPassword] = useState(true)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
+  const [FCMToken, setFCMToken] = useState("");
 
 
+  useEffect(()=>{
+    addDevice(FCMToken);
+  },[FCMToken])
 
+
+  const addDevice = (FCMToken)=>{
+    if(!FCMToken)
+    return;
+    let devieInfo = {
+      'deviceId':'',
+      'fcmId':FCMToken, 
+      'deviceType': 'web'
+    }
+    notificationService.addDevice(devieInfo).then((res)=>{
+      console.log("Add device",res);
+    },error=>{
+      console.log("Add device",error);
+    })
+  }
   const handleCloseFlash = () => {
     setOpenFlash(false)
   }
@@ -67,7 +87,7 @@ const SignInComponent = () => {
 
     // console.log(defaultValues);
     authenticationService.login(defaultValues.email, defaultValues.password).then(
-      user => {
+     async user => {
         console.log('logged user', user)
         setIsValidPassword(true)
         setIsValidEmail(true)
@@ -101,7 +121,11 @@ const SignInComponent = () => {
           const userVerified = get(user, ['data', 'data', 'is_verified'], false)
           const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)
           if (!userVerified) history.push('/userverification')
-          else if (twoFactor == 'none') window.location.href = "dashboard";
+          else if (twoFactor == 'none') {
+            let fcmToken =await getTokenFn(setFCMToken);
+            console.log("fcmToken",fcmToken);
+            window.location.href = "dashboard";
+          }
           else if (twoFactor == 'app') {
             history.push('/2facodeverification')
           } else if (twoFactor == 'email') {
@@ -114,6 +138,8 @@ const SignInComponent = () => {
                 console.log(error)
               })
           } else {
+            let fcmToken = await getTokenFn(setFCMToken);
+            console.log("fcmToken",fcmToken)
             window.location.href = "dashboard";
             // history.push('/dashboard')
           }

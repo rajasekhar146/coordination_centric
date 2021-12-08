@@ -168,6 +168,7 @@ const StaffComponent = props => {
                                     setSubLabel={setSubLabel}
                                     setStaffList={setStaffList}
                                     type="member"
+                                    role="staff"
                                 // colorcodes={colorcodes}
                                 />
                             ))

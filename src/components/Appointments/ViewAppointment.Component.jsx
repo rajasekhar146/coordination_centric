@@ -145,7 +145,7 @@ const getValue = val => {
           <div className="row-details">
             <p className="row-title">Previous Health Condition</p>
             <p className="row-data">
-            {appointmentList.data?.healthinfo[0].problems.map((d) =><span> {d} </span>)}</p>
+            {appointmentList.data?.healthinfo[0]?.problems.map((d) =><span> {d} </span>)}</p>
 
           </div>
           <div className="row-details">

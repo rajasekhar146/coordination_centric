@@ -47,66 +47,73 @@ const useStyles = makeStyles(theme => ({
 const defaultValues = [
   {
     day: 'Monday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Tuesday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Wednesday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Thursday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Friday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Saturday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
   {
     day: 'Sunday',
-    first_half_starting_time: '2021-11-14 07:00:00.000',
-    first_half_ending_time: '2021-11-14 12:00:00.000',
-    second_half_starting_time: '2021-11-14 12:00:00.000',
-    second_half_ending_time: '2021-11-14 22:00:00.000',
+    first_half_starting_time: '2021-11-14 07:00:00',
+    first_half_ending_time: '2021-11-14 12:00:00',
+    second_half_starting_time: '2021-11-14 12:00:00',
+    second_half_ending_time: '2021-11-14 22:00:00',
     is_available: true,
   },
 ]
 
 const AvailablityItem = props => {
-  const { day, first_half_starting_time, first_half_ending_time, second_half_starting_time, second_half_ending_time, is_available } =
-    props.avaliablity
+  const {
+    day,
+    first_half_starting_time,
+    first_half_ending_time,
+    second_half_starting_time,
+    second_half_ending_time,
+    is_available,
+  } = props.avaliablity
   // const[availableTime, setAvailableTime] = defaultValues
+  console.log(' props.avaliablity',  props.avaliablity)
   const classes = useStyles()
   const {
     register,
@@ -172,12 +179,12 @@ const AvailablityItem = props => {
 
   const handleUpdateTime = (propertyName, e) => {
     setValue(propertyName, e.target.value)
-    console.log(day, propertyName, e.target.value)
+    console.log('handleUpdateTime', day, propertyName, e.target.value)
     //var currentDate = new Date()
-    //currentDate.setTime(e.target.value)
+    //currentDate.setTime(e.target.value//)
 
-    const currentDate = moment()
-    const updateTime = currentDate.format('YYYY-MM-DD ' + e.target.value + '.000')
+    const currentDate = getDay(day)
+    const updateTime = moment(currentDate).format('YYYY-MM-DD ' + e.target.value + '')
     console.log(moment(updateTime))
     if (mAvaliabilities.length > 0) {
       const newAvailable = mAvaliabilities.map(m => {
@@ -197,6 +204,21 @@ const AvailablityItem = props => {
       console.log('newAvailable', newAvailable)
       dispatch(memberAvaliabilities(newAvailable))
     }
+  }
+
+  const getDay = day => {
+    let cDate = moment(new Date())
+    var dayName = moment(cDate).format('dddd')
+    console.log('day, dayName', day, dayName)
+    while (dayName != day) {
+      cDate = cDate.add(1, 'd')
+      dayName = moment(cDate).format('dddd')
+      console.log('day, dayName', day, dayName)
+      console.log('day, dayName', cDate._d)
+    }
+    
+    console.log('getDay', cDate)
+    return cDate._d
   }
 
   useEffect(() => {

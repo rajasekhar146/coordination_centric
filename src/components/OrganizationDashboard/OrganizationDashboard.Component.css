@@ -28,6 +28,7 @@
 
     /* Primary/Default */
     color: #E42346;
+    text-transform: capitalize;
 }
 
 .od__serach__text {
@@ -481,6 +482,7 @@
     flex-direction: row-reverse;
     position: relative;
     top: 4px;
+    padding: 0 0 8px 0;
 }
 .od_flex_space_between {
     display: flex;

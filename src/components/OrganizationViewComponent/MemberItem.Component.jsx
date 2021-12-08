@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
+import history from '../../history'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -333,12 +334,18 @@ const MemberItemComponent = props => {
         }
     }
 
+    const handleRowClick = async(i, row) =>{
+        history.push(`/viewDetails/${row._id}`)
+     }
 
 
     return (
         <TableRow
             hover
             role="checkbox"
+            onClick = {()=>{
+                handleRowClick(index,row)
+            }}
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]

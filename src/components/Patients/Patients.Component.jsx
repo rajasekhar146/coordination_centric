@@ -114,6 +114,7 @@ const PatientComponent = props => {
                                     setSubLabel={setSubLabel}
                                     setStaffList={setPatientList}
                                     type="member"
+                                    role="patient"
                                 />
                             ))
                             }
