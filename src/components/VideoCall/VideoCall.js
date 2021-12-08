@@ -159,7 +159,7 @@ const closeChatFun = ()=>{
                                                     />
                                                     <VideoSection room={room} setRoom={setRoom}/>
                                                     { toggleChat && <Chat closeChatFun={closeChatFun}/> }
-                                                    { togglePatientRecords && (<div className="video-call-aside-wrp"> <VideoAside/> </div>) }
+                                                    { togglePatientRecords && (<div className="video-call-aside-wrp"> <VideoAside roomId={roomId} /> </div>) }
                                                     {/* {showOverlay && <Overlay/>} */}
                                                 </div>
       </Provider>
