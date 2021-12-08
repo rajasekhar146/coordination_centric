@@ -22,7 +22,8 @@ export const memberService = {
   invitePatient,
   cancelInvite,
   resendInvite,
-  updateStatus
+  updateStatus,
+  getDetailsById
 }
 
 function inviteMember(data) {
@@ -224,3 +225,21 @@ function invitePatient(reqData) {
       })
   )
 }
+function getDetailsById(id) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+    .get(`${apiURL}/users/getMemberDetailsById?id=${id}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+

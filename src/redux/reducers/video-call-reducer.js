@@ -11,6 +11,8 @@ const initState = {
   messages:[],
   isShowVideoCallMeeting:false,
   isFullScreen:false,
+  timerCount:false,
+  callActive:false,
 };
 
 const VideoCallReducer = (state = initState, action) => {
@@ -64,6 +66,16 @@ const VideoCallReducer = (state = initState, action) => {
         return {
           ...state,
           isFullScreen: action.isFullScreen,
+        };
+      case Actions.SET_SHOW_TIMER_COUNT:
+        return {
+          ...state,
+          timerCount: action.timerCount,
+        };
+      case Actions.SET_CALL_ACTIVE:
+        return {
+          ...state,
+          callActive: action.callActive,
         };
     default:
       return state;

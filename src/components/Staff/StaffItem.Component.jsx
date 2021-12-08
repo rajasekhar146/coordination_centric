@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
 import '../OrganizationDashboard/OrganizationDashboard.Component.css'
+import history from '../../history'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -211,7 +212,9 @@ const StaffItemComponent = props => {
         setAlertMsg,
         setSubLabel,
         setStaffList,
-        type
+        type,
+        role
+
     } = props
 
     const resendInvite = async(org, status) => {
@@ -329,14 +332,19 @@ const StaffItemComponent = props => {
                 return 'defaultStyle'
         }
     }
-
+    const handleRowClick = async(i, row) =>{
+        history.push(`/viewDetails/${row._id}/${role}`)
+     }
 
 
     return (
         <TableRow
             hover
             role="checkbox"
-            style={{ width: '100%' }} tabIndex={-1} key={row.id}>
+            onClick = {()=>{
+                handleRowClick(index,row)
+            }}
+            style={{ width: '100%',cursor:"pointer" }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]
                 if (row[column.id]) value = row[column.id]

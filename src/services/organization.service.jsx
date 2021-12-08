@@ -27,6 +27,7 @@ export const organizationService = {
   getPrices,
   subscriptionOrganization,
   paymentSubscription,
+  downloadFile
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -410,6 +411,18 @@ function paymentSubscription(bodyMsg){
       })
       .catch(err => {
         return err
+      })
+  )
+}
+
+function downloadFile(fileObj) {
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/files/download_url`, fileObj, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
       })
   )
 }

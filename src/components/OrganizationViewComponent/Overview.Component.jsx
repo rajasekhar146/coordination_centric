@@ -16,8 +16,9 @@ import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined'
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { Document } from 'react-pdf'
-import Modal from '@mui/material/Modal'
 
+import Modal from '@mui/material/Modal'
+import get from 'lodash.get';
 import { organizationService } from '../../services'
 const style = {
   position: 'absolute',
@@ -113,6 +114,11 @@ const OverView = ({ orgDet }) => {
     downloadFile(new Blob(data.data), 'myfile.pdf', { type: 'application/pdf' })
   }, [])
 
+
+  const viewCertificates = async (fileName)=>{
+    let certificateResponse = await organizationService.downloadFile({name:fileName});
+    window.open(get(certificateResponse,["data","data"]), '_blank');
+  }
  
 
   return (
@@ -293,10 +299,10 @@ const OverView = ({ orgDet }) => {
                   {orgDet.business_certificate}
                 </div>
                 <div className="agreeIcons">
-                  <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} />
-                  <FileDownloadOutlinedIcon className="mod-icon" />
-                  <MailOutlineOutlinedIcon className="mod-icon" />
-                  <LocalPrintshopOutlinedIcon className="mod-icon" />
+                  {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={()=>{viewCertificates(orgDet.business_certificate)}} /> */}
+                  <FileDownloadOutlinedIcon className="mod-icon" onClick={()=>{viewCertificates(orgDet.business_certificate)}}/>
+                  {/* <MailOutlineOutlinedIcon className="mod-icon" /> */}
+                  {/* <LocalPrintshopOutlinedIcon className="mod-icon" /> */}
                 </div>
               </div>
             )}
@@ -317,10 +323,10 @@ const OverView = ({ orgDet }) => {
                     {orgDet.saas_certificate}
                   </div>
                   <div className="agreeIcons">
-                    <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} />
-                    <FileDownloadOutlinedIcon className="mod-icon" />
-                    <MailOutlineOutlinedIcon className="mod-icon" />
-                    <LocalPrintshopOutlinedIcon className="mod-icon" />
+                    {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} /> */}
+                    <FileDownloadOutlinedIcon className="mod-icon" onClick={()=>{viewCertificates(orgDet.saas_certificate)}} />
+                    {/* <MailOutlineOutlinedIcon className="mod-icon" /> */}
+                    {/* <LocalPrintshopOutlinedIcon className="mod-icon" /> */}
                   </div>
                 </div>
               )}
@@ -342,10 +348,10 @@ const OverView = ({ orgDet }) => {
                     {orgDet.eula_certificate}
                   </div>
                   <div className="agreeIcons">
-                    <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} />
-                    <FileDownloadOutlinedIcon className="mod-icon" />
-                    <MailOutlineOutlinedIcon className="mod-icon" />
-                    <LocalPrintshopOutlinedIcon className="mod-icon" />
+                    {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} /> */}
+                    <FileDownloadOutlinedIcon className="mod-icon" onClick={()=>{viewCertificates(orgDet.eula_certificate)}}/>
+                    {/* <MailOutlineOutlinedIcon className="mod-icon" /> */}
+                    {/* <LocalPrintshopOutlinedIcon className="mod-icon" /> */}
                   </div>
                 </div>
               )}
@@ -368,7 +374,7 @@ const OverView = ({ orgDet }) => {
               Bank Account Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              Citi bank
+              
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -376,7 +382,7 @@ const OverView = ({ orgDet }) => {
               Routing Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              12507106598
+              
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -384,7 +390,7 @@ const OverView = ({ orgDet }) => {
               Name Associated with Bank Account
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              James
+              
             </Typography>
           </div>
         </AccordionDetails>
@@ -397,7 +403,12 @@ const OverView = ({ orgDet }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Document file={previewFile} />
+
+        
+    
+          <Document file={{url:previewFile.url,
+        
+        withCredentials :true}} />
         </Box>
       </Modal>
     </div>

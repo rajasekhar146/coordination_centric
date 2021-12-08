@@ -18,9 +18,13 @@ var firebaseConfig = {
   measurementId: "G-52YCFYG0R2"
 };
 
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
+let messaging=null;
+if (firebase.messaging.isSupported()) {
+  firebase.initializeApp(firebaseConfig);
+  messaging = firebase.messaging();
+} else {
+  console.log('no-support :(')
+}
 
 export const getTokenFn = (setTokenFound) => {
   return messaging.getToken({vapidKey: 'BLOd-P6kDcqCptOa6OVvQK3FmW3VgMGbjInqQj5z-SNxhLarGhFLklrB25O4z62FlwYS6LDyoZVwfKcGHQY7Nqw'}).then((currentToken) => {

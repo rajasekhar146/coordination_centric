@@ -8,7 +8,10 @@ import {
     LocalVideoTrack
 
 } from 'twilio-video';
-import { setMessages, setShowOverlay } from '../../../redux/actions/video-call-actions';
+import { setMessages,setShowOverlay,setTimerCount,setCallActive} from '../../../redux/actions/video-call-actions';
+import * as env from '../../../environments/environment';
+import { authHeader } from '../../../helpers';
+const apiURL = env.environment.apiBaseUrl
 
 const audioConstraints = {
   video: false,
@@ -25,9 +28,13 @@ const videoConstraints = {
 let dataChannel = null;
 export const getTokenFromTwilio = async(roomId,identity,setAccessToken,)=>{
   console.log("I Got the request")
+  let axiosConfig = {
+    headers: authHeader(),
+    }
     const randomId = uuidv4();
+    const response = await axios.get(`${apiURL}/video/videotoken?identity=${roomId}${identity}`,axiosConfig);
     //const response = await axios.get(`https://videocall-service-3612-dev.twil.io/token-service?identity=${randomId}jitu`)
-    const response = await axios.get(`https://videocall-service-6533-dev.twil.io/token-service?identity=${roomId}${identity}`)
+   // const response = await axios.get(`https://videocall-service-6533-dev.twil.io/token-service?identity=${roomId}${identity}`)
     const data = response.data;
     if(data.accessToken){
         setAccessToken(data.accessToken)
@@ -68,8 +75,11 @@ export const connectToRoom = async (
                     });
                     console.log("succesfully connected with twilio room");
                     console.log(room);
+                    store.dispatch(setCallActive(true));
+                    // store.dispatch(setTimerCountF(true));
                     setRoom(room);
-                    store.dispatch(setShowOverlay(false))
+                    store.dispatch(setShowOverlay(false));
+                   
                   })
                   .catch((err) => {
                     console.log(
