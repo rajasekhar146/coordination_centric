@@ -102,12 +102,13 @@ const getAddress =()=>{
         
         <button
           onClick={() => {
-            if(role =="staff"){
-              history.push('/staff')
-            }
-            else if(role == "patient"){
-              history.push('/patients')
-            }
+            history.goBack();
+            // if(role =="staff"){
+            //   history.push('/staff')
+            // }
+            // else if(role == "patient"){
+            //   history.push('/patients')
+            // }
           }}
           className="ac__back__btn view_appointment_back"
         >

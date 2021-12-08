@@ -126,7 +126,7 @@ class Routes extends Component {
           <MasterLayoutWithLefuMenuComponent path="/reschedule_appointment" component={RescheduleAppointment} />
             <MasterLayoutWithLefuMenuComponent path="/selectdates" component={SelectNewDatesComponent} />
           <MasterLayoutWithLefuMenuComponent path="/viewApointment/:id" component ={ViewAppointmentComponent} />
-          <MasterLayoutWithLefuMenuComponent path="/viewDetails/:id/:role" component ={ViewStaffDetailsComponent} />
+          <MasterLayoutWithLefuMenuComponent path="/viewDetails/:id" component ={ViewStaffDetailsComponent} />
           {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
           <MemberLayoutComponent
             path="/members/personal-detail/:invitetoken/:referredby/:invitedBy"

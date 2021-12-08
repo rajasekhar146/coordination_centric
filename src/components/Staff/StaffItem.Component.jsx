@@ -333,7 +333,7 @@ const StaffItemComponent = props => {
         }
     }
     const handleRowClick = async(i, row) =>{
-        history.push(`/viewDetails/${row._id}/${role}`)
+        history.push(`/viewDetails/${row._id}`)
      }
 
 
