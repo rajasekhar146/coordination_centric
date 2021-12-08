@@ -53,7 +53,7 @@ function updateMemberDetails(id, reqdata) {
   )
 }
 
-function addHealthInfo(id, reqdata) {
+function addHealthInfo(reqdata) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -72,9 +72,14 @@ function addHealthInfo(id, reqdata) {
 
 function addInsuranceInfo(info) {
     console.log('axiosConfig', axiosConfig)
+    const reData = {
+      insurance_info: [
+        info
+      ]
+    }
     return (
         axios
-            .patch(`${apiURL}/users/updateHealthInfo`, info, axiosConfig)
+            .put(`${apiURL}/users/insuranceInfo`, reData, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 //   console.log('getCountries', data)
@@ -91,7 +96,7 @@ function getHealthInfo(id) {
     console.log('axiosConfig', axiosConfig)
     return (
         axios
-            .get(`${apiURL}/users/getHealthInfo/${id}`, axiosConfig)
+            .get(`${apiURL}/users/getHealthInfo?patient_id=${id}`, axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 //   console.log('getCountries', data)
