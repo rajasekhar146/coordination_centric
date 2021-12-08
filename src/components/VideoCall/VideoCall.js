@@ -25,9 +25,6 @@ import store from '../../redux/store';
 import './VideoCall.css';
 import {v4 as uuidv4} from 'uuid';
 
-const callEnd = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-end.mp3");
-const callStart = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-start.mp3");
-
 const  VideoCallWidget=({
   identity,
   roomId,
@@ -39,8 +36,6 @@ const  VideoCallWidget=({
   setShowVideoCallMeetingAction,
   setIsFullScreenAction,
   })=>{
-console.log("Random ID", uuidv4())
-
   const watingList = [
     {
       img:"John Doe",
@@ -64,7 +59,6 @@ console.log("Random ID", uuidv4())
         let meetingUrlSplit = meetingUrl.split('/');
         setRoomIdAction(meetingUrlSplit[2]);
          getTokenFromTwilio(meetingUrlSplit[2],userName,setTwilioAccessTokenAction);
-         console.log(">>>>>>>> Path deatils >>>>>>>", roomId, ">>>>>>>>>>", identity)
         setShowVideoCallMeetingAction(true)
        
       }catch{
@@ -73,10 +67,9 @@ console.log("Random ID", uuidv4())
     }
   
     const history = useHistory();
-    const [isCallActive, setIsCallActive] = useState(false);
     const [toggleWatingList, setToggleWatingList] = useState(false);
     const [room, setRoom] = useState('');
-    const [isCountDown, setIsCountDown] = useState(false);
+   
     const [togglePatientRecords, setTogglePatientRecords] = useState(false);
     const [toggleChat, setToggleChat] = useState(false);
     const [toggleExtend, setToggleExtend] = useState(false);
@@ -106,17 +99,13 @@ console.log("Random ID", uuidv4())
     const toggleWatingListHandel = ()=>{
       setToggleWatingList(!toggleWatingList)
       }
-    const callStartAndHandel = async(event)=>{
-        setIsCallActive(!isCallActive)
-        isCallActive ? callEnd.play():  callStart.play()
-      }
+  
 
   const toggleChatFun = ()=>{
     if(togglePatientRecords === true){
       setTogglePatientRecords(false)
     }
     setToggleChat(!toggleChat)
-    console.log("Here is it",toggleChat);
   }
 const closeChatFun = ()=>{
   setToggleChat(false)
@@ -142,10 +131,6 @@ const closeChatFun = ()=>{
                                                     toggleWatingList={toggleWatingList}
                                                     setToggleWatingList={setToggleWatingList}
                                                     toggleWatingListHandel={toggleWatingListHandel}
-                                                    isCallActive={isCallActive}
-                                                    callStartAndHandel={callStartAndHandel}
-                                                    callStartAndHandel={callStartAndHandel}
-                                                    isCountDown={isCountDown}
                                                     togglePatientRecordsFun={togglePatientRecordsFun}
                                                     toggleChatFun={toggleChatFun}
                                                     setToggleChat={setToggleChat}
@@ -179,6 +164,7 @@ const mapActionsToProps=(dispatch)=>{
       setRoomIdAction:(roomId)=> dispatch(setRoomId(roomId)),
       setIdentityAction:(identity)=> dispatch(setIdentity(identity)),
       setTwilioAccessTokenAction:(token)=> dispatch(setTwilioAccessToken(token)),
+      setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
       setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
       setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting))
     }

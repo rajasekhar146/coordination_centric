@@ -1,8 +1,6 @@
 import React,{useState} from 'react'
-import CallButton from './CallButton/CallButton';
 import LeftSideControl from './LeftSideControl/LeftSideControl';
 import RightSideControl from './RightSideControl/RightSideControl';
-import VideoButtons from './VideoButtons';
 import LeaveRoomButton from './LeaveRoomButton';
 import './CallControl.css';
 import {useSelector} from 'react-redux';
@@ -11,9 +9,6 @@ export default function CallControl({
   toggleWatingList,
   setToggleWatingList,
   toggleWatingListHandel,
-  callStartAndHandel,
-  isCallActive,
-  isCountDown,
   togglePatientRecordsFun,
   toggleChatFun,
   closeChatFun,
@@ -24,17 +19,16 @@ export default function CallControl({
   toggleShare,
   toggleShareFun,
   setToggleShare,
-  roomToken,
-  room
+  room,
+  setRoom
 }) {
 
     const videoCallReducer = useSelector(state => state.videoCallReducer);
     return (
         <div className={ !videoCallReducer.isFullScreen ? 'call-controls-wrp bg':'call-controls-wrp'}>
                 <div className="call-controls-wrp-2">
-                    <LeaveRoomButton room={room} isCallActive={isCallActive} callStartAndHandel={callStartAndHandel}/>
+                    <LeaveRoomButton room={room} setRoom={setRoom}/>
                  
-                    {/* <CallButton isCallActive={isCallActive} callStartAndHandel={callStartAndHandel}/> */}
                     {!videoCallReducer.isFullScreen && (
                         <div className="call-controls">
                         <LeftSideControl 
@@ -47,8 +41,6 @@ export default function CallControl({
                             
                         <RightSideControl
                            setToggleChat={setToggleChat}
-                           isCallActive={isCallActive}
-                           isCountDown={isCountDown}
                            togglePatientRecordsFun={togglePatientRecordsFun}
                            toggleChatFun={toggleChatFun}
                            closeChatFun={closeChatFun}
@@ -58,6 +50,7 @@ export default function CallControl({
                            toggleShare={toggleShare}
                            toggleShareFun={toggleShareFun}
                            setToggleShare={setToggleShare}
+                           room={room}
                         />
                     </div>
                     )}
