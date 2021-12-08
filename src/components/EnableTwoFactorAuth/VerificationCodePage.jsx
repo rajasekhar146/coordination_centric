@@ -66,7 +66,8 @@ const VerificationCodePage = props => {
   }
 
   const handleSubmit = () => {
-    const res = authenticationService.twoFactorAuthVerification(verificationCode, method)
+    console.log('handleSubmit 4444', verificationCode, method, currentUserEmail)
+    const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
     res
       .then(() => {
         localStorage.setItem('twoFaVerfied', true)
