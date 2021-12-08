@@ -14,17 +14,13 @@ import ProblemAndSymptomsComponent from '../../../ModelPopup/ProblemAndSymptoms.
 import AppointmentApproveRequest from '../../../ModelPopup/AppointmentApproveRequest'
 import get from 'lodash.get'
 import { authenticationService, appointmentService } from '../../../../services'
+import { useHistory } from 'react-router-dom'
 import {
   setFlashMsg,
   primaryAppointmentDate,
   secondaryAppointmentDate,
   // getWeekDays
 } from '../../../../redux/actions/commonActions'
-import { useHistory } from 'react-router-dom'
-import { getWeekDays } from '../../../../stores/appointmentslotstore'
-import AppointmentSlotsStore from '../../../../stores/appointmentslotstore'
-import useStore from '../../../../hooks/use-store';
-
 
 const confirmAppointment = {
   position: 'absolute',
@@ -38,6 +34,7 @@ const confirmAppointment = {
   borderRadius: 3,
   p: 2,
 }
+
 const confirmPopupWithoutSecondary = {
   position: 'absolute',
   top: '50%',
@@ -64,24 +61,9 @@ const problemAndSymptoms = {
   p: 2,
 }
 
-const availablities = [
-  { availabilityId: 1, availableTimeSlot: '08:00am - 09:00am', isSelected: false, isEnabled: true },
-  { availabilityId: 2, availableTimeSlot: '09:00am - 10:00am', isSelected: false, isEnabled: true },
-  { availabilityId: 3, availableTimeSlot: '10:00am - 11:00am', isSelected: false, isEnabled: false },
-  { availabilityId: 4, availableTimeSlot: '11:00am - 12:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 5, availableTimeSlot: '12:00pm - 01:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 6, availableTimeSlot: '01:00pm - 02:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 7, availableTimeSlot: '02:00pm - 03:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 8, availableTimeSlot: '03:00pm - 04:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 9, availableTimeSlot: '04:00pm - 05:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 11, availableTimeSlot: '05:00pm - 06:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 12, availableTimeSlot: '06:00pm - 07:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 13, availableTimeSlot: '07:00pm - 08:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 14, availableTimeSlot: '08:00pm - 09:00pm', isSelected: false, isEnabled: true },
-  { availabilityId: 15, availableTimeSlot: '09:00pm - 10:00pm', isSelected: false, isEnabled: true },
-]
 
 
+//const userId = '6195076bb39e32b8a4274b46' //getUserId(role)
 
 const weekDays = [0, 1, 2, 3, 4, 5]
 
@@ -90,11 +72,10 @@ const WeekDaysViewComponent = (props) => {
     appointmentDetails,
     type
   } = props;
+
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
-
-
   const getUserId = (role) => {
     switch (role) {
       case 'doctor':
@@ -104,167 +85,316 @@ const WeekDaysViewComponent = (props) => {
     }
   }
 
+  console.log('WeekDaysViewComponent', props)
+
   const userId = getUserId(role)
-
-
   const appointmentUserId = props.id;
-  // const doctorName = props.name;
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
   const rweekDaysAvailablities = useSelector(state => state.appointmentAvailableTimeSlots)
-
-
-  const [appointmentSlotsData] = useStore(AppointmentSlotsStore);
-
-  const {
-    appointmentSlots,
-  } = appointmentSlotsData;
-
-
-
-
   const [avaliableAppointmentDays, setAvaliableAppointmentDays] = useState([])
   const [currentDay, setCurrentDay] = useState('')
   const [currentDate, setCurrentDate] = useState('')
   const [IsClickedAppointment, setClickedAppointment] = useState(false)
   const dispatch = useDispatch()
-  console.log('rweekDaysAvailablities', rweekDaysAvailablities)
+  // console.log('rweekDaysAvailablities', rweekDaysAvailablities)
   const primaryDate = useSelector(state => state.primaryAppointmentDate)
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const [IsClickedConfirm, setClickedConfirm] = useState(false)
   const [IsClickedSubmit, setClickedSubmit] = useState(false)
-  const [selectedYear, setSelectedYear] = useState(null)
-  const [selectedMonth, setSelectedMonth] = useState(null)
-  const [selectedDay, setSelectedday] = useState(null)
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [newTimings, setTimeSlots] = useState([])
+  const [newAvailabilities, setNewAvailabilities] = useState([])
+  const interval = 30
+  const startSlotHour = 8
+  const startSlotMinute = 0
+  const endSlotHour = 22
+  const endSlotMinute = 0
+  const [appointmentReason, setAppointmentReason] = useState("");
   const [invitedMembers, setInvitedMembers] = useState([{
     email: '',
   }]);
-
-  const [appointmentReason, setAppointmentReason] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false);
   const [reportsArray, setReportsArray] = useState([]);
 
+  const buildTimeSlots = (
+    startDate,
+    endDate,
+    startHours,
+    startMinutes,
+    endHours,
+    endMinutes,
+    isSelected,
+    isEnabled
+  ) => {
+    var startTime = moment(startDate).set({ hour: startSlotHour, minute: startSlotMinute })
+    const endTime = moment(endDate).set({ hour: endSlotHour, minute: endSlotMinute })
+    var aStartTime = moment(startDate).set({ hour: startHours, minute: startMinutes })
+    const aEndTime = moment(endDate).set({ hour: endHours, minute: endMinutes })
 
-  const getAwailablities = async (selectedDate) => {
-    const startDate = moment(new Date()).format("YYYY-MM-DD");
-    const endDate = moment(new Date()).add(5, 'days').format("YYYY-MM-DD");
-
-    const res = await appointmentService.getAppointmentsForAwailability(userId, startDate, endDate)
-    if (res.status === 200) {
-      // console.log('data123', get(res, ['data', 'data'], null), selectedDate)
-      // getWeekDays(get(res, ['data', 'data'], null), selectedDate)
-      console.log()
-      dispatch(appointmentAvailableTimeSlots(get(res, ['data', 'data'], null), selectedDate))
-    } else {
-
-    }
+    var timeSlots = []
+    var idx = 1
+    do {
+      // console.log('startTime', startTime)
+      const sTime = startTime.format('HH:mm')
+      const eTime = startTime.add(interval, 'minutes').format('HH:mm')
+      var timeSlot = {}
+      console.log('cond >>', aStartTime.format('HH:mm'),sTime , aEndTime.format('HH:mm') , eTime)
+      if (aStartTime.format('HH:mm') <= sTime && aEndTime.format('HH:mm') >= eTime) {
+        console.log('cond >> true')
+        timeSlot = {
+          availabilityId: idx,
+          startTime: sTime,
+          endTime: eTime,
+          isSelected: isSelected,
+          isEnabled: isEnabled,
+        }
+      } else {
+        timeSlot = {
+          availabilityId: idx,
+          startTime: sTime,
+          endTime: eTime,
+          isSelected: false,
+          isEnabled: false,
+        }
+      }
+      idx = idx + 1
+      timeSlots.push(timeSlot)
+      console.log('startTime', timeSlot)
+    } while (startTime < endTime)
+    return timeSlots
   }
 
-  useEffect(() => {
-    setSelectedYear(selectedCalender.calenderDate.Year)
-    setSelectedMonth(selectedCalender.calenderDate.Month)
-    setSelectedday(selectedCalender.calenderDate.Day)
-    setSelectedDate(getSelectedDate(selectedYear, selectedMonth, selectedDay))
-  }, [selectedCalender])
-  console.log('moment date', selectedDay)
-  // moment(selectedDate).add(d, 'd')
+  const getAvailablities = async selectedDate => {
+    const startDate = moment(selectedDate).format('YYYY-MM-DD')
+    const endDate = moment(selectedDate).add(5, 'days').format('YYYY-MM-DD')
+    console.log('userId, startDate, endDate', userId, startDate, endDate)
+    const res = await appointmentService.getAppointmentsForAwailability(userId, startDate, endDate)
+    console.log('response', res)
+    if (res.status === 200) {
+      const response = get(res, ['data', 'data'], null)
+      console.log('response', response)
+      const resAppointments = response.appointments
+      const resAvailabilities = response.availabilities
+      console.log('resAvailabilities', resAvailabilities)
+      var appointments = []
+      var availabilities = []
 
+       resAppointments.map(a => {
+        const app = {
+          status: a.status,
+          startDate: a.startTime,
+          endDate: a.endTime,
+        }
+        const appDay =  moment(a.startTime).format('YYYY-MM-DD')
+        const appStartTime =  moment(a.startTime).format('HH:mm A')
+        const appEndTime =  moment(a.endTime).format('HH:mm A')
+        console.log('times', appDay, appStartTime, appEndTime)//times.format('HH:mm a'))
+
+        const appBookedTimings = {
+          startTime: appStartTime,
+          endTime: appEndTime,
+          isSelected: false,
+          isEnabled: false,
+        }
+        const appDetail = {
+          dayDesc: moment(a.startTime).format('dddd, DD'),
+          availableTimeSlots: appBookedTimings,
+          day: moment(a.startTime).format('YYYY-MM-DD'),
+        }
+         appointments.push(appDetail)
+      })
+     
+      resAvailabilities[0].days.map(d => {
+        console.log('resAvailabilities[0].days', d)
+        console.log(' moment(d.first_half_ending_time)',  moment(d.first_half_ending_time))
+        const aDate = moment(d.first_half_ending_time).format('YYYY-MM-DD')
+        const fhStartHour = moment(d.first_half_starting_time).format('HH')
+        const fhStartMinute = moment(d.first_half_starting_time).format('mm')
+        const fhEndHour = moment(d.first_half_ending_time).format('HH')
+        const fhEndMinute = moment(d.first_half_ending_time).format('mm')
+
+        const shStartHour = moment(d.second_half_starting_time).format('HH')
+        const shStartMinute = moment(d.second_half_starting_time).format('mm')
+        const shEndHour = moment(d.second_half_ending_time).format('HH')
+        const shEndMinute = moment(d.second_half_ending_time).format('mm')
+        console.log('aAvailable, resAvailabilities[0].days', aDate, fhStartHour, fhStartMinute, fhEndHour, fhEndMinute)
+        
+        // To get the First Half availabilities
+        const aFHAvailable = buildTimeSlots(
+          aDate,
+          aDate,
+          fhStartHour,
+          fhStartMinute,
+          fhEndHour,
+          fhEndMinute,
+          false,
+          true
+        )
+        // To get the Second Half availabilities
+        const aSHAvailable = buildTimeSlots(
+          aDate,
+          aDate,
+          shStartHour,
+          shStartMinute,
+          shEndHour,
+          shEndMinute,
+          false,
+          true
+        )
+        console.log('aFHAvailable', aFHAvailable)
+        console.log('aSHAvailable', aSHAvailable)
+        
+        const firstHalf =Math.ceil(aFHAvailable.length / 2)
+        console.log('aFHAvailable >> half ', firstHalf)
+
+        // To merge first and second half availabilities
+        var dAvailable = []
+        aFHAvailable.forEach(a => {
+          if(a.availabilityId < firstHalf){
+            dAvailable.push(a)
+          }
+        })
+
+        aSHAvailable.forEach(a => {
+          if(a.availabilityId >= firstHalf ){
+            dAvailable.push(a)
+          }
+        })
+
+        // aFHAvailable.concat(aSHAvailable)
+        console.log('HAvailable', dAvailable)
+
+        // Day availabilities
+        const availabilityDayDetail = {
+          dayDesc: moment(aDate).format('dddd, DD'),
+          availableTimeSlots: dAvailable,
+          day: moment(aDate).format('YYYY-MM-DD'),
+        }        
+
+        //  const bookedTimeSlots = appointments.filter(b => moment(b.day).format('dddd') == moment(a.day).format('dddd'))
+        //   console.log('bookedTimeSlots', bookedTimeSlots,  moment(a.day).format('dddd'))
+        //   var bookedTimeSlot = []
+        //   if(bookedTimeSlot.length > 0) bookedTimeSlot = bookedTimeSlots[0]
+         
+
+        availabilities.push(availabilityDayDetail)
+        console.log('buinding >> availabilities', availabilities)
+        // setAvaliableAppointmentDays(availabilityDayDetail)
+        // // console.log('weekDaysAvailablities', weekDaysAvailablities)
+        // dispatch(appointmentAvailableTimeSlots(availabilityDayDetail))
+      })
+
+      // console.log('appointments >> ', appointments)
+      console.log('appointments >> availabilities ', availabilities)
+
+     
+
+      return availabilities
+    } else {
+      return null
+    }
+  }
 
   useEffect(async () => {
-    if (selectedDate) {
-      getAwailablities(selectedDate)
-      console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
-      console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
-    }
-    //const day = selectedYear + '-' + selectedMonth + '-' + selectedDay
-    // await getWeekDays(selectedDate)
-
-  }, [moment(selectedDate).format('YYYY-MM-DD')])
-
-  useEffect(() => {
-    setAvaliableAppointmentDays([...rweekDaysAvailablities])
-    return () => {
-      dispatch(primaryAppointmentDate({
-        Day: null,
-        Time: {
-          startTime: null,
-          endTime: null
-        }
-      }))
-      dispatch(secondaryAppointmentDate({
-        Day: null,
-        Time: {
-          startTime: null,
-          endTime: null
-        }
-      }))
-    }
-  }, [rweekDaysAvailablities.length])
+    const selectedYear = selectedCalender.calenderDate.Year
+    const selectedMonth = selectedCalender.calenderDate.Month
+    const selectedDay = selectedCalender.calenderDate.Day
+    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    console.log('selectedDate', selectedDate)
+    const doctorAvailability = await getAvailablities(selectedDate)
+    setNewAvailabilities(doctorAvailability)
+    await getWeekDays(selectedDate, doctorAvailability)
+    console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
+    console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
+  }, [selectedCalender])
 
   const getSelectedDate = (year, month, day) => {
-    // const selectedDay = year + '-' + month + '-' + day
-    return moment(new Date())
+    const selectedDay = year + '-' + month + '-' + day
+    return moment(selectedDay)
   }
-  const getWeekDays = async selectedDay => {
+  const getWeekDays = async (selectedDay, newAvailabilities) => {
+    const timings = buildTimeSlots(
+      selectedDay,
+      selectedDay,
+      startSlotHour,
+      startSlotMinute,
+      endSlotHour,
+      endSlotMinute,
+      false,
+      false
+    )
+    console.log('timings', timings)
+    setTimeSlots(timings)
     var weekDaysAvailablities = []
     weekDays.forEach(d => {
       const currentDate = moment(selectedDay).add(d, 'd')
       console.log('day', currentDate.format('dddd, DD'), d)
-      const availabilityDayDetail = {
+      const dayAvailability = newAvailabilities.filter(a => moment(a.day).format('dddd') === currentDate.format('dddd'))
+      var newDayAvailability = null
+      if(dayAvailability.length > 0) newDayAvailability = dayAvailability[0]
+
+      var availabilityDayDetail = {
         dayDesc: currentDate.format('dddd, DD'),
-        availableTimeSlots: availablities,
+        availableTimeSlots: timings,
         day: currentDate.format('YYYY-MM-DD'),
       }
+      console.log('newDayAvailability', newDayAvailability)
+      console.log('newDayAvailability >> ', newDayAvailability)
+      if(newDayAvailability) availabilityDayDetail = {
+        dayDesc: currentDate.format('dddd, DD'),
+        availableTimeSlots: newDayAvailability.availableTimeSlots,
+        day: currentDate.format('YYYY-MM-DD')
+        }
+      
       weekDaysAvailablities.push(availabilityDayDetail)
     })
+
+    console.log('newAvailabilities 123', newAvailabilities)
+    
     setAvaliableAppointmentDays(weekDaysAvailablities)
-    console.log('weekDaysAvailablities', weekDaysAvailablities)
-    // dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
+    console.log('newAvailabilities', weekDaysAvailablities)
+    console.log('buinding >> weekDaysAvailablities', weekDaysAvailablities)
+    dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
   }
 
   const moveBack = async () => {
-    // console.log('useEffect Week Days', selectedCalender)
-    // const selectedYear = selectedCalender.calenderDate.Year
-    // const selectedMonth = selectedCalender.calenderDate.Month
-    // const selectedDay = selectedCalender.calenderDate.Day
-    // const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    console.log('useEffect Week Days', selectedCalender)
+    const selectedYear = selectedCalender.calenderDate.Year
+    const selectedMonth = selectedCalender.calenderDate.Month
+    const selectedDay = selectedCalender.calenderDate.Day
+    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
 
-    // const newSelectedDate = moment(selectedDate).add(-5, 'd')
-    // const newDay = newSelectedDate.format('MMMM, YYYY')
-    // console.log(newSelectedDate.format('dddd, DD'))
-    // setCurrentDate(newDay)
-    // setCurrentDay(newSelectedDate)
-    // const calenderDay = {
-    //   Year: newSelectedDate.format('YYYY'),
-    //   Month: newSelectedDate.format('MM'),
-    //   Day: newSelectedDate.format('DD'),
-    // }
-    // dispatch(calendarAppointmentDate(calenderDay))
-    setSelectedday(moment().add(-1, 'days').format('DD'))
+    const newSelectedDate = moment(selectedDate).add(-5, 'd')
+    const newDay = newSelectedDate.format('MMMM, YYYY')
+    console.log(newSelectedDate.format('dddd, DD'))
+    setCurrentDate(newDay)
+    setCurrentDay(newSelectedDate)
+    const calenderDay = {
+      Year: newSelectedDate.format('YYYY'),
+      Month: newSelectedDate.format('MM'),
+      Day: newSelectedDate.format('DD'),
+    }
+    dispatch(calendarAppointmentDate(calenderDay))
   }
   const moveNext = async () => {
-    // console.log('useEffect Week Days', selectedCalender)
-    // const selectedYear = selectedCalender.calenderDate.Year
-    // const selectedMonth = selectedCalender.calenderDate.Month
-    // const selectedDay = selectedCalender.calenderDate.Day
-    // const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    console.log('useEffect Week Days', selectedCalender)
+    const selectedYear = selectedCalender.calenderDate.Year
+    const selectedMonth = selectedCalender.calenderDate.Month
+    const selectedDay = selectedCalender.calenderDate.Day
+    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
 
-    // const newSelectedDate = moment(selectedDate).add(5, 'd')
-    // const newDay = newSelectedDate.format('MMMM, YYYY')
-    // console.log(newSelectedDate.format('dddd, DD'))
-    // setCurrentDate(newDay)
-    // setCurrentDay(newSelectedDate)
-    // const calenderDay = {
-    //   Year: newSelectedDate.format('YYYY'),
-    //   Month: newSelectedDate.format('MM'),
-    //   Day: newSelectedDate.format('DD'),
-    // }
-    // dispatch(calendarAppointmentDate(calenderDay))
-    setSelectedDate(moment(selectedDate).add(1, 'd'))
-    // getSelectedDate
-
+    const newSelectedDate = moment(selectedDate).add(5, 'd')
+    const newDay = newSelectedDate.format('MMMM, YYYY')
+    console.log(newSelectedDate.format('dddd, DD'))
+    setCurrentDate(newDay)
+    setCurrentDay(newSelectedDate)
+    const calenderDay = {
+      Year: newSelectedDate.format('YYYY'),
+      Month: newSelectedDate.format('MM'),
+      Day: newSelectedDate.format('DD'),
+    }
+    dispatch(calendarAppointmentDate(calenderDay))
   }
 
   const clickCloseButton = () => {
@@ -272,18 +402,19 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickConfirmButton = async () => {
-
+    // setClickedAppointment(false)
+    // setClickedConfirm(true)
     if (role === "patient" && type !== 'rescheduleByPatient') {
       setClickedAppointment(false)
       setClickedConfirm(true)
       return false;
     }
     const reqData = {};
-    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    if (secondaryDate.Day && secondaryDate.Time.startTime) {
-      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.timings.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email);
@@ -296,6 +427,7 @@ const WeekDaysViewComponent = (props) => {
       reqData.doctorId = appointmentDetails._id
     }
     let res;
+    console.log('role', role)
     if ((role === 'doctor' || type === 'rescheduleByPatient')) {
       res = await appointmentService.rescheduleAppointment(reqData, appointmentDetails.appointmentid, type)
     } else {
@@ -313,8 +445,19 @@ const WeekDaysViewComponent = (props) => {
     } else {
       console.log("Makeappointment", res.error);
     }
-    setClickedAppointment(false)
 
+    const selectedDate = {
+      Day: null,
+      timings: {
+        startTime: null,
+        endTime: null,
+        timeSlotId: null,
+      },
+    }
+    dispatch(primaryAppointmentDate(selectedDate))
+    dispatch(secondaryAppointmentDate(selectedDate))
+    
+    setClickedAppointment(false)
   }
 
   const clickBackButton = () => {
@@ -323,6 +466,8 @@ const WeekDaysViewComponent = (props) => {
   }
 
   const clickSubmitButton = () => {
+    // setClickedConfirm(false)
+    // setClickedSubmit(true)
     if (appointmentReason == '') {
       setappointmentReasonErr(true);
       return false;
@@ -340,11 +485,11 @@ const WeekDaysViewComponent = (props) => {
     }
 
     const reqData = {};
-    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    if (secondaryDate.Day && secondaryDate.Time.startTime) {
-      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
-      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.Time.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryStartTime = moment(primaryDate.Day + ' ' + primaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    reqData.primaryEndTime = moment(primaryDate.Day + ' ' + primaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+    if (secondaryDate.Day && secondaryDate.timings.startTime) {
+      reqData.secondaryStartTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.startTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
+      reqData.secondaryEndTime = moment(secondaryDate.Day + ' ' + secondaryDate.timings.endTime, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm:ss');
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email);
@@ -381,11 +526,7 @@ const WeekDaysViewComponent = (props) => {
         {avaliableAppointmentDays &&
           avaliableAppointmentDays.map(aas => (
             <div className="wdv__column">
-              <DayViewComponent
-                avaliableAppointmentDay={aas}
-                avaliableAppointmentDays={avaliableAppointmentDays}
-                setAvaliableAppointmentDays={setAvaliableAppointmentDays}
-              />
+              <DayViewComponent avaliableAppointmentDay={aas} />
             </div>
           ))}
         <img src={RoundedNextArrow} alt="next" style={{ cursor: 'pointer' }} onClick={() => moveNext()} />
@@ -403,41 +544,41 @@ const WeekDaysViewComponent = (props) => {
       </div>
 
       <Modal open={IsClickedAppointment} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
-          <PatientConfimationAppointmentComponent
-            appointmentDetails={appointmentDetails}
-            id={appointmentUserId}
-            role={role}
-            clickCloseButton={clickCloseButton}
-            clickConfirmButton={clickConfirmButton}
+      <Box sx={secondaryDate.Day === null ? confirmPopupWithoutSecondary : confirmAppointment}>
+        <PatientConfimationAppointmentComponent
+          appointmentDetails={appointmentDetails}
+          id={appointmentUserId}
+          role={role}
+          clickCloseButton={clickCloseButton}
+          clickConfirmButton={clickConfirmButton}
 
-          />
-        </Box>
-      </Modal>
-      <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={problemAndSymptoms}>
-          <ProblemAndSymptomsComponent
-            clickBackButton={clickBackButton}
-            clickSubmitButton={clickSubmitButton}
-            invitedMembers={invitedMembers}
-            setInvitedMembers={setInvitedMembers}
-            appointmentReason={appointmentReason}
-            setAppointmentReason={setAppointmentReason}
-            selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
-            appointmentReasonErr={appointmentReasonErr}
-            setappointmentReasonErr={setappointmentReasonErr}
-            reportsArray = {reportsArray}
-            setReportsArray = {setReportsArray}
-          />
-        </Box>
-      </Modal>
+        />
+      </Box>
+    </Modal>
+    <Modal open={IsClickedConfirm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Box sx={problemAndSymptoms}>
+        <ProblemAndSymptomsComponent
+          clickBackButton={clickBackButton}
+          clickSubmitButton={clickSubmitButton}
+          invitedMembers={invitedMembers}
+          setInvitedMembers={setInvitedMembers}
+          appointmentReason={appointmentReason}
+          setAppointmentReason={setAppointmentReason}
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+          appointmentReasonErr={appointmentReasonErr}
+          setappointmentReasonErr={setappointmentReasonErr}
+          reportsArray = {reportsArray}
+          setReportsArray = {setReportsArray}
+        />
+      </Box>
+    </Modal>
 
-      <Modal open={IsClickedSubmit} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={problemAndSymptoms}>
-          <AppointmentApproveRequest clickRequestClose={clickRequestClose} />
-        </Box>
-      </Modal>
+    <Modal open={IsClickedSubmit} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Box sx={problemAndSymptoms}>
+        <AppointmentApproveRequest clickRequestClose={clickRequestClose} />
+      </Box>
+    </Modal>
     </div>
   )
 }

@@ -194,13 +194,15 @@ const AppointmentItemComponent = props => {
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
-        dispatch(primaryAppointmentDate({
-            Day: moment(new Date(row.startTime)).format('YYYY-MM-DD'),
-            Time: {
-                startTime: moment(new Date(row.startTime), "HH:mm").format("HH:mm"),
-                endTime: moment(new Date(row.endTime), "HH:mm").format("HH:mm")
-            }
-        }))
+    dispatch(
+      primaryAppointmentDate({
+        Day: moment(new Date(row.startTime)).format('YYYY-MM-DD'),
+        timings: {
+          startTime: moment(new Date(row.startTime), 'HH:mm').format('HH:mm'),
+          endTime: moment(new Date(row.endTime), 'HH:mm').format('HH:mm'),
+        },
+      })
+    )
         // dispatch(setAppointmentDetails(row))
 
     }

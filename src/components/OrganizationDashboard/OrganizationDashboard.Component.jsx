@@ -516,7 +516,7 @@ const OrganizationDashboardComponent = () => {
     if (allOrganizations != null) {
       const totalCount = get(allOrganizations, 'totalCount', 'count', null)
       console.log('totalCount', totalCount)
-      setCount(totalCount)
+      setCount(totalCount.count)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
@@ -574,7 +574,7 @@ const OrganizationDashboardComponent = () => {
     if (allOrganizations != null) {
       const totalData = allOrganizations?.totalData
       console.log('skipRecords >> totalData', totalData)
-      setCount(totalCount)
+      setCount(totalCount.count)
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
       console.log('totalPage', totalPage)
@@ -839,7 +839,7 @@ const OrganizationDashboardComponent = () => {
           </Paper>
         </div>
       </div>
-      {(planType === "premium" && rows.length >= 10) || (role === "superadmin" && rows.length >= 10)
+      {(planType === "premium" && count > 10) || (role === "superadmin" && count > 10)
         ?
         <div className="od__row">
           <div className="od__pagination__section">
