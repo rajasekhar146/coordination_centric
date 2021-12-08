@@ -1,14 +1,14 @@
-import React from 'react'
-import Countdown from "react-countdown";
+import React from 'react';
+import Countdown,{zeroPad} from "react-countdown";
 import PatientRecordsWid from './PatientRecordsWid/PatientRecordsWid';
 import ChatWid from './ChatWid/ChatWid';
 import ExtendWid from './ExtendWid/ExtendWid';
 import ShareWid from './ShareWid/ShareWid';
-import {useSelector} from 'react-redux';
+import {setTimerCount,setCallActive} from '../../../../redux/actions/video-call-actions';
+import store from '../../../../redux/store';
 import './RightSideControl.css';
+const callEnd = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-end.mp3");
 export default function RightSideControl({
-    isCallActive,
-    isCountDown,
     togglePatientRecordsFun,
     toggleChatFun,
     toggleExtend,
@@ -17,41 +17,46 @@ export default function RightSideControl({
     toggleShare,
     toggleShareFun,
     setToggleShare,
+    room
 }) {
 //------------- Count down ---------------------
-const videoCallReducer = useSelector(state => state.videoCallReducer);
-const TimeOutTem = () => <span>Call ended time Out ..! </span>;
+
+const TimeOutTem = () => <span>Time Out ..! </span>;
 const CallEnd = () => <span>Call ended </span>;
+const countDownTime = 2000000;
+
 // Renderer callback with condition
-let renderer = ({ hours, minutes, seconds, completed }) => {
-if (completed || !isCallActive) {
-    // Render a complete state
-    return <CallEnd/>;
-  } else {
-    // Render a countdown
+
+
+// Renderer callback with condition
+let renderer = ({ hours, minutes, seconds, completed }) => (<span> {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>);
+
+const countDownTimeHide = ()=>{
+  store.dispatch(setCallActive(false));
+  room.localParticipant.videoTracks.forEach((localVideoTrackPublication) => {
+    localVideoTrackPublication.track.disable();
+    const siteUrl = window.location.origin+"/dashboard";
+    window.location.href = siteUrl;
+    callEnd.play();
+  });
+}
+
     return (
-      <span>
-        {String(hours).length < 2 ? "0"+hours:hours }:{String(minutes).length < 2 ? "0"+minutes: minutes}:{String(seconds).length < 2 ? "0"+seconds:seconds}
-      </span>
-    );
-  }
-};
-    return (
-      <>
+      <> 
             {
-            !videoCallReducer.isFullScreen && (
+            !store.getState().videoCallReducer.isFullScreen && (
                                                 <div className="right-side-control">         
                                                 {/* {videoToken} */}
-                                               
-                                                    {
-                                                        isCountDown ? (<div className="timer-wid"><Countdown date={Date.now() + 9000} renderer={renderer} /></div>): null
-                                                    }
+                                             {store.getState().videoCallReducer.callActive &&  <div className="timer-wid"><Countdown date={Date.now() + countDownTime} renderer={renderer} onComplete={countDownTimeHide}/></div> }  
+                                            
+                                                    
+                                                    
                                                     {/* <InviteWid/> */}
                                                     {/* <CallExtendConfirm/> */}
                                                     <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/>
                                                     <ChatWid toggleChatFun={toggleChatFun}/>
                                                     <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>
-                                                    <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/>
+                                                    {/* <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/> */}
                                                 
                                                 </div>
                                               )

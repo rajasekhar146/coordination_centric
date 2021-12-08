@@ -68,7 +68,7 @@ export default class TwilioRoom extends Component {
     render() {
         return (
             <div className="room">
-            <div className="participants">
+            <div id={`remote-participants-${this.state.remoteParticipants.length}`} className="participants">
               <Participant
                 key={this.props.room.localParticipant.identity}
                 localParticipant

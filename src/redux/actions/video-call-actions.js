@@ -5,10 +5,12 @@ const Actions = {
     SET_ROOM_ID: "SET_ROOM_ID",
     SET_TWILIO_ACCESS_TOKEN: "SET_TWILIO_ACCESS_TOKEN",
     SET_SHOW_OVERLAY: "SET_SHOW_OVERLAY",
+    SET_SHOW_TIMER_COUNT: "SET_SHOW_TIMER_COUNT",
     SET_PARTICIPANTS: "SET_PARTICIPANTS",
     SET_MESSAGES: "SET_MESSAGES",
     SET_SHOW_VIDEO_MEETING: "SET_SHOW_VIDEO_MEETING",
     SET_TOGGLE_FULL_SCREEN:"SET_TOGGLE_FULL_SCREEN",
+    SET_CALL_ACTIVE:"SET_CALL_ACTIVE",
   };
   
   export const setIdentity = (identity) => {
@@ -52,6 +54,13 @@ const Actions = {
       showOverlay,
     };
   };
+  export const setTimerCount = (timerCount) => {
+    return {
+      type: Actions.SET_SHOW_TIMER_COUNT,
+      timerCount,
+    };
+  };
+
   
   export const setParticipants = (participants) => {
     return {
@@ -77,5 +86,16 @@ const Actions = {
       isFullScreen,
     };
   };
+  export const setCallActive = (callActive) => {
+    return {
+      type: Actions.SET_CALL_ACTIVE,
+      callActive,
+    };
+  };
+
+
+
+
+
   
   export default Actions;
