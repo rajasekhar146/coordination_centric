@@ -156,7 +156,7 @@ const PatienRecordsComponent = (props) => {
     { id: 'first_name', label: 'Patient', minWidth: 180, align: 'left', visible: true },
     { id: 'last_name', label: 'Doctor', minWidth: 100, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 200, align: 'left', visible: true },
-    { id: 'status', label: 'Status', minWidth: 150, align: 'left', visible: true },
+    { id: 'state', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
   ]
 
@@ -165,13 +165,13 @@ const PatienRecordsComponent = (props) => {
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">Patient Records</div>
-        <div className="od__btn__div od__align__right">
+        {/* <div className="od__btn__div od__align__right">
           {1 === 1 ? (
             <Button className="od__add__organization__btn">
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Add Record
             </Button>
           ) : null}
-        </div>
+        </div> */}
       </div>
       <div className="od__row">
         <div className="od__table__org">

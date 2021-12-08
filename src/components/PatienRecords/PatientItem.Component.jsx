@@ -45,32 +45,11 @@ const useStyles = makeStyles(theme => ({
 
 const getValue = val => {
     switch (val) {
-        case 'open':
-            return 'Open'
-            break
-        case 'inactive':
-            return 'Suspended'
-            break
-        case 'unverified':
-            return 'Unverified'
-            break
-        case 'invited':
-            return 'Invited'
-            break
-        case 'pending_verification':
-            return 'Pending verification'
-            break
-        case 'pending_acceptance':
-            return 'Pending acceptance'
-            break
-        case 'cancelled':
-            return 'cancelled'
-            break
-        case 'declined':
-            return 'declined'
+        case 'active':
+            return 'Closed'
             break
         default:
-            return null
+            return 'Open'
     }
 }
 
@@ -78,10 +57,10 @@ const menuList = [
     {
         menu: 'open',
         options: [
-            { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            // { text: 'View', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Invite Patient', fnKey: 'setInvitePatientClicked', icon: require('../../assets/icons/resent_invitation.png').default },
-            { text: 'Share', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/share_icon.png').default },
-            { text: 'Archive', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/suspend.png').default },
+            // { text: 'Share', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/share_icon.png').default },
+            // { text: 'Archive', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/suspend.png').default },
         ],
     },
 ]
@@ -90,7 +69,7 @@ const menuList = [
 
 const colorcodes = {
     open: '#12B76A',
-    closed: '#12B76A'
+    closed: '#F79009'
 }
 
 const PatientItemComponent = props => {
@@ -196,16 +175,16 @@ const PatientItemComponent = props => {
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 
-                return column.id == 'status' ? (
+                return column.id == 'state' ? (
                     <TableCell
                         key={column.id}
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
-                        <div className={value ? `od__closed__status` : `od__open__status`}>
-                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value ? 'closed' : 'open'] }} />
-                            <div className={value ? `od__closed__label` : `od__open__label`}>
-                                 {getValue(value ? value : 'open')}
+                        <div className={value[0] ? `od__closed__status` : `od__open__status`}>
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value[0] ? 'closed' : 'open'] }} />
+                            <div className={value[0] ? `od__closed__label` : `od__open__label`}>
+                                 {getValue(value[0])}
                             </div>
                         </div>
                     </TableCell>

@@ -203,14 +203,14 @@ const InvitePatientComponent = props => {
                         {errors.role && <p className="io__required">{errors.role.message}</p>}
 
                     </div>
-                    <div>
+                    {/* <div>
                         <label onClick={() => {
                             accessTypes.push('')
                             setAccessTypes([...accessTypes])
                         }} className="add_another_label">
                             <img src={PlusIcon} alt="Approve Org" />  Add another
                         </label>
-                    </div>
+                    </div> */}
                     <div className="io__row">
                         <div style={{ marginTop: "50px" }} className="io__same__line">
                             <div className="io__column">

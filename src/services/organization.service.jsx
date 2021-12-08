@@ -38,7 +38,7 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   //date = 'A'
   const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD')
   const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD')
-  const statusvalues = status?.join()
+  const statusvalues = status.map(element => element.key).join()
 
   //status = ''
   // console.log(searchText, date, status)
