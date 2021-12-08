@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
 import HeartBeat from '../../assets/icons/heart_beat.png'
-
+import get from 'lodash.get'
 
 const styles = theme => ({
     superAdminCard: {
@@ -27,11 +27,27 @@ const styles = theme => ({
     }
 });
 
-const Readings = (props) => {
+const AcitveDoctors = (props) => {
     const {
         classes,
-        checkDoctorOrPatent
+        checkDoctorOrPatent,
+        dashboardDetails,
+        role
     } = props
+
+    const getValue = () => {
+        switch (role) {
+            case 'doctor':
+            case 'patient':
+                return get(dashboardDetails, ['activeDoctors'], '')
+                break
+            case 'superadmin':
+                return get(dashboardDetails, ['0', 'totals', 'activeUsers'], '')
+                break
+            case 'admin':
+                return get(dashboardDetails, ['0', 'totals', 'activeDoctors'], '')
+        }
+    }
 
     return (
         <Card
@@ -48,13 +64,13 @@ const Readings = (props) => {
                 </div>
                 <div className="db_stats_label_fields">
                     <label className="db_stats_label">
-                    Readings
+                    Active Doctors
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{getValue()}</label>
                 </div>
             </CardContent>
         </Card>
     )
 }
 
-export default withStyles(styles)(Readings)
+export default withStyles(styles)(AcitveDoctors)

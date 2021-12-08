@@ -92,7 +92,7 @@ const appointmentInfo = {
 
 const UpcomongAppointmentComponent = props => {
     const {
-        showGrid,
+        showGrid = true,
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
@@ -228,9 +228,7 @@ const UpcomongAppointmentComponent = props => {
         } else {
 
         }
-
     }
-
     useEffect(() => {
         getAppointmentList()
     }, [appointmentList.length, skip])
@@ -284,7 +282,6 @@ const UpcomongAppointmentComponent = props => {
                                     />
                                 ))
                                 }
-
                             </TableBody>
                         </Table>
                     </TableContainer>

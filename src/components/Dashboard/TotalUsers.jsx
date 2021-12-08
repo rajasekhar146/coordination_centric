@@ -3,7 +3,8 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
-import AppointmentsIcon from '../../assets/icons/appointments.png'
+import ActivePatientIcon from '../../assets/icons/appointment_user.png'
+import get from 'lodash.get'
 
 
 const styles = theme => ({
@@ -30,8 +31,24 @@ const styles = theme => ({
 const TotalUsers = (props) => {
     const {
         classes,
-        checkDoctorOrPatent
+        checkDoctorOrPatent,
+        dashboardDetails,
+        role
     } = props
+
+    const getValue = () => {
+        switch (role) {
+            case 'doctor':
+            case 'patient':
+                return get(dashboardDetails, ['otherActiveUsers'], '')
+                break
+            case 'superadmin':
+                return get(dashboardDetails, ['0', 'totals', 'otherActiveUsers'], '')
+                break
+            case 'admin':
+                return get(dashboardDetails, ['0', 'totals', 'otherActiveUsers'], '')
+        }
+    }
 
     return (
         <Card
@@ -44,13 +61,13 @@ const TotalUsers = (props) => {
         >
             <CardContent className={classes.content}>
                 <div>
-                    <img style={{ marginTop: '5px' }} width="30" height="28" src={AppointmentsIcon} alt="user_icon" />
+                    <img style={{ marginTop: '5px' }} width="30" height="28" src={ActivePatientIcon} alt="user_icon" />
                 </div>
                 <div className="db_stats_label_fields">
                     <label className="db_stats_label">
-                        Total Users
+                        Other Active Users
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{getValue()}</label>
                 </div>
             </CardContent>
         </Card>

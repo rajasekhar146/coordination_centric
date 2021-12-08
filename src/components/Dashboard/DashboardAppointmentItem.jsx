@@ -56,7 +56,7 @@ const menuList = [
         menu: 'accepted',
         options: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Re-schedule', icon: require('../../assets/icons/resend_calender.png').default },
             { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         ],
         historyOptions: [
@@ -124,19 +124,7 @@ const AppointmentItemComponent = props => {
     const {
         row,
         columns,
-        index,
-        setIsConfirmClicked,
-        setSelectedAppointment,
-        setIsRescheduleClicked,
-        setIsViewClicked,
-        setIsRejectClicked,
-        setPatientReschedule,
-        setCancelAppointment,
-        role,
-        setOpenFlash,
-        setAlertMsg,
-        setSubLabel,
-        type
+        index
     } = props
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -144,68 +132,7 @@ const AppointmentItemComponent = props => {
     const [menuOptions, setMenuOptions] = React.useState([])
 
 
-    const handleClick = (event, status) => {
-        event.preventDefault()
-        event.stopPropagation()
-        setAnchorEl(event.currentTarget)
-        const menus = menuList.filter(m => m.menu === status.toLowerCase())
-        console.log('menus', menus)
-        if (menus.length > 0) {
-            if (status === 'pending') {
-                role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
-            } else if (type === 'history') {
-                setMenuOptions(menus[0].historyOptions)
-            } else {
-                setMenuOptions(menus[0].options)
-            }
 
-        }
-        else setMenuOptions([])
-
-        console.log('menus[0].options', menus[0].options)
-    }
-
-    const handleMenuAction = (e, action, index, orgId) => {
-        e.preventDefault()
-        e.stopPropagation()
-        dispatch(setAppointmentDetails(row))
-        console.log('orgId', orgId)
-        switch (action) {
-            case 'setIsConfirmClicked':
-                setIsConfirmClicked(true)
-                break
-            case 'setIsRescheduleClicked':
-                setIsRescheduleClicked(true)
-                break
-            case 'setIsViewClicked':
-                setIsViewClicked(true)
-                break
-            case 'setIsViewClicked':
-                setIsViewClicked(true)
-                break
-            case 'setIsRejectClicked':
-                setIsRejectClicked(true)
-                break
-            case 'setPatientReschedule':
-                setPatientReschedule(true)
-                break
-            case 'setCancelAppointment':
-                setCancelAppointment(true)
-        }
-        setAnchorEl(null)
-        setSelectedAppointment(row)
-        dispatch(
-            primaryAppointmentDate({
-                Day: moment(new Date(row.startTime)).format('YYYY-MM-DD'),
-                timings: {
-                    startTime: moment(new Date(row.startTime), 'HH:mm').format('HH:mm'),
-                    endTime: moment(new Date(row.endTime), 'HH:mm').format('HH:mm'),
-                },
-            })
-        )
-        // dispatch(setAppointmentDetails(row))
-
-    }
 
     const handleClose = () => {
         setAnchorEl(null)
@@ -264,14 +191,8 @@ const AppointmentItemComponent = props => {
         rescheduled: '#F79009'
     }
 
-    const handleRowClick = async (i, row) => {
-        history.push(`/viewApointment/${row.appointmentid}`)
-    }
     return (
         <TableRow
-            onClick={() => {
-                handleRowClick(index, row)
-            }}
             hover
             role="checkbox"
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
@@ -307,53 +228,56 @@ const AppointmentItemComponent = props => {
                             </div>
                         </div>
                     </TableCell>
-                ) : column.id == 'action' ? (
-                    <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
-                        <IconButton
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls="long-menu"
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-haspopup="true"
-                            disabled={row['status'] === 'compleated' || row['status'] === 'cancelled'}
-                            onClick={e => handleClick(e, `${row['status']}`)}
-                        >
-                            <MoreVertRoundedIcon />
-                        </IconButton>
-                        <Menu
-                            MenuListProps={{
-                                'aria-labelledby': 'long-button',
-                            }}
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            className={classes.menu}
-                        // PaperProps={{
-                        //     style: {
-                        //         maxHeight: ITEM_HEIGHT * 4.5,
-                        //         width: '20ch',
-                        //         boxShadow:
-                        //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-                        //         border: '1px solid #9fa2a3',
-                        //         left: '-75px'
-                        //     },
-                        // }}
-                        >
-                            {menuOptions.map((option, idx) => (
-                                <MenuItem
-                                    key={option}
-                                    onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
-                                    className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
-                                >
-                                    <div className="od__menu__icon__column">
-                                        <img width={18} src={option.icon} alt={option.text} />
-                                    </div>
-                                    <div className="od__menu__text__column">{option.text}</div>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </TableCell>
-                ) : column.id == 'id' ? null : (
+                ) : 
+                // column.id == 'action' ? (
+                //     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
+                //         <IconButton
+                //             aria-label="more"
+                //             id="long-button"
+                //             aria-controls="long-menu"
+                //             aria-expanded={open ? 'true' : undefined}
+                //             aria-haspopup="true"
+                //             disabled={row['status'] === 'compleated' || row['status'] === 'cancelled'}
+                //             onClick={e => handleClick(e, `${row['status']}`)}
+                //         >
+                //             <MoreVertRoundedIcon />
+                //         </IconButton>
+                //         <Menu
+                //             MenuListProps={{
+                //                 'aria-labelledby': 'long-button',
+                //             }}
+                //             anchorEl={anchorEl}
+                //             open={open}
+                //             onClose={handleClose}
+                //             className={classes.menu}
+                //         // PaperProps={{
+                //         //     style: {
+                //         //         maxHeight: ITEM_HEIGHT * 4.5,
+                //         //         width: '20ch',
+                //         //         boxShadow:
+                //         //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+                //         //         border: '1px solid #9fa2a3',
+                //         //         left: '-75px'
+                //         //     },
+                //         // }}
+                //         >
+                //             {menuOptions.map((option, idx) => (
+                //                 <MenuItem
+                //                     key={option}
+                //                     onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
+                //                     className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
+                //                 >
+                //                     <div className="od__menu__icon__column">
+                //                         <img width={18} src={option.icon} alt={option.text} />
+                //                     </div>
+                //                     <div className="od__menu__text__column">{option.text}</div>
+                //                 </MenuItem>
+                //             ))}
+                //         </Menu>
+                //     </TableCell>
+                // ) 
+                // : 
+                column.id == 'id' ? null : (
                     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
                     </TableCell>

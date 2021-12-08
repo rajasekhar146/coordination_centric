@@ -31,8 +31,24 @@ const Appointments = (props) => {
     const {
         classes,
         checkDoctorOrPatent,
-        dashboardDetails
+        dashboardDetails,
+        role
     } = props
+
+    const getValue = () => {
+        switch (role) {
+            case 'doctor':
+            case 'patient':
+                return get(dashboardDetails, ['totalAppointmentCount'], '')
+                break
+            case 'superadmin':
+                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], '')
+                break
+            case 'admin':
+                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], '')
+        }
+    }
+
 
     return (
         <Card
@@ -51,7 +67,7 @@ const Appointments = (props) => {
                     <label className="db_stats_label">
                     Appointments
                     </label>
-                    <label className="db_stats_value">{get(dashboardDetails, ['totalAppointmentCount'], '')}</label>
+                    <label className="db_stats_value">{getValue()}</label>
                 </div>
             </CardContent>
         </Card>

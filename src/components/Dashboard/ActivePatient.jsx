@@ -44,7 +44,7 @@ const ActivePatient = (props) => {
                 return get(dashboardDetails, ['activePatients'], '')
                 break
             case 'superadmin':
-                // return get(dashboardDetails, ['0', 'totals', 'activePatients'], '')
+                return get(dashboardDetails, ['0', 'totals', 'activePatients'], '')
                 break
             case 'admin':
                 return get(dashboardDetails, ['0', 'totals', 'activePatients'], '')
