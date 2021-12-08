@@ -64,6 +64,7 @@ const PersonalInfo = props => {
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedTimeZone, setSelectedTimeZone] = useState('')
   const [states, setStates] = useState([])
+  const [amazonProfileURL, setAmazonProfileURL] = useState([])
   useEffect(() => {}, [])
 
   const {
@@ -135,6 +136,7 @@ const PersonalInfo = props => {
     setSelectedCountry(get(userDetails, ['country'], ''))
     setSelectedTimeZone(get(userDetails, ['timezone'], ''))
     setProfilePic(get(userDetails, ['profilePic'], ''))
+    setAmazonProfileURL(get(userDetails , ['profilePic'] , ''))
     setValue('country', get(userDetails, ['country'], ''))
     setValue('city', get(userDetails, ['city'], ''))
     await fetchStates(get(userDetails, ['country'], ''))
@@ -159,24 +161,21 @@ const PersonalInfo = props => {
   const handleDrop = files => {
     const formData = new FormData()
     files.forEach(file => {
-      formData.append(`image`, file)
+      formData.append('files', file)
       const reader = new FileReader()
-      reader.onload = () => {
-        setUpdatedUrl(URL.createObjectURL(file))
-        memberService
-          .uploadCertificate(formData, 'doctor', event => {
-            // setProgress(Math.round((100 * event.loaded) / event.total));
-          })
-          .then(response => {
-            console.log(response)
-            setProfilePic(get(response, ['data', 'data'], ''))
-          })
-          .catch(() => {})
-      }
-      reader.readAsArrayBuffer(file)
-    })
-  }
-
+      // reader.onload = () => {
+      //   setUpdatedUrl(URL.createObjectURL(file))
+       
+  })
+      memberService
+      .uploadFile(formData
+        // setProgress(Math.round((100 * event.loaded) / event.total));
+      )
+      .then(response => {
+        setAmazonProfileURL(response.data.data)
+      })
+      .catch(() => {})
+    }
   const onEditorStateChange = editorState => {
     if (editorState) {
       if (editorState.getCurrentContent().getPlainText().length < 500) {
@@ -202,8 +201,7 @@ const PersonalInfo = props => {
   const onSubmit = async data => {
     data.timezone = selectedTimeZone
     //data.country = selectedCountry
-    data.profilePic = profilepic
-    console.log('on Submit >> Data >>', data)
+    data.profilePic = amazonProfileURL
     data.biograhpy_object = convertToRaw(editorState.getCurrentContent())
     const res = await settinService.updateMemberDetails(userDetails._id, data).catch(err => {})
     if (get(res, ['data', 'status'], '') === 200) {
@@ -312,7 +310,7 @@ const PersonalInfo = props => {
             <div>
               {profilepic && (
                 <img
-                  src={updatedUrl ? updatedUrl : `data:image/png;base64,${prfileUrl}`}
+                  src={amazonProfileURL}
                   alt="profile"
                   className="io_profile"
                 />

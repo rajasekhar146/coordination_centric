@@ -10,8 +10,8 @@ const TopDoctorComponent = props => {
     <div className="tdl__main__div">
       <div className="tdl__row">
         <div>
-          {/* <img src={Doctor} alt={speciality} className="tdl__image" /> */}
-          <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"tdl__image"} />
+          <img src={profilePic} alt={speciality} className="tdl__image" />
+          {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"tdl__image"} /> */}
           {/* profilePic */}
         </div>
       </div>

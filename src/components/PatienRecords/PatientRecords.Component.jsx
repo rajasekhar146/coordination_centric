@@ -109,6 +109,11 @@ const invitePatientSuccess = {
 const menuList = getOptions()
 
 const PatienRecordsComponent = (props) => {
+  const {
+    fromVideCall,
+    setfromVideCall,
+    videoClick
+} = props
 
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
@@ -212,6 +217,9 @@ const PatienRecordsComponent = (props) => {
                       setInvitePatientClicked={setInvitePatientClicked}
                       setSelectedItem={setSelectedItem}
                       columns={columns}
+                      fromVideCall={fromVideCall}
+                      setfromVideCall = {setfromVideCall}
+                      videoClick = {videoClick}
                     />
                   ))}
                 </TableBody>

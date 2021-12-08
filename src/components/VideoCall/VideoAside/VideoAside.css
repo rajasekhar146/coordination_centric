@@ -1,8 +1,9 @@
 .video-aside-wrp {
     background-color: #F6F8FB;
     position: relative;
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     float: right;
+    overflow-y: auto;
 }
 

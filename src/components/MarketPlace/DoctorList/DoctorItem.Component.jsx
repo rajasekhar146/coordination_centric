@@ -29,8 +29,8 @@ const DoctorListComponent = (props) => {
 
     return (<TableRow key={row} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
         <TableCell align="center">
-            {/* <img src={Doctor} alt={row.speciality} className="dl__pic" /> */}
-            <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} />
+            <img src={row.pic} alt="prof_pic" className="dl__pic" />
+            {/* <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} /> */}
         </TableCell>
         <TableCell component="th" scope="row" align="left">
             {row.name}
