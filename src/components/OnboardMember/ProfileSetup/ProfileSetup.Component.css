@@ -62,9 +62,9 @@
 }
 
 .psp__profile__img {
-    width: 100px;
-    height: 100px;
-    border-radius: 75px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     opacity: 0.9
 }
 
@@ -80,7 +80,7 @@
 
     /* identical to box height, or 129% */
     letter-spacing: 0.2px;
-    width: 20%;
+    width: 30%;
 
 }
 
@@ -103,6 +103,7 @@
     /* Gray/700 */
     color: #344054;
     margin-bottom: 10px;
+    margin-top: 20px;
 }
 
 .psp__step__text {
@@ -129,13 +130,15 @@
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-    width: 50% !important;
+    width: 70% !important;
     /* identical to box height, or 150% */
     letter-spacing: 0.1px;
+    height: 230px !important;
 
     /* Neutral/Gray */
     color: #A0A4A8;
     margin-right: 60px !important;
+    margin-top: 20px;
 }
 
 .psp__next__btn {
@@ -143,7 +146,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 12px 30px !important;
+    padding: 8px 14px !important;
 
     /* Primary/Default */
     background: #E42346 !important;
@@ -161,16 +164,18 @@
     /* Neutral/White */
     color: #FFFFFF !important;
     
-    width: 180px !important;
-    height: 55px !important;
-    position: absolute !important;
+    width: 150px !important;
+    /* height: 55px !important; */
+    /* position: absolute !important; */
     right: 5%;
+    padding: 8px;
+    height: 48px !important;
 }
 
 .psp__submit__btn__center__align {
-    display: flex !important;
+    /* display: flex !important; */
     /* justify-content: end !important; */
-    align-items: end !important;
+    /* align-items: end !important; */
 
 }
 
@@ -205,4 +210,10 @@
 }
 .mar-top-30{
     margin-top: 30px;
+}
+
+.psp__submit {
+    position: absolute;
+    bottom: 0;
+    right: 100px;    
 }

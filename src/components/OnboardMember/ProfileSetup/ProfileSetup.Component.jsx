@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { newMember, resetMember } from '../../../redux/actions/memberActions'
 import { memberService } from '../../../services'
-import userLogo from '../../../assets/icons/user_circle.svg';
+import userLogo from '../../../assets/icons/user_circle.svg'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import ConfirmationPopupModel from '../../ModelPopup/ConfirmationPopupModel.Component'
@@ -36,7 +36,7 @@ const modalStyle = {
 const ProfileSetupComponent = () => {
   const defaultSrc =
     'https://www.pngkit.com/png/full/301-3012694_account-user-profile-avatar-comments-fa-user-circle.png'
-  const[profilePicName, setProfilePicName] = useState(null)
+  const [profilePicName, setProfilePicName] = useState(null)
   const [files, selectFiles] = useFileUpload()
   var {
     register,
@@ -49,7 +49,6 @@ const ProfileSetupComponent = () => {
   const [openModel, setBool] = useState('')
   const [prfileUrl, setProfileUrl] = useState('')
 
-
   const { invitetoken } = useParams()
   const { referredby } = useParams()
   const { invitedBy } = useParams()
@@ -58,30 +57,30 @@ const ProfileSetupComponent = () => {
     const bytes = new Uint8Array(buffer)
     const len = bytes.byteLength
     for (var i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i])
+      binary += String.fromCharCode(bytes[i])
     }
     return window.btoa(binary)
-}
-const getProfilePic = async profilePicName => {
-  console.log('---pro' , profilePicName)
-  const urlData = {
+  }
+  const getProfilePic = async profilePicName => {
+    console.log('---pro', profilePicName)
+    const urlData = {
       name: `doctors_certificate/${profilePicName}`,
-  }
-  console.log('---' , urlData)
-  const response = await commonService.getProfile(urlData).catch(error => {
+    }
+    console.log('---', urlData)
+    const response = await commonService.getProfile(urlData).catch(error => {
       console.log(error)
-  })
-  if (response && response.data.status === 200) {
+    })
+    if (response && response.data.status === 200) {
       setProfileUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
+    }
   }
-}
   useEffect(async () => {
-    dispatch(setQuickProfileSetup({activeStep: 1}))
+    dispatch(setQuickProfileSetup({ activeStep: 1 }))
     const newMemberDetail = member?.member
     if (newMemberDetail) {
-      setValue('bio', newMemberDetail.bio);
-      console.log('-------profile' , newMemberDetail.profilePic)
-     await getProfilePic(newMemberDetail.profilePic);
+      setValue('bio', newMemberDetail.bio)
+      console.log('-------profile', newMemberDetail.profilePic)
+      await getProfilePic(newMemberDetail.profilePic)
       // setProfileUrl(arrayBufferToBase64(newMemberDetail.profilePic))
     }
   }, [])
@@ -98,7 +97,8 @@ const getProfilePic = async profilePicName => {
       console.log(err)
     })
     dispatch(resetMember({}))
-
+    console.log('save member data >> submit ', response)
+  
     if (response.status === 200) {
       history.push('/signin')
     } else {
@@ -110,9 +110,12 @@ const getProfilePic = async profilePicName => {
     <div className="psp__main__div">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="psp__row">
-          <div className="psp__back__button" onClick={newValue => {
-                      setBool(true)
-                    }}>
+          <div
+            className="psp__back__button"
+            onClick={newValue => {
+              setBool(true)
+            }}
+          >
             <ArrowBackIosNewIcon /> &nbsp;Back
           </div>
           <div className="psp__step__text">STEP 02/02</div>
@@ -144,7 +147,7 @@ const getProfilePic = async profilePicName => {
                         console.log('fileData', fileData)
                         setProfilePicName(fileData.data)
                         member.member.profilePic = fileData.data
-                    dispatch(newMember(member.member))
+                        dispatch(newMember(member.member))
                       }
                     })
                     .catch(err => console.log('Error profile pic', err))
@@ -159,19 +162,23 @@ const getProfilePic = async profilePicName => {
           </div>
 
           <div className="psp__row psp__submit__btn__center__align">
-            <TextField className="psp__multiline__text__box" {...register('bio')} margin="normal" multiline rows={5} />
+            <TextField className="psp__multiline__text__box" {...register('bio')} margin="normal" multiline  />
             &nbsp; &nbsp;
-            <Button className="psp__next__btn" type="submit">
-              Submit &nbsp;
-              <ArrowForwardIosRoundedIcon />
-            </Button>
+            <div className="psp__submit"> <Button className="psp__next__btn" type="submit">
+            Submit &nbsp;
+            <ArrowForwardIosRoundedIcon />
+          </Button></div>
+           
           </div>
         </div>
-        <Modal open={openModel } aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-            <Box sx={modalStyle}>
-              <ConfirmationPopupModel closeScreen={handleCloseModalPopup} url={`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`} />
-            </Box>
-          </Modal>
+        <Modal open={openModel} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+          <Box sx={modalStyle}>
+            <ConfirmationPopupModel
+              closeScreen={handleCloseModalPopup}
+              url={`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`}
+            />
+          </Box>
+        </Modal>
       </form>
     </div>
   )
