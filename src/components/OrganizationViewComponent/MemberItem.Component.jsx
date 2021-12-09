@@ -270,7 +270,7 @@ const MemberItemComponent = props => {
     }
 
     const handleActivate = async(org, status) => {
-        const res = await memberService.updateStatus(organizationId, status)
+        const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
             setSkip(1)
             setOpenFlash(true)
