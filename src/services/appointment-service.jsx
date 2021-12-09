@@ -24,14 +24,23 @@ export const appointmentService = {
 
 
 
-function getAppointments(userId, date, type, skip, limit) {
+function getAppointments(userId, date, type, skip, limit, role) {
     let axiosConfig = {
         headers: authHeader(),
     }
+    const getUrl = () => {
+        switch(role) {
+            case 'doctor':
+            case 'patient':
+                return `${apiURL}/appointment/getAppointment/${userId}?date=${date}&type=${type}&skip=${skip}&limit=${limit}`
+            break
+            default:
+                return `${apiURL}/appointment/ListAllAppointments/${type}?skip=0&limit=10`
+        }
+    }
     return (
         axios
-            .get(`${apiURL}/appointment/getAppointment/${userId}?date=${date}&type=${type}&skip=${skip}&limit=${limit}
-            `, axiosConfig)
+            .get(getUrl(), axiosConfig)
             //.then(handleResponse)
             .then(data => {
                 return data

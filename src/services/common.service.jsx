@@ -16,6 +16,7 @@ export const commonService = {
   getProfile,
   getSpecializations,
   getAllOcupations,
+  getPolicyList
 }
 
 function getCountries() {
@@ -146,3 +147,23 @@ function getAllOcupations() {
       })
   )
 }
+
+
+function getPolicyList() {
+  console.log('axiosConfig', axiosConfig)
+
+  return (
+    axios
+      .get(`${apiURL}/utils/getAllPolicyBySearch`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        //   console.log('getCountries', data)
+        return { data }
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return null
+      })
+  )
+}     
+
