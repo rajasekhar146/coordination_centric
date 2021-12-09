@@ -21,7 +21,8 @@ import {
   setPrimaryAppointmentDateReducer,
   setSecondaryAppointmentDateReducer,
   setFlashMsgReducer,
-
+  skipTwoFaReducer,
+  completeProfileReducer
 } from './commonReducer'
 import { appointmentDetailsReducer, doctorDetailsReducer } from './appointmentReducer'
 
@@ -47,7 +48,9 @@ const reducers = combineReducers({
   secondaryAppointmentDate: setSecondaryAppointmentDateReducer,
   appointmentDetails: appointmentDetailsReducer,
   flashMsgObj: setFlashMsgReducer,
-  doctorDetails: doctorDetailsReducer
+  doctorDetails: doctorDetailsReducer,
+  skipTwoFaValue: skipTwoFaReducer,
+  completeProfile: completeProfileReducer
 })
 
 export default reducers

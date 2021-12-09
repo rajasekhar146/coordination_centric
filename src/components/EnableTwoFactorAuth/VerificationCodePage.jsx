@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom'
 import { authenticationService } from '../../services'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
+import { useDispatch } from 'react-redux'
+import { setCompleteProfile } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const VerificationCodePage = props => {
+  const dispatch = useDispatch()
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const { method } = useParams()
@@ -72,6 +75,7 @@ const VerificationCodePage = props => {
       .then(() => {
         localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
+        dispatch(setCompleteProfile(true))
       })
       .catch(() => {
         history.push(`/2faverificationfail`)

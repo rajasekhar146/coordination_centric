@@ -10,7 +10,8 @@ import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import React, { useEffect, useState } from 'react'
 import history from '../../history'
 import Capitalize from 'lodash.capitalize'
-
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
 
@@ -20,15 +21,31 @@ const ScheduleCalendar = (props) => {
     appointmentList
   } = props;
 
+  const currentUser = authenticationService.currentUserValue
+  const role = get(currentUser, ['data', 'data', 'role'], '')
+
   const [calenderAppointments, serCalenderAppointments] = useState([])
 
   const getLabel = (appointment) => {
     return (
-      <label>
-        {`[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}] ${appointment.name}`}
-      </label>
+      <React.Fragment>
+        <label>
+          {`[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}] ${role === 'patient' ? 'Dr.' : ''} ${appointment.name}`}
+        </label>
+      </React.Fragment>
     )
   }
+  // const getLabel = (appointment) => {
+  //   return (
+  //     <React.Fragment>
+  //       <label>
+  //         {`[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}]`}
+  //       </label><br />
+  //       <lebel>{`${role === 'patient' ? 'Dr.' : ''} ${appointment.name}`}</lebel>
+  //     </React.Fragment>
+
+  //   )
+  // }
 
   useEffect(() => {
     if (appointmentList.length) {
