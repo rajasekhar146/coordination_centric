@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import CircleIcon from '@mui/icons-material/Circle'
@@ -9,7 +9,8 @@ import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
 import '../OrganizationDashboard/OrganizationDashboard.Component.css'
-
+import PatientRecordsDeatils from '../VideoCall/PatientRecordsDeatils/PatientRecordsDeatils'
+import { useParams } from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -74,7 +75,7 @@ const colorcodes = {
 
 const PatientItemComponent = props => {
     const classes = useStyles()
-
+    const [ rowData , setRowData] = useState(''); 
     const {
         row,
         columns,
@@ -85,7 +86,10 @@ const PatientItemComponent = props => {
         setSubLabel,
         setCollaboratorList,
         setInvitePatientClicked,
-        setSelectedItem
+        setSelectedItem,
+        fromVideCall,
+        setfromVideCall,
+        videoClick
     } = props
 
     const handleStatus = (org, status) => {
@@ -144,6 +148,16 @@ const PatientItemComponent = props => {
     }
 
 
+    const handleRowClick = (index, row) =>{
+        if(videoClick){
+            setRowData(row);
+        setfromVideCall(true);
+        }
+    }
+    const closeList = (e) =>{
+        setfromVideCall(false)
+        e.stopPropagation();
+    }
 
     const handleClose = () => {
         setAnchorEl(null)
@@ -166,6 +180,9 @@ const PatientItemComponent = props => {
 
     return (
         <TableRow
+        onClick = {(e)=>{
+            handleRowClick(index,row); e.stopPropagation();
+        }}
             hover
             role="checkbox"
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
@@ -239,6 +256,10 @@ const PatientItemComponent = props => {
                     </TableCell>
                 )
             })}
+             {/* {
+            fromVideCall &&
+            <PatientRecordsDeatils closeList = {closeList} rowData={rowData}></PatientRecordsDeatils>
+            } */}
         </TableRow>
     )
 }

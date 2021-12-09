@@ -117,11 +117,13 @@ const getValue = val => {
             <p className="row-title">{role == 'doctor' ? 'Patient' : 'Doctor'}</p>
 
             { role == 'doctor' && <p className="row-data flex-dr">
-            <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} />
+            <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
+            {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} /> */}
               <p>{ appointmentList.data?.patientName}</p>
             </p> }
             { role != 'doctor' && <p className="row-data flex-dr">
-            <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} />
+            <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
+            {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
               <p>{ appointmentList.data?.doctorName}</p>
             </p> }
           </div>
@@ -166,7 +168,8 @@ const getValue = val => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={confirmAppointment}>
-                <ViewImageComponent category={'doctors_certificate'} pic={imageValue} imageClass={"show_img_div"} showClose = 'true' handleClose={handleClose} />
+                <img src={imageValue} className="galary_icon" alt="success_icon" />
+                {/* <ViewImageComponent category={'doctors_certificate'} pic={imageValue} imageClass={"show_img_div"} showClose = 'true' handleClose={handleClose} /> */}
                 </Box>
             </Modal>
         </div>

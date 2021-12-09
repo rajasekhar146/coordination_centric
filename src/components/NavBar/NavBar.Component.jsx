@@ -400,8 +400,8 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
           >
             <div className="nb__profile__dropdown">
               <div>
-                {/* <img src={ProfileImage} alt="Profile" className="nb__profile__image" /> */}
-                <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} />
+                <img src={profilePic} alt="Profile" className="nb__profile__image" />
+                {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} /> */}
               </div>
               <div className="nb__profile__content">
                 <div className="nb__profile__name">{name}</div>

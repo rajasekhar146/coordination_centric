@@ -31,7 +31,8 @@ const style = {
   boxShadow: 24,
   p: 4,
 }
-const OverView = ({ orgDet }) => {
+const OverView = ( props ) => {
+  const{orgDet,payment} = props
   const { orgId } = useParams()
   const history = useHistory()
   const [open, setOpen] = React.useState(false)
@@ -366,15 +367,16 @@ const OverView = ({ orgDet }) => {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography className="acc-title">Organization's Banking Info</Typography>
+          <Typography className="acc-title">Organization's {payment.type== "card"?"Card":"Banking"}  Info</Typography>
         </AccordionSummary>
+{payment.type== "account"?
         <AccordionDetails className="modAccDetails">
           <div className="detailWrapper">
             <Typography variant="subtitle2" display="block" className="det-title" gutterBottom component="div">
               Bank Account Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              
+              **** **** **** {payment.last4}
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -382,7 +384,7 @@ const OverView = ({ orgDet }) => {
               Routing Number
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              
+              {payment.routing_number}
             </Typography>
           </div>
           <div className="detailWrapper">
@@ -390,10 +392,30 @@ const OverView = ({ orgDet }) => {
               Name Associated with Bank Account
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-              
+              {payment.account_holder_name}
             </Typography>
           </div>
-        </AccordionDetails>
+        </AccordionDetails>:
+        <AccordionDetails className="modAccDetails">
+        <div className="detailWrapper">
+          <Typography variant="subtitle2" display="block" className="det-title" gutterBottom component="div">
+            Card Number
+          </Typography>
+          <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+          **** **** **** {payment.last4}
+          </Typography>
+        </div>
+        <div className="detailWrapper">
+          <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
+            Card Type
+          </Typography>
+          <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+            {payment.card}
+          </Typography>
+        </div>
+         
+      </AccordionDetails>}
+    
       </Accordion>
 
       <Modal

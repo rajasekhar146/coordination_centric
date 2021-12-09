@@ -23,6 +23,7 @@ export const memberService = {
   cancelInvite,
   resendInvite,
   updateStatus,
+  uploadFile,
   getDetailsById
 }
 
@@ -51,6 +52,22 @@ function uploadCertificate(formData, role, onUploadProgress) {
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function uploadFile(file) {
+  let axiosConfig = {
+    headers: authHeader()
+  }
+  return (
+    axios
+      .post(`${apiURL}/files/fileUpload/profile` , file , axiosConfig)
+      .then(data => {
         return data
       })
       .catch(err => {
