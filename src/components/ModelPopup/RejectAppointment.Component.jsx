@@ -43,7 +43,8 @@ const RejectAppointmentComponent = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
-        setIsRescheduleClicked
+        setIsRescheduleClicked,
+        getAppointmentList
     } = props
 
     const [activeTab, setActiveTab] = useState('primary')
@@ -56,6 +57,7 @@ const RejectAppointmentComponent = props => {
             setAlertMsg('Declined');
             setSubLabel(`This appointmend was cancelled.`)
             clickCloseButton()
+            getAppointmentList()
         } else {
 
         }

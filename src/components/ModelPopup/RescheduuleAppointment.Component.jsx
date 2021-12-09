@@ -52,7 +52,8 @@ const RescheduuleAppointmentComponent = props => {
         setAlertMsg,
         setSubLabel,
         clickCloseButton,
-        selectedAppointment
+        selectedAppointment,
+        getAppointmentList
     } = props
 
     const selectNewDates = () => {
@@ -67,6 +68,7 @@ const RescheduuleAppointmentComponent = props => {
             setAlertMsg('Requested');
             setSubLabel(`The re-schedule request was sent to the patient.`)
             clickCloseButton()
+            getAppointmentList()
         } else {
             setAlertMsg('Error');
             // setSubLabel(``)
