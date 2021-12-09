@@ -231,7 +231,9 @@ const AppointmentItemComponent = props => {
 
     }
 
-    const handleClose = () => {
+    const handleClose = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
         setAnchorEl(null)
     }
 

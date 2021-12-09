@@ -45,7 +45,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
-import { authenticationService } from '../../services'
+import { authenticationService, memberService } from '../../services'
 import MenuItemComponent from "./MenuItemComponent";
 
 const style = {
@@ -447,6 +447,7 @@ const OrganizationDashboardComponent = () => {
   const currentUser = authenticationService.currentUserValue
   const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
   const role = get(currentUser, ['data', 'data', 'role'], false)
+  const organizationId = get(currentUser, ['data', 'data', '_id'], '')
 
   const planType = get(currentUser, ['data', 'data', 'planType'], '')
 
@@ -512,8 +513,12 @@ const OrganizationDashboardComponent = () => {
 
   const getOrganization = async (nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus) => {
     setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus)
-    console.log('allOrganizations', allOrganizations)
+    let allOrganizations;
+    if (role === 'admin') {
+      allOrganizations = await memberService.getStaffList(organizationId, 'facility', 10, skip)
+    } else {
+      allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus)
+    }    console.log('allOrganizations', allOrganizations)
     if (allOrganizations != null) {
       const totalCount = get(allOrganizations, 'totalCount', 'count', null)
       console.log('totalCount', totalCount)
@@ -568,7 +573,12 @@ const OrganizationDashboardComponent = () => {
     setPage(newPage)
     const skipRecords = (newPage - 1) * 10
     console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchStartDate, searchEndDate, selectedStatus)
+    let allOrganizations;
+    if (role === 'admin') {
+      allOrganizations = await memberService.getStaffList(organizationId, 'facility', 10, skipRecords)
+    } else {
+      allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchStartDate, searchEndDate, selectedStatus)
+    }
     console.log('skipRecords >> Records', allOrganizations)
     const totalCount = get(allOrganizations, 'totalCount', 'count', null)
     console.log('totalCount', totalCount)

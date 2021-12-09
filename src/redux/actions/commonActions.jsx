@@ -69,3 +69,18 @@ export const setFlashMsg = data => {
     payload: data,
   }
 }
+
+
+export const setSkip2fa = data => {
+  return {
+    type: ActionTypes.SET_SKIP_TWOFA,
+    payload: data,
+  }
+}
+
+export const setCompleteProfile = data => {
+  return {
+    type: ActionTypes.SET_COMPLETE_PROFILE,
+    payload: data,
+  }
+}
