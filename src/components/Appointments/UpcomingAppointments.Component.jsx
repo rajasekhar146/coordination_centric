@@ -298,6 +298,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -315,6 +316,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -333,6 +335,7 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -369,6 +372,7 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -382,6 +386,7 @@ const UpcomongAppointmentComponent = props => {
                             <CancelAppointmentPopup
                                 clickCloseButton={closeCancelTermsAndConds}
                                 clickConfirmButton={handleNextPopup}
+                                
                             />
                         </Box>
                     </Modal>
@@ -400,6 +405,7 @@ const UpcomongAppointmentComponent = props => {
                                 setcancelReasonInput = {setcancelReasonInput}
                                 setcancelReasonInputErr = {setcancelReasonInputErr}
                                 cancelReasonInputErr = {cancelReasonInputErr}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>

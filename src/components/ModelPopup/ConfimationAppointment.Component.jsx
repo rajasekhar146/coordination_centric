@@ -62,6 +62,7 @@ const ConfimationAppointment = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
+        getAppointmentList
     } = props
 
     const [activeTab, setActiveTab] = useState(null)
@@ -79,13 +80,13 @@ const ConfimationAppointment = props => {
                 profile: element?.userId?.profilePic,
                 location: 'Online',
                 date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
-                time: (element.startTime ? moment(element.startTime).format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).format('h:mm a') : ''),
-                status: element.status,
+                time: (element?.startTime ? moment(element?.startTime).format('h:mm a') : "") + " - " + (element?.endTime ? moment(element?.endTime).format('h:mm a') : ''),
+                status: element?.status,
                 gender: element?.userId?.gender,
-                _id: element.userId._id,
-                appointmentid: element._id,
-                startTime: element.startTime,
-                endTime: element.endTime
+                _id: element?.userId?._id,
+                appointmentid: element?._id,
+                startTime: element?.startTime,
+                endTime: element?.endTime
             }
             setSecondarySlots(recordNew)
         } else {
@@ -103,6 +104,7 @@ const ConfimationAppointment = props => {
             setAlertMsg('Confirmed');
             setSubLabel(`This appointment is confirmed to ${get(selectedSlot, ['date'], '')} ${get(selectedSlot, ['time'], '')}.`)
             clickCloseButton()
+            getAppointmentList()
         } else {
             setAlertMsg('Error');
             // setSubLabel(``)
@@ -162,28 +164,32 @@ const ConfimationAppointment = props => {
                 </div>
 
             </div>
-            <div
-                onClick={() => {
-                    setActiveTab('secondary')
-                    setSelectedSlot(secondarySlots)
-                }}
-                className="io_slot_selector">
-                <div>
-                    <label className="io_user_label">
-                        Secondary - Date and Time
+            {get(secondarySlots, ['startTime'], null) && get(secondarySlots, ['endTime'], null)
+                && <div
+                    onClick={() => {
+                        setActiveTab('secondary')
+                        setSelectedSlot(secondarySlots)
+                    }}
+                    className="io_slot_selector">
+                    <div>
+                        <label className="io_user_label">
+                            Secondary - Date and Time
 
-                    </label>
-                </div>
-                <div>
-                    <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
-                        <CircleIcon sx={{ color: activeTab === 'secondary' ? '#E42346' : '#DCDCDC' }} />
-                    </span>
-                    <label className="io_user_name">
-                        {`${get(secondarySlots, ['date'], '')} ${get(secondarySlots, ['time'], '')}`}
-                    </label>
+                        </label>
+                    </div>
+                    <div>
+                        <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
+                            <CircleIcon sx={{ color: activeTab === 'secondary' ? '#E42346' : '#DCDCDC' }} />
+                        </span>
+                        <label className="io_user_name">
+                            {`${get(secondarySlots, ['date'], '')} ${get(secondarySlots, ['time'], '')}`}
+                        </label>
+                    </div>
+
                 </div>
 
-            </div>
+            }
+
             <div className="io__row io__btn io_width97">
                 <div className="io__same__line">
                     <div className="io__cancel">
