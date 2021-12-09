@@ -183,7 +183,7 @@ export const memberAvailabilitiesReducer = (state = memberAvailabilitiesInitialS
 export const memberSpecialtiesReducer = (state = memberSpecialtiesInitialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.MEMBER_SPECIALTIES:
-      return { ...state, specialties: payload }
+      return payload
     default:
       return state
   }
@@ -192,7 +192,7 @@ export const memberSpecialtiesReducer = (state = memberSpecialtiesInitialState, 
 export const memberProfessionalInfoCertificatesReducer = (state = memberCertificateInitialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.MEMBER_PROFESSIONAL_CERTIFICATES:
-      return [...state, payload]
+      return payload
     default:
       return state
   }

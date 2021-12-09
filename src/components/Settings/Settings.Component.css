@@ -617,3 +617,58 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .io_morning_time{
     margin-top: -25px;
 }
+
+.od__certificate__main {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #E0DADA;
+    background-color: #FFFFFF;
+    padding: 5px;
+}
+
+.od__speciality__main {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    border: 1px solid #E0DADA;
+    background-color: #FFFFFF;
+    padding: 5px;
+}
+
+.od__icon {
+    width: 10%;
+    background-color: #f3f0f0 !important;
+    align-items: center;
+    text-align: center;
+    padding: 5px;    
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.od__certificate__main {
+    margin: 8px;
+}
+
+.od__file__name {
+    width: 80%;
+}
+
+.od__cursor {
+    cursor: pointer;
+}
+
+.od__speciality__name {
+    padding:4px;
+}
+
+.od__delete__icon{
+    width: 10%;
+    background-color: #f3f0f0 !important;
+    align-items: center;
+    text-align: center;
+    padding: 5px;    
+    border-radius: 50%;
+}

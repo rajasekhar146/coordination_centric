@@ -21,6 +21,7 @@ import {
   memberProfessionalInfo,
   memberAvaliabilities,
   memberProfessionalInfoCertificates,
+  memberSpecialties,
 } from '../../redux/actions/memberActions' //'../../../redux/actions/memberActions'
 import Chip from '@mui/material/Chip'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -31,6 +32,11 @@ import './Settings.Component.css'
 import FormControl from '@material-ui/core/FormControl'
 import { withStyles } from '@material-ui/core/styles'
 import history from '../../history'
+import moment from 'moment'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
+import { organizationService } from '../../services'
+import DeleteIcon from '../../assets/icons/delete_icon.png'
 
 const styles = theme => ({
   root: {
@@ -61,7 +67,6 @@ const styles = theme => ({
 
 const PersonalInfo = props => {
   // const { classes, getMemberDetails } = props
-  const setAlertColor = props.setAlertColor;
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [textCount, setTextCount] = useState(500)
@@ -79,6 +84,11 @@ const PersonalInfo = props => {
   const mProfessionalInfo = useSelector(state => state.memberProfessionalInfo)
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const mAvaliabilities = useSelector(state => state.memberAvaliabilities)
+  const [certificateList, setCertificates] = useState([])
+
+  const memberSpecialities = useSelector(state => state.memberSpecialties)
+  console.log('memberSpecialities', memberSpecialities)
+
   console.log('mAvaliabilities', mAvaliabilities)
   // const [openflash, setOpenFlash] = useState(false)
   // const [alertMsg, setAlertMsg] = useState('')
@@ -144,12 +154,13 @@ const PersonalInfo = props => {
   }
 
   const fetchMemberProfessionalInfo = async () => {
-    const response = await memberService.getMemberProfessionalInfo(userId).catch(err => {
+    const response = await settinService.getProfessionalInfoDetails().catch(err => {
       console.log(err)
     })
-    dispatch(memberProfessionalInfo(response?.data?.data))
-    console.log('response', response)
-    loadFormData(response?.data?.data)
+    const memberData = get(response, ['data', 'data', 'data'], null)
+    dispatch(memberProfessionalInfo(memberData))
+    console.log('response', memberData)
+    loadFormData(memberData)
   }
 
   useEffect(() => {
@@ -180,6 +191,11 @@ const PersonalInfo = props => {
       setPCToggleOn(services?.consultation)
 
       const specialization = mpInfo.specialization
+      var files = mpInfo.certificates
+      //files.push('Prkaash.doc')
+      setCertificates(files)
+
+      console.log('files', files)
 
       var tSpecialization = []
       specialization.map(s => {
@@ -190,7 +206,7 @@ const PersonalInfo = props => {
         tSpecialization.push(nSpl)
       })
       setSpeciality(tSpecialization)
-      console.log('setSpeciality', tSpecialization)
+      console.log('handleChange >> setSpeciality', tSpecialization)
       const availability = mpInfo.availability
       console.log('availability', availability)
 
@@ -218,6 +234,21 @@ const PersonalInfo = props => {
     setSpecialities(tSpecializations)
   }
 
+  const getDay = day => {
+    let cDate = moment(new Date())
+    var dayName = moment(cDate).format('dddd')
+    console.log('day, dayName', day, dayName)
+    while (dayName != day) {
+      cDate = cDate.add(1, 'd')
+      dayName = moment(cDate).format('dddd')
+      console.log('day, dayName', day, dayName)
+      console.log('day, dayName', cDate._d)
+    }
+
+    console.log('getDay', cDate)
+    return cDate._d
+  }
+
   const getLabel = value => {
     return (
       <div>
@@ -239,8 +270,10 @@ const PersonalInfo = props => {
       setNPIIdErr(true)
       return
     }
+
     console.log('npiId', npiId)
     console.log('Certificates', certificates)
+
     console.log('Specialties ', speciality)
     console.log('Availabilty ', mAvaliabilities)
     console.log('Market Place ', mpToggleOn)
@@ -256,10 +289,10 @@ const PersonalInfo = props => {
       if (a.is_available) {
         const av = {
           day: a.day,
-          first_half_starting_time: a.first_half_starting_time,
-          first_half_ending_time: a.first_half_ending_time,
-          second_half_starting_time: a.second_half_starting_time,
-          second_half_ending_time: a.second_half_ending_time,
+          first_half_starting_time: getDateTime(a.day, a.first_half_starting_time),
+          first_half_ending_time: getDateTime(a.day, a.first_half_ending_time),
+          second_half_starting_time: getDateTime(a.day, a.second_half_starting_time),
+          second_half_ending_time: getDateTime(a.day, a.second_half_ending_time),
         }
         newAvailabilities.push(av)
       }
@@ -269,6 +302,15 @@ const PersonalInfo = props => {
     certificates.map(c => {
       newCertificates.push(c.certificate_name)
     })
+
+    console.log('certificates >> 123', newCertificates)
+
+    // if (certificateList) {
+    //   certificateList.forEach(f => {
+    //     newCertificates.push(f)
+    //   })
+    // }
+    // console.log('certificates >> 12345', newCertificates)
 
     const formData = {
       email: email,
@@ -289,13 +331,24 @@ const PersonalInfo = props => {
       console.log('Successfull')
       setOpenFlash(true)
       setAlertMsg('Saved')
-      setSubLabel('Your information was successfuly updated.')
-      setAlertColor('success')
+      setSubLabel('Your changes are saved')
       getMemberDetails()
     }
   }
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
+  }
+
+  const getDateTime = (dayName, time) => {
+    console.log('getDateTime', dayName, time)
+    if (moment(time).isValid()) return moment(time).format('YYYY-MM-DD HH:mm')
+    else {      
+      var dayDateTime = getDay(dayName)
+      var hourAndMinute = time.split(':')
+      const retDate = moment(dayDateTime).set({ hour: parseInt(hourAndMinute[0]), minute: parseInt(hourAndMinute[1]) })
+      console.log('getDateTime', moment(retDate).format('YYYY-MM-DD HH:mm'), hourAndMinute)
+      return moment(retDate).format('YYYY-MM-DD HH:mm') //.set({ hour: endSlotHour, minute: endSlotMinute })
+    }
   }
 
   const getAvailability = newavailability => {
@@ -364,15 +417,26 @@ const PersonalInfo = props => {
       const nAvailable = defaultValues.map(n => {
         const tAvailable = newavailability.filter(a => a.day === n.day)
         if (tAvailable.length > 0) {
+          console.log('conversion >> time', moment(tAvailable[0].first_half_starting_time).format('LT'))
           return {
             day: tAvailable[0].day,
-            first_half_starting_time: tAvailable[0].first_half_starting_time,
-            first_half_ending_time: tAvailable[0].first_half_ending_time,
-            second_half_starting_time: tAvailable[0].second_half_starting_time,
-            second_half_ending_time: tAvailable[0].second_half_ending_time,
+            first_half_starting_time: moment(tAvailable[0].first_half_starting_time).format('HH:mm'),
+            first_half_ending_time: moment(tAvailable[0].first_half_ending_time).format('HH:mm'),
+            second_half_starting_time: moment(tAvailable[0].second_half_starting_time).format('HH:mm'),
+            second_half_ending_time: moment(tAvailable[0].second_half_ending_time).format('HH:mm'),
             is_available: true,
           }
-        } else return { ...n, is_available: false }
+        } //else return { ...n, is_available: false }
+        else {
+          return {
+            day: n.day,
+            first_half_starting_time: moment(n.first_half_starting_time).format('HH:mm'),
+            first_half_ending_time: moment(n.first_half_ending_time).format('HH:mm'),
+            second_half_starting_time: moment(n.second_half_starting_time).format('HH:mm'),
+            second_half_ending_time: moment(n.second_half_ending_time).format('HH:mm'),
+            is_available: false,
+          }
+        }
       })
       console.log('NEW Avaliablity', nAvailable)
       setAvailabilities(nAvailable)
@@ -388,6 +452,28 @@ const PersonalInfo = props => {
     return option
   }
 
+  const viewCertificates = async fileName => {
+    let certificateResponse = await organizationService.downloadFile({ name: fileName })
+    window.open(get(certificateResponse, ['data', 'data']), '_blank')
+  }
+
+  const deleteCertificate = async filename => {
+    // console.log('index',certificateList, index);
+    // let newList = certificateList.splice(index, 1);
+    const data = certificateList.filter(f => f !== filename) //Duplicate state.
+    console.log('newList >> index', data)
+    setCertificates(data)
+    var newList = []
+    data.forEach(f => {
+      const c = {
+        certificate_name: f,
+      }
+      newList.push(c)
+    })
+    // var newListCertificates = certificates
+    console.log('newListCertificates', newList)
+    dispatch(memberProfessionalInfoCertificates(newList))
+  }
   return (
     <div className="io_p_info">
       <div className="od__row od_flex_space_between">
@@ -455,6 +541,21 @@ const PersonalInfo = props => {
           {selectedFiles.map((file, index) => (
             <UploadCertificateFile file={file} index={index} handleDeleteFile={handleDeleteFile} />
           ))}
+          {certificateList &&
+            certificateList.map((file, index) => (
+              <div className="od__certificate__main">
+                <div className="od__icon">
+                  <DescriptionOutlinedIcon />
+                </div>
+                <div className="od__file__name"> {file} </div>
+                <div className="od__icon od__cursor" onClick={() => viewCertificates(file)}>
+                  <FileDownloadOutlinedIcon />
+                </div>
+                <div className="od__icon od__cursor" onClick={() => deleteCertificate(file)}>
+                  <img src={DeleteIcon} alt="upload" />
+                </div>
+              </div>
+            ))}
         </div>
       </div>
       <ColoredLine color="#E4E7EC" />
@@ -473,7 +574,7 @@ const PersonalInfo = props => {
                 }}
                 options={specialities}
                 getOptionLabel={option => option.speciality_name}
-                defaultValue={speciality}
+                defaultValue={memberSpecialities}
                 renderInput={params => <TextField {...params} />}
               />
             </Stack>

@@ -14,14 +14,14 @@ import ListItemText from '@mui/material/ListItemText'
 import { setCountries } from '../../redux/actions/commonActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../services'
-import get from 'lodash.get'
 import { settinService } from '../../services'
 import { memberService } from '../../services'
 import FormControl from '@material-ui/core/FormControl'
 import moment from 'moment-timezone'
 import { withStyles } from '@material-ui/core/styles'
 import history from '../../history'
-
+import get from 'lodash.get'
+import { memberSpecialties } from '../../redux/actions/memberActions'
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -65,8 +65,8 @@ const PersonalInfo = props => {
   const [selectedTimeZone, setSelectedTimeZone] = useState('')
   const [states, setStates] = useState([])
   const [amazonProfileURL, setAmazonProfileURL] = useState([])
-  useEffect(() => {}, [])
-
+  const memberSpecialities = useSelector(state => state.memberSpecialties)
+  
   const {
     register,
     handleSubmit,
@@ -97,8 +97,29 @@ const PersonalInfo = props => {
     }
   }
 
+  const fetchMemberProfessionalInfo = async () => {
+    const response = await settinService.getProfessionalInfoDetails().catch(err => {
+      console.log(err)
+    })
+    const memberData = get(response, ['data', 'data', 'data'], null)
+    console.log('response', memberData)
+
+    const specialization = memberData.specialization
+
+    var tSpecialization = []
+    specialization.map(s => {
+      const nSpl = {
+        id: s._id,
+        speciality_name: s.speciality_name,
+      }
+      tSpecialization.push(nSpl)
+    })
+    console.log('tSpecialization', tSpecialization)
+    dispatch(memberSpecialties(tSpecialization))
+  }
   useEffect( async () => {
     fetchCountries()   
+    await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
     if (get(userDetails, ['biograhpy_object'], null)) {
       userDetails.biograhpy_object.entityMap = {}
