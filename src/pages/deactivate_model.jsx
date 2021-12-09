@@ -12,6 +12,7 @@ const DeactivateModel = props => {
       setOpenFlash={props.setOpenFlash}
       setAlertMsg={props.setAlertMsg}
       setSubLabel={props.setSubLabel}
+      setAlertColor = {props.setAlertColor}
     />
     </React.Fragment>
   )

@@ -261,7 +261,8 @@ const SignInComponent = () => {
         <Alert
           handleCloseFlash={handleCloseFlash}
           alertMsg={alertMsg}
-          openflash={openflash} />
+          openflash={openflash} 
+          color = "fail"/>
       </form>
     </div>
   )

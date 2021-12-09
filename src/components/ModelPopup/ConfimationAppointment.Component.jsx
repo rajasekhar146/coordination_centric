@@ -62,6 +62,7 @@ const ConfimationAppointment = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
+        setAlertColor
     } = props
 
     const [activeTab, setActiveTab] = useState(null)
@@ -101,6 +102,7 @@ const ConfimationAppointment = props => {
             setOpenFlash(true);
             setAlertMsg('Confirmed');
             setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
+            setAlertColor('success')
             clickCloseButton()
         } else {
             setAlertMsg('Error');

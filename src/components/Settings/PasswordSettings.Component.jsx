@@ -65,6 +65,7 @@ const PersonalInfo = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setAlertColor
     } = props
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -139,13 +140,14 @@ const PersonalInfo = props => {
                 // history.push('/resetpasswordsuccess')
                 setOpenFlash(true)
                 setAlertMsg('Updated')
-                setSubLabel('Your password was successfully updated.')
+                setSubLabel('Your password was successfuly updated.')
+                setAlertColor('success')
             }).catch((res) => {
                 console.log(res.response)
                 setOpenFlash(true)
                 setAlertMsg('Error')
                 setSubLabel(get(res, ['response', 'data', 'message']))
-
+                setAlertColor('fail')
             })
             // SignInStore.load('ResetPassword', {
             //     resetData,

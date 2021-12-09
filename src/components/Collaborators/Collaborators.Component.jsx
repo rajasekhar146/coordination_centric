@@ -211,6 +211,7 @@ const CollaboratorsComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
+                color = "success"
             />
         </div>
 

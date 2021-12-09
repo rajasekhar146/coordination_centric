@@ -378,7 +378,7 @@ const MemberSignInComponent = () => {
             </div>
           </div>
         </div>
-        <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} />
+        <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} color = "success" />
       </form>
     </div>
   )

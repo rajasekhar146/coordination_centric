@@ -97,6 +97,7 @@ const UpcomongAppointmentComponent = props => {
         setAlertMsg,
         setSubLabel,
         type,
+        setAlertColor,
         handleNavigation
     } = props
     const [isConfirmClicked, setIsConfirmClicked] = useState(false)
@@ -160,6 +161,7 @@ const UpcomongAppointmentComponent = props => {
             if(res.data){
                 setOpenFlash(true)
                 setAlertMsg('Canceled')
+                setAlertColor('cancel')
                 setSubLabel(get(res, ['data', 'message'], ''));
             }
             getAppointmentList();
@@ -301,6 +303,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                setAlertColor = {setAlertColor}
                             />
                         </Box>
                     </Modal>
@@ -336,6 +339,7 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
+                                setAlertColor={setAlertColor}
                             />
                         </Box>
                     </Modal>

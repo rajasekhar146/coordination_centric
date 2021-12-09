@@ -33,7 +33,8 @@ const TwoFaEnableSettings = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        getMemberDetails
+        getMemberDetails,
+        setAlertColor
     } = props
     const [twoFaValue, setTwoFaValue] = useState(null)
     const [disableTwoFaPopup, setDisableTwoFaPopup] = useState(false)
@@ -134,6 +135,7 @@ const TwoFaEnableSettings = props => {
                             setSubLabel={setSubLabel}
                             setTwoFaValue={setTwoFaValue}
                             getMemberDetails={getMemberDetails}
+                            setAlertColor = {setAlertColor}
                         />
                     </Box>
                 </Modal>

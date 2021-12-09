@@ -43,7 +43,8 @@ const RejectAppointmentComponent = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
-        setIsRescheduleClicked
+        setIsRescheduleClicked,
+        setAlertColor
     } = props
 
     const [activeTab, setActiveTab] = useState('primary')
@@ -55,6 +56,7 @@ const RejectAppointmentComponent = props => {
             setOpenFlash(true);
             setAlertMsg('Declined');
             setSubLabel(`This appointmend was cancelled.`)
+            setAlertColor('fail')
             clickCloseButton()
         } else {
 

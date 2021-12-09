@@ -127,6 +127,7 @@ const PatientComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
+                color = "success"
             />
             </Paper>
         </div>

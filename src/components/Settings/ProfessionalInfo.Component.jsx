@@ -61,6 +61,7 @@ const styles = theme => ({
 
 const PersonalInfo = props => {
   // const { classes, getMemberDetails } = props
+  const setAlertColor = props.setAlertColor;
   const [profilepic, setProfilePic] = useState('')
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [textCount, setTextCount] = useState(500)
@@ -288,7 +289,8 @@ const PersonalInfo = props => {
       console.log('Successfull')
       setOpenFlash(true)
       setAlertMsg('Saved')
-      setSubLabel('Your changes are saved')
+      setSubLabel('Your information was successfuly updated.')
+      setAlertColor('success')
       getMemberDetails()
     }
   }

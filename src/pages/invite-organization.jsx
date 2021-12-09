@@ -8,6 +8,8 @@ const InviteOrganization = props => {
         clickCloseButton={props.clickCloseButton}
         setOpenFlash={props.setOpenFlash}
         setAlertMsg={props.setAlertMsg}
+        setAlertColor={props.setAlertColor}
+        setSubLabel={props.setSubLabel}
       />
     </div>
   )

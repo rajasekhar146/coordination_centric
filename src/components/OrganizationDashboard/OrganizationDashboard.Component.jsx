@@ -434,7 +434,7 @@ const OrganizationDashboardComponent = () => {
   const [searchEndDate, setSearchEndDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
   const [subLebel, setSubLabel] = useState('')
-
+  const [alertColor , setAlertColor] = useState('');
 
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
@@ -828,6 +828,7 @@ const OrganizationDashboardComponent = () => {
                         setSubLabel={setSubLabel}
                         setIsActivateClicked={setIsActivateClicked}
                         role={role}
+                        setAlertColor={setAlertColor}
                       />
                     ))
                     : null
@@ -862,6 +863,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -880,6 +882,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -898,6 +901,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -916,6 +920,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -934,6 +939,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -942,6 +948,7 @@ const OrganizationDashboardComponent = () => {
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
+        color={alertColor}
       />
     </div>
   )
