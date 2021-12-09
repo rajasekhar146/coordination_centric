@@ -186,6 +186,45 @@ const getMenuList = (role) => {
       ]
       break
       case 'doctor':
+        return [
+          {
+            name: 'Dashboard',
+            link: '/dashboard',
+            icon: require('../../assets/icons/dashboard.png').default,
+            activeIcon: require('../../assets/icons/active_dashboard.png').default,
+            items: [],
+          },
+          {
+            name: 'Appointments',
+            link: '/appointments',
+            icon: require('../../assets/icons/appointments.png').default,
+            activeIcon: require('../../assets/icons/appointments.png').default,
+            items: [],
+          },
+         
+          // {
+          //   name: 'Marketplace',
+          //   link: '/marketplace',
+          //   icon: require('../../assets/icons/vaccinations.png').default,
+          //   activeIcon: require('../../assets/icons/vaccinations.png').default,
+          //   items: [],
+          // },
+          {
+            name: 'Notifications',
+            link: '/notifications',
+            icon: require('../../assets/icons/notifications.png').default,
+            activeIcon: require('../../assets/icons/notifications.png').default,
+            items: [],
+          },
+          {
+            name: 'Payments',
+            link: '/payments',
+            icon: require('../../assets/icons/payments.png').default,
+            activeIcon: require('../../assets/icons/payments.png').default,
+            items: [],
+          },
+        ]
+        break
       case 'patient':
         return [
           {
