@@ -31,7 +31,8 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         minWidth: 120,
         background: "#FFFFFF",
-        width: '100%'
+        width: '100%',
+        position: 'relative'
     },
     dropdownStyle: {
         border: "1px solid black",
@@ -46,6 +47,11 @@ const styles = theme => ({
         background: "#FFFFFF",
         borderRadius: "8px",
     },
+    inputLabel: {
+        position: 'absolute',
+        right: '37px',
+        top: '9px'
+    }
 });
 
 const PatientHealthDetails = props => {
@@ -72,7 +78,7 @@ const PatientHealthDetails = props => {
     const [problems, setProblems] = useState([])
     const [allProblems, setAllProblems] = useState([])
     const [mediName, setMediName] = useState('')
-
+    const [healthIfo, setHealthInfo] = useState(null)
 
     const ColoredLine = ({ color }) => (
         <hr
@@ -86,6 +92,7 @@ const PatientHealthDetails = props => {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm()
 
@@ -130,6 +137,8 @@ const PatientHealthDetails = props => {
         const response = await settinService.getHealthInfo(userDetails._id).catch(error => {
             console.log(error)
         })
+        setHealthInfo(get(response, ['data', 'data', 'data'], null))
+
     }
 
     useEffect(() => {
@@ -137,6 +146,17 @@ const PatientHealthDetails = props => {
         fetchHealthProblems()
         fetchHealthInfo()
     }, [])
+
+    useEffect(() => {
+        if(healthIfo) {
+            setValue('height', get(healthIfo, ['measurement', 'height'], ''))
+            setValue('weight', get(healthIfo, ['measurement', 'weight'], ''))
+            setMediCheck(get(healthIfo, ['medicine', 'medi_check'], ''))
+            setMediName(get(healthIfo, ['medicine', 'medi_name'], ''))
+            setProblems(get(healthIfo, ['problems'], []))
+            setReportsArray(get(healthIfo, ['reports'], []))
+        }
+    }, [healthIfo])
 
     const heightArray = [
         145,
@@ -170,18 +190,25 @@ const PatientHealthDetails = props => {
         60
     ]
 
-    
+
 
     const onSubmit = async (data) => {
-        data.height = height;
-        data.weight = weight;
-        data.medicine = {
+        const respData = {}
+        respData.medicine = {
             medi_check: medi_check,
             medi_name: mediName
         }
-        data.problems = problems;
-        data.reports = reportsArray;
-        const res = await settinService.addHealthInfo(userDetails._id, data).catch((err) => {
+        respData.measurement = {
+            height: data.height,
+            weight: data.weight
+        }
+        respData.problems = problems;
+        if(data.others) {
+            respData.problems.push(data.others)
+        }
+        respData.reports = reportsArray;
+        respData.patient_id = userDetails._id
+        const res = await settinService.addHealthInfo(respData).catch((err) => {
         })
         if (get(res, ['data', 'status'], '') === 200) {
             setOpenFlash(true)
@@ -202,7 +229,7 @@ const PatientHealthDetails = props => {
                             Update your health details here.
                         </div>
                     </div>
-                  
+
                 </div>
 
                 <ColoredLine color="#E4E7EC" />
@@ -213,9 +240,9 @@ const PatientHealthDetails = props => {
                     </div>
                     <div className="od_input_p io_radio">
                         <div className="io_height">
-                            height
+                            Height
                             <div style={{ marginTop: "10px" }}>
-                                <FormControl variant="outlined" className={classes.formControl}>
+                                {/* <FormControl variant="outlined" className={classes.formControl}>
                                     <Select
                                         // {...register('country', {
                                         //     required: 'Country is required.',
@@ -234,13 +261,26 @@ const PatientHealthDetails = props => {
                                                 </MenuItem>
                                             ))}
                                     </Select>
+                                </FormControl> */}
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <TextField
+                                         {...register('height', {
+
+                                        })}
+                                        placeholder="Inches"
+                                        margin="normal"
+                                        InputProps={{
+                                            className: classes.input,
+                                        }}
+                                    />
                                 </FormControl>
+
                             </div>
                         </div>
                         <div className="io_height">
                             Weight
                             <div style={{ marginTop: "10px" }}>
-                                <FormControl variant="outlined" className={classes.formControl}>
+                                {/* <FormControl variant="outlined" className={classes.formControl}>
                                     <Select
                                         // {...register('role', {
                                         //     required: 'Role is required.',
@@ -260,6 +300,18 @@ const PatientHealthDetails = props => {
                                                 </MenuItem>
                                             ))}
                                     </Select>
+                                </FormControl> */}
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <TextField
+                                         {...register('weight', {
+
+                                        })}
+                                        placeholder="Kgs"
+                                        margin="normal"
+                                        InputProps={{
+                                            className: classes.input,
+                                        }}
+                                    />
                                 </FormControl>
                             </div>
                         </div>
@@ -283,6 +335,7 @@ const PatientHealthDetails = props => {
                                     <input
                                         type="radio"
                                         name="dashboard"
+                                        checked={medi_check === true}
                                         onChange={(e) => {
                                             setMediCheck(true)
                                         }}
@@ -298,6 +351,7 @@ const PatientHealthDetails = props => {
                                     <input
                                         type="radio"
                                         name="dashboard"
+                                        checked={medi_check === false}
                                         onChange={(e) => {
                                             setMediCheck(false)
                                         }}
@@ -312,8 +366,9 @@ const PatientHealthDetails = props => {
                         <FormControl variant="outlined" className={classes.formControl}>
                             <TextField
                                 onChange={(e) => {
-                                    setMediName(false)
+                                    setMediName(e.target.value)
                                 }}
+                                value={mediName}
                                 margin="normal"
                                 InputProps={{
                                     className: classes.input,

@@ -74,6 +74,7 @@ const OrganizationViewComponent = (props) => {
     const { orgId } = useParams()
     const history = useHistory()
     const [orgDet, setOrgDetails] = useState({})
+    const [paymentDetails, setPaymentDetails] = useState({})
     const [value, setValue] = React.useState('0');
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
@@ -95,7 +96,8 @@ const OrganizationViewComponent = (props) => {
 
     const getOrgDetails = async () => {
         let orgDetails = await organizationService.getOrganizationDetails(orgId)
-        setOrgDetails(orgDetails)
+        setOrgDetails(orgDetails.data);
+        setPaymentDetails(orgDetails.payment);
     }
 
     useEffect(() => {
@@ -227,7 +229,7 @@ const OrganizationViewComponent = (props) => {
                 <TabItem value="3" label="Patients" />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <Overview orgDet={orgDet} />
+                <Overview orgDet={orgDet} payment={paymentDetails}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Members

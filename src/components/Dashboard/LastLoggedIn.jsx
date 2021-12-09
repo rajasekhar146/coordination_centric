@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
 import LastLoginIcon from '../../assets/icons/activate.png'
-
+import moment from 'moment'
 
 const styles = theme => ({
     superAdminCard: {
@@ -30,7 +30,8 @@ const styles = theme => ({
 const LastLoggedIn = (props) => {
     const {
         classes,
-        checkDoctorOrPatent
+        checkDoctorOrPatent,
+        last_login_time
     } = props
 
     return (
@@ -50,7 +51,7 @@ const LastLoggedIn = (props) => {
                     <label className="db_stats_label">
                         Last logged in
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{moment(last_login_time).fromNow()}</label>
                 </div>
             </CardContent>
         </Card>

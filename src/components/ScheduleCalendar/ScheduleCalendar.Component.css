@@ -61,4 +61,6 @@
 /* body{position: relative;} */
 
 
-
+.rbc-events-container{
+    margin-right: 0 !important;
+}

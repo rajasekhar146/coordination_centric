@@ -92,7 +92,7 @@ const appointmentInfo = {
 
 const UpcomongAppointmentComponent = props => {
     const {
-        showGrid,
+        showGrid = true,
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
@@ -230,9 +230,7 @@ const UpcomongAppointmentComponent = props => {
         } else {
 
         }
-
     }
-
     useEffect(() => {
         getAppointmentList()
     }, [appointmentList.length, skip])
@@ -286,7 +284,6 @@ const UpcomongAppointmentComponent = props => {
                                     />
                                 ))
                                 }
-
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -304,6 +301,7 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 setAlertColor = {setAlertColor}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -321,6 +319,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -339,10 +338,8 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
-                                setAlertColor={setAlertColor}
-                            />
+                                getAppointmentList={getAppointmentList}
                         </Box>
-                    </Modal>
                     <Modal
                         open={isViewClicked}
                         // onClose={setIsAcceptClicked}
@@ -376,6 +373,7 @@ const UpcomongAppointmentComponent = props => {
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
@@ -389,6 +387,7 @@ const UpcomongAppointmentComponent = props => {
                             <CancelAppointmentPopup
                                 clickCloseButton={closeCancelTermsAndConds}
                                 clickConfirmButton={handleNextPopup}
+                                
                             />
                         </Box>
                     </Modal>
@@ -407,6 +406,7 @@ const UpcomongAppointmentComponent = props => {
                                 setcancelReasonInput = {setcancelReasonInput}
                                 setcancelReasonInputErr = {setcancelReasonInputErr}
                                 cancelReasonInputErr = {cancelReasonInputErr}
+                                getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>

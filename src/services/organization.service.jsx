@@ -38,7 +38,7 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   //date = 'A'
   const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD')
   const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD')
-  const statusvalues = status?.join()
+  const statusvalues = status.map(element => element.key).join()
 
   //status = ''
   // console.log(searchText, date, status)
@@ -142,8 +142,10 @@ function getOrganizationDetails(orgId) {
         console.log('getOrganizationDetails - ', data)
         if (data?.data?.data) {
           const res = get(data, ['data', 'data', '0', 'totalData', '0'], {})
+          const payment = get(data, ['data', 'payment'], {})
+
           console.log('Result >> ', res)
-          return res
+          return {data:res,payment:payment}
         } else {
           return null
         }

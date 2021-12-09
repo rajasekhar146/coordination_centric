@@ -437,7 +437,9 @@ const WeekDaysViewComponent = (props) => {
       dispatch(setFlashMsg({
         openFlash: true,
         alertMsg: 'Well done!',
-        subLabel: 'Your appointment was successfuly re-scheduled, wait 24h for doctor confirmation.'
+        subLabel: role === 'doctor' ?
+        'Your appointment was successfuly re-scheduled, wait for patient confirmation.'
+          : 'Your appointment was successfuly re-scheduled, wait for doctor confirmation.'
       }))
       history.push('/appointments')
       setClickedConfirm(false)

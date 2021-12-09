@@ -9,6 +9,7 @@ import './ScheduleCalendar.Component.css'
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import React, { useEffect, useState } from 'react'
 import history from '../../history'
+import Capitalize from 'lodash.capitalize'
 
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
@@ -21,11 +22,19 @@ const ScheduleCalendar = (props) => {
 
   const [calenderAppointments, serCalenderAppointments] = useState([])
 
+  const getLabel = (appointment) => {
+    return (
+      <label>
+        {`[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}] ${appointment.name}`}
+      </label>
+    )
+  }
+
   useEffect(() => {
     if (appointmentList.length) {
       const formattesData = appointmentList.map((appointment) => (
         {
-          title: appointment.name,
+          title: getLabel(appointment),
           start: new Date(appointment.startTime),
           end: new Date(appointment.endTime),
           status: appointment.status,
@@ -43,7 +52,7 @@ const ScheduleCalendar = (props) => {
     cancelled: '#FEF3F2',
     declined: '#FEF3F2',
     request_to_reschedule: '#FFF5D9',
-    rescheduled: '#F79009'
+    rescheduled: '#FFF5D9'
   }
 
   const textColor = {
@@ -52,16 +61,16 @@ const ScheduleCalendar = (props) => {
     cancelled: '#E74F48',
     declined: '#E74F48',
     request_to_reschedule: '#F79009',
-    rescheduled: '#F79009'
+    rescheduled: '#B54708'
   }
 
   // const CustomToolbar = (props) => {
   //   const navigate = action => {
   //     console.log(action);
-      
+
   //     props.onNavigate(action)
   //   }
-  
+
   //   return (
   //     <div className='rbc-toolbar'>
   //       <span className="rbc-btn-group">
@@ -83,7 +92,9 @@ const ScheduleCalendar = (props) => {
         style={{ height: 715 }}
         timeslots={1}
         onSelectEvent={(event) => {
-          history.push(`/video-call/${event.appointmentid}`)
+          if (event.status === 'accepted') {
+            history.push(`/video-call/${event.appointmentid}`)
+          }
         }}
         // components = {{toolbar : CustomToolbar}}
         eventPropGetter={(event) => {

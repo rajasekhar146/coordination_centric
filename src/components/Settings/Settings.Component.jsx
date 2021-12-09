@@ -187,7 +187,7 @@ const OrganizationViewComponent = () => {
                 <TabItem value="3" label="Password" />
                 <TabItem value="4" label="2Factor-Authentication" />
                 {get(userDetails, ['role'], '') === 'patient' && <TabItem value="5" label="Insurance Information" />}
-                <TabItem value="6" label="Notifications" />
+                {/* <TabItem value="6" label="Notifications" /> */}
             </Tabs>
             <TabPanel value={value} index={0}>
                 <PersonalInfo

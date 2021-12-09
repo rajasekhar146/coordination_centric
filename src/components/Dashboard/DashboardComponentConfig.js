@@ -1,33 +1,35 @@
 const config = {
     superadmin: [
+        'TotalAppointments',
         'ActivePatient',
         'ActiveOrganizations',
-        'ActivePatientsperOrganization',
-        'TotalAppointments',
+        'AcitveDoctors',
         'UnassignedReadings',
-        'UnassignedReadingsperOrg',
+        'OtherUsers',
         'OrganizationOnboardings'
     ],
     admin: [
+        'TotalAppointments',
         'ActivePatient',
-        'ActiveUsers',
-        'TotalUsers',
-        'Alerts',
-        'Readings',
-        'OrderstoExpireinXdays',
+        'AcitveDoctors',
+        'OtherUsers',
+        'ActiveOrganizations',
+
+        // 'Readings',
+        // 'OrderstoExpireinXdays',
         'OrganizationOnboardings'
     ],
     doctor: [
         'ActivePatient',
-        'Adherence',
         'Appointments',
         'LastLoggedIn',
+        'AppointmentList'
     ],
     patient: [
         'Appointments',
-        'Adherence',
-        'Readings',
-        'ReadingsFromLastweek',
+        'AcitveDoctors',
+        'LastLoggedIn',
+        'AppointmentList'
     ],
 };
 

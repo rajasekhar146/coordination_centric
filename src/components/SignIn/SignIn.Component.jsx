@@ -35,23 +35,23 @@ const SignInComponent = () => {
   const [FCMToken, setFCMToken] = useState("");
 
 
-  useEffect(()=>{
+  useEffect(() => {
     addDevice(FCMToken);
-  },[FCMToken])
+  }, [FCMToken])
 
 
-  const addDevice = (FCMToken)=>{
-    if(!FCMToken)
-    return;
+  const addDevice = (FCMToken) => {
+    if (!FCMToken)
+      return;
     let devieInfo = {
-      'deviceId':'',
-      'fcmId':FCMToken, 
+      'deviceId': '',
+      'fcmId': FCMToken,
       'deviceType': 'web'
     }
-    notificationService.addDevice(devieInfo).then((res)=>{
-      console.log("Add device",res);
-    },error=>{
-      console.log("Add device",error);
+    notificationService.addDevice(devieInfo).then((res) => {
+      console.log("Add device", res);
+    }, error => {
+      console.log("Add device", error);
     })
   }
   const handleCloseFlash = () => {
@@ -87,7 +87,7 @@ const SignInComponent = () => {
 
     // console.log(defaultValues);
     authenticationService.login(defaultValues.email, defaultValues.password).then(
-     async user => {
+      async user => {
         console.log('logged user', user)
         setIsValidPassword(true)
         setIsValidEmail(true)
@@ -122,8 +122,8 @@ const SignInComponent = () => {
           const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)
           if (!userVerified) history.push('/userverification')
           else if (twoFactor == 'none') {
-            let fcmToken =await getTokenFn(setFCMToken);
-            console.log("fcmToken",fcmToken);
+            let fcmToken = await getTokenFn(setFCMToken);
+            console.log("fcmToken", fcmToken);
             window.location.href = "dashboard";
           }
           else if (twoFactor == 'app') {
@@ -139,7 +139,7 @@ const SignInComponent = () => {
               })
           } else {
             let fcmToken = await getTokenFn(setFCMToken);
-            console.log("fcmToken",fcmToken)
+            console.log("fcmToken", fcmToken)
             window.location.href = "dashboard";
             // history.push('/dashboard')
           }
@@ -173,8 +173,8 @@ const SignInComponent = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="si__right__div si_left_signin">
-                    <div className="si__right__content ">
+        <div className="si__right__div si_left_signin">
+          <div className="si__right__content ">
             <div className="si__right__title">Welcome to CoordiNation Centric!</div>
             <div className="si__right__subtitle">Enter the credentials provided to access our platform</div>
             <div className="si__right__label">
@@ -195,7 +195,7 @@ const SignInComponent = () => {
                 placeholder="Email"
                 type="email"
                 error={errors.email && isSubmit}
-                InputProps={{ 
+                InputProps={{
                   className: 'si__text__box',
                   placeholder: 'Email'
                 }}
@@ -249,12 +249,12 @@ const SignInComponent = () => {
                 Login{' '}
               </Button>{' '}
             </div>
-            <div 
-            className="si__forgot__link"
-            onClick={() => {
-              history.push('/forgotpassword')
-            }}
-            > Forgot Password? 
+            <div
+              className="si__forgot__link"
+              onClick={() => {
+                history.push('/forgotpassword')
+              }}
+            > Forgot Password?
             </div>
           </div>
         </div>
