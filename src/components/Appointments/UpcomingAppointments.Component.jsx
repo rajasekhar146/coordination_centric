@@ -187,7 +187,7 @@ const UpcomongAppointmentComponent = props => {
         } else {
             date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
         }
-        res = await appointmentService.getAppointments(userId, date, type, limit, skip)
+        res = await appointmentService.getAppointments(userId, date, type, limit, skip, role)
         if (res.status === 200) {
             const appointmentsTemp = get(res, ['data', 'data'], []);
             let appointmentsArray = [];
