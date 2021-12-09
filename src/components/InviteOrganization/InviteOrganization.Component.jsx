@@ -19,7 +19,8 @@ const InviteOrganizationComponent = props => {
     setOpenFlash,
     setAlertMsg,
     clickCloseButton,
-    setSubLabel
+    setSubLabel,
+    setAlertColor
   } = props;
 
 
@@ -83,7 +84,9 @@ const InviteOrganizationComponent = props => {
     const res = organizationService.addOrganization(orgDetail, currentUserRole)
     res.then((response) => {
       setOpenFlash(true)
-      setAlertMsg('Invitation Sent Successfully')
+      setAlertMsg('Invitation Sent')
+      setSubLabel('The invitation was sent successfully')
+      setAlertColor('success')
       clickCloseButton()
       localStorage.removeItem('facility')
     }).catch((error) => {

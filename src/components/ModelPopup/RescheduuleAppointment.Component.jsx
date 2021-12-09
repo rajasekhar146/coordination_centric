@@ -53,6 +53,7 @@ const RescheduuleAppointmentComponent = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
+        setAlertColor,
         getAppointmentList
     } = props
 
@@ -67,6 +68,7 @@ const RescheduuleAppointmentComponent = props => {
             setOpenFlash(true);
             setAlertMsg('Requested');
             setSubLabel(`The re-schedule request was sent to the patient.`)
+            setAlertColor('success')
             clickCloseButton()
             getAppointmentList()
         } else {

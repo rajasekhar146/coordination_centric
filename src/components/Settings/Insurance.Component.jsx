@@ -62,7 +62,8 @@ const InsuranceComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        getMemberDetails
+        getMemberDetails,
+        setAlertColor
     } = props
 
     const [policyType, setPolicyType] = useState('')
@@ -87,7 +88,8 @@ const InsuranceComponent = props => {
             // history.push('/resetpasswordsuccess')
             setOpenFlash(true)
             setAlertMsg('Updated')
-            setSubLabel('Your insurance information was updated successfully.')
+            setSubLabel('Your insurance information was successfuly updated.')
+            setAlertColor('success')
             getMemberDetails()
         }).catch(() => {
 

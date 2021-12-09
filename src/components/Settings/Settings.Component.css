@@ -556,9 +556,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .io_disable {
     color: #E42346;
+    margin-left: 12px;
 }
 .io_enable {
     color: #039855;
+    margin-left: 12px;
 }
 .od_label_p_twofa{
     width: 35%;

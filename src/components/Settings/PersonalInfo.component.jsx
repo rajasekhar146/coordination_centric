@@ -206,8 +206,8 @@ const PersonalInfo = props => {
     const res = await settinService.updateMemberDetails(userDetails._id, data).catch(err => {})
     if (get(res, ['data', 'status'], '') === 200) {
       setOpenFlash(true)
-      setAlertMsg('Saved')
-      setSubLabel('Your changes are saved')
+      setAlertMsg('Updated')
+      setSubLabel('Your changes are updated successfully')
       getMemberDetails()
     }
   }

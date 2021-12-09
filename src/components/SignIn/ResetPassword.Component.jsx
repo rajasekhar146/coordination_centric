@@ -326,7 +326,8 @@ const ResetPasswordPage = props => {
                 <Alert
                     handleCloseFlash={handleCloseFlash}
                     subLebel={subLebel}
-                    openflash={openflash} />
+                    openflash={openflash}
+                    color = "success" />
             </form>
         </div>
     )

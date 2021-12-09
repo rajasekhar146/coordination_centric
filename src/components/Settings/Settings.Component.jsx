@@ -60,6 +60,7 @@ const OrganizationViewComponent = () => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
+    const [alertColor , setAlertColor] = useState('');
 
     const role = get(userDetails, ['role'], '')
 
@@ -195,6 +196,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -204,6 +206,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    setAlertColor ={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -213,6 +216,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -221,6 +225,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={4}>
@@ -230,6 +235,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={5}>
@@ -239,9 +245,10 @@ const OrganizationViewComponent = () => {
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
                     userDetails={userDetails}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
-            <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} />
+            <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} color = {alertColor}/>
         </div>
     )
 }

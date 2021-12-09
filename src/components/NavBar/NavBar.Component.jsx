@@ -448,6 +448,7 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
      alertMsg={alertMsg}
      openflash={openflash}
      subLebel={subLebel}
+     color = "success"
    />
    
    </>

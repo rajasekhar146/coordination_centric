@@ -29,7 +29,8 @@ const DisableTwoFaSetting = props => {
         setAlertMsg,
         setSubLabel,
         setTwoFaValue,
-        getMemberDetails
+        getMemberDetails,
+        setAlertColor
     } = props
     const [reason, setReason] = useState(null)
 
@@ -40,7 +41,8 @@ const DisableTwoFaSetting = props => {
             setTwoFaValue('none')
             setOpenFlash(true)
             setAlertMsg('2FA Disabled')
-            setSubLabel('The 2FA was successfully disabled for your account.')
+            setSubLabel('The 2FA was successfuly disabled from your account.')
+            setAlertColor('success')
             localStorage.removeItem('twoFaVerfied')
             props.clickCloseButton()
         })

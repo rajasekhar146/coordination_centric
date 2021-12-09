@@ -44,6 +44,7 @@ const RejectAppointmentComponent = props => {
         clickCloseButton,
         selectedAppointment,
         setIsRescheduleClicked,
+        setAlertColor,
         getAppointmentList
     } = props
 
@@ -56,6 +57,7 @@ const RejectAppointmentComponent = props => {
             setOpenFlash(true);
             setAlertMsg('Declined');
             setSubLabel(`This appointmend was cancelled.`)
+            setAlertColor('fail')
             clickCloseButton()
             getAppointmentList()
         } else {

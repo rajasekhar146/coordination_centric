@@ -330,6 +330,7 @@ const OrganizationViewComponent = (props) => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
+                color = "success"
             />
         </div >
     )

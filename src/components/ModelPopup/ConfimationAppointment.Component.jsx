@@ -62,6 +62,7 @@ const ConfimationAppointment = props => {
         setSubLabel,
         clickCloseButton,
         selectedAppointment,
+        setAlertColor,
         getAppointmentList
     } = props
 
@@ -103,6 +104,7 @@ const ConfimationAppointment = props => {
             setOpenFlash(true);
             setAlertMsg('Confirmed');
             setSubLabel(`This appointment is confirmed to ${get(selectedSlot, ['date'], '')} ${get(selectedSlot, ['time'], '')}.`)
+            setAlertColor('success')
             clickCloseButton()
             getAppointmentList()
         } else {

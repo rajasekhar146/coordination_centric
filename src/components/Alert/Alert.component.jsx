@@ -3,20 +3,26 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { makeStyles } from '@material-ui/core/styles'
 import SuccessIcon from '../../assets/icons/success.png'
-import UnionSuccess from '../../assets/icons/green_bobbles.png'
+import success_bubbles from '../../assets/icons/green_bobbles.png'
 import SnackbarContent from '@mui/material/SnackbarContent';
+import fail_bubbles from '../../assets/icons/red_bubbles.png'
+import cancel_bubbles from '../../assets/icons/blue_bubbles.png'
+import failIcon from '../../assets/icons/fail.png'
+import cancelIcon from '../../assets/icons/cancel.png'
+import CloseIcon from '@mui/icons-material/Close';
+
 
 
 const useStyles = makeStyles(theme => ({
     root: {
-        backgroundColor: "#03A65A",
-        width: '438px',
-        height: '132px',
+        // backgroundColor: "#03A65A",
+        width: '400px',
+        height: '120px',
         borderRadius: '32px'
     },
     icon: {
         position: "absolute",
-        bottom: "110px"
+        bottom: "100px"
     },
     union: {
         position: "absolute",
@@ -42,10 +48,30 @@ const useStyles = makeStyles(theme => ({
        color: '#ffffff',
        paddingLeft: "120px",
        position: 'absolute',
-       bottom: '23px'
+    },
+    closeIcon : {
+        right: '15px' ,
+        position: 'absolute',
+        top: '20px',
+        cursor: 'pointer'
     }
 }))
 
+const colorcodes = {
+    success : '#03A65A',
+    fail : '#F63E50',
+    cancel : '#739BE5',
+  }
+  const bubbles = {
+    success : success_bubbles,
+    fail : fail_bubbles,
+    cancel : cancel_bubbles,
+  }
+  const icon = {
+    success : SuccessIcon,
+    fail : failIcon,
+    cancel : cancelIcon,
+  }
 
 
 // const AlertMui = React.forwardRef(function Alert(props, ref) {
@@ -61,7 +87,8 @@ const Alert = (props) => {
         handleCloseFlash,
         alertMsg,
         openflash,
-        subLebel
+        subLebel,
+        color
     } = props
 
 
@@ -77,16 +104,17 @@ const Alert = (props) => {
                 autoHideDuration={2000}
                 onClose={handleCloseFlash}
             >
-                <SnackbarContent
+                <SnackbarContent style={{backgroundColor:colorcodes[color]}}
                     className={classes.root}
                     message={
                         <span>
-                            <img className={classes.icon} src={SuccessIcon} alt="success_icon" />
+                            <CloseIcon className={classes.closeIcon} onClick={handleCloseFlash}  />
+                            <img className={classes.icon} src={icon[color]} alt="icon" />
                             <h1 className={classes.header}>{alertMsg}</h1>
                             <label className={classes.subText}>
                                 {subLebel}
                             </label>
-                            <img className={classes.union} src={UnionSuccess} alt="success_icon" />
+                            <img className={classes.union} src={bubbles[color]} alt="icon" />
 
                         </span>
 

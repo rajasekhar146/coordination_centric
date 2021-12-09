@@ -61,7 +61,8 @@ const PatientHealthDetails = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        getMemberDetails
+        getMemberDetails,
+        setAlertColor
     } = props;
 
     const [profilepic, setProfilePic] = useState('')
@@ -212,7 +213,8 @@ const PatientHealthDetails = props => {
         if (get(res, ['data', 'status'], '') === 200) {
             setOpenFlash(true)
             setAlertMsg('Saved')
-            setSubLabel('Your changes are saved')
+            setSubLabel('Your health info was successfuly updated.')
+            setAlertColor('success')
             getMemberDetails()
         }
     }

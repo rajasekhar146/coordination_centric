@@ -69,6 +69,7 @@ const AppointmentsComponent = (props) => {
   const [openflash, setOpenFlash] = React.useState(useSelector(state => state.flashMsgObj.openFlash))
   const [alertMsg, setAlertMsg] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
   const [subLebel, setSubLabel] = useState(useSelector(state => state.flashMsgObj.subLabel))
+  const [alertcolor, setAlertColor] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -130,6 +131,7 @@ const AppointmentsComponent = (props) => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          setAlertColor = {setAlertColor}
           type="upcoming"
         />
       </TabPanel>
@@ -139,6 +141,7 @@ const AppointmentsComponent = (props) => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
+          setAlertColor = {setAlertColor}
           type="history"
         />
       </TabPanel>
@@ -147,6 +150,7 @@ const AppointmentsComponent = (props) => {
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
+        color = {alertcolor}
       />
     </div>
   )
