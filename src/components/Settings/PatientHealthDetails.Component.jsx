@@ -153,7 +153,7 @@ const PatientHealthDetails = props => {
             setMediCheck(get(healthIfo, ['medicine', 'medi_check'], ''))
             setMediName(get(healthIfo, ['medicine', 'medi_name'], ''))
             setProblems(get(healthIfo, ['problems'], []))
-            setReportsArray(get(healthIfo, ['problems'], []))
+            setReportsArray(get(healthIfo, ['reports'], []))
         }
     }, [healthIfo])
 
@@ -265,12 +265,12 @@ const PatientHealthDetails = props => {
                                          {...register('height', {
 
                                         })}
+                                        placeholder="Inches"
                                         margin="normal"
                                         InputProps={{
                                             className: classes.input,
                                         }}
                                     />
-                                    <label className={classes.inputLabel}>Inch</label>
                                 </FormControl>
 
                             </div>
@@ -304,12 +304,12 @@ const PatientHealthDetails = props => {
                                          {...register('weight', {
 
                                         })}
+                                        placeholder="Kgs"
                                         margin="normal"
                                         InputProps={{
                                             className: classes.input,
                                         }}
                                     />
-                                    <label className={classes.inputLabel}>Kgs</label>
                                 </FormControl>
                             </div>
                         </div>
