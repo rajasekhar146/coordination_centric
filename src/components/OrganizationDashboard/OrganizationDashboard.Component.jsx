@@ -434,6 +434,7 @@ const OrganizationDashboardComponent = () => {
   const [searchEndDate, setSearchEndDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
   const [subLebel, setSubLabel] = useState('')
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 
   // const [searchStatus, setSearchStatus] = React.useState('')
@@ -446,8 +447,7 @@ const OrganizationDashboardComponent = () => {
   const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
   const role = get(currentUser, ['data', 'data', 'role'], false)
 
-  const planType = get(currentUser, ['data', 'planType'], '')
-
+  const planType = get(currentUser, ['data', 'data', 'planType'], '')
 
 
 
@@ -481,7 +481,7 @@ const OrganizationDashboardComponent = () => {
         getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
       }
     }, 1000);
-    
+
     return () => {
       clearTimeout(handler);
     };
@@ -494,7 +494,7 @@ const OrganizationDashboardComponent = () => {
     selectedStatus,
     isAcivated
   ])
-  
+
   useEffect(() => {
     if (isStatusFieldsChanged) {
       getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
@@ -695,8 +695,8 @@ const OrganizationDashboardComponent = () => {
           <Button className="od_clear_btn" onClick={handleClear}>
             &nbsp;&nbsp; Clear Filters
           </Button>
-          {role === "superadmin" || (planType === "premium") ? (
-            <Button className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"} onClick={handleAddOrganizationOpen}>
+          {role === "superadmin" ? (
+            <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
           ) : null}
@@ -730,7 +730,11 @@ const OrganizationDashboardComponent = () => {
                 value={selectedStatus}
                 // onChange={e => handleSearchStatus(e)}
                 input={<OutlinedInput />}
-                renderValue={selected => selected.join(', ')}
+                renderValue={selected => {
+                  return selected.map(element => element.name).join(', ')
+
+                }}
+
                 MenuProps={MenuProps}
                 className="od__date__field"
               >
@@ -802,7 +806,7 @@ const OrganizationDashboardComponent = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {(planType === "premium") || (role === "superadmin")
+                  {(planType !== "free") || (role === "superadmin")
                     ? rows.map((row, index) => (
                       <OrganisationItem
                         row={row}
@@ -836,10 +840,19 @@ const OrganizationDashboardComponent = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            {/* <TablePagination
+              component="div"
+              rowsPerPageOptions={[5, 10, 25]}
+              count={rows.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            /> */}
           </Paper>
         </div>
       </div>
-      {(planType === "premium" && count > 10) || (role === "superadmin" && count > 10)
+      {(planType !== "free" && count > 10) || (role === "superadmin" && count > 10)
         ?
         <div className="od__row">
           <div className="od__pagination__section">
@@ -850,6 +863,7 @@ const OrganizationDashboardComponent = () => {
         </div>
         : null
       }
+
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"

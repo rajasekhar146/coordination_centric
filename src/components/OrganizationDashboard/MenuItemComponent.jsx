@@ -21,17 +21,18 @@ const OrganisationItem = props => {
     return (
         <MenuItem key={status.key} value={status.key}>
             <Checkbox
-                checked={selectedStatus.indexOf(status.key) > -1}
+                checked={selectedStatus.map(function(e) { return e.key; }).indexOf(status.key) > -1}
                 onChange={(e) => {
                     e.stopPropagation()
                     e.preventDefault()
                     if (!e.target.checked) {
                         if(status.key === "all") {
-                            selectedStatus.splice(selectedStatus.indexOf('all'), 1)
+                            
+                            selectedStatus.splice(selectedStatus.map(function(e) { return e.key; }).indexOf('all'), 1)
                         } else {
-                            selectedStatus.splice(selectedStatus.indexOf(status.key), 1)
-                            if(selectedStatus.indexOf('all') > -1) {
-                                selectedStatus.splice(selectedStatus.indexOf('all'), 1)
+                            selectedStatus.splice(selectedStatus.map(function(e) { return e.key; }).indexOf(status.key), 1)
+                            if(selectedStatus.map(function(e) { return e.key; }).indexOf('all') > -1) {
+                                selectedStatus.splice(selectedStatus.map(function(e) { return e.key; }).indexOf('all'), 1)
                             }
                         }
                         setSelectedStatus([...selectedStatus])
@@ -39,19 +40,9 @@ const OrganisationItem = props => {
                     }
                     if (e.target.checked) {
                         if (status.key === "all") {
-                            setSelectedStatus([
-                                'all',
-                                'active',
-                                'pending_verification',
-                                'declined',
-                                'pending_acceptance',
-                                'unverified',
-                                'inactive',
-                                'invited',
-                                'cancelled',
-                            ])
+                            setSelectedStatus([...statusNames])
                         } else {
-                            selectedStatus.push(status.key)
+                            selectedStatus.push(status)
                             setSelectedStatus([...selectedStatus])
                             
                         }

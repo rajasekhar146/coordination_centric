@@ -18,11 +18,11 @@ import ActivePatient from './ActivePatient'
 import ActiveOrganizations from './ActiveOrganizations'
 import ActivePatientsperOrganization from './ActivePatientsperOrganization'
 import UnassignedReadings from './UnassignedReadings'
-import UnassignedReadingsperOrg from './UnassignedReadingsperOrg'
+import OtherUsers from './OtherUsers'
 import ActiveUsers from './ActiveUsers'
 import TotalUsers from './TotalUsers'
 import Alerts from './Alerts'
-import Readings from './Readings'
+import AcitveDoctors from './AcitveDoctor'
 import Adherence from './Adherence'
 import Appointments from './Appointments'
 import LastLoggedIn from './LastLoggedIn'
@@ -31,7 +31,7 @@ import TotalAppointments from './TotalAppointments'
 import OrderstoExpireinXdays from './OrderstoExpireinXdays'
 import OrganizationOnboardings from './OrganizationOnboardings'
 import { dashboardService } from '../../services'
-
+import AppointmentList from './AppointmentList'
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -159,8 +159,8 @@ const componenetsMap = {
 
     },
   },
-  UnassignedReadingsperOrg: {
-    component: UnassignedReadingsperOrg,
+  OtherUsers: {
+    component: OtherUsers,
     componentProps: {
 
     },
@@ -183,8 +183,8 @@ const componenetsMap = {
 
     },
   },
-  Readings: {
-    component: Readings,
+  AcitveDoctors: {
+    component: AcitveDoctors,
     componentProps: {
 
     },
@@ -224,7 +224,12 @@ const componenetsMap = {
     componentProps: {
 
     },
+  },
+  AppointmentList: {
+    component: AppointmentList,
+    componentProps: {
 
+    },
   }
 };
 
@@ -274,9 +279,9 @@ const DashboardComponent = () => {
 
   const checkDoctorOrPatent = () => {
     switch (role) {
-      case 'doctor':
+      // case 'doctor':
       case 'patient':
-        return true
+        return false
         break;
       default:
         return false
@@ -301,6 +306,7 @@ const DashboardComponent = () => {
                   role={role}
                   checkDoctorOrPatent={checkDoctorOrPatent}
                   dashboardDetails={dashboardDetails}
+                  last_login_time={last_login_time}
                 />
               );
             }

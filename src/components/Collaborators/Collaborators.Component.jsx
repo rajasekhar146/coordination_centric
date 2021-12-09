@@ -67,6 +67,11 @@ const CollaboratorsComponent = props => {
     const [collaboratorList, setCollaboratorList] = React.useState([])
     const currentUser = authenticationService.currentUserValue
     const organizationId = get(currentUser, ['data', 'data', '_id'], '')
+
+    const planType = get(currentUser, ['data', 'planType'], '')
+    const role = get(currentUser, ['data', 'data', 'role'], false)
+    const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
+
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
     const [openflash, setOpenFlash] = React.useState(false)
@@ -115,16 +120,19 @@ const CollaboratorsComponent = props => {
         <div className="od__main__div">
             <div className="od__row od_flex_space_between">
                 <div className="od__title__text">Collaborators</div>
-                <div className="od__btn__div od">
-                    <Button
-                        onClick={() => {
-                            setOpenInviteCollaborator(true)
-                        }}
-                        className="od_add_member_btn">
-                        &nbsp;&nbsp; Add Collaborator
-                    </Button>
-                </div>
-
+                {role === "superadmin" || (planType !== "free") &&
+                    <div className="od__btn__div od">
+                        <Button
+                            onClick={() => {
+                                setOpenInviteCollaborator(true)
+                            }}
+                            className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
+                            >
+                            &nbsp;&nbsp; Add Collaborator
+                        </Button>
+                    </div>
+                }
+               
             </div>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>

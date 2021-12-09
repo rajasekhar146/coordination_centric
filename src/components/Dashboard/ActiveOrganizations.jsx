@@ -4,6 +4,8 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
 import MedicalKit from '../../assets/icons/medical_kit.png'
+import get from 'lodash.get'
+
 
 const styles = theme => ({
     superAdminCard: {
@@ -28,9 +30,24 @@ const styles = theme => ({
 const ActiveOrganizations = (props) => {
     const {
         classes,
-        checkDoctorOrPatent
+        checkDoctorOrPatent,
+        dashboardDetails,
+        role
     } = props
 
+    const getValue = () => {
+        switch (role) {
+            case 'doctor':
+            case 'patient':
+                return get(dashboardDetails, ['activeOrganization'], '')
+                break
+            case 'superadmin':
+                return get(dashboardDetails, ['0', 'totals', 'activeOrganization'], '')
+                break
+            case 'admin':
+                return get(dashboardDetails, ['0', 'totals', 'activeOrganization'], '')
+        }
+    }
     
     return (
         <Card
@@ -49,7 +66,7 @@ const ActiveOrganizations = (props) => {
                     <label className="db_stats_label">
                         Active Organizations
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{getValue()}</label>
                 </div>
             </CardContent>
         </Card>

@@ -19,7 +19,7 @@
     font-family: Lato;
 }
 .od__closed__status {
-    background-color: #ECFDF3 !important;
+    background: #FFF5D9;
     border-radius: 16px;
     text-transform: capitalize;
     line-height: 18px;
@@ -35,6 +35,6 @@
 }
 .od__closed__label {
     padding-left: 6px;
-    color: #027A48;     
+    color: #B54708;
     font-family: Lato;
 }

@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { withStyles } from "@material-ui/core/styles";
 import ActivePatientIcon from '../../assets/icons/appointment_user.png'
+import get from 'lodash.get'
 
 const styles = theme => ({
     card: {
@@ -21,8 +22,28 @@ const styles = theme => ({
 
 const UnassignedReadings = (props) => {
     const {
-        classes
+        classes,
+        checkDoctorOrPatent,
+        dashboardDetails,
+        role
     } = props
+
+
+    const getValue = () => {
+        switch (role) {
+            case 'doctor':
+            case 'patient':
+                return get(dashboardDetails, ['activeDoctors'], '')
+                break
+            case 'superadmin':
+                return get(dashboardDetails, ['0', 'totals', 'total'], '')
+                break
+            case 'admin':
+                return get(dashboardDetails, ['0', 'totals', 'total'], '')
+        }
+    }
+
+
     return (
         <Card
             classes={{ root: classes.card }}
@@ -38,10 +59,10 @@ const UnassignedReadings = (props) => {
                 </div>
                 <div className="db_stats_label_fields">
                     <label className="db_stats_label">
-                        Unassigned Readings
+                        Total Users
 
                     </label>
-                    <label className="db_stats_value">153</label>
+                    <label className="db_stats_value">{getValue()}</label>
                 </div>
             </CardContent>
         </Card>

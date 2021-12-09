@@ -299,12 +299,12 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
       </div>
 
       <div className="nb__column__right">
-        <div className="nb__calender">
+        {/* <div className="nb__calender">
           <EventNoteIcon />
         </div>
         <div className="nb__message">
           <MessageOutlinedIcon />
-        </div>
+        </div> */}
         {notificationUnReadcount>0 &&(
         <div className="notificationUnReadcount">{notificationUnReadcount}</div>
         ) }

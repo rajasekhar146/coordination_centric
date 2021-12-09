@@ -66,7 +66,8 @@ const ConfimationAppointment = props => {
 
     const [activeTab, setActiveTab] = useState(null)
     const [secondarySlots, setSecondarySlots] = useState(null)
-    const [selectedSlotId, setSelectedSlot] = useState(null)
+    const [selectedSlot, setSelectedSlot] = useState(null)
+
 
 
     useEffect(async () => {
@@ -82,7 +83,7 @@ const ConfimationAppointment = props => {
                 status: element.status,
                 gender: element?.userId?.gender,
                 _id: element.userId._id,
-                slotId: element._id,
+                appointmentid: element._id,
                 startTime: element.startTime,
                 endTime: element.endTime
             }
@@ -96,11 +97,11 @@ const ConfimationAppointment = props => {
 
 
     const handleApprove = async () => {
-        const res = await appointmentService.confirmAppointment(selectedSlotId)
+        const res = await appointmentService.confirmAppointment(selectedSlot.appointmentid)
         if (res.status === 200) {
             setOpenFlash(true);
             setAlertMsg('Confirmed');
-            setSubLabel(`This appointment is confirmed to Thu, 7th Oct 2021 at 8 am.`)
+            setSubLabel(`This appointment is confirmed to ${get(selectedSlot, ['date'], '')} ${get(selectedSlot, ['time'], '')}.`)
             clickCloseButton()
         } else {
             setAlertMsg('Error');
@@ -150,7 +151,7 @@ const ConfimationAppointment = props => {
                 <div
                     onClick={() => {
                         setActiveTab('primary')
-                        setSelectedSlot(selectedAppointment.appointmentid)
+                        setSelectedSlot(selectedAppointment)
                     }}>
                     <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
                         <CircleIcon sx={{ color: activeTab === 'primary' ? '#E42346' : '#DCDCDC' }} />
@@ -164,7 +165,7 @@ const ConfimationAppointment = props => {
             <div
                 onClick={() => {
                     setActiveTab('secondary')
-                    setSelectedSlot(secondarySlots.slotId)
+                    setSelectedSlot(secondarySlots)
                 }}
                 className="io_slot_selector">
                 <div>
@@ -191,7 +192,14 @@ const ConfimationAppointment = props => {
                         </Button>
                     </div>
                     <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn" onClick={handleApprove}>
+                        <Button
+                            type="submit"
+                            className={
+                                selectedSlot
+                                    ? 'io__Approve__btn'
+                                    : 'io__disable__btn'
+                            }
+                            onClick={handleApprove}>
                             Confirm
                         </Button>
                     </div>
