@@ -93,7 +93,7 @@ const getValue = val => {
 }
 
 const getAddress =()=>{
-    return [userDetails.address,userDetails.city,userDetails.state].filter(c=>c).join(',');
+    return [userDetails.address,userDetails.city,userDetails.state,userDetails.country,userDetails.postalCode].filter(c=>c).join(', ');
 }
 
     return (
@@ -147,9 +147,11 @@ const getAddress =()=>{
           </div>
           <div className="row-details">
             <p className="row-title">Speciality</p>
+            <p className="row-data">
             {userDetails?.speciality?.map((item)=>{
-               return <p className="row-data" key={item}>{item.speciality_name}</p>
+               return <p>{item.speciality_name}</p>
           })}
+          </p>
           </div>
   
             <div className="row-details">
