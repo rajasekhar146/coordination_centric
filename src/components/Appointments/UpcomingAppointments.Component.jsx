@@ -339,7 +339,9 @@ const UpcomongAppointmentComponent = props => {
                                 setSubLabel={setSubLabel}
                                 handleNavigation={handleNavigation}
                                 getAppointmentList={getAppointmentList}
+                            />
                         </Box>
+                        </Modal>
                     <Modal
                         open={isViewClicked}
                         // onClose={setIsAcceptClicked}
