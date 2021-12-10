@@ -43,9 +43,9 @@ const MembersComponent = props => {
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
 
     const getStaffList = async () => {

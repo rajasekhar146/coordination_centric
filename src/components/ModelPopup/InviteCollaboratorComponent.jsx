@@ -16,6 +16,7 @@ import get from 'lodash.get'
 import { organizationService } from '../../services'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { capitalize } from 'lodash'
 
 
 const styles = theme => ({
@@ -58,6 +59,7 @@ const InviteCollaboratorComponent = props => {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm()
 
@@ -123,6 +125,9 @@ const InviteCollaboratorComponent = props => {
                                 {...register('facilityName', {
                                     required: 'Name is required.'
                                 })}
+                                onChange={(e) => {
+                                    setValue('facilityName', capitalize(e.target.value))
+                                }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{

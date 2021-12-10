@@ -101,7 +101,7 @@ const RejectAppointmentComponent = props => {
                     </div>
                     <div>
                         <label className="io_user_name">
-                            Thu, 7th Oct - 8am
+                        {`${selectedAppointment.date} ${selectedAppointment.time}`}
                         </label>
                     </div>
                 </div>

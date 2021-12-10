@@ -42,13 +42,14 @@ const VerificationCodePage = props => {
   const [subLebel, setSubLabel] = useState('')
 
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
+  const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
 
 
   const [verificationCode, setVerificationCode] = useState('')
 
   useEffect(() => {
-    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFaVerfied) {
+    // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFactor_auth_type === 'none') {
       
       history.push(`/dashboard`)
     }
@@ -73,9 +74,12 @@ const VerificationCodePage = props => {
     const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
     res
       .then(() => {
-        localStorage.setItem('twoFaVerfied', true)
+        // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        dispatch(setCompleteProfile(true))
+        if(!last_login_time) {
+          dispatch(setCompleteProfile(true))
+
+        }
       })
       .catch(() => {
         history.push(`/2faverificationfail`)

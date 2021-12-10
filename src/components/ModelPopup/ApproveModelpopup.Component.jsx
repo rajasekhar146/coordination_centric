@@ -22,7 +22,7 @@ const ApproveModel = props => {
       })
       if (res.status === 200) {
         setOrganizations([])
-        setSkip(1)
+        setSkip(0)
         setOpenFlash(true)
         setAlertMsg('Verified')
         setSubLabel('This account was successfully verified.')
