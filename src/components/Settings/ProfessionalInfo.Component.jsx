@@ -342,7 +342,7 @@ const PersonalInfo = props => {
   const getDateTime = (dayName, time) => {
     console.log('getDateTime', dayName, time)
     if (moment(time).isValid()) return moment(time).format('YYYY-MM-DD HH:mm')
-    else {      
+    else {
       var dayDateTime = getDay(dayName)
       var hourAndMinute = time.split(':')
       const retDate = moment(dayDateTime).set({ hour: parseInt(hourAndMinute[0]), minute: parseInt(hourAndMinute[1]) })
@@ -442,8 +442,18 @@ const PersonalInfo = props => {
       setAvailabilities(nAvailable)
       dispatch(memberAvaliabilities(nAvailable))
     } else {
-      setAvailabilities(defaultValues)
-      dispatch(memberAvaliabilities(defaultValues))
+      const nAvailable = defaultValues.map(n => {
+        return {
+          day: n.day,
+          first_half_starting_time: moment(n.first_half_starting_time).format('HH:mm'),
+          first_half_ending_time: moment(n.first_half_ending_time).format('HH:mm'),
+          second_half_starting_time: moment(n.second_half_starting_time).format('HH:mm'),
+          second_half_ending_time: moment(n.second_half_ending_time).format('HH:mm'),
+          is_available: false,
+        }
+      })
+      setAvailabilities(nAvailable)
+      dispatch(memberAvaliabilities(nAvailable))
     }
   }
 
@@ -453,8 +463,11 @@ const PersonalInfo = props => {
   }
 
   const viewCertificates = async fileName => {
+     console.log('viewCertificates', fileName)
     let certificateResponse = await organizationService.downloadFile({ name: fileName })
-    window.open(get(certificateResponse, ['data', 'data']), '_blank')
+    const url = get(certificateResponse, ['data', 'data', 'url'], '')
+    console.log('certificateResponse', url)
+    window.open(url, '_blank')
   }
 
   const deleteCertificate = async filename => {
