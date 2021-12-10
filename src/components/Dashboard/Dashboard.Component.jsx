@@ -12,7 +12,7 @@ import { authenticationService } from '../../services'
 import get from 'lodash.get'
 import CompleateProfile from './CompleateProfile.Component'
 import { useSelector, useDispatch } from 'react-redux'
-import { setCopmletPropfilePopup } from '../../redux/actions/commonActions'
+import { setCopmletPropfilePopup, setSkip2fa } from '../../redux/actions/commonActions'
 import dashboardComponentConfig from './DashboardComponentConfig'
 import ActivePatient from './ActivePatient'
 import ActiveOrganizations from './ActiveOrganizations'
@@ -235,8 +235,9 @@ const componenetsMap = {
 
 const DashboardComponent = () => {
   const dispatch = useDispatch()
-  const [isOpen2FA, setIsOpen2FA] = useState(false)
-  const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.isOpenCompletProfilePopup))
+  const [isOpen2FA, setIsOpen2FA] = useState()
+  const [skipped2fa, setSkipped2fa] = useState(useSelector(state => state.skipTwoFaValue))
+  const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -247,7 +248,7 @@ const DashboardComponent = () => {
 
 
   useEffect(() => {
-    if (!last_login_time) {
+    if (!last_login_time && !skipped2fa) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }
@@ -256,12 +257,14 @@ const DashboardComponent = () => {
   }, [])
 
   const close2FaModel = () => {
-    const res = authenticationService.skipTwoFa()
-    res.then(data => {
-      // setIsOpenCompleateProfile(true)
-      // dispatch(setCopmletPropfilePopup(true))
-    })
+    // const res = authenticationService.skipTwoFa()
+    // res.then(data => {
+    //   // setIsOpenCompleateProfile(true)
+    //   // dispatch(setCopmletPropfilePopup(true))
+    // })
     setIsOpen2FA(false)
+    setIsOpenCompleateProfile(true)
+    dispatch(setSkip2fa(true))
   }
 
 
@@ -355,6 +358,20 @@ const DashboardComponent = () => {
           <TwoFaModel
             clickCloseButton={close2FaModel}
             setIsOpenCompleateProfile={setIsOpenCompleateProfile}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={isOpenCompleateProfile}
+        // onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={twoFaModelStyle}>
+          <CompleateProfile
+            clickCloseButton={close2FaModel}
+            setIsOpenCompleateProfile={setIsOpenCompleateProfile}
+            userId={userId}
           />
         </Box>
       </Modal>

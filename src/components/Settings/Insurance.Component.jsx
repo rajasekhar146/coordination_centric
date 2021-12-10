@@ -69,6 +69,7 @@ const InsuranceComponent = props => {
     const [policyType, setPolicyType] = useState('')
     const [errMsg, setErrMsg] = useState('')
     const [insuranceInfo, setInsuranceInfo] = useState(null)
+    const [policyList, setPolicyList] = useState([])
 
     const {
         register,
@@ -116,8 +117,20 @@ const InsuranceComponent = props => {
         }
     }
 
+    const getPolicyList = async () => {
+        const response = await commonService.getPolicyList().catch(error => {
+
+        })
+        if (get(response, ['data', "status"], '') === 200) {
+            setPolicyList(get(response, ['data', 'data', 'data'], null))
+        } else {
+            console.log(response)
+        }
+    }
+
     useEffect(() => {
         fetchInsuranceInfo()
+        getPolicyList()
     }, [])
 
     useEffect(() => {
@@ -206,9 +219,9 @@ const InsuranceComponent = props => {
 
                                 >
                                     {
-                                        ['medical'].map(c => (
-                                            <MenuItem value={c} key={c}>
-                                                {c}
+                                       policyList.map(c => (
+                                            <MenuItem value={c.policy_name} key={c.id}>
+                                                {c.policy_name}
                                             </MenuItem>
                                         ))}
                                 </Select>

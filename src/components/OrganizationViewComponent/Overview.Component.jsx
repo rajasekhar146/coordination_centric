@@ -367,9 +367,9 @@ const OverView = ( props ) => {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography className="acc-title">Organization's {payment.type== "card"?"Card":"Banking"}  Info</Typography>
+          <Typography className="acc-title">Organization's {payment?.type== "card"?"Card":"Banking"}  Info</Typography>
         </AccordionSummary>
-{payment.type== "account"?
+{payment?.type== "account"?
         <AccordionDetails className="modAccDetails">
           <div className="detailWrapper">
             <Typography variant="subtitle2" display="block" className="det-title" gutterBottom component="div">
@@ -402,7 +402,7 @@ const OverView = ( props ) => {
             Card Number
           </Typography>
           <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-          **** **** **** {payment.last4}
+          **** **** **** {payment?.last4}
           </Typography>
         </div>
         <div className="detailWrapper">
@@ -410,7 +410,7 @@ const OverView = ( props ) => {
             Card Type
           </Typography>
           <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-            {payment.card}
+            {payment?.card}
           </Typography>
         </div>
          

@@ -176,3 +176,22 @@ export const setFlashMsgReducer = (state = flagMsg, { type, payload }) => {
       return state
   }
 }
+
+export const skipTwoFaReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_SKIP_TWOFA:
+      return payload
+    default:
+      return state
+  }
+}
+
+export const completeProfileReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_COMPLETE_PROFILE:
+      return payload
+    default:
+      return state
+  }
+}
+

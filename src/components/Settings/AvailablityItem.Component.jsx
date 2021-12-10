@@ -113,7 +113,13 @@ const AvailablityItem = props => {
     is_available,
   } = props.avaliablity
   // const[availableTime, setAvailableTime] = defaultValues
-  console.log(' props.avaliablity',  props.avaliablity)
+
+  // const [fhStartTime, setFHStartTime ] = useState(null)
+  // const [fhEndTime, setFHEndTime] = useState(null)
+  // const [shStartTime, setSFStartTime] = useState(null)
+  // const [shEndTime, setSHEndTime ]= useState(null)
+
+  console.log(' props.avaliablity', props.avaliablity)
   const classes = useStyles()
   const {
     register,
@@ -178,13 +184,14 @@ const AvailablityItem = props => {
   }
 
   const handleUpdateTime = (propertyName, e) => {
-    setValue(propertyName, e.target.value)
-    console.log('handleUpdateTime', day, propertyName, e.target.value)
+    // setValue(propertyName, e.target.value)
     //var currentDate = new Date()
     //currentDate.setTime(e.target.value//)
 
     const currentDate = getDay(day)
-    const updateTime = moment(currentDate).format('YYYY-MM-DD ' + e.target.value + '')
+    const updateTime = moment(currentDate).format('YYYY-MM-DD ' + e + '')
+    console.log('handleUpdateTime', day, propertyName, updateTime)
+    // setValue(propertyName, updateTime)
     console.log(moment(updateTime))
     if (mAvaliabilities.length > 0) {
       const newAvailable = mAvaliabilities.map(m => {
@@ -216,7 +223,7 @@ const AvailablityItem = props => {
       console.log('day, dayName', day, dayName)
       console.log('day, dayName', cDate._d)
     }
-    
+
     console.log('getDay', cDate)
     return cDate._d
   }
@@ -229,13 +236,31 @@ const AvailablityItem = props => {
       second_half_starting_time,
       second_half_ending_time
     )
+
+    // const shStartHours = parseInt(moment(second_half_starting_time).format('hh'))
+    // const shStartMinutes = parseInt(moment(second_half_starting_time).format('mm'))
+    // console.log('shStartHours, shStartMinutes', second_half_starting_time, shStartHours, shStartMinutes)
     setValue('day', day)
-    setValue('first_half_starting_time', moment(first_half_starting_time).format('hh:mm'))
-    setValue('first_half_ending_time', moment(first_half_ending_time).format('hh:mm'))
-    setValue('second_half_starting_time', moment(second_half_starting_time).format('hh:mm'))
-    setValue('second_half_ending_time', moment(second_half_ending_time).format('hh:mm'))
+    // setValue('first_half_starting_time', moment(first_half_starting_time).format('hh:mm'))
+    // setValue('first_half_ending_time', moment(first_half_ending_time).format('hh:mm'))
+    // setValue('second_half_starting_time', moment(second_half_starting_time).format('hh:mm'))
+    // setValue('second_half_ending_time', moment(second_half_ending_time).format('hh:mm'))
+
+    setValue('first_half_starting_time', first_half_starting_time)
+    setValue('first_half_ending_time', first_half_ending_time)
+    setValue('second_half_starting_time', second_half_starting_time)
+    setValue('second_half_ending_time', second_half_ending_time)
     setToggleOn(is_available)
   }, [])
+
+  const getDateTime = (dayName, time) => {
+    console.log('getDateTime', dayName, time)
+    if (moment(time).isValid()) return moment(time).format('YYYY-MM-DD HH:mm')
+    else {
+      const currentDate = getDay(dayName)
+      return moment(currentDate + ' ' + time).format('YYYY-MM-DD HH:mm') //.set({ hour: endSlotHour, minute: endSlotMinute })
+    }
+  }
 
   return (
     <div className="io_availablity mb_25">
@@ -260,7 +285,7 @@ const AvailablityItem = props => {
             <TextField
               {...register('first_half_starting_time', {
                 onChange: e => {
-                  handleUpdateTime('first_half_starting_time', e)
+                  handleUpdateTime('first_half_starting_time', e.target.value)
                 },
               })}
               type="time"
@@ -274,7 +299,7 @@ const AvailablityItem = props => {
             <TextField
               {...register('first_half_ending_time', {
                 onChange: e => {
-                  handleUpdateTime('first_half_ending_time', e)
+                  handleUpdateTime('first_half_ending_time', e.target.value)
                 },
               })}
               type="time"
@@ -296,7 +321,7 @@ const AvailablityItem = props => {
             <TextField
               {...register('second_half_starting_time', {
                 onChange: e => {
-                  handleUpdateTime('second_half_starting_time', e)
+                  handleUpdateTime('second_half_starting_time', e.target.value)
                 },
               })}
               type="time"
@@ -310,7 +335,7 @@ const AvailablityItem = props => {
             <TextField
               {...register('second_half_ending_time', {
                 onChange: e => {
-                  handleUpdateTime('second_half_ending_time', e)
+                  handleUpdateTime('second_half_ending_time', e.target.value)
                 },
               })}
               type="time"
