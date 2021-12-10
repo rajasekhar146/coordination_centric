@@ -134,7 +134,7 @@ function getStaffList(id, type, limit, skip) {
   }
   return (
     axios
-      .get(`${apiURL}/users/getDetails?id=${id}&type=${type}&limit=${limit}&skip="${skip}`, axiosConfig)
+      .get(`${apiURL}/users/getDetails?id=${id}&type=${type}&limit=${limit}&skip=${skip}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('data', data)

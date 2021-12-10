@@ -55,7 +55,7 @@ const EnableTwoFactorAuth = () => {
           <h4 className="io__query">How would you like to recieve your authentication code</h4>
         </div>
         <div className="io__tf__options">
-          <div
+          {/* <div
             onClick={() => {
               setActiveTab('sms')
             }}
@@ -68,7 +68,7 @@ const EnableTwoFactorAuth = () => {
             <span className={activeTab === 1 ? 'io__active__icon' : 'io__nonactive__icon'}>
               <CircleIcon sx={{ color: activeTab === 'sms' ? '#E42346' : '#DCDCDC' }} />
             </span>
-          </div>
+          </div> */}
           <div
             onClick={() => {
               setActiveTab('email')

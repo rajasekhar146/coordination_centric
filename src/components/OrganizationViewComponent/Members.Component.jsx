@@ -10,6 +10,8 @@ import TableRow from '@mui/material/TableRow'
 import MemberItem from './MemberItem.Component'
 import get from 'lodash.get'
 import { memberService } from '../../services'
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
 
 
 const columns = [
@@ -40,23 +42,39 @@ const MembersComponent = props => {
     } = props
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-    
-    const [page, setPage] = React.useState(1)
-    
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
-        if (res.status === 200) {
+        setIsLoading(true)
+        memberService.getStaffList(organizationId, 'member', limit, skip).then((res) => {
             setMembersList(get(res, ['data', 'data', '0', 'totalData'], []))
-        } else {
-
-        }
-
+            setIsLoading(false)
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
     useEffect(() => {
         getStaffList()
-    }, [membersList.length, skip])
+    }, [membersList.length, skip, limit])
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
 
     return (
         <div>
@@ -83,25 +101,51 @@ const MembersComponent = props => {
                                 )}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {membersList.map((row, index) => (
-                                <MemberItem
-                                    row={row}
-                                    index={index}
-                                    columns={columns}
-                                    setOpenFlash={setOpenFlash}
-                                    setAlertMsg={setAlertMsg}
-                                    setSubLabel={setSubLabel}
-                                    setMembersList={setMembersList}
-                                    setSkip={setSkip}
-                                    organizationId={organizationId}
-                                />
-                            ))
-                            }
+                        {isLoading
+                            ? <TableBody>
+                                <tr>
+                                    <td className="app_loader" colSpan={15}>
+                                        <CircularProgress />
+                                    </td>
+                                </tr>
+                            </TableBody>
+                            :
+                            <TableBody >
 
-                        </TableBody>
+                                {membersList.length === 0
+                                    ? <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <label>No Results Found</label>
+                                        </td>
+
+                                    </tr> :
+                                    membersList.map((row, index) => (
+                                        <MemberItem
+                                            row={row}
+                                            index={index}
+                                            columns={columns}
+                                            setOpenFlash={setOpenFlash}
+                                            setAlertMsg={setAlertMsg}
+                                            setSubLabel={setSubLabel}
+                                            setMembersList={setMembersList}
+                                            setSkip={setSkip}
+                                            organizationId={organizationId}
+                                        />
+                                    ))
+                                }
+                            </TableBody>
+                        }
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Paper>
         </div>
     )
