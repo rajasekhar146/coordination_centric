@@ -104,21 +104,24 @@ const PersonalInfo = props => {
     const memberData = get(response, ['data', 'data', 'data'], null)
     console.log('response', memberData)
 
-    const specialization = memberData.specialization
+    const specialization = memberData?.specialization
 
     var tSpecialization = []
-    specialization.map(s => {
-      const nSpl = {
-        id: s._id,
-        speciality_name: s.speciality_name,
-      }
-      tSpecialization.push(nSpl)
-    })
+    if (specialization) {
+      specialization.map(s => {
+        const nSpl = {
+          id: s._id,
+          speciality_name: s.speciality_name,
+        }
+        tSpecialization.push(nSpl)
+      })
+    }
     console.log('tSpecialization', tSpecialization)
     dispatch(memberSpecialties(tSpecialization))
   }
-  useEffect( async () => {
-    fetchCountries()   
+
+  useEffect(async () => {
+    fetchCountries()
     await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
     if (get(userDetails, ['biograhpy_object'], null)) {

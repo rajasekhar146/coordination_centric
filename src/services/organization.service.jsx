@@ -62,6 +62,9 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   // }
 
   // console.log('searchCond', searchCond)
+
+  
+
   let url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
   // if (searchText != null) {
   //   url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`

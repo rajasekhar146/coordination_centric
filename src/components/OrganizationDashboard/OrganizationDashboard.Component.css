@@ -510,3 +510,8 @@
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
     top: -7px !important;
 }
+.app_loader{
+    text-align: center;
+    padding-top: 17%;
+    padding-bottom: 17%;
+}
