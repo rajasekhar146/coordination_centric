@@ -764,6 +764,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
+                label = "End Date"
                 value={searchEndDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchEndDate(e)}
@@ -775,6 +776,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
+                label = "Start Date"
                 value={searchStartDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchStartDate(e)}

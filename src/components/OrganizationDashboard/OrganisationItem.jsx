@@ -84,7 +84,7 @@ const OrganisationItem = props => {
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org.id)
+    const res = organizationService.resendInvite(org.id , 'facility')
     res.then(res => {
       setOrganizations([])
       setSkip(1)

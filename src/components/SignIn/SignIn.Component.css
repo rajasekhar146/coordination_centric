@@ -406,7 +406,7 @@
     left: 130%;
 }
 input[type="email"] {
-    text-transform: lowercase;
+    text-transform: capitalize;
 }
 
 ::-webkit-input-placeholder {
