@@ -177,16 +177,18 @@ const InviteOrganizationComponent = props => {
             <TextField
               {...register('facilityPhone', {
                 pattern: {
-                  value: /\d+/,
-                  message: 'This input is number only.',
-                },
-              })}
+                    value: /^[1-9]\d*(\d+)?$/i,
+                    message: 'Phone Number accepts only integer',
+                }
+          })}
+          inputProps={{
+            maxLength: 15,
+          }}
               onChange={e => {
                 setValue('facilityPhone', e.target.value.replace(/[^0-9]/g, ''))
               }}
               margin="normal"
               InputProps={{
-                maxLength: 15,
                 startAdornment: (
                   <InputAdornment position="start">
                     <img src={OrganizationPhoneIcon} alt="Organization Phone" />

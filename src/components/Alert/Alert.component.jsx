@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         // backgroundColor: "#03A65A",
         width: '400px',
         height: '120px',
-        borderRadius: '32px'
+        borderRadius: '32px !important'
     },
     icon: {
         position: "absolute",

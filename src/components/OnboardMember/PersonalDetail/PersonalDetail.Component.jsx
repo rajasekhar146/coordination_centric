@@ -23,6 +23,7 @@ import ConfirmationPopupModel from '../../ModelPopup/ConfirmationPopupModel.Comp
 import moment from 'moment'
 import { useParams } from 'react-router-dom'
 import { setQuickProfileSetup } from '../../../redux/actions/commonActions'
+import { makeStyles } from '@material-ui/core/styles'
 
 const style = {
   position: 'absolute',
@@ -72,7 +73,7 @@ const PersonalDetailComponent = () => {
   const dispatch = useDispatch()
   const member = useSelector(state => state.newMember)
   // const [gender, setGender] = useState('')
-  const [dateOfBirth, setDOB] = useState('')
+  const [dateOfBirth, setDOB] = React.useState(null)
   const [openModel, setBool] = useState('')
   // const [country, setCountry] = useState('')
   // const [state, setState] = useState('')
@@ -82,6 +83,7 @@ const PersonalDetailComponent = () => {
   const { referredby } = useParams()
   const { invitedBy } = useParams()
   const currentStep = useSelector(state => state.quickProfileSetupReducer)
+  const [IsDateEntered, setDateEntered] = useState(true)
 
   var {
     register,
@@ -128,8 +130,10 @@ const PersonalDetailComponent = () => {
       age = newAge.split(" ")[0];
     }
     
-
-    var memberData = { ...member.member, ...data }
+    if(!dateOfBirth){
+      setDateEntered(false)
+    }else{
+      var memberData = { ...member.member, ...data }
     console.log('submit data >> ', memberData)
     console.log('submit role >> ', memberData.role)
 
@@ -137,8 +141,9 @@ const PersonalDetailComponent = () => {
     if (memberData.role == 'doctor' || Number(age) >= 18) {
       history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
     } else setIsUnder19(true)
-  }
+    }
 
+  }
   const fetchCountries = async () => {
     const response = await commonService.getCountries().catch(error => {
       console.log(error)
@@ -173,7 +178,9 @@ const PersonalDetailComponent = () => {
       setValue('city', newMemberDetail.city)
       setValue('postalCode', newMemberDetail.postalCode)
       setValue('gender', newMemberDetail.gender)
-      setDOB(newMemberDetail.dob)
+      if(newMemberDetail.dob){
+        setDOB(newMemberDetail.dob)
+      }
       // setCountry('country', newMemberDetail.country)
       setValue('state', newMemberDetail.state)
     }
@@ -311,12 +318,17 @@ const PersonalDetailComponent = () => {
                       value={dateOfBirth}
                       onChange={newValue => {
                         setDOB(newValue)
+                        setDateEntered(true)
                       }}
                       renderInput={params => <TextField {...params} />}
                       InputProps={{ className: 'pdc__date__field' }}
                     />
                   </LocalizationProvider>
+                  {!IsDateEntered && 
+                        <p className="ac__required">Please select the date</p>
+                    }
                 </div>
+              
 
                 <div className="pdc__column">
                   <div className="pdc__label">
@@ -324,12 +336,15 @@ const PersonalDetailComponent = () => {
                   </div>
                   <TextField
                     {...register('phoneNumber', {
-                      required: 'Phone Number is required',
-                      pattern: {
-                        value: /\d+/,
-                        message: 'This input is number only.',
+                      required: {
+                          value: true,
+                          message: "Phone Number is required",
                       },
-                    })}
+                      pattern: {
+                          value: /^[1-9]\d*(\d+)?$/i,
+                          message: 'Phone Number accepts only integer',
+                      }
+                })}
                     margin="normal"
                     inputProps={{
                       maxLength: 15,
@@ -413,7 +428,7 @@ const PersonalDetailComponent = () => {
                     {...register('city', {
                       required: 'City is required',
                       pattern: {
-                        value: /^[A-Za-z]+$/,
+                        value: /^[A-Za-z\s]+$/,
                         message: 'This input is characters only.',
                       },
                     })}

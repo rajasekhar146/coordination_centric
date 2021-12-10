@@ -202,6 +202,7 @@ const AppointmentItemComponent = props => {
                 setIsRescheduleClicked(true)
                 break
             case 'setIsViewClicked':
+                history.push(`/viewApointment/${row.appointmentid}`)
                 setIsViewClicked(true)
                 break
             case 'setIsViewClicked':

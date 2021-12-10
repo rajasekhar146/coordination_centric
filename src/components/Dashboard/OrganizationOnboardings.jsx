@@ -91,7 +91,7 @@ const options = {
             
         },
         {
-            name: 'Patient',
+            name: 'Doctor',
             data: [3, 7, 4, 7, 8, 5, 3, 4, 8, 2, 9, 12],
             color: '#F79009'
         },

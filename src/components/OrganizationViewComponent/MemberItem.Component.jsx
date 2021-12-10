@@ -309,8 +309,8 @@ const MemberItemComponent = props => {
             // case 'setIsActivateClicked':
             //   handleActivate()
             case 'viewdetails':
-            // routeDirect(orgId)
-
+                handleRowClick(row)
+                break;
             default:
                 return null
         }
@@ -334,7 +334,7 @@ const MemberItemComponent = props => {
         }
     }
 
-    const handleRowClick = async(i, row) =>{
+    const handleRowClick = async( row) =>{
         history.push(`/viewDetails/${row._id}`)
      }
 

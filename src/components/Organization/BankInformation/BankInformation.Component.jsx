@@ -22,6 +22,7 @@ import { loadStripe } from '@stripe/stripe-js/pure'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../../services'
 import FormControl from '@mui/material/FormControl'
+import Alert from '../../Alert/Alert.component'
 
 import get from 'lodash.get'
 import { paymentService } from '../../../services'
@@ -68,6 +69,10 @@ const BankInformationComponent = () => {
   const [countries, setAllCountries] = useState([])
   const [facility, setFacility] = useState({})
   const [message, setMessage] = useState(null)
+  const [readSubscriptionAgreement , setReadSubscriptionAgreement]= useState(true);
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState("")
+  const [subLebel, setSubLabel] = useState("")
   var sigPad = {}
 
   const {
@@ -81,10 +86,17 @@ const BankInformationComponent = () => {
   const [activeStep, setActiveStep] = React.useState(2)
 
   const onSubmit = data => {
-    setMessage(null)
-    console.log('card data', data)
-    getCardDetail(data)
+    if(readSubscriptionAgreement){
+      setMessage(null)
+      console.log('card data', data)
+      getCardDetail(data)
+    }else{
+            setOpenFlash(true)
+    }
     //history.push('/terms-condition')
+  }
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
   }
 
   const handleBack = () => {
@@ -336,10 +348,10 @@ const BankInformationComponent = () => {
                                       // },
                                     })}
                                   />
-                                  {errors.nameOnCard && (
-                                    <p className="ac__required ml_15">{errors.nameOnCard.message}</p>
-                                  )}
                                 </div>
+                                {errors.nameOnCard && (
+                                    <p className="ac__required">{errors.nameOnCard.message}</p>
+                                  )}
                                 <div className="ac__row">
                                   <div className="ac__label">Card number</div>
                                 </div>
@@ -363,16 +375,18 @@ const BankInformationComponent = () => {
                                       // },
                                     })}
                                   />
-                                  {errors.cardNumber && (
-                                    <p className="ac__required ml_15">{errors.cardNumber.message}</p>
-                                  )}
                                 </div>
-                                <div className="ac__row">
+                                {errors.cardNumber && (
+                                    <p className="ac__required">{errors.cardNumber.message}</p>
+                                  )}
+                                {/* <div className="ac__row">
                                   <div className="ac__label bi__space__expiry">Expiry</div>
                                   <div className="ac__label">CVV</div>
-                                </div>
-                                <div className="ac__row">
+                                </div> */}
+                                <div className="two-row-grid">
                                   <div className="bi__expiry__text__box">
+                                  <div className="ac__label bi__space__expiry">Expiry</div>
+
                                     <TextField
                                       margin="normal"
                                       placeholder="MM/YY"
@@ -391,9 +405,10 @@ const BankInformationComponent = () => {
                                         // },
                                       })}
                                     />
-                                    {errors.expiry && <p className="ac__required ml_15">{errors.expiry.message}</p>}
+                                  {errors.expiry && <p className="ac__required">{errors.expiry.message}</p>}
                                   </div>
                                   <div className="bi__expiry__text__box">
+                                  <div className="ac__label">CVV</div>
                                     <TextField
                                       id=""
                                       type="password"
@@ -413,7 +428,7 @@ const BankInformationComponent = () => {
                                         // },
                                       })}
                                     />
-                                    {errors.cvv && <p className="ac__required ml_15">{errors.cvv.message}</p>}
+                                  {errors.cvv && <p className="ac__required">{errors.cvv.message}</p>}
                                   </div>
                                 </div>
                                 <div className="ac__row">
@@ -452,8 +467,8 @@ const BankInformationComponent = () => {
                                     className={classes.textField}
                                     margin="normal"
                                   />
-                                  {errors.accountNo && <p className="ac__required ml_15">{errors.accountNo.message}</p>}
                                 </div>
+                                {errors.accountNo && <p className="ac__required">{errors.accountNo.message}</p>}
                                 <div className="ac__row">
                                   <div className="ac__label">
                                     Routing Number <span className="ac__required">*</span>
@@ -473,8 +488,8 @@ const BankInformationComponent = () => {
                                     className={classes.textField}
                                     margin="normal"
                                   />
-                                  {errors.routingNo && <p className="ac__required ml_15">{errors.routingNo.message}</p>}
                                 </div>
+                                {errors.routingNo && <p className="ac__required">{errors.routingNo.message}</p>}
                                 <div className="ac__row">
                                   <div className="ac__label">
                                     Name Associated with Bank Account <span className="ac__required">*</span>
@@ -494,8 +509,8 @@ const BankInformationComponent = () => {
                                     error={errors.name && isSubmit}
                                     margin="normal"
                                   />
-                                  {errors.name && <p className="ac__required ml_15">{errors.name.message}</p>}
                                 </div>
+                                {errors.name && <p className="ac__required">{errors.name.message}</p>}
                                 {/*} <Button type="submit" id="continue" className="ac__next__btn continue_btn">
                                   Pay & Continue
                                   <ArrowForwardIosRoundedIcon />
@@ -517,6 +532,9 @@ const BankInformationComponent = () => {
                                 <div className="ac__column">
                                   <FormControlLabel
                                     className="bi__checkbox__text"
+                                    onChange={e => {
+                                      setReadSubscriptionAgreement(e.target.checked)
+                                    }}
                                     control={<Checkbox defaultChecked />}
                                     label="I have read and agree with the Subscription Agreement"
                                   />
@@ -553,6 +571,14 @@ const BankInformationComponent = () => {
             }
           </Box>
         </div>
+        <Alert
+      
+      handleCloseFlash={handleCloseFlash}
+      alertMsg= "Subscription Agreement"
+      openflash={openflash}
+      subLebel = "Please select the subscription agreement checkbox"
+      color = "cancel"
+  />
       </div>
     </div>
   )
