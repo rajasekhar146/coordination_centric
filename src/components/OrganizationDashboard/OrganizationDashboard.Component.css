@@ -507,3 +507,8 @@
     border-radius: 3px !important;
     width: 150px !important;
 }
+.app_loader{
+    text-align: center;
+    padding-top: 17%;
+    padding-bottom: 17%;
+}
