@@ -7,6 +7,9 @@ import TwoFaImg from '../../assets/icons/TowFaAuthentication.png'
 import { organizationService } from '../../services'
 import history from '../../history'
 import CloseIcon from '../../assets/icons/close.png'
+import { useDispatch } from 'react-redux'
+import { setCompleteProfile } from '../../redux/actions/commonActions'
+
 
 const useStyles = makeStyles(theme => ({
     textField: {
@@ -28,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 const CompleateProfile = props => {
     const { userId } = props
     const classes = useStyles()
+    const dispatch = useDispatch()
     return (
         <div>
             <div className="io__row io__icon">
@@ -46,6 +50,7 @@ const CompleateProfile = props => {
                     <Button
                     onClick={() => {
                         history.push(`/settings/${userId}`)
+                        dispatch(setCompleteProfile(false))
                     }}
                      type="submit" className="io__done__btn">
                         Complete Profile

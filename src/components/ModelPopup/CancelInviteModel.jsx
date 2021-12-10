@@ -12,7 +12,7 @@ const CancelInviteModel = props => {
     const res = organizationService.cancelIvitation(selectedOrg.id, 'facility')
     res.then(res => {
       setOrganizations([])
-      setSkip(1)
+      setSkip(0)
       setOpenFlash(true)
       setAlertMsg('Canceled')
       setSubLabel('The invitation was cancelled')

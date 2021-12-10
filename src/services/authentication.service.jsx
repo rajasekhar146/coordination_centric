@@ -92,7 +92,7 @@ function login(username, password) {
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser')
-  localStorage.removeItem('twoFaVerfied')
+  // localStorage.removeItem('twoFaVerfied')
   currentUserSubject.next(null)
 }
 

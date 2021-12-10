@@ -60,6 +60,8 @@ const buildTimeSlots = () => {
       endTime: eTime,
       isSelected: false,
       isEnabled: true,
+      isPrimary: false,
+      isSecondary: false,
     }
     timeSlots.push(timeSlot)
     // console.log('startTime', timeSlot)

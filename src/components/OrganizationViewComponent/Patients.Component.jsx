@@ -37,7 +37,10 @@ const PatientComponent = props => {
         colorcodes,
         organizationId,
         patientList,
-        setPatientList
+        setPatientList,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
     } = props
 
 
@@ -51,9 +54,9 @@ const PatientComponent = props => {
 
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
-    const [openflash, setOpenFlash] = React.useState(false)
-    const [alertMsg, setAlertMsg] = React.useState('')
-    const [subLebel, setSubLabel] = useState('')
+    // const [openflash, setOpenFlash] = React.useState(false)
+    // const [alertMsg, setAlertMsg] = React.useState('')
+    // const [subLebel, setSubLabel] = useState('')
     const [totalPage, setTotalPage] = React.useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const [page, setPage] = useState(1)

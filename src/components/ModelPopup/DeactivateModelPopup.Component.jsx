@@ -12,7 +12,7 @@ const DeactivateModel = props => {
         const res = organizationService.updateOrganization(selectedOrg.id, 'inactive')
         res.then((res) => {
             setOrganizations([])
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Deactivated')
             setSubLabel('This account was deactivated, users no longer have access.')

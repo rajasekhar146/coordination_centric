@@ -234,13 +234,13 @@ const PatientItemComponent = props => {
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setPatientList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -250,13 +250,12 @@ const PatientItemComponent = props => {
     const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setPatientList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(1)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
@@ -265,12 +264,11 @@ const PatientItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setPatientList([])
            
         } else {
-            setSkip(1)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')

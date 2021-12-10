@@ -239,15 +239,15 @@ const MemberItemComponent = props => {
     }
 
     const resendInvite = async (org, status) => {
-        const res = await memberService.resendInvite(organizationId, status, 'member')
+        const res = await memberService.resendInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setMembersList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             // setSubLabel('Another invitation was sended to this Member.')
@@ -255,15 +255,15 @@ const MemberItemComponent = props => {
     }
 
     const cancelInvite = async (org, status) => {
-        const res = await memberService.cancelInvite(organizationId, status, 'member')
+        const res = await memberService.cancelInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setMembersList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
@@ -272,11 +272,11 @@ const MemberItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setMembersList([])
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')

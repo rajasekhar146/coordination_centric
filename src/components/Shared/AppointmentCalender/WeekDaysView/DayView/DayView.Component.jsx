@@ -40,9 +40,18 @@ const DayViewComponent = props => {
           selectedTimeSlot = a
           const aSelected = a.isSelected
           isUnselected = !aSelected
-          const availableTS = { ...a, isSelected: isUnselected }
-          newATS.push(availableTS)
-          console.log('selected time', availableTS)
+          if (primaryDate.Day === null) {
+            const availableTS = { ...a, isSelected: isUnselected, isPrimary: isUnselected, isSecondary: false }
+            newATS.push(availableTS)
+          } else if (secondaryDate.Day === null) {
+            const availableTS = { ...a, isSelected: isUnselected, isPrimary: false, isSecondary: isUnselected }
+            newATS.push(availableTS)
+          } else {
+            const availableTS = { ...a, isSelected: isUnselected, isPrimary: false, isSecondary: false }
+            newATS.push(availableTS)
+          }
+
+          // console.log('selected time', availableTS)
         } else newATS.push(a)
       })
       const newSelectedTimeSlot = { ...newSelectedDay, availableTimeSlots: newATS }
@@ -62,7 +71,7 @@ const DayViewComponent = props => {
         timeSlotId: id,
       },
     }
-
+    const tSelectedDate = selectedDate
     if (!isUnselected) {
       selectedDate = {
         Day: null,
@@ -75,18 +84,39 @@ const DayViewComponent = props => {
     }
 
     console.log('newDay', newDay)
-    console.log('newDay >> selectedDate', selectedDate)
+    console.log('selectedDate 1', selectedDate)
+    console.log('selectedDate 1>> primary', primaryDate)
+    console.log('selectedDate 1>> secondary', secondaryDate)
+
     setDaySelected(selectedDate)
 
     //if (primaryDate.Day === null || primaryDate.Day === selectedDate.Day || primaryDate.Day === newDay) {
-    if (primaryDate.Day === null || (primaryDate.Day === selectedDate.Day && primaryDate.timings.startTime === selectedDate.timings.startTime ) ) {
+    if (
+      primaryDate.Day === null ||
+      (primaryDate.Day === tSelectedDate.Day && primaryDate.timings.startTime === tSelectedDate.timings.startTime)
+    ) {
+      console.log('cond >> selectedDate 1', selectedDate)
       dispatch(primaryAppointmentDate(selectedDate))
-    } else if (secondaryDate.Day === null || secondaryDate.Day === selectedDate.Day && secondaryDate.timings.startTime === selectedDate.timings.startTime) {
+    } else if (
+      secondaryDate.Day === null ||
+      (secondaryDate.Day === tSelectedDate.Day && secondaryDate.timings.startTime === tSelectedDate.timings.startTime)
+    ) {
+      console.log('cond >> selectedDate 2', selectedDate)
       dispatch(secondaryAppointmentDate(selectedDate))
     }
+    // console.log('conditions 1 >> ',
+    // newDay ,primaryDate.Day,
+    // primaryDate.timings.timeSlotId)
+
+    // console.log('conditions 2 >> ',
+    // newDay,secondaryDate.Day ,
+    // secondaryDate.timings.timeSlotId)
+
+    // console.log('conditions 3 >> ', primaryDate.timings.timeSlotId , secondaryDate.timings.timeSlotId )
 
     //if(dispatch(secondaryAppointmentDate(selectedDate))
     console.log('newWeekDaysAvailablities', newWeekDaysAvailablities)
+    // if(primaryDate.Day === null || secondaryDate.Day === null)
     dispatch(appointmentAvailableTimeSlots(newWeekDaysAvailablities))
   }
 
@@ -100,9 +130,7 @@ const DayViewComponent = props => {
         {availableTimes &&
           availableTimes.map(ats => (
             <div className="dv__row">
-              {ats.isEnabled &&
-              daySelected.Day === primaryDate.Day &&
-              ats.availabilityId === primaryDate.timings.timeSlotId ? (
+            {ats.isEnabled && ats.isPrimary ? (
                 <div
                   className="dv__time__text__selected"
                   key={ats.availabilityId}
@@ -114,10 +142,7 @@ const DayViewComponent = props => {
                   </div>
                 </div>
               ) : null}
-
-              {ats.isEnabled &&
-              daySelected.Day === secondaryDate.Day &&
-              ats.availabilityId === secondaryDate.timings.timeSlotId ? (
+              {ats.isEnabled && ats.isSecondary ? (
                 <div
                   className="dv__secondary__time__text__selected"
                   key={ats.availabilityId}
@@ -129,7 +154,7 @@ const DayViewComponent = props => {
                   </div>
                 </div>
               ) : null}
-              {ats.isEnabled && !ats.isSelected ? (
+              {ats.isEnabled && !ats.isPrimary && !ats.isSecondary? (
                 <div
                   className="dv__time__text"
                   key={ats.availabilityId}
@@ -140,12 +165,14 @@ const DayViewComponent = props => {
                   </div>
                 </div>
               ) : null}
+
               {!ats.isEnabled ? (
                 <div className="dv__time__disabled">
                   {ats.startTime} - {ats.endTime}
                 </div>
               ) : null}
-            </div>
+
+              </div>
           ))}
       </div>
     </div>

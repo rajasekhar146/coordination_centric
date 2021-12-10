@@ -235,13 +235,13 @@ const CollaboratorItemComponent = props => {
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -251,13 +251,13 @@ const CollaboratorItemComponent = props => {
     const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
@@ -266,12 +266,12 @@ const CollaboratorItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
            
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')

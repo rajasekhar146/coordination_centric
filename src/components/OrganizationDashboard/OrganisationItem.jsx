@@ -75,7 +75,7 @@ const OrganisationItem = props => {
       console.log('handleActivate >> 2 ', res)
       if (res.status === 200) {
         setOrganizations([])
-        setSkip(1)
+        setSkip(0)
         setAlertMsg('Activated')
         setSubLabel('This account was successfully activated.')
         setAlertcolor('success')
@@ -89,7 +89,7 @@ const OrganisationItem = props => {
     const res = organizationService.resendInvite(org.id , 'facility')
     res.then(res => {
       setOrganizations([])
-      setSkip(1)
+      setSkip(0)
       setAlertMsg('Re-sended')
       setSubLabel('Another invitation was sended to this organization.')
       setAlertcolor('success')
