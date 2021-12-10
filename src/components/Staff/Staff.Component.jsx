@@ -19,6 +19,8 @@ import InviteMemberComponent from '../ModelPopup/InviteMemberComponent'
 import InviteMemberSuccess from '../ModelPopup/MemberInvitationSuccess'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
 
 
 const style = {
@@ -74,39 +76,33 @@ const StaffComponent = props => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
-    const [totalPage, setTotalPage] = React.useState(0)
-    const [page, setPage] = React.useState(1)
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
-    
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'member', limit, skip)
-        if (res.status === 200) {
+        setIsLoading(true)
+        memberService.getStaffList(organizationId, 'member', limit, skip).then((res) => {
             setStaffList(get(res, ['data', 'data', '0', 'totalData'], []))
-            const totalPagees = Math.ceil(get(res, ['data', 'data', '0', 'totalData'], []).length / 10)
-            console.log(totalPagees)
-            setTotalPage(totalPagees)
-        } else {
-
-        }
-
+            setIsLoading(false)
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
 
     useEffect(() => {
         getStaffList()
-    }, [staffList.length, skip])
+    }, [staffList.length, skip, limit])
 
 
     const handleCloseFlash = (event, reason) => {
         setOpenFlash(false)
     }
 
-    const handleChangePage = async (event, newPage) => {
-        setPage(newPage)
-        const skipRecords = (newPage - 1) * 10
-        setSkip(skipRecords)
-
-    }
 
     const closeInviteModel = () => {
         setOpenInviteMember(false)
@@ -116,6 +112,20 @@ const StaffComponent = props => {
     const closeInviteSuccessModel = () => {
         setOpenInviteMemberSuccess(false)
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
 
 
     return (
@@ -156,39 +166,55 @@ const StaffComponent = props => {
                                 )}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {staffList.map((row, index) => (
-                                <StaffItem
-                                    row={row}
-                                    index={index}
-                                    columns={columns}
-                                    setSkip={setSkip}
-                                    setOpenFlash={setOpenFlash}
-                                    setAlertMsg={setAlertMsg}
-                                    setSubLabel={setSubLabel}
-                                    setStaffList={setStaffList}
-                                    type="member"
-                                    role="staff"
-                                // colorcodes={colorcodes}
-                                />
-                            ))
-                            }
+                        {isLoading
+                            ? <TableBody>
+                                <tr>
+                                    <td className="app_loader" colSpan={15}>
+                                        <CircularProgress />
+                                    </td>
+                                </tr>
+                            </TableBody>
+                            :
+                            <TableBody >
 
-                        </TableBody>
+                                {staffList.length === 0
+                                    ? <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <label>No Results Found</label>
+                                        </td>
+
+                                    </tr> :
+                                    staffList.map((row, index) => (
+                                        <StaffItem
+                                            row={row}
+                                            index={index}
+                                            columns={columns}
+                                            setSkip={setSkip}
+                                            setOpenFlash={setOpenFlash}
+                                            setAlertMsg={setAlertMsg}
+                                            setSubLabel={setSubLabel}
+                                            setStaffList={setStaffList}
+                                            type="member"
+                                            role="staff"
+                                        // colorcodes={colorcodes}
+                                        />
+                                    ))
+                                }
+                            </TableBody>
+                        }
+
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Paper>
-            {staffList.length >= 10
-                ?
-                <div className="od__row">
-                    <div className="od__pagination__section">
-                        <Stack spacing={2}>
-                            <Pagination count={totalPage} page={page} variant="outlined" onChange={handleChangePage} shape="rounded" />
-                        </Stack>
-                    </div>
-                </div>
-                : null
-            }
             <Modal
                 open={openInviteMember}
                 aria-labelledby="modal-modal-title"
@@ -221,7 +247,7 @@ const StaffComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color = "success"
+                color="success"
             />
         </div>
 

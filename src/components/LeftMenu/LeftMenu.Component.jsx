@@ -142,13 +142,13 @@ const getMenuList = (role) => {
           activeIcon: require('../../assets/icons/active_dashboard.png').default,
           items: [],
         },
-        {
-          name: 'Appointments',
-          link: '/appointments',
-          icon: require('../../assets/icons/appointments.png').default,
-          activeIcon: require('../../assets/icons/appointments.png').default,
-          items: [],
-        },
+        // {
+        //   name: 'Appointments',
+        //   link: '/appointments',
+        //   icon: require('../../assets/icons/appointments.png').default,
+        //   activeIcon: require('../../assets/icons/appointments.png').default,
+        //   items: [],
+        // },
         {
           name: 'Organizations',
           link: '/organizations',

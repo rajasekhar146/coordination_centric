@@ -13,6 +13,8 @@ import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import Button from '@mui/material/Button'
 import Alert from '../Alert/Alert.component'
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
 
 
 const columns = [
@@ -40,17 +42,21 @@ const PatientComponent = props => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
-    const [totalPage, setTotalPage] = React.useState(0)
-    const [page, setPage] = React.useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'patient', limit, skip)
-        if (res.status === 200) {
-          setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
-        } else {
-
-        }
-
+        setIsLoading(true)
+        memberService.getStaffList(organizationId, 'patient', limit, skip).then((res) => {
+            setPatientList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setIsLoading(false)
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
 
     useEffect(() => {
@@ -62,6 +68,19 @@ const PatientComponent = props => {
         setOpenFlash(false)
     }
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
 
 
     return (
@@ -102,26 +121,52 @@ const PatientComponent = props => {
                                 )}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {patientList.map((row, index) => (
-                                <PatientItem
-                                    row={row}
-                                    index={index}
-                                    columns={columns}
-                                    setSkip={setSkip}
-                                    setOpenFlash={setOpenFlash}
-                                    setAlertMsg={setAlertMsg}
-                                    setSubLabel={setSubLabel}
-                                    setStaffList={setPatientList}
-                                    type="member"
-                                    role="patient"
-                                />
-                            ))
-                            }
+                        {isLoading
+                            ? <TableBody>
+                                <tr>
+                                    <td className="app_loader" colSpan={15}>
+                                        <CircularProgress />
+                                    </td>
+                                </tr>
+                            </TableBody>
+                            :
+                            <TableBody >
 
-                        </TableBody>
+                                {patientList.length === 0
+                                    ? <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <label>No Results Found</label>
+                                        </td>
+
+                                    </tr> :
+                                    patientList.map((row, index) => (
+                                        <PatientItem
+                                            row={row}
+                                            index={index}
+                                            columns={columns}
+                                            setSkip={setSkip}
+                                            setOpenFlash={setOpenFlash}
+                                            setAlertMsg={setAlertMsg}
+                                            setSubLabel={setSubLabel}
+                                            setStaffList={setPatientList}
+                                            type="member"
+                                            role="patient"
+                                        />
+                                    ))
+                                }
+                            </TableBody>
+                        }
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <Alert
                 handleCloseFlash={handleCloseFlash}
                 alertMsg={alertMsg}

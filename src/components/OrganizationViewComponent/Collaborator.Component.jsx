@@ -10,6 +10,8 @@ import TableRow from '@mui/material/TableRow'
 import CollaboratorItem from './CollaboratorItem.Component'
 import get from 'lodash.get'
 import { memberService } from '../../services'
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
 
 
 const columns = [
@@ -48,21 +50,41 @@ const CollaboratorComponent = props => {
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [skip, setSkip] = useState(0)
     const [limit, setLimit] = useState(10)
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const handleClose = () => {
         setAnchorEl(null)
     }
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
-        if (res.status === 200) {
+        setIsLoading(true)
+        memberService.getStaffList(organizationId, 'facility', limit, skip).then((res) => {
             setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
-        } else {
-
-        }
-
+            setIsLoading(false)
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
     useEffect(() => {
         getStaffList()
-    }, [collaboratorList.length, skip])
+    }, [collaboratorList.length, skip, limit])
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
+
 
     return (
         <div>
@@ -89,28 +111,54 @@ const CollaboratorComponent = props => {
                                 )}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {collaboratorList.map((row, index) => (
-                                <CollaboratorItem
-                                    row={row}
-                                    index={index}
-                                    columns={columns}
-                                    setAnchorEl={setAnchorEl}
-                                    handleClose={handleClose}
-                                    setOpenFlash={setOpenFlash}
-                                    setAlertMsg={setAlertMsg}
-                                    setSubLabel={setSubLabel}
-                                    setCollaboratorList={setCollaboratorList}
-                                    setSkip={setSkip}
-                                    organizationId={organizationId}
-                                    collaboratorList={collaboratorList}
-                                />
-                            ))
-                            }
+                        {isLoading
+                            ? <TableBody>
+                                <tr>
+                                    <td className="app_loader" colSpan={15}>
+                                        <CircularProgress />
+                                    </td>
+                                </tr>
+                            </TableBody>
+                            :
+                            <TableBody >
 
-                        </TableBody>
+                                {collaboratorList.length === 0
+                                    ? <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <label>No Results Found</label>
+                                        </td>
+
+                                    </tr> :
+                                    collaboratorList.map((row, index) => (
+                                        <CollaboratorItem
+                                            row={row}
+                                            index={index}
+                                            columns={columns}
+                                            setAnchorEl={setAnchorEl}
+                                            handleClose={handleClose}
+                                            setOpenFlash={setOpenFlash}
+                                            setAlertMsg={setAlertMsg}
+                                            setSubLabel={setSubLabel}
+                                            setCollaboratorList={setCollaboratorList}
+                                            setSkip={setSkip}
+                                            organizationId={organizationId}
+                                            collaboratorList={collaboratorList}
+                                        />
+                                    ))
+                                }
+                            </TableBody>
+                        }
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Paper>
         </div>
     )
