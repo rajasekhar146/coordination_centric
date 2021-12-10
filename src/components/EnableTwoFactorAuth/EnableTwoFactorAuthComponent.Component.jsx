@@ -14,6 +14,7 @@ const EnableTwoFactorAuth = () => {
   const [activeTab, setActiveTab] = useState('email')
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
 
   const handleSubmit = () => {
     if (activeTab === 'email') {
@@ -31,8 +32,8 @@ const EnableTwoFactorAuth = () => {
   }
 
   useEffect(() => {
-    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFaVerfied) {
+    // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFactor_auth_type === 'none') {
       history.push(`/dashboard`)
     }
   }, [])

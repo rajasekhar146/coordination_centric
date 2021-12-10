@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 const getValue = val => {
     switch (val) {
         case 'active':
+        case 'invited':
             return 'Closed'
             break
         default:
@@ -75,7 +76,7 @@ const colorcodes = {
 
 const PatientItemComponent = props => {
     const classes = useStyles()
-    const [ rowData , setRowData] = useState(''); 
+    const [rowData, setRowData] = useState('');
     const {
         row,
         columns,
@@ -95,7 +96,7 @@ const PatientItemComponent = props => {
     const handleStatus = (org, status) => {
         const res = memberService.updateStatus(org._id, status, 'facility')
         res.then(res => {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
         })
@@ -148,13 +149,13 @@ const PatientItemComponent = props => {
     }
 
 
-    const handleRowClick = (index, row) =>{
-        if(videoClick){
+    const handleRowClick = (index, row) => {
+        if (videoClick) {
             setRowData(row);
-        setfromVideCall(true);
+            setfromVideCall(true);
         }
     }
-    const closeList = (e) =>{
+    const closeList = (e) => {
         setfromVideCall(false)
         e.stopPropagation();
     }
@@ -180,9 +181,9 @@ const PatientItemComponent = props => {
 
     return (
         <TableRow
-        onClick = {(e)=>{
-            handleRowClick(index,row); e.stopPropagation();
-        }}
+            onClick={(e) => {
+                handleRowClick(index, row); e.stopPropagation();
+            }}
             hover
             role="checkbox"
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
@@ -201,7 +202,7 @@ const PatientItemComponent = props => {
                         <div className={value[0] ? `od__closed__status` : `od__open__status`}>
                             <CircleIcon fontSize="small" sx={{ color: colorcodes[value[0] ? 'closed' : 'open'] }} />
                             <div className={value[0] ? `od__closed__label` : `od__open__label`}>
-                                 {getValue(value[0])}
+                                {getValue(value[0])}
                             </div>
                         </div>
                     </TableCell>
@@ -256,7 +257,7 @@ const PatientItemComponent = props => {
                     </TableCell>
                 )
             })}
-             {/* {
+            {/* {
             fromVideCall &&
             <PatientRecordsDeatils closeList = {closeList} rowData={rowData}></PatientRecordsDeatils>
             } */}

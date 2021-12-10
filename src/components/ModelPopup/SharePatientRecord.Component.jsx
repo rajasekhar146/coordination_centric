@@ -32,7 +32,7 @@ const SharePatientRecord = props => {
         const res = organizationService.updateOrganization(selectedOrg.id, 'declined', reason)
         res.then(() => {
             setOrganizations([])
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Rejected')
             setSubLabel('This account was successfully rejected, and is now disabled.')

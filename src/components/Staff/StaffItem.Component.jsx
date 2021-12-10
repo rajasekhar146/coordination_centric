@@ -220,13 +220,13 @@ const StaffItemComponent = props => {
     const resendInvite = async(org, status) => {
         const res = await memberService.resendInvite(org._id, status, type)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setStaffList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             // setSubLabel('Another invitation was sended to this Member.')
@@ -236,13 +236,13 @@ const StaffItemComponent = props => {
         const res = await memberService.cancelInvite(org._id, status, type)
 
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setStaffList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
@@ -251,12 +251,12 @@ const StaffItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setStaffList([])
            
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')

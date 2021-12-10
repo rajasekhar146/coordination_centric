@@ -21,6 +21,7 @@ import { memberService, commonService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { capitalize } from 'lodash'
 
 
 const styles = theme => ({
@@ -83,6 +84,7 @@ const InviteMemberComponent = props => {
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors },
     } = useForm()
@@ -141,6 +143,9 @@ const InviteMemberComponent = props => {
                                 {...register('first_name', {
                                     required: 'First Name is required.',
                                 })}
+                                onChange={(e) => {
+                                    setValue('first_name', capitalize(e.target.value))
+                                }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{
@@ -168,6 +173,9 @@ const InviteMemberComponent = props => {
                                 {...register('last_name', {
                                     required: 'Last Name Required.'
                                 })}
+                                onChange={(e) => {
+                                    setValue('last_name', capitalize(e.target.value))
+                                }}
                                 margin="normal"
                                 error={errors.facilityEmail && isSubmit}
                                 InputProps={{

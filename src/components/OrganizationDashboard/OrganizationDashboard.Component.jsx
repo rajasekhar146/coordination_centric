@@ -660,7 +660,7 @@ const OrganizationDashboardComponent = () => {
     console.log('start Date', e)
     setSearchStartDate(e)
     setOrganizations([])
-    setSkip(1)
+    setSkip(0)
     // getOrganization(searchText, e, searchStatus)
   }
 
@@ -668,7 +668,7 @@ const OrganizationDashboardComponent = () => {
     console.log('end Date', e)
     setSearchEndDate(e)
     setOrganizations([])
-    setSkip(1)
+    setSkip(0)
     // getOrganization(searchText, e, searchStatus)
   }
 
@@ -757,7 +757,6 @@ const OrganizationDashboardComponent = () => {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 value={searchEndDate}
-                label="Basic example"
                 maxDate={new Date()}
                 onChange={e => handleSearchEndDate(e)}
                 renderInput={params => <TextField {...params} />}

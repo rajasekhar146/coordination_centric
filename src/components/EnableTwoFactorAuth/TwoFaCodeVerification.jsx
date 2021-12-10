@@ -13,6 +13,7 @@ import useStore from '../../hooks/use-store';
 import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
 import {getTokenFn} from '../../firebase'
+import Alert from '../Alert/Alert.component'
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,13 +44,15 @@ const TwoFaEnabled = props => {
   const currentUser = authenticationService.currentUserValue
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
   const [FCMToken, setFCMToken] = useState("");
-
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
   const twofaActive = authenticationService.twofaActive
-
   const [signinStoreData] = useStore(SigninStore);
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLebel, setSubLabel] = useState('')
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertcolor, setAlertColor] = useState('success')
 
   const {
     email,
@@ -76,8 +79,7 @@ const TwoFaEnabled = props => {
     })
   }
   useEffect(async() => {
-    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFaVerfied) {
+    if (twoFactor_auth_type === 'none') {
     let fcmToken = await getTokenFn(setFCMToken);
     console.log("fcmToken",fcmToken);
       history.push(`/dashboard`)
@@ -108,9 +110,8 @@ const TwoFaEnabled = props => {
     const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type, email)
     res
       .then(async() => {
-        localStorage.setItem('twoFaVerfied', true)
         let fcmToken = await getTokenFn(setFCMToken);
-    console.log("fcmToken",fcmToken);
+        console.log("fcmToken",fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {
@@ -118,10 +119,17 @@ const TwoFaEnabled = props => {
       })
   }
 
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
+
   const handleResend = async () => {
     var response = authenticationService.twoFactorEmailAuth(email)
-    response.then(() => {
+    response.then((res) => {
       setMinutes(3)
+      setOpenFlash(true)
+      setSubLabel(res?.data?.message)
+      setAlertMsg('Mail sent')
     }).catch(() => {
 
     })
@@ -200,6 +208,13 @@ const TwoFaEnabled = props => {
           </span>
           <label className="io__same__line"> Back</label>
         </div>
+        <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color={alertcolor}
+      />
       </div>
     </div>
   )

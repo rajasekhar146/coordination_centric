@@ -149,7 +149,7 @@ const EmailVerificationPage = props => {
           </Button>
           &nbsp; &nbsp;&nbsp; &nbsp;
           <Button
-            className={!verificationCode ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}
+            className={!verificationCode || (minutes === 0 && seconds === 0) ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}
             onClick={handleVarification}>
             Verify &nbsp;{' '}
             {

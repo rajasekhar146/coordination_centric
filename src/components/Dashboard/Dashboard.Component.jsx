@@ -32,6 +32,7 @@ import OrderstoExpireinXdays from './OrderstoExpireinXdays'
 import OrganizationOnboardings from './OrganizationOnboardings'
 import { dashboardService } from '../../services'
 import AppointmentList from './AppointmentList'
+import history from '../../history'
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -244,10 +245,14 @@ const DashboardComponent = () => {
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const [elementsStats, setElementStats] = useState([])
   const [dashboardDetails, setDashboardDetails] = useState(null)
+  const isLoggedToken = get(JSON.parse(localStorage.getItem('currentUser')), ['data', 'token'], null)
 
 
 
   useEffect(() => {
+    if (!isLoggedToken) {
+      history.push('signin')
+    }
     if (!last_login_time && !skipped2fa) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
