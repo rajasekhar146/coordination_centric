@@ -9,12 +9,13 @@ const axiosConfig = {
 }
 
 export const settinService = {
-    getMemberDetails,
-    updateMemberDetails,
-    addHealthInfo,
-    addInsuranceInfo,
-    getHealthInfo,
-    getInsuranceInfo
+  getMemberDetails,
+  updateMemberDetails,
+  addHealthInfo,
+  addInsuranceInfo,
+  getHealthInfo,
+  getInsuranceInfo,
+  getProfessionalInfoDetails,
 }
 
 function getMemberDetails(id) {
@@ -125,4 +126,24 @@ function getInsuranceInfo(id) {
                 return null
             })
     )
+}
+
+function getProfessionalInfoDetails() {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+
+  return (
+    axios
+      .get(`${apiURL}/users/getProfessionalInfo`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        //   console.log('getCountries', data)
+        return { data }
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return null
+      })
+  )
 }
