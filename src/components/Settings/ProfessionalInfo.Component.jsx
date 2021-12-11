@@ -331,7 +331,7 @@ const PersonalInfo = props => {
       console.log('Successfull')
       setOpenFlash(true)
       setAlertMsg('Saved')
-      setSubLabel('Your changes are saved')
+      setSubLabel('Your changes are updated successfully')
       getMemberDetails()
     }
   }

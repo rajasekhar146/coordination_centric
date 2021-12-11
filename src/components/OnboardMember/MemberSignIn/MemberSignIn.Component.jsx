@@ -39,11 +39,14 @@ const MemberSignInComponent = () => {
   const [IsValidPassword, setIsValidPassword] = useState(true)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
+  const [alertColor , setAlertColor] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
   const { invitetoken } = useParams()
   const { referredby } = useParams()
   const { invitedBy } = useParams()
+  const [subLebel, setSubLabel] = useState()
+  const [agreeTermsAndCondtion , setAgreeTermsAndCondtion]= useState(true);
   //const [member, setMember] = useState({})
   const dispatch = useDispatch()
   let member = useSelector(state => state.newMember)
@@ -129,27 +132,38 @@ const MemberSignInComponent = () => {
     // data['last_name'] = '';
     // data['ssn'] = '';
 
-    console.log(password, confirmPassword)
+    // console.log(password, confirmPassword)
     if (password === confirmPassword) {
-      member.member.password = password
+      if(agreeTermsAndCondtion){
+        member.member.password = password
 
-      // member.member.dob = '12/12/2020'
-      // member.member.gender = 'Male'
-      // member.member.ssn = '12345678'
-      // member.member.occupation = 'Eye Doctor'
-      console.log('memberData', member)
-      await organizationService
-        .registerMember(member.member)
-        .then(res => {
-          dispatch(newMember(member.member))
-          history.push(`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        // member.member.dob = '12/12/2020'
+        // member.member.gender = 'Male'
+        // member.member.ssn = '12345678'
+        // member.member.occupation = 'Eye Doctor'
+        console.log('memberData', member)
+        await organizationService
+          .registerMember(member.member)
+          .then(res => {
+            dispatch(newMember(member.member))
+            history.push(`/members/personal-detail/${invitetoken}/${referredby}/${invitedBy}`)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }else{
+        setSubLabel('Please select the terms and condition checkbox')
+        setOpenFlash(true)
+        setAlertColor('cancel')
+        setAlertMsg('Terms & Condition')
+      }
+
     } else {
-      setAlertMsg('The password confirmation doesn’t match.')
+      setSubLabel('The password confirmation doesn’t match.')
+      setAlertMsg('Password mismatch')
       setOpenFlash(true)
+      setAlertColor('success')
+
     }
   }
 
@@ -367,6 +381,9 @@ const MemberSignInComponent = () => {
                 control={<Checkbox defaultChecked />}
                 className="ms__check__box__text"
                 label="I agree to terms & conditions"
+                onChange={e => {
+                  setAgreeTermsAndCondtion(e.target.checked)
+                }}
               />{' '}
             </div>
             <div>
@@ -378,7 +395,7 @@ const MemberSignInComponent = () => {
             </div>
           </div>
         </div>
-        <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} color = "success" />
+        <Alert handleCloseFlash={handleCloseFlash} subLebel={subLebel}  alertMsg={alertMsg} openflash={openflash} color = {alertColor} />
       </form>
     </div>
   )

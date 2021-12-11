@@ -314,11 +314,11 @@ async function uploadCertificate(bodyMsg, certificateType) {
 //       return null
 //     })
 
-function resendInvite(id) {
+function resendInvite(id , type) {
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .get(`${apiURL}/facilityList/resendInvite/${id}`, axiosConfig)
+      .get(`${apiURL}/facilityList/resendInvite/${id}/${type}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data

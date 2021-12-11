@@ -140,7 +140,7 @@ const PersonalInfo = props => {
                 // history.push('/resetpasswordsuccess')
                 setOpenFlash(true)
                 setAlertMsg('Updated')
-                setSubLabel('Your password was successfuly updated.')
+                setSubLabel('Your password was successfully updated.')
                 setAlertColor('success')
             }).catch((res) => {
                 console.log(res.response)

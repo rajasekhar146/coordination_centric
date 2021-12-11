@@ -628,6 +628,7 @@
     width: 100%;
     grid-template-columns: 1fr 1fr;
     grid-gap: 2px 8px;
+    height: 44px;
 }
 
 .capitalize{

@@ -53,7 +53,7 @@ const PersonalInfo = props => {
   const timezones = moment.tz.names()
   console.log(timezones)
 
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails } = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails ,setAlertColor} = props
   const [profilepic, setProfilePic] = useState('')
   const [prfileUrl, setProfileUrl] = useState('')
   const [updatedUrl, setUpdatedUrl] = useState('')
@@ -232,6 +232,7 @@ const PersonalInfo = props => {
       setOpenFlash(true)
       setAlertMsg('Updated')
       setSubLabel('Your changes are updated successfully')
+      setAlertColor('success')
       getMemberDetails()
     }
   }

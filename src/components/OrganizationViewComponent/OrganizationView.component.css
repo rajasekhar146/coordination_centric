@@ -86,7 +86,7 @@
   flex-direction: row;
 }
 .block-container .det-value {
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 .subTitle-block {
   margin: 20px 40px 0 0;

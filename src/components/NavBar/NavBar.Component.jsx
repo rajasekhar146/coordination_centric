@@ -400,7 +400,10 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
           >
             <div className="nb__profile__dropdown">
               <div>
-                <img src={profilePic} alt="Profile" className="nb__profile__image" />
+                {profilePic ? 
+                <img src={profilePic} alt="Profile" className="nb__profile__image" /> : 
+                <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile"  />
+                }
                 {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} /> */}
               </div>
               <div className="nb__profile__content">

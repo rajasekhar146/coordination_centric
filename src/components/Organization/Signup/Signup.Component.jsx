@@ -155,7 +155,7 @@ const SignupComponent = () => {
           <div className="su__column__premium">
             <div className="su__row">
               <div className="su__plan__premium__amount">${planPrice}</div>
-              <div className="su__plan__premium__amount__month">/month</div>
+              <div className="su__plan__premium__amount__month">{selectedPlan == 'M' ? '/ Month' : '/ Year'} </div>
             </div>
             <div className="su__row su__premiun__text">Premium</div>
             <div className="su__content__premium">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut</div>

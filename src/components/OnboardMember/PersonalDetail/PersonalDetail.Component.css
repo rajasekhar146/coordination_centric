@@ -307,11 +307,16 @@ width: 100% !important
 .MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed {
     background: white !important;
     border-radius: 50% !important;
-    color: white !important;
+    color: #E42346 !important;
 }
 
 .MuiSvgIcon-root-MuiStepIcon-root {
     background: white !important;
     border-radius: 50% !important;
     color: white !important;
+}
+
+.Mui-completed{
+    color: #E42346 !important;
+
 }

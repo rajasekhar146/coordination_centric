@@ -35,6 +35,7 @@ const OrganisationItem = props => {
     setSubLabel,
     setIsActivateClicked,
     role,
+    setAlertcolor
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -77,6 +78,7 @@ const OrganisationItem = props => {
         setSkip(0)
         setAlertMsg('Activated')
         setSubLabel('This account was successfully activated.')
+        setAlertcolor('success')
         setOpenFlash(true)
         setIsActivateClicked(false)
       }
@@ -84,12 +86,13 @@ const OrganisationItem = props => {
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org.id)
+    const res = organizationService.resendInvite(org.id , 'facility')
     res.then(res => {
       setOrganizations([])
       setSkip(0)
       setAlertMsg('Re-sended')
       setSubLabel('Another invitation was sended to this organization.')
+      setAlertcolor('success')
       setOpenFlash(true)
     })
   }

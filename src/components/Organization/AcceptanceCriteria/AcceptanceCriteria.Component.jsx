@@ -207,7 +207,7 @@ const AcceptanceCriteriaComponent = props => {
                                 required: 'Full Name is required',
                                 maxLength: 50,
                                 pattern: {
-                                  value: /^[A-Za-z]+$/,
+                                  value: /^[A-Za-z\s]+$/,
                                   message: 'This input is characters only.',
                                 },
                               })}
@@ -247,13 +247,16 @@ const AcceptanceCriteriaComponent = props => {
                               Phone Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('phoneNumber', {
-                                required: 'Admin Phone Number is required.',
-                                pattern: {
-                                  value: /\d+/,
-                                  message: 'This input is number only.',
+                              {...register('phoneNumber',{
+                                required: {
+                                    value: true,
+                                    message: "Admin's Phone Number is required",
                                 },
-                              })}
+                                pattern: {
+                                    value: /^[1-9]\d*(\d+)?$/i,
+                                    message: 'Phone Number accepts only integer',
+                                }
+                          })}
                               inputProps={{
                                 maxLength: 15,
                               }}
@@ -316,13 +319,16 @@ const AcceptanceCriteriaComponent = props => {
                               Phone Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('facilityPhone', {
-                                required: 'Organization Phone Number is required',
-                                pattern: {
-                                  value: /\d/,
-                                  message: 'This input is number only.',
+                              {...register('facilityPhone',{
+                                required: {
+                                    value: true,
+                                    message: "Organization's Phone Number is required",
                                 },
-                              })}
+                                pattern: {
+                                    value: /^[1-9]\d*(\d+)?$/i,
+                                    message: 'Phone Number accepts only integer',
+                                }
+                          })}
                               maxLength={15}
                               characterLimit={15}
                               onInput={e => {
@@ -342,7 +348,19 @@ const AcceptanceCriteriaComponent = props => {
                               Fax Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('faxNumber', { required: 'Fax Number is required' })}
+                              {...register('faxNumber', {
+                                required: {
+                                    value: true,
+                                    message: "Fax Number is required",
+                                },
+                                pattern: {
+                                    value: /^[1-9]\d*(\d+)?$/i,
+                                    message: 'Fax accepts only integer',
+                                }
+                          })}
+                              inputProps={{
+                                maxLength: 10,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={faxNumber}
@@ -409,7 +427,7 @@ const AcceptanceCriteriaComponent = props => {
                                 required: 'City is required ',
                                 maxLength: 20,
                                 pattern: {
-                                  value: /^[A-Za-z]+$/,
+                                  value: /^[A-Za-z\s]+$/,
                                   message: 'This input is characters only.',
                                 },
                               })}
@@ -443,7 +461,19 @@ const AcceptanceCriteriaComponent = props => {
                               NPI <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('npi', { required: 'NPI is required ', maxLength: 20 })}
+                              {...register('npi', {
+                                required: {
+                                    value: true,
+                                    message: "NPI is required",
+                                },
+                                pattern: {
+                                    value: /^[1-9]\d*(\d+)?$/i,
+                                    message: 'NPI accepts only integer',
+                                }
+                          })}
+                          inputProps={{
+                            maxLength: 10,
+                          }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={nip}
@@ -467,13 +497,22 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Medical ID</div>
                             <TextField
-                              {...register('medicalId', { maxLength: 20 })}
+                              {...register('medicalId', {
+                                pattern: {
+                                    value: /^[1-9]\d*(\d+)?$/i,
+                                    message: 'Medical ID accepts only integer',
+                                }
+                          })}
+                              inputProps={{
+                                maxLength: 14,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={medicalId}
                               // name="medicalId"
                               // value={initialValues ? initialValues.medicalId : ''}
                             />
+                            {errors.medicalId && <p className="ac__required">{errors.medicalId.message}</p>}
                           </div>
                         </div>
 
@@ -481,13 +520,19 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField
-                              {...register('website', { maxLength: 20 })}
+                              {...register('website',  {
+                                pattern: {
+                                    value: /^(https?:\/\/)?[a-z0-9-]*\.+?[a-z0-9-]+\.[a-z0-9-]+(\/[^<>]*)?$/,
+                                    message: 'Invalid Web url',
+                                }
+                          })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={website}
                               // name="website"
                               // value={initialValues ? initialValues.website : ''}
                             />
+                            {errors.website && <p className="ac__required">{errors.website.message}</p>}
                           </div>
 
                           <div className="ac__column">

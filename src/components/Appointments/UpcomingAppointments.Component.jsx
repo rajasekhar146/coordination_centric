@@ -25,7 +25,7 @@ import moment from 'moment'
 import CancelAppointmentReasonPopup from '../ModelPopup/CancelAppointmentReasonPopup';
 import CircularProgress from '@mui/material/CircularProgress';
 import TablePagination from '@mui/material/TablePagination'
-
+import ViewAppointmentComponent from '../Appointments/ViewAppointment.Component'
 const confirmAppointment = {
     position: 'absolute',
     top: '50%',
@@ -366,6 +366,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                setAlertColor = {setAlertColor}
                                 getAppointmentList={getAppointmentList}
                             />
                         </Box>
@@ -384,12 +385,14 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                setAlertColor = {setAlertColor}
                                 handleNavigation={handleNavigation}
                                 getAppointmentList={getAppointmentList}
                             />
                         </Box>
                     </Modal>
-                    <Modal
+
+                    {/* <Modal
                         open={isViewClicked}
                         // onClose={setIsAcceptClicked}
                         aria-labelledby="modal-modal-title"
@@ -406,7 +409,7 @@ const UpcomongAppointmentComponent = props => {
                             // setSubLabel={setSubLabel}
                             />
                         </Box>
-                    </Modal>
+                    </Modal> */}
                     <Modal
                         open={patientReschedule}
                         // onClose={setIsAcceptClicked}

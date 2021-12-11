@@ -19,7 +19,8 @@ export const appointmentService = {
     rescheduleAppointment,
     getSecondaryAppointment,
     cancelAppointment,
-    getAppointmentById
+    getAppointmentById,
+    getAppointmentChat
 }
 
 
@@ -241,6 +242,19 @@ function getAppointmentById(id) {
     return (
         axios
             .get(`${apiURL}/appointment/viewAppointmentByAppointmentId/${id}`, axiosConfig)
+            .then(data => {
+                return data
+            })
+    ) 
+}
+
+function getAppointmentChat(id){
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/appointmentChat/getChatList?appointment_id=${id}`, axiosConfig)
             .then(data => {
                 return data
             })

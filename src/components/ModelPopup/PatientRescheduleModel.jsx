@@ -60,7 +60,7 @@ const PatientReschedule = props => {
             </div>
             <div className="io__row">
                 <FormGroup>
-                    <div className="ac__column">
+                    <div className="ac__column flex">
                         <label className="container">
                             <span className="io_terms_conditions">
                                 I agree to re-schedule my appointment and I am aware of the Coordination Centric Terms & Conditions.

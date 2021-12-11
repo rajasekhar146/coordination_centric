@@ -503,9 +503,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     background-color: #ccc;
   }
 .container input:checked ~ .checkmark {
-    border-color: #1C2043;
+    border-color: #E42346;
     background-position: 0 0;
-    background-image: url('../../assets/icons/checkbox_selected.svg')
+    background-image: url('../../assets/icons/checkbox_selected.svg');
+    background-color: #E42346;
  }
 .checkmark:after {
     content: "";
