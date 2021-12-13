@@ -334,7 +334,7 @@ const MemberItemComponent = props => {
         }
     }
 
-    const handleRowClick = async( row) =>{
+    const handleRowClick = async() =>{
         history.push(`/viewDetails/${row._id}`)
      }
 

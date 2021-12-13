@@ -39,7 +39,7 @@ const handleClose = () =>{
 }
 const getAppointmentDetails = async () => {
     let res = await memberService.getDetailsById(id);
-    setUserDetails(res.data.data);
+    setUserDetails(res?.data?.data);
     console.log('params' , res.data)
 }
 
