@@ -24,7 +24,7 @@ const ForgotPasswordComponent = (props) => {
     const [IsValidPassword, setIsValidPassword] = useState(true)
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
-
+    const [activeLink, setActiveLink] = useState(false)
 
 
     const handleCloseFlash = () => {
@@ -106,9 +106,15 @@ const ForgotPasswordComponent = (props) => {
                             </Button>{' '}
                         </div>
                         <div
-                            className="si__forgot__link"
+                            className= {activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
                             onClick={() => {
                                 history.push('/signin')
+                            }}
+                            onMouseOver={() => {
+                                setActiveLink(true)
+                            }}
+                            onMouseOut={() => {
+                                setActiveLink(false)
                             }}
                         >
                             <img src={ArrowLeft} alt="Login Left Logo" />

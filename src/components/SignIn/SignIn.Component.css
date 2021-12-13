@@ -158,9 +158,26 @@
     text-align: center !important;
     justify-content: center !important;
     letter-spacing: 0.1px;
+    display: flex !important;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.si__forgot__link_active{
+    width: 100% !important;
+    color: #E42346 !important;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 16px;
     
-    /* Neutral/Gray */
-    color: #A0A4A8;
+    /* identical to box height, or 133% */
+    display: flex;
+    align-items: center !important;
+    text-align: center !important;
+    justify-content: center !important;
+    letter-spacing: 0.1px;
     display: flex !important;
     margin-top: 15px;
     cursor: pointer;
@@ -413,3 +430,6 @@ input[type="email"] {
     text-transform: initial;
  }
  
+.si_acive_resend {
+    color: #E42346 !important;
+}

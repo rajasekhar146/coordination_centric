@@ -33,6 +33,7 @@ const SignInComponent = () => {
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
   const [FCMToken, setFCMToken] = useState("");
+  const [activeLink, setActiveLink] = useState(false)
 
 
   useEffect(() => {
@@ -250,10 +251,16 @@ const SignInComponent = () => {
               </Button>{' '}
             </div>
             <div
-              className="si__forgot__link"
+              className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
               onClick={() => {
                 history.push('/forgotpassword')
               }}
+              onMouseOver={() => {
+                setActiveLink(true)
+            }}
+            onMouseOut={() => {
+                setActiveLink(false)
+            }}
             > Forgot Password?
             </div>
           </div>
@@ -261,8 +268,8 @@ const SignInComponent = () => {
         <Alert
           handleCloseFlash={handleCloseFlash}
           alertMsg={alertMsg}
-          openflash={openflash} 
-          color = "fail"/>
+          openflash={openflash}
+          color="fail" />
       </form>
     </div>
   )
