@@ -25,6 +25,7 @@ const UploadCertificateFile = props => {
   const [imgUrl, setImgUrl] = useState('')
   const [progress, setProgress] = useState(0)
   const [message, setMessage] = useState('')
+  const [fileName, setFileName] = useState('')
   const certificates = useSelector(state => state.memberProfessionalInfoCertificates)
   const [fileSize, setFileSize] = useState(0)
   const dispatch = useDispatch()
@@ -45,6 +46,7 @@ const UploadCertificateFile = props => {
       })
       .then(response => {
         console.log('Uploaded success', response.data.data)
+        setFileName(response.data.data)
         const newCertificate = {
           certificate_name: response.data.data,
         }
@@ -62,13 +64,15 @@ const UploadCertificateFile = props => {
     <div className="od_dropzone_progress mb_25">
       <div className="">
         <span className="io_delete">
-          {progress === 100 ? (
+          {progress === 100 ? (<>
             <img className="upload_icon" src={UploadSuccess} alt="upload" />
+            <img className="toggle_icon" src={DeleteIcon} alt="upload" onClick={() => props.handleDeleteFile(fileName, props.index)} />
+            </>
           ) : (
             <img className="upload_icon" src={DeleteIcon} alt="upload" />
           )}
         </span>
-        <img className="upload_icon" src={UploadFileIcon} alt="upload" />
+        <img className="file_icon" src={UploadFileIcon} alt="upload" />
         <div className="io_filename">
           <label>{file.name}</label>
         </div>
