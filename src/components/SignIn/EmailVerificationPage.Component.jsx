@@ -73,7 +73,7 @@ const EmailVerificationPage = props => {
 
   const handleVarification = async () => {
     console.log('currentUserEmail', currentUserEmail)
-    await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
+    await authenticationService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
       console.log('handleSendEmail >> ', data)
       if (data?.status == 200) window.location.href = "emailverification-success";
       else history.push('/emailverification-failed')
@@ -179,7 +179,7 @@ const EmailVerificationPage = props => {
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
-        color = "success"
+        color="success"
       />
     </div>
   )

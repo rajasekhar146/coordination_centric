@@ -855,7 +855,7 @@ const OrganizationDashboardComponent = () => {
                             setSubLabel={setSubLabel}
                             setIsActivateClicked={setIsActivateClicked}
                             role={role}
-                            setAlertColor={setAlertColor}
+                            setAlertcolor={setAlertColor}
                           />
                         ))
                         : null
