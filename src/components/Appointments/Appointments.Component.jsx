@@ -69,7 +69,7 @@ const AppointmentsComponent = (props) => {
   const [openflash, setOpenFlash] = React.useState(useSelector(state => state.flashMsgObj.openFlash))
   const [alertMsg, setAlertMsg] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
   const [subLebel, setSubLabel] = useState(useSelector(state => state.flashMsgObj.subLabel))
-  const [alertcolor, setAlertColor] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
+  const [alertcolor, setAlertColor] = React.useState(useSelector(state => state.flashMsgObj.color))
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,7 +80,8 @@ const AppointmentsComponent = (props) => {
     dispatch(setFlashMsg({
       openFlash: false,
       alertMsg: '',
-      subLabel: ''
+      subLabel: '',
+      color: ''
     }))
   }
 

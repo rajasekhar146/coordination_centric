@@ -44,6 +44,7 @@ const flagMsg = {
   openFlash: false,
   alertMsg: '',
   subLabel: '',
+  color: ''
 }
 
 const buildTimeSlots = () => {
