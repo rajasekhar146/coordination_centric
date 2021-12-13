@@ -9,12 +9,14 @@ import history from '../../history'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import get from 'lodash.get'
 import { authenticationService } from '../../services'
+import { useSelector, useDispatch } from 'react-redux'
 
 const EnableTwoFactorAuth = () => {
   const [activeTab, setActiveTab] = useState('email')
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
+  const [enableTwofa, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
 
   const handleSubmit = () => {
     if (activeTab === 'email') {
@@ -33,7 +35,7 @@ const EnableTwoFactorAuth = () => {
 
   useEffect(() => {
     // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFactor_auth_type === 'none') {
+    if (twoFactor_auth_type === 'none' && !enableTwofa ) {
       history.push(`/dashboard`)
     }
   }, [])

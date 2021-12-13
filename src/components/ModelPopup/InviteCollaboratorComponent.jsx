@@ -84,7 +84,7 @@ const InviteCollaboratorComponent = props => {
         var orgDetail = {
             facilityName: data.facilityName,
             facilityEmail: data.facilityEmail,
-            refUserId: organizationId
+            refUserId: orgId
         }
 
         if (currentUserRole === 'admin') {

@@ -17,17 +17,17 @@ const ApproveModel = props => {
     })
     console.log('Approve Model Popup >> 1 ', response)
     if (response.status === 200) {
-      const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
-        console.log(err)
-      })
-      if (res.status === 200) {
+      // const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
+      //   console.log(err)
+      // })
+      // if (res.status === 200) {
         setOrganizations([])
         setSkip(0)
         setOpenFlash(true)
         setAlertMsg('Verified')
         setSubLabel('This account was successfully verified.')
         props.clickCloseButton()
-      }
+      // }
     }
   }
 

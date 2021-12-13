@@ -94,7 +94,7 @@ const PersonalInfo = props => {
   // const [alertMsg, setAlertMsg] = useState('')
   // const [subLabel, setSubLabel] = useState('')
   const [npiIdErr, setNPIIdErr] = useState(false)
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails } = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props
   console.log('certificates', certificates)
   const ColoredLine = ({ color }) => (
     <hr
@@ -344,6 +344,7 @@ const PersonalInfo = props => {
       setOpenFlash(true)
       setAlertMsg('Saved')
       setSubLabel('Your changes are updated successfully')
+      setAlertColor('success')
       getMemberDetails()
     }
   }

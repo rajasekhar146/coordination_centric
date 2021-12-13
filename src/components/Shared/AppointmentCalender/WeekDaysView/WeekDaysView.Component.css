@@ -87,3 +87,7 @@
     /* light-text-color */
     color: #FFFFFF !important;
   }
+
+  .wdv__back__icon {
+    width: 10% important;
+  }

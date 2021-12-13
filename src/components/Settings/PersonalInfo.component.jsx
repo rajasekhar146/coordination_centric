@@ -124,7 +124,7 @@ const PersonalInfo = props => {
     fetchCountries()
     await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
-    if (get(userDetails, ['biograhpy_object'], null)) {
+    if (get(userDetails, ['biograhpy_object', 'blocks', '0', 'text'], null)) {
       userDetails.biograhpy_object.entityMap = {}
       const data = convertFromRaw(userDetails.biograhpy_object)
       setEditorState(EditorState.createWithContent(data))

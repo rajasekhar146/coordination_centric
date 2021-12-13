@@ -84,3 +84,23 @@ export const setCompleteProfile = data => {
     payload: data,
   }
 }
+
+export const enableTwofa = val => {
+  return {
+    type: ActionTypes.ENABLE_TWO_FA,
+    payload: val,
+  }
+}
+export const reschedulePrimaryAppointmentDate = primaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_PRIMARY_DATE,
+    payload: primaryAppointment,
+  }
+}
+
+export const rescheduleSecondaryAppointmentDate = secondaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_SECONDARY_DATE,
+    payload: secondaryAppointment,
+  }
+}

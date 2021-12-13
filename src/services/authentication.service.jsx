@@ -21,6 +21,7 @@ export const authenticationService = {
   changePassword,
   requestPassword,
   skipTwoFa,
+  sendEmailVerificationCode,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -141,10 +142,10 @@ function twoFactorAuthVerification(code, type, email) {
     type === 'email'
       ? null
       : {
-          code,
-          email: email,
-          token: 'base32',
-        }
+        code,
+        email: email,
+        token: 'base32',
+      }
 
   return (
     axios
@@ -231,4 +232,28 @@ function skipTwoFa(data) {
         currentUserSubject.next(data)
       })
   )
+}
+
+
+async function sendEmailVerificationCode(email, code) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  var bodyMsg = {
+    email: email,
+    code: code,
+  }
+  return await axios
+    .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
+    //.then(handleResponse)
+    .then(response => {
+      console.log('sendEmailVerificationCode', response)
+      localStorage.setItem('currentUser', JSON.stringify(response))
+      currentUserSubject.next(response)
+      return response
+    })
+    .catch(err => {
+      console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
+      return err.response
+    })
 }

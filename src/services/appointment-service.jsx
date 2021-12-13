@@ -131,24 +131,21 @@ function getDoctorsList(searchParam) {
 }
 
 function getHighlightedDoctorsList() {
-    let axiosConfig = {
-        headers: authHeader(),
-    }
-    return (
-        axios
-            .get(
-                `${apiURL}/users/getHighlightedDoctors`,
-                axiosConfig
-            )
-            //.then(handleResponse)
-            .then(data => {
-                console.log('getHighlightedDoctorsList >>', data)
-                return data
-            })
-            .catch(err => {
-                return err
-            })
-    )
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .get(`${apiURL}/users/getHighlightedDoctors?skip=0&limit=5`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('getHighlightedDoctorsList >>', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
 }
 
 function getAllSpecializations() {

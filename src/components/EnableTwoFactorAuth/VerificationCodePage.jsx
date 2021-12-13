@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { authenticationService } from '../../services'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCompleteProfile } from '../../redux/actions/commonActions'
 
 
@@ -43,14 +43,15 @@ const VerificationCodePage = props => {
 
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
+  const [enableTwofa, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
+  const [activeResend, setActiveResend] = useState(false)
 
 
   const [verificationCode, setVerificationCode] = useState('')
 
   useEffect(() => {
     // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFactor_auth_type === 'none') {
-      
+    if (twoFactor_auth_type === 'none' && !enableTwofa) {
       history.push(`/dashboard`)
     }
   }, [])
@@ -76,7 +77,7 @@ const VerificationCodePage = props => {
       .then(() => {
         // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        if(!last_login_time) {
+        if (!last_login_time) {
           dispatch(setCompleteProfile(true))
 
         }
@@ -123,9 +124,9 @@ const VerificationCodePage = props => {
             className={classes.textField}
             value={verificationCode}
             inputProps={{ maxLength: 6 }}
-              onChange={e => {
-                setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
-              }}
+            onChange={e => {
+              setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
+            }}
           />
         </div>
         <div className="io__two_justify io__margin__32 io__width__100">
@@ -143,7 +144,16 @@ const VerificationCodePage = props => {
             style={{ width: '70%' }}
             onClick={() => handleResend()}
             className="io__resend__label">
-            Didn't recieve? Resend OTP
+            Didn't recieve?
+            <span
+              className={activeResend ? 'si_acive_resend' : ''}
+              onMouseOver={() => {
+                setActiveResend(true)
+              }}
+              onMouseOut={() => {
+                setActiveResend(false)
+              }} >Resend OTP
+            </span>
           </label>
         </div>
       </div>
@@ -162,7 +172,7 @@ const VerificationCodePage = props => {
           alertMsg={alertMsg}
           openflash={openflash}
           subLebel={subLebel}
-          color = "success"
+          color="success"
         />
       </div>
     </div>
