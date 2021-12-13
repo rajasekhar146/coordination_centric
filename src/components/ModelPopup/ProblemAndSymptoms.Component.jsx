@@ -5,74 +5,73 @@ import TextField from '@mui/material/TextField'
 import UploadIcon from '../../assets/icons/upload.png'
 import Dropzone from 'react-dropzone'
 import UploadFile from '../Settings/UploadFile.Component'
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
 import { useForm } from 'react-hook-form'
 import InviteMember from './InviteMemberItem'
 
-const ProblemAndSymptomsComponent = (props) => {
-  const setInvitedMembers = props.setInvitedMembers;
-  const invitedMembers = props.invitedMembers;
-  const appointmentReason = props.appointmentReason;
-  const setAppointmentReason = props.setAppointmentReason;
-  const selectedFiles = props.selectedFiles;
-  const setSelectedFiles = props.setSelectedFiles;
-  const setappointmentReasonErr = props.setappointmentReasonErr;
-  const appointmentReasonErr = props.appointmentReasonErr;
-  const setReportsArray = props.setReportsArray;
-  const reportsArray = props.reportsArray;
+const ProblemAndSymptomsComponent = props => {
+  const setInvitedMembers = props.setInvitedMembers
+  const invitedMembers = props.invitedMembers
+  const appointmentReason = props.appointmentReason
+  const setAppointmentReason = props.setAppointmentReason
+  const selectedFiles = props.selectedFiles
+  const setSelectedFiles = props.setSelectedFiles
+  const setappointmentReasonErr = props.setappointmentReasonErr
+  const appointmentReasonErr = props.appointmentReasonErr
+  const setReportsArray = props.setReportsArray
+  const reportsArray = props.reportsArray
   // const [invitedMembers, setInvitedMembers] = useState(0);
-  const [inputValues, setInputValues] = useState({});
-  const [imgCounter, setImgCounter] = useState(0);
-  const [showUpload, setshowUpload] = useState(false);
-
+  const [inputValues, setInputValues] = useState({})
+  const [imgCounter, setImgCounter] = useState(0)
+  const [showUpload, setshowUpload] = useState(false)
 
   const handleAddMembers = () => {
     console.log('Clicked')
     var members = [...invitedMembers]
     const newMember = {
       email: '',
-      validator: true
+      validator: true,
     }
     members.push(newMember)
     console.log('members', members)
     setInvitedMembers(members)
   }
-  const handleDrop = (files) => {
+  const handleDrop = files => {
     files.forEach((file, index) => {
       selectedFiles.push(file)
       setSelectedFiles([...selectedFiles])
-    });
+    })
   }
   const handleClose = (e, index) => {
     var members = [...invitedMembers]
-    members.splice(index, 1);
+    members.splice(index, 1)
     setInvitedMembers(members)
   }
 
   useEffect(() => {
     var members = {
       email: '',
-      validator: true
+      validator: true,
     }
     setInvitedMembers([members])
   }, [])
 
-
   const imgHandleClick = () => {
-    setImgCounter(imgCounter + 1);
+    setImgCounter(imgCounter + 1)
     setshowUpload(!showUpload)
-  };
-
+  }
 
   const updateInviteEmail = (email, index) => {
-    const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)
-    let emailArray = [...invitedMembers];
-    emailArray[index].email = email;
-    emailArray[index].validator = emailValidation;
-    setInvitedMembers(emailArray);
-
+    const emailValidation =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email
+      )
+    let emailArray = [...invitedMembers]
+    emailArray[index].email = email
+    emailArray[index].validator = emailValidation
+    setInvitedMembers(emailArray)
   }
-  const appointmentHanlde = (event) => {
+  const appointmentHanlde = event => {
     if (!event.target.value) {
       setappointmentReasonErr(true)
     } else {
@@ -81,8 +80,7 @@ const ProblemAndSymptomsComponent = (props) => {
     }
   }
 
-
-    return (
+  return (
     <div className="pas__main__div">
       <div className="pas__row">
         <div className="pca__center__align">
@@ -110,20 +108,13 @@ const ProblemAndSymptomsComponent = (props) => {
             onChange={appointmentHanlde}
           />
         </div>
-        {
-        appointmentReasonErr && <span className="reason_error">
-          Reason is required
-        </span>
-      }
+        {appointmentReasonErr && <span className="reason_error">Reason is required</span>}
       </div>
-     
 
       {/* <div className="pas__row mar-top-30">
         <div className="pas__problem__label">Do you want to invite someone to join the appointment?</div>
       </div> */}
-      <div className="pas__row">
-
-      </div>
+      <div className="pas__row"></div>
       {/* <div className="">
         {invitedMembers && invitedMembers.map((c, index) => (
           <InviteMember
@@ -146,18 +137,18 @@ const ProblemAndSymptomsComponent = (props) => {
       </div>
 
       <div className="od_input_p">
-        {selectedFiles && selectedFiles.map((file, index) => (
-          <UploadFile
-            file={file}
-            setReportsArray={setReportsArray}
-            reportsArray={reportsArray}
-            index={index}
-            setSelectedFiles={setSelectedFiles}
-            selectedFiles={selectedFiles}
-          />
-        ))
-        }
-        {showUpload &&
+        {selectedFiles &&
+          selectedFiles.map((file, index) => (
+            <UploadFile
+              file={file}
+              setReportsArray={setReportsArray}
+              reportsArray={reportsArray}
+              index={index}
+              setSelectedFiles={setSelectedFiles}
+              selectedFiles={selectedFiles}
+            />
+          ))}
+        {showUpload && (
           <div className="od_dropzone_prof mb_25">
             <Dropzone
               onDrop={handleDrop}
@@ -166,7 +157,6 @@ const ProblemAndSymptomsComponent = (props) => {
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
-
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
                     <img className="io_upload_icon" src={UploadIcon} alt="upload" />
@@ -180,9 +170,7 @@ const ProblemAndSymptomsComponent = (props) => {
               )}
             </Dropzone>
           </div>
-        }
-
-
+        )}
       </div>
       <div className="pas__row">
         <div className="pas__invite__button">

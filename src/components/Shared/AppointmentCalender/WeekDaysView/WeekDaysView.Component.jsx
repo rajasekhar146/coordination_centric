@@ -417,6 +417,7 @@ const WeekDaysViewComponent = props => {
   }
 
   const clickCloseButton = () => {
+
     setClickedAppointment(false)
   }
 
@@ -493,6 +494,9 @@ const WeekDaysViewComponent = props => {
   }
 
   const clickBackButton = () => {
+    console.log('clickBackButton >> clicked')
+    setAppointmentReason('')
+    setSelectedFiles([])
     setClickedAppointment(true)
     setClickedConfirm(false)
   }
