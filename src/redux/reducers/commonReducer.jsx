@@ -198,3 +198,11 @@ export const completeProfileReducer = (state = false, { type, payload }) => {
   }
 }
 
+export const enableTwofaReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.ENABLE_TWO_FA:
+      return payload
+    default:
+      return state
+  }
+}
