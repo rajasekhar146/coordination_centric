@@ -163,12 +163,16 @@ const WeekDaysViewComponent = props => {
     return timeSlots
   }
 
-  const getAvailablities = async selectedDate => {
+  const getAvailablities = async sDate => {
+    var selectedDate = sDate
+    if(!moment(selectedDate).isValid) {
+      selectedDate = moment(new Date())
+    }
     const startDate = moment(selectedDate).format('YYYY-MM-DD')
     const endDate = moment(selectedDate).add(5, 'days').format('YYYY-MM-DD')
-    console.log('userId, startDate, endDate', userId, startDate, endDate)
+    console.log('userId, startDate, endDate, selectedDate', userId, startDate, endDate, selectedDate)
     const res = await appointmentService.getAppointmentsForAwailability(userId, startDate, endDate)
-    console.log('response', res)
+    console.log('response >> appointmentService', res)
     if (res.status === 200) {
       const response = get(res, ['data', 'data'], null)
       console.log('response', response)
@@ -296,7 +300,7 @@ const WeekDaysViewComponent = props => {
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
     const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
-    
+
     const day = moment(selectedDate).format('YYYY-MM-DD')
     const currentDay = moment(new Date()).format('YYYY-MM-DD')
     console.log('today', day)
@@ -309,7 +313,7 @@ const WeekDaysViewComponent = props => {
 
     var newStartDate = moment(new Date()).format('YYYY-MM-DD')
     console.log('startDate < newStartDate', selectedDate, newStartDate)
-    if(selectedDate < newStartDate) selectedDate = newStartDate
+    if (selectedDate < newStartDate) selectedDate = newStartDate
 
     const doctorAvailability = await getAvailablities(selectedDate)
     setNewAvailabilities(doctorAvailability)
@@ -373,14 +377,14 @@ const WeekDaysViewComponent = props => {
     const selectedYear = selectedCalender.calenderDate.Year
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
-    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)    
 
+    var newSelectedDate = moment(selectedDate).add(-5, 'd')
     var newStartDate = moment(new Date())
     console.log('startDate < newStartDate >> Weekdays', selectedDate, newStartDate)
-    if(selectedDate.format('YYYY-MM-DD') < newStartDate.format('YYYY-MM-DD')) selectedDate = newStartDate.format('YYYY-MM-DD')
+    if (newSelectedDate.format('YYYY-MM-DD') < newStartDate.format('YYYY-MM-DD'))
+    newSelectedDate = newStartDate
 
-
-    const newSelectedDate = moment(selectedDate).add(-5, 'd')
     const newDay = newSelectedDate.format('MMMM, YYYY')
     console.log(newSelectedDate.format('dddd, DD'))
     setCurrentDate(newDay)
@@ -561,9 +565,10 @@ const WeekDaysViewComponent = props => {
   return (
     <div className="wdv__main__div">
       <div className="wdv__row">
-      {!isPastMonth ?
-        <img src={RoundedBackArrow} alt="back" style={{ cursor: 'pointer' }} onClick={() => moveBack()} />
-      : null}{avaliableAppointmentDays &&
+        {!isPastMonth ? (
+          <img src={RoundedBackArrow} alt="back" style={{ cursor: 'pointer' }} onClick={() => moveBack()} />
+        ) : null}
+        {avaliableAppointmentDays &&
           avaliableAppointmentDays.map(aas => (
             <div className="wdv__column">
               <DayViewComponent avaliableAppointmentDay={aas} />
@@ -575,7 +580,7 @@ const WeekDaysViewComponent = props => {
         <div className="wdv__section">
           {primaryDate.Day === null || secondaryDate.Day === null ? (
             <Button className="wdv__next__btn">Next</Button>
-          ) : null }
+          ) : null}
 
           {role === 'doctor' && primaryDate.Day != null ? (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
@@ -583,7 +588,7 @@ const WeekDaysViewComponent = props => {
             </Button>
           ) : null}
 
-          {role === 'patient' && primaryDate.Day != null && secondaryDate.Day != null? (
+          {role === 'patient' && primaryDate.Day != null && secondaryDate.Day != null ? (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
               Request Appointment
             </Button>

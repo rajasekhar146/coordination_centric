@@ -7,9 +7,12 @@ import history from '../../../../history'
 import ReactStars from 'react-rating-stars-component'
 import { settinService } from '../../../../services'
 import get from 'lodash.get'
+import moment from 'moment'
 import {
   primaryAppointmentDate,
   secondaryAppointmentDate,
+  appointmentAvailableTimeSlots,
+  calendarAppointmentDate,
 } from '../../../../redux/actions/commonActions' //'../../../redux/actions/commonActions'
 import { useSelector, useDispatch } from 'react-redux'
 const DoctorBioDetailsComponent = props => {
@@ -80,10 +83,18 @@ const DoctorBioDetailsComponent = props => {
         timeSlotId: null,
       },
     }
+    
+    const calenderDate = {
+        Year: moment().format('YYYY'),
+        Month: moment().format('MM'),
+        Day: moment().format('DD'),
+    }
+    console.log('moveBack >> calenderDate', calenderDate)
+    // dispatch(appointmentAvailableTimeSlots([]))
+    dispatch(calendarAppointmentDate(calenderDate))
     dispatch(primaryAppointmentDate(selectedDate))
     dispatch(secondaryAppointmentDate(selectedDate))
     history.push('/marketplace')
-
   }
   return (
     <div className="dbd__main__div">

@@ -130,7 +130,7 @@ const DayViewComponent = props => {
         {availableTimes &&
           availableTimes.map(ats => (
             <div className="dv__row">
-            {ats.isEnabled && ats.isPrimary ? (
+              {ats.isEnabled && ats.isPrimary ? (
                 <div
                   className="dv__time__text__selected"
                   key={ats.availabilityId}
@@ -154,7 +154,7 @@ const DayViewComponent = props => {
                   </div>
                 </div>
               ) : null}
-              {ats.isEnabled && !ats.isPrimary && !ats.isSecondary? (
+              {ats.isEnabled && !ats.isPrimary && !ats.isSecondary ? (
                 <div
                   className="dv__time__text"
                   key={ats.availabilityId}
@@ -171,8 +171,7 @@ const DayViewComponent = props => {
                   {ats.startTime} - {ats.endTime}
                 </div>
               ) : null}
-
-              </div>
+            </div>
           ))}
       </div>
     </div>
