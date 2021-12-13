@@ -443,8 +443,8 @@ const WeekDaysViewComponent = props => {
         openFlash: true,
         alertMsg: 'Well done!',
         subLabel: role === 'doctor' ?
-        'Your appointment was successfuly re-scheduled, wait for patient confirmation.'
-          : 'Your appointment was successfuly re-scheduled, wait for doctor confirmation.',
+        'Your appointment was successfully re-scheduled, wait for patient confirmation.'
+          : 'Your appointment was successfully re-scheduled, wait for doctor confirmation.',
         color: 'success'
       }))
       history.push('/appointments')

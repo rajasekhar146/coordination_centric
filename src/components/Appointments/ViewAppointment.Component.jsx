@@ -12,8 +12,10 @@ import moment from 'moment'
 import galary_icon from '../../assets/icons/galary_icon.png';
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
+import Chat from '../VideoCall/Chat/Chat'
 import CircleIcon from '@mui/icons-material/Circle'
-
+// import {ChatBox} from 'react-chatbox-component';
+// import 'react-chatbox-component/dist/style.css';
 function ViewAppointmentComponent() {
 
   const { id } = useParams()
@@ -22,9 +24,12 @@ function ViewAppointmentComponent() {
   const [imageValue, setImageValue ] = useState();
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
+  // const [messages, setMessages] = useState([]);
+  const [toggleChat, setToggleChat] = useState(false);
 
   useEffect(() => {
-    getAppointmentDetails()
+    getAppointmentDetails();
+    getAppointmentChat()
 }, [])
 
 const openImage = (docs)=>{
@@ -40,6 +45,11 @@ const getAppointmentDetails = async () => {
     console.log('params' , res.data)
 }
 
+const getAppointmentChat = async () =>{
+  let chat = await appointmentService.getAppointmentChat(id);
+  // setMessages(chat.data?.data?.messages)
+  console.log('1222' , chat);
+}
 const colorcodes = {
   accepted: '#12B76A',
   pending: '#7A5AF8',
@@ -60,7 +70,9 @@ const confirmAppointment = {
   borderRadius: 3,
   p: 3,
 }
-
+const closeChatFun = ()=>{
+  setToggleChat(false)
+  }
 const getValue = val => {
   switch (val) {
       case 'accepted':
@@ -89,6 +101,47 @@ const getValue = val => {
   }
 }
 
+const messages = [
+  {
+    "text": "Hello there",
+    "id": "1",
+    "sender": {
+      "name": "Ironman",
+      "uid": "user1",
+      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
+    },
+  },
+  {
+    "text": "Hello there",
+    "id": "2",
+    "sender": {
+      "name": "Ironman",
+      "uid": "user2",
+      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
+    },
+  },
+  {
+    "text": "Hello there",
+    "id": "1",
+    "sender": {
+      "name": "Ironman",
+      "uid": "user1",
+      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
+    },
+  },
+  {
+    "text": "Hello there",
+    "id": "1",
+    "sender": {
+      "name": "Ironman",
+      "uid": "user1",
+      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
+    },
+  },
+]
+const user = {
+  "uid" : "user1"
+} 
     return (
       <div className="view-app">
         <div className="view-header"> 
@@ -162,6 +215,16 @@ const getValue = val => {
               
             )}</p>
           </div>
+              <div className="row-details">
+               <Chat/> 
+
+              {/* <ChatBox
+  messages={messages}
+  user={user}
+/> */}
+
+              </div>
+
           <Modal
                 open={showImage}
                 aria-labelledby="modal-modal-title"

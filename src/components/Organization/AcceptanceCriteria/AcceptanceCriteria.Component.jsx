@@ -486,7 +486,10 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Tax ID</div>
                             <TextField
-                              {...register('taxId', { maxLength: 20 })}
+                              {...register('taxId')}
+                              inputProps={{
+                                maxLength: 11,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={taxId}
