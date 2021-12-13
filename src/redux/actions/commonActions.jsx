@@ -84,3 +84,10 @@ export const setCompleteProfile = data => {
     payload: data,
   }
 }
+
+export const enableTwofa = val => {
+  return {
+    type: ActionTypes.ENABLE_TWO_FA,
+    payload: val,
+  }
+}

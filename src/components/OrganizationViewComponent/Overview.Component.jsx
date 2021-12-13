@@ -258,6 +258,14 @@ const OverView = ( props ) => {
           </div>
           <div className="detailWrapper">
             <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
+              Medical Id
+            </Typography>
+            <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+              {orgDet && orgDet.medicalId}
+            </Typography>
+          </div>
+          <div className="detailWrapper">
+            <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
               Website
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
