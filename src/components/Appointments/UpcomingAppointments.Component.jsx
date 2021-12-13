@@ -318,7 +318,9 @@ const UpcomongAppointmentComponent = props => {
                                                 setSubLabel={setSubLabel}
                                                 setOpenFlash={setOpenFlash}
                                                 type={type}
+                                                setCancelAppointmentReason={setCancelAppointmentReason}
                                             />
+                                            
                                         ))
                                     }
                                 </TableBody>
