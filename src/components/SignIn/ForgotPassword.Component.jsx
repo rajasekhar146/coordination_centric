@@ -11,6 +11,7 @@ import SigninStore from '../../stores/signinstore'
 import KeyIcon from '../../assets/icons/key_icon.png'
 import ArrowLeft from '../../assets/icons/arrow-left.png'
 import { authenticationService } from '../../services'
+import Alert from '../Alert/Alert.component'
 
 
 
@@ -25,6 +26,8 @@ const ForgotPasswordComponent = (props) => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [activeLink, setActiveLink] = useState(false)
+    const [subLebel, setSubLabel] = useState('')
+    const [alertcolor, setAlertColor] = React.useState(null)
 
 
     const handleCloseFlash = () => {
@@ -49,8 +52,10 @@ const ForgotPasswordComponent = (props) => {
         const res = authenticationService.requestPassword(reBody)
         res.then(() => {
             history.push('/forgotpasswordresend')
-        }).catch(() => {
-
+        }).catch((res) => {
+            setOpenFlash(true)
+            setAlertMsg(res?.response?.data?.message)
+            setAlertColor('fail')
         })
     }
 
@@ -127,6 +132,13 @@ const ForgotPasswordComponent = (props) => {
                 </div>
 
             </form>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+                color={alertcolor}
+            />
         </div>
     )
 }

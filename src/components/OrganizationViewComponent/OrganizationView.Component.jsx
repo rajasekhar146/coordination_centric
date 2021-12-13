@@ -252,6 +252,7 @@ const OrganizationViewComponent = (props) => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    orgId={orgId}
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
