@@ -427,7 +427,7 @@ const OrganizationDashboardComponent = () => {
   const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(0)
   const [limit, setLimit] = useState(10)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedOrg, setSelectedOrg] = useState(null)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
