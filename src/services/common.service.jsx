@@ -55,22 +55,20 @@ function getStates(countryCode) {
   )
 }
 
-function getAllRoles(countryCode) {
+function getAllRoles() {
   const axiosConfig = {
     headers: authHeader(),
   }
   return (
     axios
-      // .get(`${apiURL}/utils/getStateByCountryCode?countrycode=${countryCode}`, axiosConfig)
-      // //.then(handleResponse)
-      // .then(data => {
-      //   //   console.log('getCountries', data)
-      //   return { data }
-      // })
-      // .catch(err => {
-      //   // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-      //   return null
-      // })
+      .get(`${apiURL}/utils/getRoles`, axiosConfig)
+      .then(data => {
+        return { data }
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return null
+      })
   )
 }
 

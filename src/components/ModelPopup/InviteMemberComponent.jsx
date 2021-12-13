@@ -52,12 +52,6 @@ const styles = theme => ({
 
 
 
-const roles = [
-    { name: 'Doctor', value: 'doctor' },
-    { name: 'NP', value: 'np' },
-    { name: 'PA', value: 'pa' },
-    { name: 'Receptionist', value: 'receptionist' }
-]
 
 
 const InviteMemberComponent = props => {
@@ -76,8 +70,9 @@ const InviteMemberComponent = props => {
         setMembersList
     } = props;
 
-    useEffect(() => {
-        const res = commonService.getAllRoles()
+    useEffect(async() => {
+        const res = await commonService.getAllRoles();
+        setRoles(res.data.data.data);
     }, [])
 
 
@@ -100,7 +95,7 @@ const InviteMemberComponent = props => {
 
     const [isSubmit, setIsSubmit] = useState(false)
     const [isExist, setIsExist] = useState('')
-
+    const [roles , setRoles] = useState([]);
     const onSubmit = (requestData) => {
         setIsSubmit(true)
         requestData.refUserId = organizationId
@@ -239,8 +234,8 @@ const InviteMemberComponent = props => {
                                 Select an Option
                             </MenuItem> */}
                                 {roles.map(role => (
-                                    <MenuItem key={role.name} value={role.value}>
-                                        <ListItemText primary={role.name} />
+                                    <MenuItem key={role.role_name} value={role.role_name}>
+                                        <ListItemText primary={role.role_name} />
                                     </MenuItem>
                                 ))}
                             </Select>
