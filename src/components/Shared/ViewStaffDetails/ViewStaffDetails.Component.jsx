@@ -93,7 +93,7 @@ const getValue = val => {
 }
 
 const getAddress =()=>{
-    return [userDetails.address,userDetails.city,userDetails.state,userDetails.country,userDetails.postalCode].filter(c=>c).join(', ');
+    return [userDetails?.address,userDetails?.city,userDetails?.state,userDetails?.country,userDetails?.postalCode].filter(c=>c).join(', ');
 }
 
     return (
@@ -124,7 +124,7 @@ const getAddress =()=>{
           <div className="row-details">
             <p className="row-title">Photo</p>
               <p className="row-data flex-dr">
-            <img src={userDetails.profilePic} className="ap_profile mar-right-10"/>          
+            <img src={userDetails?.profilePic} className="ap_profile mar-right-10"/>          
             </p> 
             
           </div>

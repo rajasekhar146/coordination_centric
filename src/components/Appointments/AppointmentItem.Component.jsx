@@ -60,10 +60,10 @@ const menuList = [
         //     { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         // ],
         doctorOptions: [
-                { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-                { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
-                { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
-            ],
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointmentReason', icon: require('../../assets/icons/reject.png').default },
+        ],
         patientOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
@@ -160,6 +160,7 @@ const AppointmentItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setCancelAppointmentReason,
         type
     } = props
     const dispatch = useDispatch()
@@ -216,6 +217,9 @@ const AppointmentItemComponent = props => {
                 break
             case 'setCancelAppointment':
                 setCancelAppointment(true)
+                break
+            case 'setCancelAppointmentReason':
+                setCancelAppointmentReason(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
