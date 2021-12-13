@@ -273,7 +273,7 @@ const CollaboratorComponent = props => {
                 resendInvite(row, 'resend')
                 break
             case 'setIsViewClicked':
-                history.push(`/viewDetails/${row._id}`)
+                history.push(`/organization-view/${row._id}`)
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()
@@ -329,7 +329,7 @@ const CollaboratorComponent = props => {
             hover
             role="checkbox"
             onClick={() => {
-                history.push(`/viewDetails/${row._id}`)
+                history.push(`/organization-view/${row._id}`)
             }}
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
