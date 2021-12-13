@@ -91,3 +91,16 @@ export const enableTwofa = val => {
     payload: val,
   }
 }
+export const reschedulePrimaryAppointmentDate = primaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_PRIMARY_DATE,
+    payload: primaryAppointment,
+  }
+}
+
+export const rescheduleSecondaryAppointmentDate = secondaryAppointment => {
+  return {
+    type: ActionTypes.APPOINTMENT_SECONDARY_DATE,
+    payload: secondaryAppointment,
+  }
+}

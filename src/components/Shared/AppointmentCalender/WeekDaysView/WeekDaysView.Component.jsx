@@ -165,7 +165,7 @@ const WeekDaysViewComponent = props => {
 
   const getAvailablities = async sDate => {
     var selectedDate = sDate
-    if(!moment(selectedDate).isValid) {
+    if (!moment(selectedDate).isValid) {
       selectedDate = moment(new Date())
     }
     const startDate = moment(selectedDate).format('YYYY-MM-DD')
@@ -377,13 +377,12 @@ const WeekDaysViewComponent = props => {
     const selectedYear = selectedCalender.calenderDate.Year
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
-    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)    
+    const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
 
     var newSelectedDate = moment(selectedDate).add(-5, 'd')
     var newStartDate = moment(new Date())
     console.log('startDate < newStartDate >> Weekdays', selectedDate, newStartDate)
-    if (newSelectedDate.format('YYYY-MM-DD') < newStartDate.format('YYYY-MM-DD'))
-    newSelectedDate = newStartDate
+    if (newSelectedDate.format('YYYY-MM-DD') < newStartDate.format('YYYY-MM-DD')) newSelectedDate = newStartDate
 
     const newDay = newSelectedDate.format('MMMM, YYYY')
     console.log(newSelectedDate.format('dddd, DD'))
@@ -417,7 +416,6 @@ const WeekDaysViewComponent = props => {
   }
 
   const clickCloseButton = () => {
-
     setClickedAppointment(false)
   }
 

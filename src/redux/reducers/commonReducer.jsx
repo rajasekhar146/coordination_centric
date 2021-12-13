@@ -206,3 +206,20 @@ export const enableTwofaReducer = (state = false, { type, payload }) => {
       return state
   }
 }
+export const reschedulePrimaryAppointmentDateReducer = (state = primaryppointments, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.RESCHEDULE_APPOINTMENT_PRIMARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}
+
+export const rescheduleSecondaryAppointmentDateReducer = (state = secondaryAppointment, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.RESCHEDULE_APPOINTMENT_SECONDARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}
