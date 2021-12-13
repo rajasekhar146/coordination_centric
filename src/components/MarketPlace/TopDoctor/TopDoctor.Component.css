@@ -1,11 +1,14 @@
 .tdl__main__div {
-    width: 100%;
+    /* width: 100%; */
     background-color: #fff;
+    margin-right: 16px;
+    align-items: center;
 }
 
 .tdl__row {
     width: 100%;
     display: flex;
+    justify-content: center;
 }
 
 .tdl__image {
