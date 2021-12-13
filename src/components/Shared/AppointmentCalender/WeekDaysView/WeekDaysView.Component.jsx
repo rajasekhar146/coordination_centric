@@ -113,6 +113,7 @@ const WeekDaysViewComponent = props => {
   const [selectedFiles, setSelectedFiles] = useState([])
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false)
   const [reportsArray, setReportsArray] = useState([])
+  const [isPastMonth, setPastMonth] = useState(false)
 
   const buildTimeSlots = (
     startDate,
@@ -295,7 +296,21 @@ const WeekDaysViewComponent = props => {
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
     const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+    
+    const day = moment(selectedDate).format('YYYY-MM-DD')
+    const currentDay = moment(new Date()).format('YYYY-MM-DD')
+    console.log('today', day)
+    console.log('today >> currentDay', day, currentDay)
+    const IsValid = day > currentDay
+    console.log('isValid', IsValid)
+    setPastMonth(!IsValid)
+
     console.log('selectedDate', selectedDate)
+
+    var newStartDate = moment(new Date()).format('YYYY-MM-DD')
+    console.log('startDate < newStartDate', selectedDate, newStartDate)
+    if(selectedDate < newStartDate) selectedDate = newStartDate
+
     const doctorAvailability = await getAvailablities(selectedDate)
     setNewAvailabilities(doctorAvailability)
     await getWeekDays(selectedDate, doctorAvailability)
@@ -359,6 +374,11 @@ const WeekDaysViewComponent = props => {
     const selectedMonth = selectedCalender.calenderDate.Month
     const selectedDay = selectedCalender.calenderDate.Day
     const selectedDate = await getSelectedDate(selectedYear, selectedMonth, selectedDay)
+
+    var newStartDate = moment(new Date())
+    console.log('startDate < newStartDate >> Weekdays', selectedDate, newStartDate)
+    if(selectedDate.format('YYYY-MM-DD') < newStartDate.format('YYYY-MM-DD')) selectedDate = newStartDate.format('YYYY-MM-DD')
+
 
     const newSelectedDate = moment(selectedDate).add(-5, 'd')
     const newDay = newSelectedDate.format('MMMM, YYYY')
@@ -541,9 +561,9 @@ const WeekDaysViewComponent = props => {
   return (
     <div className="wdv__main__div">
       <div className="wdv__row">
-        {' '}
+      {!isPastMonth ?
         <img src={RoundedBackArrow} alt="back" style={{ cursor: 'pointer' }} onClick={() => moveBack()} />
-        {avaliableAppointmentDays &&
+      : null}{avaliableAppointmentDays &&
           avaliableAppointmentDays.map(aas => (
             <div className="wdv__column">
               <DayViewComponent avaliableAppointmentDay={aas} />
