@@ -20,7 +20,8 @@ export const appointmentService = {
     getSecondaryAppointment,
     cancelAppointment,
     getAppointmentById,
-    getAppointmentChat
+    getAppointmentChat,
+    sendMessage
 }
 
 
@@ -255,6 +256,18 @@ function getAppointmentChat(id){
     return (
         axios
             .get(`${apiURL}/appointmentChat/getChatList?appointment_id=${id}`, axiosConfig)
+            .then(data => {
+                return data
+            })
+    ) 
+}
+
+function sendMessage(id, messageRequest){
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return ( axios
+            .post(`${apiURL}/appointmentChat/chatBox/${id}`, messageRequest , axiosConfig)
             .then(data => {
                 return data
             })
