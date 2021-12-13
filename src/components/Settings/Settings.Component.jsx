@@ -60,7 +60,7 @@ const OrganizationViewComponent = () => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
-    const [alertColor , setAlertColor] = useState('');
+    const [alertColor, setAlertColor] = useState('');
 
     const role = get(userDetails, ['role'], '')
 
@@ -206,7 +206,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
-                    setAlertColor ={setAlertColor}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -248,7 +248,12 @@ const OrganizationViewComponent = () => {
                     setAlertColor={setAlertColor}
                 />
             </TabPanel>
-            <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} color = {alertColor}/>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+                color={alertColor} />
         </div>
     )
 }

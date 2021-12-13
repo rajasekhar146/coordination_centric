@@ -11,7 +11,7 @@ const axiosConfig = {
 export const accountService = {
   getAll,
   sendEmailWithVerificationCode,
-  sendEmailVerificationCode,
+  // sendEmailVerificationCode,
 }
 
 function getAll() {
@@ -35,23 +35,4 @@ function sendEmailWithVerificationCode(email) {
         return { errorCode: err.status, errorMessage: err.message }
       })
   )
-}
-
-async function sendEmailVerificationCode(email, code) {
-  console.log('axiosConfig', axiosConfig)
-  var bodyMsg = {
-    email: email,
-    code: code,
-  }
-  return await axios
-    .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
-    //.then(handleResponse)
-    .then(response => {
-      console.log('sendEmailVerificationCode', response)
-      return response
-    })
-    .catch(err => {
-      console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
-      return err.response
-    })
 }
