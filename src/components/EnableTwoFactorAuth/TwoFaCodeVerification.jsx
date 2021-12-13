@@ -12,7 +12,7 @@ import get from 'lodash.get'
 import useStore from '../../hooks/use-store';
 import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
-import {getTokenFn} from '../../firebase'
+import { getTokenFn } from '../../firebase'
 import Alert from '../Alert/Alert.component'
 
 
@@ -53,35 +53,36 @@ const TwoFaEnabled = props => {
   const [subLebel, setSubLabel] = useState('')
   const [openflash, setOpenFlash] = useState(false)
   const [alertcolor, setAlertColor] = useState('success')
+  const [activeResend, setActiveResend] = useState(false)
 
   const {
     email,
   } = signinStoreData;
 
 
-  useEffect(()=>{
+  useEffect(() => {
     addDevice(FCMToken);
-  },[FCMToken])
+  }, [FCMToken])
 
 
-  const addDevice = (FCMToken)=>{
-    if(!FCMToken)
-    return;
+  const addDevice = (FCMToken) => {
+    if (!FCMToken)
+      return;
     let devieInfo = {
-      'deviceId':'',
-      'fcmId':FCMToken, 
+      'deviceId': '',
+      'fcmId': FCMToken,
       'deviceType': 'web'
     }
-    notificationService.addDevice(devieInfo).then((res)=>{
-      console.log("Add device",res);
-    },error=>{
-      console.log("Add device",error);
+    notificationService.addDevice(devieInfo).then((res) => {
+      console.log("Add device", res);
+    }, error => {
+      console.log("Add device", error);
     })
   }
-  useEffect(async() => {
+  useEffect(async () => {
     if (twoFactor_auth_type === 'none') {
-    let fcmToken = await getTokenFn(setFCMToken);
-    console.log("fcmToken",fcmToken);
+      let fcmToken = await getTokenFn(setFCMToken);
+      console.log("fcmToken", fcmToken);
       history.push(`/dashboard`)
     }
   }, [])
@@ -106,12 +107,12 @@ const TwoFaEnabled = props => {
     }
   }, [minutes, seconds])
 
-  const handleSubmit =  () => {
+  const handleSubmit = () => {
     const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type, email)
     res
-      .then(async() => {
+      .then(async () => {
         let fcmToken = await getTokenFn(setFCMToken);
-        console.log("fcmToken",fcmToken);
+        console.log("fcmToken", fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {
@@ -170,7 +171,16 @@ const TwoFaEnabled = props => {
               handleResend()
             }}
             className="io_resend_label io__margin_bottom30">
-            <label className="pointer">Didn’t receive? Resend OTP</label>
+            <label className="pointer">Didn’t receive?
+              <span
+                className={activeResend ? 'si_acive_resend' : ''}
+                onMouseOver={() => {
+                  setActiveResend(true)
+                }}
+                onMouseOut={() => {
+                  setActiveResend(false)
+                }} >Resend OTP</span>
+            </label>
           </div>
           <Button
             onClick={() => {
@@ -209,12 +219,12 @@ const TwoFaEnabled = props => {
           <label className="io__same__line"> Back</label>
         </div>
         <Alert
-        handleCloseFlash={handleCloseFlash}
-        alertMsg={alertMsg}
-        openflash={openflash}
-        subLebel={subLebel}
-        color={alertcolor}
-      />
+          handleCloseFlash={handleCloseFlash}
+          alertMsg={alertMsg}
+          openflash={openflash}
+          subLebel={subLebel}
+          color={alertcolor}
+        />
       </div>
     </div>
   )

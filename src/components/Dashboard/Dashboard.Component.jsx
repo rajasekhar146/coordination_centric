@@ -237,7 +237,6 @@ const componenetsMap = {
 const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState()
-  const [skipped2fa, setSkipped2fa] = useState(useSelector(state => state.skipTwoFaValue))
   const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
@@ -253,7 +252,7 @@ const DashboardComponent = () => {
     if (!isLoggedToken) {
       history.push('signin')
     }
-    if (!last_login_time && !skipped2fa) {
+    if (!last_login_time) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }

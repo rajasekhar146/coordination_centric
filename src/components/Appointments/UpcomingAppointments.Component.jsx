@@ -320,7 +320,7 @@ const UpcomongAppointmentComponent = props => {
                                                 type={type}
                                                 setCancelAppointmentReason={setCancelAppointmentReason}
                                             />
-                                            
+
                                         ))
                                     }
                                 </TableBody>
@@ -360,18 +360,18 @@ const UpcomongAppointmentComponent = props => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={rejectAppointment}>
-                            <RejectAppointment
-                                clickCloseButton={closeRejectModel}
-                                setIsRescheduleClicked={setIsRescheduleClicked}
-                                selectedAppointment={selectedAppointment}
-                                setOpenFlash={setOpenFlash}
-                                setAlertMsg={setAlertMsg}
-                                setSubLabel={setSubLabel}
-                                setAlertColor = {setAlertColor}
-                                getAppointmentList={getAppointmentList}
-                            />
-                        </Box>
+
+                        <RejectAppointment
+                            clickCloseButton={closeRejectModel}
+                            setIsRescheduleClicked={setIsRescheduleClicked}
+                            selectedAppointment={selectedAppointment}
+                            setOpenFlash={setOpenFlash}
+                            setAlertMsg={setAlertMsg}
+                            setSubLabel={setSubLabel}
+                            setAlertColor={setAlertColor}
+                            getAppointmentList={getAppointmentList}
+                        />
+
                     </Modal>
                     <Modal
                         open={isResheduleClicked}
@@ -387,7 +387,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
-                                setAlertColor = {setAlertColor}
+                                setAlertColor={setAlertColor}
                                 handleNavigation={handleNavigation}
                                 getAppointmentList={getAppointmentList}
                             />
