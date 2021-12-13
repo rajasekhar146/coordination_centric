@@ -100,9 +100,9 @@ const WeekDaysViewComponent = props => {
   const [newTimings, setTimeSlots] = useState([])
   const [newAvailabilities, setNewAvailabilities] = useState([])
   const interval = 30
-  const startSlotHour = 8
+  const startSlotHour = 6
   const startSlotMinute = 0
-  const endSlotHour = 22
+  const endSlotHour = 23
   const endSlotMinute = 0
   const [appointmentReason, setAppointmentReason] = useState('')
   const [invitedMembers, setInvitedMembers] = useState([
@@ -553,13 +553,21 @@ const WeekDaysViewComponent = props => {
       </div>
       <div className="wdv__row">
         <div className="wdv__section">
-          {primaryDate.Day === null ? (
+          {primaryDate.Day === null || secondaryDate.Day === null ? (
             <Button className="wdv__next__btn">Next</Button>
-          ) : (
+          ) : null }
+
+          {role === 'doctor' && primaryDate.Day != null ? (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
               Request Appointment
             </Button>
-          )}
+          ) : null}
+
+          {role === 'patient' && primaryDate.Day != null && secondaryDate.Day != null? (
+            <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
+              Request Appointment
+            </Button>
+          ) : null}
         </div>
       </div>
 

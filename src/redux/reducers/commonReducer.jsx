@@ -48,8 +48,8 @@ const flagMsg = {
 }
 
 const buildTimeSlots = () => {
-  var startTime = moment().set({ hour: 8, minute: 0 })
-  const endTime = moment().set({ hour: 22, minute: 0 })
+  var startTime = moment().set({ hour: 6, minute: 0 })
+  const endTime = moment().set({ hour: 23, minute: 0 })
   const interval = 30
   var timeSlots = []
   do {
