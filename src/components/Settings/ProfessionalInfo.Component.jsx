@@ -119,18 +119,22 @@ const PersonalInfo = props => {
     })
   }
 
-  const handleDeleteFile = idx => {
+  const handleDeleteFile = (fName, idx) => {
+    console.log('handleDeleteFile >> fName', fName)
+    console.log('handleDeleteFile >> idx', idx, certificates)
+    console.log('handleDeleteFile >> certificates', certificates)
+    console.log('handleDeleteFile >> selectedFiles', selectedFiles)
     var newFiles = []
     var newTempFiles = []
     certificates.forEach((file, index) => {
-      console.log('update-certificate-redux', file, index, idx)
-      if (index != idx) {
+      console.log('update-certificate-redux', file)
+      if (file.certificate_name != fName) {
         newFiles.push({ certificate_name: file.certificate_name })
       }
     })
     selectedFiles.forEach((file, index) => {
-      console.log('update-certificate-local', file, index, idx)
-      if (index != idx) {
+      console.log('update-certificate-local', file)
+      if (idx != index) {
         newTempFiles.push(file)
       }
     })
@@ -194,6 +198,14 @@ const PersonalInfo = props => {
       var files = mpInfo.certificates
       //files.push('Prkaash.doc')
       setCertificates(files)
+      var newFiles = []
+      files.forEach(f => {
+        const c = {
+          certificate_name: f,
+        }
+        newFiles.push(c)
+      })
+      dispatch(memberProfessionalInfoCertificates(newFiles))
 
       console.log('files', files)
 
@@ -463,7 +475,7 @@ const PersonalInfo = props => {
   }
 
   const viewCertificates = async fileName => {
-     console.log('viewCertificates', fileName)
+    console.log('viewCertificates', fileName)
     let certificateResponse = await organizationService.downloadFile({ name: fileName })
     const url = get(certificateResponse, ['data', 'data', 'url'], '')
     console.log('certificateResponse', url)

@@ -223,9 +223,20 @@
 }
 .upload_icon {
     position: absolute;
-    left: 8px;
-    top: 12px;
+    left: -30px;
+    top: 2px;
+    align-items: center;
+    justify-content: center;
 }
+
+
+.file_icon {
+    position: absolute;
+    top: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
 .od_dropzone_progress {
     position: relative;
     width: 100%;
