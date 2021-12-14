@@ -345,7 +345,12 @@ const StaffItemComponent = props => {
             style={{ width: '100%',cursor:"pointer" }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]
-                if (row[column.id]) value = row[column.id]
+                if(column.id == 'role'){
+                    if (row[column.id]) 
+                    value = <span style={{textTransform: 'capitalize'}}> {row[column.id]}</span> 
+                }else{
+                    if (row[column.id]) value = row[column.id]
+                }
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 

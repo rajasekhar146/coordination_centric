@@ -350,6 +350,10 @@ const MemberItemComponent = props => {
             {columns.map(column => {
                 var value = row[column.id]
                 if (row[column.id]) value = row[column.id]
+                if(column.id == 'role'){
+                    if (row[column.id]) 
+                    value = <span style={{textTransform: 'capitalize'}}> {row[column.id]}</span> 
+                }
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 

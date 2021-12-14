@@ -201,7 +201,7 @@ const UpcomongAppointmentComponent = props => {
                 let recordNew = {};
                 if (role === "doctor") {
                     recordNew = {
-                        name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
+                        name: element?.userId?.first_name + " "  + (element?.userId?.last_name),
                         profile: element?.userId?.profilePic,
                         location: 'Online',
                         date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
@@ -216,7 +216,7 @@ const UpcomongAppointmentComponent = props => {
 
                 } else {
                     recordNew = {
-                        name: element?.doctorId?.first_name || "" + " " + element?.doctorId?.last_name || "",
+                        name: element?.doctorId?.first_name+ " "  + element?.doctorId?.last_name ,
                         profile: element?.doctorId?.profilePic,
                         location: 'Online',
                         date: moment(element.startTime).format('ddd, Do MMM'),
