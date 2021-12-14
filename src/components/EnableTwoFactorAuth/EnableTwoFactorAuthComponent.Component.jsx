@@ -35,7 +35,7 @@ const EnableTwoFactorAuth = () => {
 
   useEffect(() => {
     // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFactor_auth_type === 'none' && !enableTwofa ) {
+    if (twoFactor_auth_type !== 'none' && !enableTwofa ) {
       history.push(`/dashboard`)
     }
   }, [])

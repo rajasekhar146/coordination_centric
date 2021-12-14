@@ -259,6 +259,17 @@ const DashboardComponent = () => {
     setElementStats(dashboardComponentConfig[role])
     getDashboardDetails()
   }, [])
+  
+  const isShowCopleateProfile = () => {
+    switch(role) {
+      case 'doctor':
+      case 'patient':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
 
   const close2FaModel = () => {
     // const res = authenticationService.skipTwoFa()
@@ -267,7 +278,9 @@ const DashboardComponent = () => {
     //   // dispatch(setCopmletPropfilePopup(true))
     // })
     setIsOpen2FA(false)
-    setIsOpenCompleateProfile(true)
+    if(isShowCopleateProfile()) {
+      setIsOpenCompleateProfile(true)
+    }
     dispatch(setSkip2fa(true))
   }
 

@@ -10,7 +10,7 @@ import { authenticationService } from '../../services'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCompleteProfile } from '../../redux/actions/commonActions'
+import { setCompleteProfile, enableTwofa } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +43,8 @@ const VerificationCodePage = props => {
 
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
-  const [enableTwofa, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
+  const role = get(currentUser, ['data', 'data', 'role'], false)
+  const [enableTwofavalue, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
   const [activeResend, setActiveResend] = useState(false)
 
 
@@ -51,7 +52,7 @@ const VerificationCodePage = props => {
 
   useEffect(() => {
     // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFactor_auth_type === 'none' && !enableTwofa) {
+    if (twoFactor_auth_type !== 'none' && !enableTwofavalue) {
       history.push(`/dashboard`)
     }
   }, [])
@@ -70,6 +71,18 @@ const VerificationCodePage = props => {
     }
   }
 
+  const isShowCopleateProfile = () => {
+    switch(role) {
+      case 'doctor':
+      case 'patient':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+
+
   const handleSubmit = () => {
     console.log('handleSubmit 4444', verificationCode, method, currentUserEmail)
     const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
@@ -77,10 +90,10 @@ const VerificationCodePage = props => {
       .then(() => {
         // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        if (!last_login_time) {
+        if (!last_login_time && isShowCopleateProfile) {
           dispatch(setCompleteProfile(true))
-
         }
+        dispatch(enableTwofa(false))
       })
       .catch(() => {
         history.push(`/2faverificationfail`)
