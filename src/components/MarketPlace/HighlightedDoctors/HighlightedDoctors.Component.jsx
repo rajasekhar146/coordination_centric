@@ -48,7 +48,7 @@ const HighlightedDoctorsComponent = () => {
   return (
     <div className="hd__main__div">
       <div className="hd__row">
-        {doctors &&
+        {doctors.length > 0 && 
           doctors.map(doctor => {
             return <TopDoctorComponent doctor={doctor} />
           })}

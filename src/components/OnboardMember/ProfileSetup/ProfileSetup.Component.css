@@ -231,4 +231,5 @@
 
 .two-grid .MuiOutlinedInput-root{
     height: 100%;
+    align-items:start;
 }

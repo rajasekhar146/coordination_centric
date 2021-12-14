@@ -203,7 +203,7 @@ const AppointmentItemComponent = props => {
                 setIsRescheduleClicked(true)
                 break
             case 'setIsViewClicked':
-                history.push(`/viewApointment/${row.appointmentid}`)
+                history.push(`/viewApointment/${type}/${row.appointmentid}`)
                 setIsViewClicked(true)
                 break
             case 'setIsViewClicked':
@@ -296,7 +296,7 @@ const AppointmentItemComponent = props => {
     }
 
     const handleRowClick = async (i, row) => {
-        history.push(`/viewApointment/${row.appointmentid}`)
+        history.push(`/viewApointment/${type}/${row.appointmentid}`)
     }
     return (
         <TableRow
@@ -333,8 +333,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
-                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
+                                <img className="ap_profile" src={value} alt="profile" className="nb__profile__image" />
+                                {/* <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} /> */}
                             </div>
                         </div>
                     </TableCell>
