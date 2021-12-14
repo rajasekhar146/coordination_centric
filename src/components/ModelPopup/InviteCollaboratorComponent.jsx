@@ -140,7 +140,7 @@ const InviteCollaboratorComponent = props => {
                                 }}
                             />
                         </FormControl>
-                        {errors.name && <p className="io__required">{errors.name.message}</p>}
+                        {errors.facilityName && <p className="io__required">{errors.facilityName.message}</p>}
                     </div>
 
 
@@ -167,7 +167,7 @@ const InviteCollaboratorComponent = props => {
                                 }}
                             />
                         </FormControl>
-                        {errors.email && <p className="io__required">{errors.email.message}</p>}
+                        {errors.facilityEmail && <p className="io__required">{errors.facilityEmail.message}</p>}
                         {isExist && <p className="io__required">{isExist}</p>}
 
                     </div>

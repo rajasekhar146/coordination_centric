@@ -188,7 +188,7 @@ const PatientHealthDetails = props => {
         if (get(res, ['data', 'status'], '') === 200) {
             setOpenFlash(true)
             setAlertMsg('Saved')
-            setSubLabel('Your health info was successfuly updated.')
+            setSubLabel('Your health info was successfully updated.')
             setAlertColor('success')
             getMemberDetails()
         }

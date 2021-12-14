@@ -137,16 +137,16 @@ const ProfileSetupComponent = () => {
               onClick={() =>
                 selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
                   const formData = new FormData()
-                  formData.append(`image`, file)
+                  formData.append(`files`, file)
                   console.log('Files Selected', { name, size, source, file })
                   memberService
-                    .uploadCertificate(formData, 'doctor', null)
+                    .uploadFile(formData)
                     .then(response => {
                       if (response?.data) {
-                        var fileData = response.data
-                        console.log('fileData', fileData)
-                        setProfilePicName(fileData.data)
-                        member.member.profilePic = fileData.data
+                        // var fileData = response.data
+                        // console.log('fileData', fileData)
+                        setProfilePicName(response.data.data)
+                        member.member.profilePic = response.data.data
                         dispatch(newMember(member.member))
                       }
                     })

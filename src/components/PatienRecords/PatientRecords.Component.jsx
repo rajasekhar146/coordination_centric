@@ -158,8 +158,8 @@ const PatienRecordsComponent = (props) => {
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
-    { id: 'first_name', label: 'Patient', minWidth: 180, align: 'left', visible: true },
-    { id: 'last_name', label: 'Doctor', minWidth: 100, align: 'left', visible: true },
+    { id: 'name', label: 'Patient', minWidth: 180, align: 'left', visible: true },
+    { id: 'doctor_name', label: 'Doctor', minWidth: 100, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 200, align: 'left', visible: true },
     { id: 'state', label: 'Status', minWidth: 150, align: 'left', visible: true },
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
