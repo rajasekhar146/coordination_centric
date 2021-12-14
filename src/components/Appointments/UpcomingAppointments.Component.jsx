@@ -468,10 +468,9 @@ const UpcomongAppointmentComponent = props => {
                 :
                 <ScheduleCalendar
                     appointmentList={appointmentList}
+                    type={type}
                 />
-
             }
-
         </div>
     );
 }

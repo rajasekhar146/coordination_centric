@@ -18,7 +18,8 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales
 
 const ScheduleCalendar = (props) => {
   const {
-    appointmentList
+    appointmentList,
+    type
   } = props;
 
   const currentUser = authenticationService.currentUserValue
@@ -27,13 +28,8 @@ const ScheduleCalendar = (props) => {
   const [calenderAppointments, serCalenderAppointments] = useState([])
 
   const getLabel = (appointment) => {
-    return (
-      <React.Fragment>
-        <label>
-          {`[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}] ${role === 'patient' ? 'Dr.' : ''} ${appointment.name}`}
-        </label>
-      </React.Fragment>
-    )
+    return `[${Capitalize(appointment.status === 'accepted' ? 'Confirmed' : appointment.status)}] ${role === 'patient' ? 'Dr.' : ''} ${appointment.name}`
+    
   }
   // const getLabel = (appointment) => {
   //   return (
@@ -109,9 +105,12 @@ const ScheduleCalendar = (props) => {
         style={{ height: 715 }}
         timeslots={1}
         onSelectEvent={(event) => {
-          if (event.status === 'accepted') {
-            history.push(`/video-call/${event.appointmentid}`)
-          }
+          history.push(`/viewApointment/${type}/${event.appointmentid}`)
+
+          // if (event.status === 'accepted') {
+          //   history.push(`/video-call/${event.appointmentid}`)
+          // } else {
+          // }
         }}
         // components = {{toolbar : CustomToolbar}}
         eventPropGetter={(event) => {

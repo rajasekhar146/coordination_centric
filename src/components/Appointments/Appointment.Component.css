@@ -230,6 +230,7 @@
 .view-header{
     display: inline-flex;
     margin-bottom: 25px;
+    position: relative;
 }
 
 .view-app{
@@ -373,4 +374,20 @@
     left: -25px;
     top: 5px;
     position: absolute;
+}
+.od__join_call {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    /* identical to box height, or 131% */
+    letter-spacing: 0.2px;
+
+    /* Primary/Default */
+    color: #E42346;
+    text-transform: capitalize;
+    position: absolute;
+    right: -344px;
+    top: 20px;
+    top: 20px;
 }
