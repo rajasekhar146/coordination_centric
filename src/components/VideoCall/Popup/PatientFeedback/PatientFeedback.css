@@ -1,0 +1,42 @@
+
+.popup-header {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.popup-header h1 {
+ font-size:18px;
+ margin: 5px 0;
+}
+.popup-header .subtitle {
+    font-size: 12px;
+    color: #A0A4A8;
+    margin: 0;
+}
+
+.tow-round-icon {
+    padding: 12px;
+    background-color: #F2F4F7;
+    border-radius: 100%;
+    width: 42px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.tow-round-icon .MuiSvgIcon-root{
+    padding: 12px;
+    background-color: #e3e7ed;
+    border-radius: 100%;
+    font-size: 18px;
+}
+.popup-main-content .MuiTypography-root{
+font-size: 13px;
+margin-bottom: 2px;
+}
+.max-char {
+    color: #A0A4A8;
+}
+.comment-field .MuiOutlinedInput-root fieldset{
+    border-radius: 12px;
+}

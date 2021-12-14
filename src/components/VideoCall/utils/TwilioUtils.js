@@ -11,6 +11,7 @@ import {
 import { setMessages,setShowOverlay,setTimerCount,setCallActive} from '../../../redux/actions/video-call-actions';
 import * as env from '../../../environments/environment';
 import { authHeader } from '../../../helpers';
+const callStart = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-start.mp3");
 const apiURL = env.environment.apiBaseUrl
 
 const audioConstraints = {
@@ -26,19 +27,24 @@ const videoConstraints = {
   },
 };
 let dataChannel = null;
-export const getTokenFromTwilio = async(roomId,identity,setAccessToken,)=>{
-  console.log("I Got the request")
+let dataFunctionChannel = null;
+export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoTokenErrorMsz,setVideoCallDuration)=>{
   let axiosConfig = {
     headers: authHeader(),
-    }
+  }
+  
     const randomId = uuidv4();
-    const response = await axios.get(`${apiURL}/video/videotoken?identity=${roomId}${identity}`,axiosConfig);
-    //const response = await axios.get(`https://videocall-service-3612-dev.twil.io/token-service?identity=${randomId}jitu`)
-   // const response = await axios.get(`https://videocall-service-6533-dev.twil.io/token-service?identity=${roomId}${identity}`)
-    const data = response.data;
-    if(data.accessToken){
-        setAccessToken(data.accessToken)
-    }
+    axios.get(`${apiURL}/video/videotoken?identity=${roomId}${identity}`,axiosConfig)
+    .then((response)=>{
+      const data = response.data;
+      if(data.accessToken){
+        setAccessToken(data.accessToken);
+        setVideoCallDuration(data.timeduration)
+        //setVideoCallDuration(6000000)
+      }
+    }).catch((err)=>{
+      setVideoTokenErrorMsz(err);
+    })
 }
 export const connectToRoom = async (
   accessToken,
@@ -59,14 +65,16 @@ export const connectToRoom = async (
                     // create data track for messages
                     const audioTrack = new LocalAudioTrack(stream.getAudioTracks()[0]);
                     const dataTrack = new LocalDataTrack();
+                    const dataFunctionTrack = new LocalDataTrack();
                     dataChannel = dataTrack;
+                    dataFunctionChannel = dataFunctionTrack;
                     let videoTrack;
 
                     if (!onlyWithAudio) {
                       videoTrack = new LocalVideoTrack(stream.getVideoTracks()[0]);
-                      tracks = [audioTrack, videoTrack, dataTrack];
+                      tracks = [audioTrack, videoTrack, dataTrack, dataFunctionTrack];
                     } else {
-                      tracks = [audioTrack, dataTrack];
+                      tracks = [audioTrack, dataTrack, dataFunctionTrack];
                     }
 
                     const room = await connect(accessToken, {
@@ -77,6 +85,7 @@ export const connectToRoom = async (
                     console.log(room);
                     store.dispatch(setCallActive(true));
                     // store.dispatch(setTimerCountF(true));
+                    callStart.play()
                     setRoom(room);
                     store.dispatch(setShowOverlay(false));
                    
@@ -118,3 +127,26 @@ export const addMessageToMessenger=(message)=>{
   messages.push(message)
   store.dispatch(setMessages(messages))
 }
+//--------------------------------------------------------------------
+
+// // Data chennel utils 
+// export  const sendActionUsignDataFunctionChannel =(syncCountDown,syncCountDownValue)=>{
+
+//   let ownAction = {
+//     syncCountDown,
+//     syncCountDownValue
+//   };
+//   //addMessageToMessenger(ownAction);
+//   const twilioSyncAction = {
+//     syncCountDown,
+//     syncCountDownValue
+//   } 
+//   const stringifiedSyncAction = JSON.stringify(twilioSyncAction) 
+//   dataFunctionChannel.send(stringifiedSyncAction)
+// };
+
+// export const addMessageToFunction=(message)=>{
+// const messages = [...store.getState().videoCallReducer.messages];
+// messages.push(message)
+// store.dispatch(setMessages(messages))
+// }

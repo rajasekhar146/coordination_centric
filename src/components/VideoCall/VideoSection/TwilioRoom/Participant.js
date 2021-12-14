@@ -59,7 +59,6 @@ class Participant extends Component {
       });
     }
   }
-
   render() {
     return (
       <div className="participant" id={this.props.participant.identity}>
@@ -69,7 +68,7 @@ class Participant extends Component {
           }
 
           if (track.kind === "video") {
-            return <VideoTrack key={track} track={track} />;
+            return <VideoTrack key={track} track={track} name={this.props.participant.identity.slice(24)}/>;
           }
         })}
       </div>

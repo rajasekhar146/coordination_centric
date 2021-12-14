@@ -13,6 +13,15 @@ const initState = {
   isFullScreen:false,
   timerCount:false,
   callActive:false,
+  erroMsz:"",
+  videoCallDuration:"",
+  showApplicationPopup:false,
+  applicationPopup:'',
+  applicationPopupVal:'',
+  userType:{
+    user:null,
+    host:false
+  },
 };
 
 const VideoCallReducer = (state = initState, action) => {
@@ -76,6 +85,36 @@ const VideoCallReducer = (state = initState, action) => {
         return {
           ...state,
           callActive: action.callActive,
+        };
+      case Actions.SET_VIDEO_TOKEN_ERROR_MSZ:
+        return {
+          ...state,
+          erroMsz: action.erroMsz,
+        };
+      case Actions.SET_VIDEO_CALL_DURATION:
+        return {
+          ...state,
+          videoCallDuration: action.videoCallDuration,
+        };
+      case Actions.SET_SHOW_APPLICATION_POPUP:
+        return {
+          ...state,
+          showApplicationPopup: action.showApplicationPopup,
+        };
+      case Actions.SET_APPLICATION_POPUP:
+        return {
+          ...state,
+          applicationPopup: action.applicationPopup,
+        };
+      case Actions.SET_APPLICATION_POPUP_VAL:
+        return {
+          ...state,
+          applicationPopupVal: action.applicationPopupVal,
+        };
+      case Actions.SET_USER_TYPE:
+        return {
+          ...state,
+          userType: action.userType,
         };
     default:
       return state;
