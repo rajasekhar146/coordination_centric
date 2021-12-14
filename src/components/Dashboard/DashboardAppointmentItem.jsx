@@ -223,8 +223,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
-                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
+                                <img className="nb__profile__image" src={value} alt="profile" />
+                                {/* <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} /> */}
                             </div>
                         </div>
                     </TableCell>
