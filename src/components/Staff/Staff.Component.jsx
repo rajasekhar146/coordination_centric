@@ -87,6 +87,7 @@ const StaffComponent = props => {
         setIsLoading(true)
         memberService.getStaffList(organizationId, 'member', limit, skip).then((res) => {
             setStaffList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], []))
             setIsLoading(false)
         }).catch((err) => {
             console.log(err)

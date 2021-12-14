@@ -150,6 +150,9 @@ const OrganisationItem = props => {
       case 'pending_verification':
         return 'Pending verification'
         break
+      case 'pending_bank_verification':
+        return 'Pending Bank Verification'
+        break
       case 'pending_acceptance':
         return 'Pending acceptance'
         break

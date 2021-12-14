@@ -259,10 +259,10 @@ const SignInComponent = () => {
               }}
               onMouseOver={() => {
                 setActiveLink(true)
-            }}
-            onMouseOut={() => {
+              }}
+              onMouseOut={() => {
                 setActiveLink(false)
-            }}
+              }}
             > Forgot Password?
             </div>
           </div>
