@@ -140,7 +140,7 @@ const ProfileSetupComponent = () => {
                   formData.append(`files`, file)
                   console.log('Files Selected', { name, size, source, file })
                   memberService
-                    .uploadFile(formData)
+                    .uploadFile('profile', formData)
                     .then(response => {
                       if (response?.data) {
                         // var fileData = response.data

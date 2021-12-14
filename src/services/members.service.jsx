@@ -60,13 +60,13 @@ function uploadCertificate(formData, role, onUploadProgress) {
   )
 }
 
-function uploadFile(file) {
+function uploadFile(type , file) {
   let axiosConfig = {
     headers: authHeader()
   }
   return (
     axios
-      .post(`${apiURL}/files/fileUpload/profile` , file , axiosConfig)
+      .post(`${apiURL}/files/fileUpload/${type}` , file , axiosConfig)
       .then(data => {
         return data
       })

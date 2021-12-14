@@ -54,10 +54,10 @@ const PatientRecordsDeatils = (props) => {
                     {/* <CloseIcon className="right" onClick={props.closeList} /> */}
                     </div>
                     <div className="patient-deatils-info">
-                        <p className="main-title"> Doctor</p>
+                        <p className="main-title"> Patient</p>
                         <div className="patient-img-wrp">
-            <img src={appointmentData.data?.profilePic} alt="Profile" className="nb__profile__image" />
-                            <p className="patient-name"> {appointmentData.data?.doctorName}</p>
+            <img src={appointmentData.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
+                            <p className="patient-name"> {appointmentData.data?.patientName}</p>
                         </div>
                     </div>
                 </div>

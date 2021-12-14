@@ -192,7 +192,7 @@ const PersonalInfo = props => {
        
   })
       memberService
-      .uploadFile(formData
+      .uploadFile('profile', formData
         // setProgress(Math.round((100 * event.loaded) / event.total));
       )
       .then(response => {
