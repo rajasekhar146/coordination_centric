@@ -114,20 +114,24 @@ function askPatientReschedule(id) {
 }
 
 function getDoctorsList(searchParam) {
-    let axiosConfig = {
-        headers: authHeader(),
-    }
-    return (
-        axios
-            .get(
-                `${apiURL}/users/getDoctorlist?limit=${searchParam.pageLimit}&page=${searchParam.pageNo}&sort_field=${searchParam.sortByColoumn}&sort=${searchParam.sortOrder}&search_key=${searchParam.searchKey}&search_value=${searchParam.searchValue}&speciality=${searchParam.speciality}&country=${searchParam.country}&state=${searchParam.state}&city=${searchParam.city}&zipcode=${searchParam.zipcode}`,
-                axiosConfig
-            )
-            //.then(handleResponse)
-            .then(data => {
-                return data
-            })
-    )
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('getDoctorsList >> axiosConfig ', axiosConfig, searchParam)
+  let url = `${apiURL}/users/getDoctorsListForPatient?limit=${searchParam.pageLimit}&skip=${searchParam.pageNo}`
+  if(searchParam.searchValue.trim().length > 0)
+    url += `&search_text=${searchParam.searchValue}`
+  return (
+    axios
+      .get(
+        url,
+        axiosConfig
+      )
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
 }
 
 function getHighlightedDoctorsList() {

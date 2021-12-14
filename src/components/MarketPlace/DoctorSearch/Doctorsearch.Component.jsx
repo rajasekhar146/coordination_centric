@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import {appointmentService} from '../../../services'
+import { appointmentService } from '../../../services'
 import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
@@ -72,13 +72,12 @@ const DoctorsearchComponent = props => {
   const isAllSelected = specialists.length > 0 && selected.length === specialists.length
   const handleChange = event => {
     let value = event.target.value
-    if(value && value.length>0 && value[0]=="Speciality"){
-    value.splice(0, 1);
+    if (value && value.length > 0 && value[0] == 'Speciality') {
+      value.splice(0, 1)
+    } else {
+      // value =["Speciality"];
     }
-    else{ 
-    // value =["Speciality"];
-    }
-    console.log("handleChange",value);
+    console.log('handleChange', value)
     if (value[value.length - 1] === 'all') {
       setSelected(selected.length === specialists.length ? [] : specialists)
       return
@@ -96,8 +95,6 @@ const DoctorsearchComponent = props => {
   // const handleClear = () => {
   //   props.setSearchText('')
   // }
-
-
 
   // const StyledMenu = styled(props => (
   //   <Menu
@@ -132,7 +129,7 @@ const DoctorsearchComponent = props => {
     setSpecialties([...uniqueSpecialities])
   }, [])
   return (
-    <div className="ds__section" style={{marginBottom:20}}>
+    <div className="ds__section" style={{ marginBottom: 20 }}>
       <div className="ds__row__div">
         <div className="ds__column__div" style={{ width: '30%' }}>
           <TextField
@@ -150,77 +147,7 @@ const DoctorsearchComponent = props => {
           />
         </div>
         <div className="ds__column__div ds__dropdown__section">
-          <div className="ds__menu">
-            <div className="ds__spl__menu">
-              <FormControl className={classes.formControl}>
-                <Select
-                  labelId="mutiple-select-label"
-                  multiple
-                  value={selected.length>0?selected:["Speciality"]}
-                  onChange={handleChange}
-                  renderValue={selected => selected.join(', ')}
-                  MenuProps={MenuProps}
-                  className="ds__dropdown__menu"
-                >
-                  
-                  <MenuItem
-                    value="all"
-                    classes={{
-                      root: isAllSelected ? classes.selectedAll : '',
-                    }}
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        classes={{ indeterminate: classes.indeterminateColor }}
-                        checked={isAllSelected}
-                        indeterminate={selected.length > 0 && selected.length < specialists.length}
-                      />
-                    </ListItemIcon>
-                    <ListItemText classes={{ primary: classes.selectAllText }} primary="Select All" />
-                  </MenuItem>
-                  {specialists && specialists.map(option => (
-                    <MenuItem key={option} value={option}>
-                      <ListItemIcon>
-                        <Checkbox checked={selected.indexOf(option) > -1} />
-                      </ListItemIcon>
-                      <ListItemText primary={option} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-            <div className="ds__status__menu">
-             
-                <Select 
-                  labelId="mutiple-select-label"
-                  multiple
-                  value={(props.searchState||props.searchCity||props.searchZipcode) ?[props.searchState,props.searchCity,props.searchZipcode]:["Locations"]}
-                  renderValue={selected =>selected.filter(x=>x).join(', ')}
-                  // onChange={handleChange}
-                  MenuProps={MenuProps}
-                  className="ds__dropdown__menu"
-                >
-                  <MenuItem>
-                    <ListItemIcon>
-                <TextField margin="normal" defaultValue={props.searchState}  placeholder="State"   inputProps={{ className: 'pas__problem__textbox' }}  onChange={(e)=>{props.setSearchState(e.target.value)}}/>
-                    </ListItemIcon>
-                  </MenuItem>
-                    <MenuItem >
-                      <ListItemIcon>
-                      <TextField margin="normal" defaultValue={props.searchCity}  placeholder="City"  inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{props.setSearchCity(e.target.value)}}/>
-
-                      </ListItemIcon>
-                    </MenuItem>
-                    <MenuItem >
-                      <ListItemIcon>
-                      <TextField margin="normal"   placeholder="Zipcode" defaultValue={props.searchZipcode}   inputProps={{ className: 'pas__problem__textbox' }} onChange={(e)=>{props.setSearchZipcode(e.target.value)}}/>
-
-                      </ListItemIcon>
-                    </MenuItem>
-                </Select>
-
-            </div>
-          </div>
+         
         </div>
       </div>
     </div>

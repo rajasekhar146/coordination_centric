@@ -72,40 +72,34 @@ const columns = [
 //   },
 // ]
 
-
-const DoctorListComponent = (props) => {
-  console.log("proops", props);
-  const [doctorList, setDoctorList] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+const DoctorListComponent = props => {
+  console.log('proops', props)
+  const [doctorList, setDoctorList] = React.useState([])
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-
+    setPage(newPage)
+  }
 
   // const doctorList =props.doctorsList;
 
   useEffect(() => {
-    let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    setDoctorList(result);
+    let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    setDoctorList(result)
   }, [props.doctorsList])
 
   useEffect(() => {
-    let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    setDoctorList(result);
+    let result = props.doctorsList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    setDoctorList(result)
   }, [page, rowsPerPage])
-
- 
 
   return (
     <div>
       <div>
-
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <TableContainer id="scrollableDiv">
             <Table stickyHeader aria-label="sticky table">
@@ -131,22 +125,12 @@ const DoctorListComponent = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {
-                  doctorList &&
-                  doctorList.map(row => (
-                    <DoctorItem
-                    row={row}
-                     />
-                  ))
-
-                 
-                } 
-            {(!doctorList|| doctorList && doctorList.length == 0) && (
-              <div style={{padding:10}}>
-                <span>No records found</span>
-              </div>
-            )}
-
+                {doctorList && doctorList.map(row => <DoctorItem row={row} />)}
+                {(!doctorList || (doctorList && doctorList.length == 0)) && (
+                  <div style={{ padding: 10, width: '200px' }}>
+                    <span>No records found</span>
+                  </div>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
