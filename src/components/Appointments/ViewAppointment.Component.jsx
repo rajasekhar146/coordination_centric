@@ -14,22 +14,38 @@ import get from 'lodash.get';
 import { authenticationService } from '../../services'
 import Chat from '../VideoCall/Chat/Chat'
 import CircleIcon from '@mui/icons-material/Circle'
+import sendIcon from '../../assets/icons/Vector.png'
+import chatIcon from '../../assets/icons/chat_icon.png'
+import reject from '../../assets/icons/reject.png'
 // import {ChatBox} from 'react-chatbox-component';
 // import 'react-chatbox-component/dist/style.css';
 function ViewAppointmentComponent() {
 
-  const { id } = useParams()
+  const { id , type} = useParams()
   const [appointmentList, setAppointmentList] = useState([]);
   const [showImage , setShowImage] = useState(false);
   const [imageValue, setImageValue ] = useState();
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
-  // const [messages, setMessages] = useState([]);
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
+  const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState([]);
   const [toggleChat, setToggleChat] = useState(false);
+  const [senderUserId , setSenderUserId] = useState('');
+  const [recieverUserId , setRecieverUserId] = useState('')
+  const [senderImg , setSenderImg] = useState('')
+  const [recieverImg , setRecieverImg] = useState('');
+  const [showChat , setShowChat] = useState(false);
+
 
   useEffect(() => {
     getAppointmentDetails();
-    getAppointmentChat()
+    getAppointmentChat();
+    if(type == 'history'){
+      setShowChat(false)
+    }else{
+      setShowChat(true)
+    }
 }, [])
 
 const openImage = (docs)=>{
@@ -41,14 +57,26 @@ const handleClose = () =>{
 }
 const getAppointmentDetails = async () => {
     let res = await appointmentService.getAppointmentById(id);
+    if(res.data.data.doctorId == userId) {
+      setSenderUserId(res.data.data.doctorId)
+      setRecieverUserId(res.data.data.patientId)
+      setSenderImg(res.data.data.profilePic)
+      setRecieverImg(res.data.data.profilePicPatient)
+
+    }else{
+      setSenderUserId(res.data.data.patientId)
+      setRecieverUserId(res.data.data.doctorId)
+      setSenderImg(res.data.data.profilePicPatient)
+      setRecieverImg(res.data.data.profilePic)
+    }
     setAppointmentList(res.data);
-    console.log('params' , res.data)
+    console.log('params' , res.data.data)
 }
 
 const getAppointmentChat = async () =>{
   let chat = await appointmentService.getAppointmentChat(id);
-  // setMessages(chat.data?.data?.messages)
-  console.log('1222' , chat);
+  setMessages(chat.data?.data?.messages);
+
 }
 const colorcodes = {
   accepted: '#12B76A',
@@ -70,9 +98,6 @@ const confirmAppointment = {
   borderRadius: 3,
   p: 3,
 }
-const closeChatFun = ()=>{
-  setToggleChat(false)
-  }
 const getValue = val => {
   switch (val) {
       case 'accepted':
@@ -101,95 +126,87 @@ const getValue = val => {
   }
 }
 
-const messages = [
-  {
-    "text": "Hello there",
-    "id": "1",
-    "sender": {
-      "name": "Ironman",
-      "uid": "user1",
-      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
-    },
-  },
-  {
-    "text": "Hello there",
-    "id": "2",
-    "sender": {
-      "name": "Ironman",
-      "uid": "user2",
-      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
-    },
-  },
-  {
-    "text": "Hello there",
-    "id": "1",
-    "sender": {
-      "name": "Ironman",
-      "uid": "user1",
-      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
-    },
-  },
-  {
-    "text": "Hello there",
-    "id": "1",
-    "sender": {
-      "name": "Ironman",
-      "uid": "user1",
-      "avatar": "https://data.cometchat.com/assets/images/avatars/ironman.png",
-    },
-  },
-]
-const user = {
-  "uid" : "user1"
-} 
+const showChatDialog = () =>{
+  setShowChat(!showChat)
+}
+
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+      sendMessage()
+  }
+}
+const sendMessage = async ()=>{
+  console.log('do validate' , inputValue);
+  if(inputValue.length > 0){
+    const msgRequest = {"messages": 
+    [{"message": inputValue, 
+    "from": senderUserId, 
+    "to": recieverUserId}]}
+  
+  let chat = await appointmentService.sendMessage(id , msgRequest);
+  getAppointmentChat();
+  setInputValue('')
+  }
+ 
+
+}
     return (
       <div className="view-app">
-        <div className="view-header"> 
-        
-        <button
-          onClick={() => {
-            history.push('/appointments')
-          }}
-          className="ac__back__btn view_appointment_back"
-        >
-          <ArrowBackIosNewIcon className="arrow_align" fontSize="sm" />
-          <span>Back</span>
-        </button>
-        <div className="od__title__text">Appointments Summary</div>
+        <div className="view-header">
+          <button
+            onClick={() => {
+              history.push('/appointments')
+            }}
+            className="ac__back__btn view_appointment_back"
+          >
+            <ArrowBackIosNewIcon className="arrow_align" fontSize="sm" />
+            <span>Back</span>
+          </button>
+          <div className="od__title__text">Appointments Summary</div>
 
-        <div className={`od__${appointmentList.data?.appointmentStatus?.toLowerCase()}__status align_status`}>
-                            <CircleIcon fontSize="small" sx={{ color: colorcodes[appointmentList.data?.appointmentStatus?.toLowerCase()] }} />
-                            <div className={`od__${appointmentList.data?.appointmentStatus?.toLowerCase()}__label`}>
-                                {getValue(appointmentList.data?.appointmentStatus)}
-                            </div>
-                        </div>
+          <div className={`od__${appointmentList.data?.appointmentStatus?.toLowerCase()}__status align_status`}>
+            <CircleIcon
+              fontSize="small"
+              sx={{ color: colorcodes[appointmentList.data?.appointmentStatus?.toLowerCase()] }}
+            />
+            <div className={`od__${appointmentList.data?.appointmentStatus?.toLowerCase()}__label`}>
+              {getValue(appointmentList.data?.appointmentStatus)}
+            </div>
+          </div>
         </div>
 
         <div className="summary-page">
           <div className="row-details">
             <p className="row-title">{role == 'doctor' ? 'Patient' : 'Doctor'}</p>
 
-            { role == 'doctor' && <p className="row-data flex-dr">
-            <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
-            {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} /> */}
-              <p className="mar-left-10">{ appointmentList.data?.patientName}</p>
-            </p> }
-            { role != 'doctor' && <p className="row-data flex-dr">
-            <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
-            {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
-              <p>{ appointmentList.data?.doctorName}</p>
-            </p> }
+            {role == 'doctor' && (
+              <p className="row-data flex-dr">
+                <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
+                {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} /> */}
+                <p className="mar-left-10">{appointmentList.data?.patientName}</p>
+              </p>
+            )}
+            {role != 'doctor' && (
+              <p className="row-data flex-dr">
+                <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
+                {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
+                <p>{appointmentList.data?.doctorName}</p>
+              </p>
+            )}
           </div>
-          {role == 'patient' && <div className="row-details">
-            <p className="row-title">Specialty</p>
-            <p className="row-data">{appointmentList.data?.speciality.map((d)=>
-            <span>{d} </span> )}</p>
-          </div> }
+          {role == 'patient' && (
+            <div className="row-details">
+              <p className="row-title">Specialty</p>
+              <p className="row-data">
+                {appointmentList.data?.speciality.map(d => (
+                  <span>{d} </span>
+                ))}
+              </p>
+            </div>
+          )}
           <div className="row-details">
             <p className="row-title">Date / Time</p>
-            <p className="row-data">
-            {moment(new Date(appointmentList.data?.startTime)).format('ddd, Do MMMM YYYY ')}
-          </p>
+            <p className="row-data">{moment(new Date(appointmentList.data?.startTime)).format('ddd, Do MMMM YYYY ')}</p>
           </div>
           <div className="row-details">
             <p className="row-title">Reason for appointment</p>
@@ -198,43 +215,102 @@ const user = {
           <div className="row-details">
             <p className="row-title">Previous Health Condition</p>
             <p className="row-data">
-            {appointmentList.data?.healthinfo[0]?.problems.map((d) =><span> {d} </span>)}</p>
-
+              {appointmentList.data?.healthinfo[0]?.problems.map(d => (
+                <span> {d} </span>
+              ))}
+            </p>
           </div>
           <div className="row-details">
             <p className="row-title">Documents</p>
-            <p className="row-data">{appointmentList.data?.documents.map((docs) => 
-                <span className="docs-view" >
+            <p className="row-data">
+              {appointmentList.data?.documents.map(docs => (
+                <span className="docs-view">
                   <img src={galary_icon} className="galary_icon" alt="success_icon" />
 
-                  <img onClick={()=>{
-                  openImage(docs)
-                }} src={view_details} className="right" alt="success_icon" />
-                  <p className="align__img__name"> {docs}</p> 
-                   </span>
-              
-            )}</p>
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                  <p className="align__img__name"> {docs}</p>
+                </span>
+              ))}
+            </p>
           </div>
-              <div className="row-details">
-               <Chat/> 
+          <div className="row-details">
+            <p className="row-title">Chat</p>
+            
+            <div>
+              {type == 'history' && !showChat &&
+              <button  className={messages.length <= 0  ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'}  className="" disabled={messages.length <= 0} onClick={showChatDialog}>
+                  { messages.length > 0 &&   <img className="msg__icon" src={chatIcon}  alt="upload" />}
+                 View Chat History</button>
+              }
+              {type == 'history' && showChat &&
+              <p className="close_chat" onClick={showChatDialog}>
+                    <img className="chat__close__icon" src={reject} alt="reject" />
+                 Close Chat History</p>
+              }
+              {showChat && 
+               <div className="chat_content">
+               {messages.map(d => (
+                 <div className="chat_body ">
+                   {d.from == userId && (
+                     <p >
+                         <img
+                           src={recieverImg}
+                           alt="Profile"
+                           className="nb__chat__image left_img"
+                         />
+                       <div className="from_chat chat__box">
+                       {d.message}
+                       </div>
+                     </p>
+                   )}
+                   {d.from != userId && (
+                     <p >
+                       <div className="to_chat chat__box">
+                       {d.message}
+                       </div>
+ 
+                         <img
+                           src={senderImg}
+                           alt="Profile"
+                           className="nb__chat__image right_img"
+                         />
+                     </p>
+                   )}
+                 </div>
+               ))}
+               </div>
+              }
+             { type == 'upcoming'  &&
+               <div className="send_message_textbox">
+            <input className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown} 
+                              value={inputValue} onInput={e => setInputValue(e.target.value)}
+                            />
+                    <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
 
-              {/* <ChatBox
-  messages={messages}
-  user={user}
-/> */}
+            </div>
+}
+            </div>
+            
+          </div>
 
-              </div>
-
-          <Modal
-                open={showImage}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={confirmAppointment}>
-                {/* <img src={imageValue} className="galary_icon" alt="success_icon" /> */}
-                <ViewImageComponent category={'doctors_certificate'} pic={imageValue} imageClass={"show_img_div"} showClose = 'true' handleClose={handleClose} />
-                </Box>
-            </Modal>
+          <Modal open={showImage} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={confirmAppointment}>
+              <ViewImageComponent
+                category={'doctors_certificate'}
+                pic={imageValue}
+                imageClass={'show_img_div'}
+                showClose="true"
+                handleClose={handleClose}
+              />
+            </Box>
+          </Modal>
         </div>
       </div>
     )

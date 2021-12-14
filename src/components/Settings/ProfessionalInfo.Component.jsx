@@ -519,9 +519,21 @@ const PersonalInfo = props => {
           <FormControl variant="outlined" className={classes.formControl}>
             <TextField
               {...register('npiId', {
-                required: 'NPI ID is required.',
-                onChange: e => setNPIID(e.target.value),
-              })}
+                required: {
+                    value: true,
+                    message: "NPI ID is required.",
+                },
+                pattern: {
+                    value: /^[1-9]\d*(\d+)?$/i,
+                    message: 'Phone Number accepts only integer',
+                }
+              }
+              
+             )}
+             onChange={e => {
+              setValue('npiId', e.target.value.replace(/[^0-9]/g, ''));
+              setNPIID(e.target.value.replace(/[^0-9]/g, ''))
+            }}
               margin="normal"
               InputProps={{
                 className: classes.input,

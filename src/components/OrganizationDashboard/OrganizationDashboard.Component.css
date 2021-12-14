@@ -354,11 +354,10 @@
     align-items: left !important;
     justify-content: center;
     padding: 8px 4px 8px 4px !important;
-    margin-left: 20px;
 }
 
 .od__menu__text__column {
-    min-width: 100% !important;
+    min-width: 100px !important;
     display: flex;
     align-items: left !important;
     margin-left: 15px;

@@ -164,9 +164,9 @@ const PersonalDetailComponent = () => {
     const newMemberDetail = member?.member
     if (newMemberDetail) {
       await fetchStates(newMemberDetail.country)
-      setValue('first_name', newMemberDetail.first_name)
-      setValue('middle_name', newMemberDetail.middle_name)
-      setValue('last_name', newMemberDetail.last_name)
+      // setValue('first_name', newMemberDetail.first_name)
+      // setValue('middle_name', newMemberDetail.middle_name)
+      // setValue('last_name', newMemberDetail.last_name)
       setValue('ssn', newMemberDetail.ssn)
       setValue('occupation', newMemberDetail.occupation)
       setValue('dob', newMemberDetail.dob)
@@ -316,6 +316,8 @@ const PersonalDetailComponent = () => {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       value={dateOfBirth}
+                      openTo={new Date('1980/01/01')}
+                      maxDate={new Date('12/31/1995')}    
                       onChange={newValue => {
                         setDOB(newValue)
                         setDateEntered(true)
