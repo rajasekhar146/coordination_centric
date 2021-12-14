@@ -79,7 +79,7 @@ const StaffComponent = props => {
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
 

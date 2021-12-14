@@ -25,6 +25,8 @@ import PatientItem from './PatientItem.Component'
 import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
+import TablePagination from '@mui/material/TablePagination'
+import CircularProgress from '@mui/material/CircularProgress';
 import './PatientRecords.Component.css'
 
 const useStyles = makeStyles(theme => ({
@@ -113,7 +115,7 @@ const PatienRecordsComponent = (props) => {
     fromVideCall,
     setfromVideCall,
     videoClick
-} = props
+  } = props
 
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
@@ -126,7 +128,10 @@ const PatienRecordsComponent = (props) => {
   const [limit, setLimit] = useState(10)
   const [skip, setSkip] = useState(0)
   const [patientRecords, setPatientRecords] = useState([])
-
+  const [isLoading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(0)
+  const [count, setCount] = useState(50)
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const open = Boolean(anchorEl)
   const classes = useStyles()
 
@@ -140,20 +145,21 @@ const PatienRecordsComponent = (props) => {
     setOpenSharePatientRecord(false)
   }
 
-
   const getPatientRecords = async () => {
-    const res = await memberService.getPatientRecords(userId, limit, skip)
-    if (res.status === 200) {
+    setIsLoading(true)
+    memberService.getPatientRecords(userId, limit, skip).then((res) => {
       setPatientRecords(get(res, ['data', 'data', '0', 'totalData'], []))
-    } else {
-
-    }
+      setIsLoading(false)
+    }).catch((err) => {
+      console.log(err)
+      setIsLoading(false)
+    })
 
   }
 
   useEffect(() => {
     getPatientRecords()
-  }, [])
+  }, [skip, limit, rowsPerPage])
 
 
   const columns = [
@@ -165,6 +171,19 @@ const PatienRecordsComponent = (props) => {
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
   ]
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    setSkip(limit * newPage)
+    setIsLoading(true)
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    setSkip(0)
+    setLimit(parseInt(event.target.value, 10))
+    setIsLoading(true)
+  };
 
   return (
     <div className="od__main__div">
@@ -203,28 +222,55 @@ const PatienRecordsComponent = (props) => {
                     )}
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {patientRecords.map((row, index) => (
-                    <PatientItem
-                      row={row}
-                      index={index}
-                      open={open}
-                      handleClose={handleClose}
-                      classes={classes}
-                      getTextColor={getTextColor}
-                      menuList={menuList}
-                      setOpenSharePatientRecord={setOpenSharePatientRecord}
-                      setInvitePatientClicked={setInvitePatientClicked}
-                      setSelectedItem={setSelectedItem}
-                      columns={columns}
-                      fromVideCall={fromVideCall}
-                      setfromVideCall = {setfromVideCall}
-                      videoClick = {videoClick}
-                    />
-                  ))}
-                </TableBody>
+                {isLoading
+                  ? <TableBody>
+                    <tr>
+                      <td className="app_loader" colSpan={15}>
+                        <CircularProgress />
+                      </td>
+                    </tr>
+                  </TableBody>
+                  :
+                  <TableBody >
+                    {patientRecords.length === 0
+                      ? <tr>
+                        <td className="app_loader" colSpan={15}>
+                          <label>No Results Found</label>
+                        </td>
+
+                      </tr> :
+                      patientRecords.map((row, index) => (
+                        <PatientItem
+                          row={row}
+                          index={index}
+                          open={open}
+                          handleClose={handleClose}
+                          classes={classes}
+                          getTextColor={getTextColor}
+                          menuList={menuList}
+                          setOpenSharePatientRecord={setOpenSharePatientRecord}
+                          setInvitePatientClicked={setInvitePatientClicked}
+                          setSelectedItem={setSelectedItem}
+                          columns={columns}
+                          fromVideCall={fromVideCall}
+                          setfromVideCall={setfromVideCall}
+                          videoClick={videoClick}
+                        />
+                      ))
+                    }
+                  </TableBody>
+                }
               </Table>
             </TableContainer>
+            <TablePagination
+              component="div"
+              rowsPerPageOptions={[5, 10, 25]}
+              count={count}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Paper>
         </div>
       </div>

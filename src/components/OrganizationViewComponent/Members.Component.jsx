@@ -60,7 +60,7 @@ const MembersComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [membersList.length, skip, limit])
+    }, [membersList.length, skip, limit, rowsPerPage])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

@@ -59,7 +59,7 @@ const PatientComponent = props => {
     // const [subLebel, setSubLabel] = useState('')
     const [totalPage, setTotalPage] = React.useState(0)
     const [isLoading, setIsLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -76,7 +76,7 @@ const PatientComponent = props => {
 
     useEffect(() => {
         getStaffList()
-    }, [patientList.length, skip])
+    }, [patientList.length, skip, limit, rowsPerPage])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

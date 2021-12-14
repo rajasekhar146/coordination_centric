@@ -69,7 +69,7 @@ const CollaboratorComponent = props => {
     }
     useEffect(() => {
         getStaffList()
-    }, [collaboratorList.length, skip, limit])
+    }, [collaboratorList.length, skip, limit, rowsPerPage])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
