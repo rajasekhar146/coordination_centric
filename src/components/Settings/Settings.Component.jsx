@@ -61,8 +61,9 @@ const OrganizationViewComponent = () => {
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
     const [alertColor, setAlertColor] = useState('');
-
     const role = get(userDetails, ['role'], '')
+    const [activeLink, setActiveLink] = useState(false)
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -152,9 +153,15 @@ const OrganizationViewComponent = () => {
     return (
         <div className="od__setting__div">
             <div
-                className="io__back_setting"
+                className={activeLink ? 'io__back_setting active_link' : 'io__back_setting'}
                 onClick={() => {
                     history.push('/dashboard')
+                }}
+                onMouseOver={() => {
+                    setActiveLink(true)
+                }}
+                onMouseOut={() => {
+                    setActiveLink(false)
                 }}
             >
                 <span className="io__back__arrow_setting">

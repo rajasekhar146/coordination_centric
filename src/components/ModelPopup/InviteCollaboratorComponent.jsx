@@ -126,8 +126,15 @@ const InviteCollaboratorComponent = props => {
                                     required: 'Name is required.'
                                 })}
                                 onChange={(e) => {
-                                    setValue('facilityName', capitalize(e.target.value))
-                                }}
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('facilityName', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{

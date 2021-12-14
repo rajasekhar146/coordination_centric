@@ -300,8 +300,7 @@ const PatientItemComponent = props => {
             // case 'setIsActivateClicked':
             //   handleActivate()
             case 'viewdetails':
-            // routeDirect(orgId)
-
+                history.push(`/viewDetails/${row._id}`)
             default:
                 return null
         }

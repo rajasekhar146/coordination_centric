@@ -139,8 +139,15 @@ const InviteMemberComponent = props => {
                                     required: 'First Name is required.',
                                 })}
                                 onChange={(e) => {
-                                    setValue('first_name', capitalize(e.target.value))
-                                }}
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('first_name', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{
@@ -169,8 +176,15 @@ const InviteMemberComponent = props => {
                                     required: 'Last Name Required.'
                                 })}
                                 onChange={(e) => {
-                                    setValue('last_name', capitalize(e.target.value))
-                                }}
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('last_name', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityEmail && isSubmit}
                                 InputProps={{

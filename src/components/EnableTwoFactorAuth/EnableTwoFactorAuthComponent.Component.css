@@ -434,6 +434,7 @@
     font-size: 14px;
     line-height: 20px;
     color: #A0A4A8;
+    cursor: pointer;
 }
 .io_mr_20 {
     margin-right: 20px;
@@ -441,8 +442,4 @@
 .io_mt_30 {
     margin-top: 30px;
     margin-bottom: 15px;
-}
-
-.pointer{
-    cursor: pointer;
 }
