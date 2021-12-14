@@ -32,6 +32,7 @@ import OrderstoExpireinXdays from './OrderstoExpireinXdays'
 import OrganizationOnboardings from './OrganizationOnboardings'
 import { dashboardService } from '../../services'
 import AppointmentList from './AppointmentList'
+import history from '../../history'
 
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
@@ -236,7 +237,6 @@ const componenetsMap = {
 const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState()
-  const [skipped2fa, setSkipped2fa] = useState(useSelector(state => state.skipTwoFaValue))
   const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
@@ -244,17 +244,32 @@ const DashboardComponent = () => {
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const [elementsStats, setElementStats] = useState([])
   const [dashboardDetails, setDashboardDetails] = useState(null)
+  const isLoggedToken = get(JSON.parse(localStorage.getItem('currentUser')), ['data', 'token'], null)
 
 
 
   useEffect(() => {
-    if (!last_login_time && !skipped2fa) {
+    if (!isLoggedToken) {
+      history.push('signin')
+    }
+    if (!last_login_time) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }
     setElementStats(dashboardComponentConfig[role])
     getDashboardDetails()
   }, [])
+  
+  const isShowCopleateProfile = () => {
+    switch(role) {
+      case 'doctor':
+      case 'patient':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
 
   const close2FaModel = () => {
     // const res = authenticationService.skipTwoFa()
@@ -263,7 +278,9 @@ const DashboardComponent = () => {
     //   // dispatch(setCopmletPropfilePopup(true))
     // })
     setIsOpen2FA(false)
-    setIsOpenCompleateProfile(true)
+    if(isShowCopleateProfile()) {
+      setIsOpenCompleateProfile(true)
+    }
     dispatch(setSkip2fa(true))
   }
 

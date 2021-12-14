@@ -62,3 +62,11 @@ export const deleteMemberProfessionalInfoCertificate = certificate => {
     payload: certificate,
   }
 }
+
+
+export const memberMedicalReports = medicalReports => {
+  return {
+    type: ActionTypes.MEMBER_MEDICAL_REPORTS,
+    payload: medicalReports,
+  }
+}

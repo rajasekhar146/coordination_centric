@@ -19,7 +19,9 @@ export const appointmentService = {
     rescheduleAppointment,
     getSecondaryAppointment,
     cancelAppointment,
-    getAppointmentById
+    getAppointmentById,
+    getAppointmentChat,
+    sendMessage
 }
 
 
@@ -129,24 +131,21 @@ function getDoctorsList(searchParam) {
 }
 
 function getHighlightedDoctorsList() {
-    let axiosConfig = {
-        headers: authHeader(),
-    }
-    return (
-        axios
-            .get(
-                `${apiURL}/users/getHighlightedDoctors`,
-                axiosConfig
-            )
-            //.then(handleResponse)
-            .then(data => {
-                console.log('getHighlightedDoctorsList >>', data)
-                return data
-            })
-            .catch(err => {
-                return err
-            })
-    )
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .get(`${apiURL}/users/getHighlightedDoctors?skip=0&limit=5`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('getHighlightedDoctorsList >>', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
 }
 
 function getAllSpecializations() {
@@ -241,6 +240,31 @@ function getAppointmentById(id) {
     return (
         axios
             .get(`${apiURL}/appointment/viewAppointmentByAppointmentId/${id}`, axiosConfig)
+            .then(data => {
+                return data
+            })
+    ) 
+}
+
+function getAppointmentChat(id){
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return (
+        axios
+            .get(`${apiURL}/appointmentChat/getChatList?appointment_id=${id}`, axiosConfig)
+            .then(data => {
+                return data
+            })
+    ) 
+}
+
+function sendMessage(id, messageRequest){
+    let axiosConfig = {
+        headers: authHeader(),
+    }
+    return ( axios
+            .post(`${apiURL}/appointmentChat/chatBox/${id}`, messageRequest , axiosConfig)
             .then(data => {
                 return data
             })

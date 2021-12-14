@@ -13,6 +13,7 @@ import OrganizationPhoneIcon from '../../assets/icons/organization_phone.png'
 import { useForm } from 'react-hook-form'
 import { organizationService } from '../../services'
 import get from 'lodash.get'
+import capitalize from 'lodash.capitalize'
 
 const InviteOrganizationComponent = props => {
   const {
@@ -57,8 +58,8 @@ const InviteOrganizationComponent = props => {
     defaultValues.facilityEmail = watch('facilityEmail')
     defaultValues.facilityAddress = watch('facilityAddress')
     defaultValues.facilityPhone = watch('facilityPhone')
-    
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))                   
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
     const currentUserRole = get(currentUser, ['data', 'data', 'role'], '')
     const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
 
@@ -69,7 +70,7 @@ const InviteOrganizationComponent = props => {
       facilityPhone: defaultValues.facilityPhone
     }
 
-    if(currentUserRole === 'admin') {
+    if (currentUserRole === 'admin') {
       orgDetail = {
         adminEmail: currentUserEmail,
         facilityEmail: defaultValues.facilityEmail,
@@ -80,7 +81,7 @@ const InviteOrganizationComponent = props => {
     }
 
     console.log('orgDetail', orgDetail)
-    
+
     const res = organizationService.addOrganization(orgDetail, currentUserRole)
     res.then((response) => {
       setOpenFlash(true)
@@ -115,6 +116,17 @@ const InviteOrganizationComponent = props => {
               {...register('facilityName', { required: true })}
               margin="normal"
               error={errors.facilityName && isSubmit}
+              onChange={(e) => {
+                let val;
+                if (e.target.value.length === 1) {
+                  val = capitalize(e.target.value)
+                }
+                else {
+                  val = e.target.value
+                }
+                setValue('facilityName', val)
+              }}
+              inputProps={{ minLength: 3 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -177,16 +189,18 @@ const InviteOrganizationComponent = props => {
             <TextField
               {...register('facilityPhone', {
                 pattern: {
-                  value: /\d+/,
-                  message: 'This input is number only.',
-                },
-              })}
+                    value: /^[1-9]\d*(\d+)?$/i,
+                    message: 'Phone Number accepts only integer',
+                }
+          })}
+          inputProps={{
+            maxLength: 15,
+          }}
               onChange={e => {
                 setValue('facilityPhone', e.target.value.replace(/[^0-9]/g, ''))
               }}
               margin="normal"
               InputProps={{
-                maxLength: 15,
                 startAdornment: (
                   <InputAdornment position="start">
                     <img src={OrganizationPhoneIcon} alt="Organization Phone" />
@@ -198,13 +212,13 @@ const InviteOrganizationComponent = props => {
           </div>
 
           <div className="io__row">
-            <div style={{ marginTop: "50px"}} className="io__same__line">
+            <div style={{ marginTop: "50px" }} className="io__same__line">
               <div className="io__column">
                 <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
                   Close
                 </Button>
               </div>
-              <div style={{ marginLeft: "15px"}} className="io__column io__invite__org__btn">
+              <div style={{ marginLeft: "15px" }} className="io__column io__invite__org__btn">
                 <Button type="submit" className="io__add__organization__btn">
                   Invite Organization
                 </Button>

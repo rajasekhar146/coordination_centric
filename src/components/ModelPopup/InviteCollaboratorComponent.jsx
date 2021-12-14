@@ -16,6 +16,7 @@ import get from 'lodash.get'
 import { organizationService } from '../../services'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { capitalize } from 'lodash'
 
 
 const styles = theme => ({
@@ -58,6 +59,7 @@ const InviteCollaboratorComponent = props => {
         register,
         handleSubmit,
         watch,
+        setValue,
         formState: { errors },
     } = useForm()
 
@@ -82,7 +84,7 @@ const InviteCollaboratorComponent = props => {
         var orgDetail = {
             facilityName: data.facilityName,
             facilityEmail: data.facilityEmail,
-            refUserId: organizationId
+            refUserId: orgId
         }
 
         if (currentUserRole === 'admin') {
@@ -123,6 +125,16 @@ const InviteCollaboratorComponent = props => {
                                 {...register('facilityName', {
                                     required: 'Name is required.'
                                 })}
+                                onChange={(e) => {
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('facilityName', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{
@@ -135,7 +147,7 @@ const InviteCollaboratorComponent = props => {
                                 }}
                             />
                         </FormControl>
-                        {errors.name && <p className="io__required">{errors.name.message}</p>}
+                        {errors.facilityName && <p className="io__required">{errors.facilityName.message}</p>}
                     </div>
 
 
@@ -162,7 +174,7 @@ const InviteCollaboratorComponent = props => {
                                 }}
                             />
                         </FormControl>
-                        {errors.email && <p className="io__required">{errors.email.message}</p>}
+                        {errors.facilityEmail && <p className="io__required">{errors.facilityEmail.message}</p>}
                         {isExist && <p className="io__required">{isExist}</p>}
 
                     </div>

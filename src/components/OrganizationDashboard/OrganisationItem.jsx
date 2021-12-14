@@ -35,6 +35,7 @@ const OrganisationItem = props => {
     setSubLabel,
     setIsActivateClicked,
     role,
+    setAlertcolor
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -74,9 +75,10 @@ const OrganisationItem = props => {
       console.log('handleActivate >> 2 ', res)
       if (res.status === 200) {
         setOrganizations([])
-        setSkip(1)
+        setSkip(0)
         setAlertMsg('Activated')
         setSubLabel('This account was successfully activated.')
+        setAlertcolor('success')
         setOpenFlash(true)
         setIsActivateClicked(false)
       }
@@ -84,12 +86,13 @@ const OrganisationItem = props => {
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org.id)
+    const res = organizationService.resendInvite(org.id , 'facility')
     res.then(res => {
       setOrganizations([])
-      setSkip(1)
+      setSkip(0)
       setAlertMsg('Re-sended')
       setSubLabel('Another invitation was sended to this organization.')
+      setAlertcolor('success')
       setOpenFlash(true)
     })
   }
@@ -146,6 +149,9 @@ const OrganisationItem = props => {
         break
       case 'pending_verification':
         return 'Pending verification'
+        break
+      case 'pending_bank_verification':
+        return 'Pending Bank Verification'
         break
       case 'pending_acceptance':
         return 'Pending acceptance'

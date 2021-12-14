@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import VideoCallReducer from "./video-call-reducer";
+import { combineReducers } from 'redux'
+import VideoCallReducer from './video-call-reducer'
 import {
   memberReducer,
   newMemberReducer,
@@ -9,6 +9,7 @@ import {
   memberSpecialtiesReducer,
   memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificatesReducer,
+  memberMedicalReportsReducer,
 } from './memberReducer'
 import { organizationReducer, newOrganizationReducer } from './organizationReducer'
 import {
@@ -22,7 +23,10 @@ import {
   setSecondaryAppointmentDateReducer,
   setFlashMsgReducer,
   skipTwoFaReducer,
-  completeProfileReducer
+  completeProfileReducer,
+  reschedulePrimaryAppointmentDateReducer,
+  rescheduleSecondaryAppointmentDateReducer,
+  enableTwofaReducer,
 } from './commonReducer'
 import { appointmentDetailsReducer, doctorDetailsReducer } from './appointmentReducer'
 
@@ -37,7 +41,7 @@ const reducers = combineReducers({
   memberAvaliabilities: memberAvailabilitiesReducer,
   memberSpecialties: memberSpecialtiesReducer,
   specialties: specialtiesReducer,
-  videoCallReducer:VideoCallReducer,
+  videoCallReducer: VideoCallReducer,
   isOpenCompletProfilePopup: setCompleteProfileReducer,
   memberProfessionalInfoCertificates: memberProfessionalInfoCertificatesReducer,
   deleteMemberProfessionalInfoCertificate: deleteMemberProfessionalInfoCertificatesReducer,
@@ -50,7 +54,11 @@ const reducers = combineReducers({
   flashMsgObj: setFlashMsgReducer,
   doctorDetails: doctorDetailsReducer,
   skipTwoFaValue: skipTwoFaReducer,
-  completeProfile: completeProfileReducer
+  completeProfile: completeProfileReducer,
+  memberMedicalReports: memberMedicalReportsReducer,
+  reschedulePrimaryAppointmentDate: reschedulePrimaryAppointmentDateReducer,
+  rescheduleSecondaryAppointmentDate: rescheduleSecondaryAppointmentDateReducer,
+  enableTwofa: enableTwofaReducer
 })
 
 export default reducers

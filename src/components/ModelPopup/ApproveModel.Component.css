@@ -628,6 +628,7 @@
     width: 100%;
     grid-template-columns: 1fr 1fr;
     grid-gap: 2px 8px;
+    height: 44px;
 }
 
 .capitalize{
@@ -658,4 +659,7 @@
     border-radius: 5px !important;
     padding: 4px 16px 4px 16px !important;
     color: #fff !important;
+}
+.mar-bot-10{
+    margin-bottom: 10px;
 }

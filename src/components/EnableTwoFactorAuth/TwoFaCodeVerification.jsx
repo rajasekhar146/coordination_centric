@@ -12,7 +12,9 @@ import get from 'lodash.get'
 import useStore from '../../hooks/use-store';
 import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
-import {getTokenFn} from '../../firebase'
+import { getTokenFn } from '../../firebase'
+import Alert from '../Alert/Alert.component'
+import { enableTwofa } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,43 +45,46 @@ const TwoFaEnabled = props => {
   const currentUser = authenticationService.currentUserValue
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
   const [FCMToken, setFCMToken] = useState("");
-
   const [verificationCode, setVerificationCode] = useState('')
   const [minutes, setMinutes] = useState(3)
   const [seconds, setSeconds] = useState(0)
   const twofaActive = authenticationService.twofaActive
-
   const [signinStoreData] = useStore(SigninStore);
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLebel, setSubLabel] = useState('')
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertcolor, setAlertColor] = useState('success')
+  const [activeResend, setActiveResend] = useState(false)
+  const [activeLink, setActiveLink] = useState(false)
 
   const {
     email,
   } = signinStoreData;
 
 
-  useEffect(()=>{
+  useEffect(() => {
     addDevice(FCMToken);
-  },[FCMToken])
+  }, [FCMToken])
 
 
-  const addDevice = (FCMToken)=>{
-    if(!FCMToken)
-    return;
+  const addDevice = (FCMToken) => {
+    if (!FCMToken)
+      return;
     let devieInfo = {
-      'deviceId':'',
-      'fcmId':FCMToken, 
+      'deviceId': '',
+      'fcmId': FCMToken,
       'deviceType': 'web'
     }
-    notificationService.addDevice(devieInfo).then((res)=>{
-      console.log("Add device",res);
-    },error=>{
-      console.log("Add device",error);
+    notificationService.addDevice(devieInfo).then((res) => {
+      console.log("Add device", res);
+    }, error => {
+      console.log("Add device", error);
     })
   }
-  useEffect(async() => {
-    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFaVerfied) {
-    let fcmToken = await getTokenFn(setFCMToken);
-    console.log("fcmToken",fcmToken);
+  useEffect(async () => {
+    if (twoFactor_auth_type === 'none') {
+      let fcmToken = await getTokenFn(setFCMToken);
+      console.log("fcmToken", fcmToken);
       history.push(`/dashboard`)
     }
   }, [])
@@ -104,13 +109,12 @@ const TwoFaEnabled = props => {
     }
   }, [minutes, seconds])
 
-  const handleSubmit =  () => {
+  const handleSubmit = () => {
     const res = authenticationService.twoFactorAuthVerification(verificationCode, twoFactor_auth_type, email)
     res
-      .then(async() => {
-        localStorage.setItem('twoFaVerfied', true)
+      .then(async () => {
         let fcmToken = await getTokenFn(setFCMToken);
-    console.log("fcmToken",fcmToken);
+        console.log("fcmToken", fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {
@@ -118,10 +122,17 @@ const TwoFaEnabled = props => {
       })
   }
 
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
+
   const handleResend = async () => {
     var response = authenticationService.twoFactorEmailAuth(email)
-    response.then(() => {
+    response.then((res) => {
       setMinutes(3)
+      setOpenFlash(true)
+      setSubLabel(res?.data?.message)
+      setAlertMsg('Mail sent')
     }).catch(() => {
 
     })
@@ -162,7 +173,16 @@ const TwoFaEnabled = props => {
               handleResend()
             }}
             className="io_resend_label io__margin_bottom30">
-            <label className="pointer">Didn’t receive? Resend OTP</label>
+            <label className="pointer">Didn’t receive?
+              <span
+                className={activeResend ? 'si_acive_resend' : ''}
+                onMouseOver={() => {
+                  setActiveResend(true)
+                }}
+                onMouseOut={() => {
+                  setActiveResend(false)
+                }} >Resend OTP</span>
+            </label>
           </div>
           <Button
             onClick={() => {
@@ -182,9 +202,17 @@ const TwoFaEnabled = props => {
           <label className="io_resend_label io_mr_20">or </label>
           <label
             onClick={() => {
-              history.push('./enable2fa')
+              dispatch(enableTwofa(true))
+              history.push('/enable2fa')
             }}
-            className="io_resend_label io_mr_20 pointer">
+            onMouseOver={() => {
+              setActiveLink(true)
+            }}
+            onMouseOut={() => {
+              setActiveLink(false)
+            }}
+            className={activeLink ? 'io_resend_label io_mr_20 active_link' : 'io_resend_label io_mr_20'}
+            >
             Choose another authentication method
           </label>
         </div>
@@ -200,6 +228,13 @@ const TwoFaEnabled = props => {
           </span>
           <label className="io__same__line"> Back</label>
         </div>
+        <Alert
+          handleCloseFlash={handleCloseFlash}
+          alertMsg={alertMsg}
+          openflash={openflash}
+          subLebel={subLebel}
+          color={alertcolor}
+        />
       </div>
     </div>
   )

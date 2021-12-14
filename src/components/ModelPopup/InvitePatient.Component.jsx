@@ -21,7 +21,8 @@ import MembersStore from '../../stores/membersstore'
 import UserIcon from '../../assets/icons/usericon.png'
 import PlusIcon from '../../assets/icons/plus_icon.png'
 import { memberService } from '../../services'
-
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
 
 const useStyles = makeStyles(theme => ({
     select: {
@@ -62,10 +63,11 @@ const InvitePatientComponent = props => {
         setOpenInvitePatientSuccess,
         setOpenInviteMember,
         selectedItem,
-        userId
+        // userId
     } = props;
 
-
+    const currentUser = authenticationService.currentUserValue
+    const userId = get(currentUser, ['data', 'data', '_id'], '')
 
     const {
         register,
@@ -79,7 +81,7 @@ const InvitePatientComponent = props => {
         setValue('first_name', selectedItem.first_name)
         setValue('last_name', selectedItem.last_name)
         setValue('email', selectedItem.email)
-        setValue('refUserId', selectedItem._id)
+        setValue('refUserId', userId)
     }, {})
 
     console.log(errors)

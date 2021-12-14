@@ -209,3 +209,12 @@ export const deleteMemberProfessionalInfoCertificatesReducer = (
       return state
   }
 }
+
+export const memberMedicalReportsReducer = (state = memberCertificateInitialState, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.MEMBER_MEDICAL_REPORTS:
+      return payload
+    default:
+      return state
+  }
+}

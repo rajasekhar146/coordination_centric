@@ -130,7 +130,7 @@
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-    width: 70% !important;
+    width: 80% !important;
     /* identical to box height, or 150% */
     letter-spacing: 0.1px;
     height: 230px !important;
@@ -213,7 +213,23 @@
 }
 
 .psp__submit {
+    bottom: 0px;
     position: absolute;
-    bottom: 0;
-    right: 100px;    
+    right: 0px;   
+}
+
+.two-grid{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+.tex-field{
+    width: 100%;
+}
+
+.two-grid .MuiOutlinedInput-root{
+    height: 100%;
+    align-items:start;
 }

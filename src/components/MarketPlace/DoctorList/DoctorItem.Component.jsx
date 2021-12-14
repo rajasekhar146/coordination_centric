@@ -9,7 +9,7 @@ import ViewImageComponent from '../../Shared/AppointmentCalender/ViewImage/ViewI
 import { setDoctorDetials } from '../../../redux/actions/appointmentActions'
 import { useDispatch } from 'react-redux'
 import history from '../../../history'
-
+import default_profile_image from '../../../assets/icons/default_profile_image.png'
 
 
 const DoctorListComponent = (props) => {
@@ -29,7 +29,11 @@ const DoctorListComponent = (props) => {
 
     return (<TableRow key={row} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
         <TableCell align="center">
+            {row.pic ?
             <img src={row.pic} alt="prof_pic" className="dl__pic" />
+            :
+            <img src={require('../../../assets/icons/default_profile_image.png').default} alt="profile"  />
+        }
             {/* <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} /> */}
         </TableCell>
         <TableCell component="th" scope="row" align="left">

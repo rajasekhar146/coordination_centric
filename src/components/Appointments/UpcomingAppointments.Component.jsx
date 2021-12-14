@@ -23,7 +23,9 @@ import get from 'lodash.get';
 import { authenticationService } from '../../services'
 import moment from 'moment'
 import CancelAppointmentReasonPopup from '../ModelPopup/CancelAppointmentReasonPopup';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
+import ViewAppointmentComponent from '../Appointments/ViewAppointment.Component'
 const confirmAppointment = {
     position: 'absolute',
     top: '50%',
@@ -113,6 +115,10 @@ const UpcomongAppointmentComponent = props => {
     const userId = get(currentUser, ['data', 'data', '_id'], '')
     const [limit, setLimit] = useState(0)
     const [skip, setSkip] = useState(20)
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const role = get(currentUser, ['data', 'data', 'role'], '')
     const [cancelReasonInput, setcancelReasonInput] = useState();
@@ -138,27 +144,27 @@ const UpcomongAppointmentComponent = props => {
     const closeCancelTermsAndConds = () => {
         setCancelAppointment(false)
     }
-    const closeAppointmentReasonPopup = () =>{
+    const closeAppointmentReasonPopup = () => {
         setCancelAppointmentReason(false)
     }
-    const handleNextPopup = () =>{
+    const handleNextPopup = () => {
         setCancelAppointmentReason(true);
         setCancelAppointment(false)
 
     }
 
-    const closeCancelReason = () =>{
+    const closeCancelReason = () => {
         setCancelAppointment(true)
         setCancelAppointmentReason(false);
     }
-    const submitCancelReason = async() =>{
-        if(!cancelReasonInput){
+    const submitCancelReason = async () => {
+        if (!cancelReasonInput) {
             setcancelReasonInputErr(true);
-        }else{
+        } else {
             setCancelAppointmentReason(false);
             setcancelReasonInputErr(false);
             let res = await appointmentService.cancelAppointment(selectedAppointment.appointmentid, cancelReasonInput);
-            if(res.data){
+            if (res.data) {
                 setOpenFlash(true)
                 setAlertMsg('Canceled')
                 setAlertColor('cancel')
@@ -166,8 +172,6 @@ const UpcomongAppointmentComponent = props => {
             }
             getAppointmentList();
         }
-
-
     }
     const columns = [
         { id: 'profile', label: 'profile', minWidth: 50, align: 'left', visible: true },
@@ -180,6 +184,7 @@ const UpcomongAppointmentComponent = props => {
     ]
 
     const getAppointmentList = async () => {
+        setIsLoading(true)
         let res;
         let date;
         if (type === 'upcoming') {
@@ -187,15 +192,16 @@ const UpcomongAppointmentComponent = props => {
         } else {
             date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
         }
-        res = await appointmentService.getAppointments(userId, date, type, limit, skip, role)
-        if (res.status === 200) {
+        appointmentService.getAppointments(userId, date, type, limit, skip, role).then((res) => {
+            setIsLoading(false)
             const appointmentsTemp = get(res, ['data', 'data'], []);
             let appointmentsArray = [];
             appointmentsTemp.forEach(element => {
+                const timezoneDiff = (new Date()).getTimezoneOffset()
                 let recordNew = {};
                 if (role === "doctor") {
                     recordNew = {
-                        name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
+                        name: element?.userId?.first_name + " "  + (element?.userId?.last_name),
                         profile: element?.userId?.profilePic,
                         location: 'Online',
                         date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
@@ -210,11 +216,11 @@ const UpcomongAppointmentComponent = props => {
 
                 } else {
                     recordNew = {
-                        name: element?.doctorId?.first_name || "" + " " + element?.doctorId?.last_name || "",
+                        name: element?.doctorId?.first_name+ " "  + element?.doctorId?.last_name ,
                         profile: element?.doctorId?.profilePic,
                         location: 'Online',
                         date: moment(element.startTime).format('ddd, Do MMM'),
-                        time: element.startTime ? moment(element.startTime).format('h:mm a') : "" + " - " + element.endTime ? moment(element.endTime).format('h:mm a') : "",
+                        time: (element.startTime ? moment(element.startTime).add(timezoneDiff, 'minutes').format('hh:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).add(timezoneDiff, 'minutes').format('hh:mm a') : ''),
                         status: element.status,
                         gender: 'male',
                         _id: element?.doctorId?._id,
@@ -226,14 +232,28 @@ const UpcomongAppointmentComponent = props => {
                 appointmentsArray.push(recordNew);
             });
             setAppointmentList(appointmentsArray);
-            // setAppointmentList(get(res, ['data', 'data', '0', 'totalData'], []))
-        } else {
-
-        }
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
     useEffect(() => {
         getAppointmentList()
     }, [appointmentList.length, skip])
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
 
 
     return (
@@ -263,30 +283,59 @@ const UpcomongAppointmentComponent = props => {
                                     )}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                {appointmentList.map((row, index) => (
-                                    <AppointmentItem
-                                        row={row}
-                                        index={index}
-                                        columns={columns}
-                                        setIsConfirmClicked={setIsConfirmClicked}
-                                        setSelectedAppointment={setSelectedAppointment}
-                                        setIsRescheduleClicked={setIsRescheduleClicked}
-                                        setIsViewClicked={setIsViewClicked}
-                                        setIsRejectClicked={setIsRejectClicked}
-                                        setPatientReschedule={setPatientReschedule}
-                                        setCancelAppointment={setCancelAppointment}
-                                        role={role}
-                                        setAlertMsg={setAlertMsg}
-                                        setSubLabel={setSubLabel}
-                                        setOpenFlash={setOpenFlash}
-                                        type={type}
-                                    />
-                                ))
-                                }
-                            </TableBody>
+                            {isLoading
+                                ? <TableBody>
+                                    <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <CircularProgress />
+                                        </td>
+                                    </tr>
+                                </TableBody>
+                                :
+                                <TableBody >
+
+                                    {appointmentList.length === 0
+                                        ? <tr>
+                                            <td className="app_loader" colSpan={15}>
+                                                <label>No Results Found</label>
+                                            </td>
+
+                                        </tr> :
+                                        appointmentList.map((row, index) => (
+                                            <AppointmentItem
+                                                row={row}
+                                                index={index}
+                                                columns={columns}
+                                                setIsConfirmClicked={setIsConfirmClicked}
+                                                setSelectedAppointment={setSelectedAppointment}
+                                                setIsRescheduleClicked={setIsRescheduleClicked}
+                                                setIsViewClicked={setIsViewClicked}
+                                                setIsRejectClicked={setIsRejectClicked}
+                                                setPatientReschedule={setPatientReschedule}
+                                                setCancelAppointment={setCancelAppointment}
+                                                role={role}
+                                                setAlertMsg={setAlertMsg}
+                                                setSubLabel={setSubLabel}
+                                                setOpenFlash={setOpenFlash}
+                                                type={type}
+                                                setCancelAppointmentReason={setCancelAppointmentReason}
+                                            />
+
+                                        ))
+                                    }
+                                </TableBody>
+                            }
                         </Table>
                     </TableContainer>
+                    <TablePagination
+                        component="div"
+                        rowsPerPageOptions={[5, 10, 25]}
+                        count={count}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
                     <Modal
                         open={isConfirmClicked}
                         // onClose={setIsAcceptClicked}
@@ -300,7 +349,7 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
-                                setAlertColor = {setAlertColor}
+                                setAlertColor={setAlertColor}
                                 getAppointmentList={getAppointmentList}
                             />
                         </Box>
@@ -311,17 +360,18 @@ const UpcomongAppointmentComponent = props => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={rejectAppointment}>
-                            <RejectAppointment
-                                clickCloseButton={closeRejectModel}
-                                setIsRescheduleClicked={setIsRescheduleClicked}
-                                selectedAppointment={selectedAppointment}
-                                setOpenFlash={setOpenFlash}
-                                setAlertMsg={setAlertMsg}
-                                setSubLabel={setSubLabel}
-                                getAppointmentList={getAppointmentList}
-                            />
-                        </Box>
+
+                        <RejectAppointment
+                            clickCloseButton={closeRejectModel}
+                            setIsRescheduleClicked={setIsRescheduleClicked}
+                            selectedAppointment={selectedAppointment}
+                            setOpenFlash={setOpenFlash}
+                            setAlertMsg={setAlertMsg}
+                            setSubLabel={setSubLabel}
+                            setAlertColor={setAlertColor}
+                            getAppointmentList={getAppointmentList}
+                        />
+
                     </Modal>
                     <Modal
                         open={isResheduleClicked}
@@ -337,12 +387,14 @@ const UpcomongAppointmentComponent = props => {
                                 setOpenFlash={setOpenFlash}
                                 setAlertMsg={setAlertMsg}
                                 setSubLabel={setSubLabel}
+                                setAlertColor={setAlertColor}
                                 handleNavigation={handleNavigation}
                                 getAppointmentList={getAppointmentList}
                             />
                         </Box>
-                        </Modal>
-                    <Modal
+                    </Modal>
+
+                    {/* <Modal
                         open={isViewClicked}
                         // onClose={setIsAcceptClicked}
                         aria-labelledby="modal-modal-title"
@@ -359,7 +411,7 @@ const UpcomongAppointmentComponent = props => {
                             // setSubLabel={setSubLabel}
                             />
                         </Box>
-                    </Modal>
+                    </Modal> */}
                     <Modal
                         open={patientReschedule}
                         // onClose={setIsAcceptClicked}
@@ -389,7 +441,7 @@ const UpcomongAppointmentComponent = props => {
                             <CancelAppointmentPopup
                                 clickCloseButton={closeCancelTermsAndConds}
                                 clickConfirmButton={handleNextPopup}
-                                
+
                             />
                         </Box>
                     </Modal>
@@ -403,11 +455,11 @@ const UpcomongAppointmentComponent = props => {
                         <Box sx={cancelPopup}>
                             <CancelAppointmentReasonPopup
                                 clickCloseButton={closeCancelReason}
-                                submitCancelReason = {submitCancelReason}
-                                cancelReasonInput = {cancelReasonInput}
-                                setcancelReasonInput = {setcancelReasonInput}
-                                setcancelReasonInputErr = {setcancelReasonInputErr}
-                                cancelReasonInputErr = {cancelReasonInputErr}
+                                submitCancelReason={submitCancelReason}
+                                cancelReasonInput={cancelReasonInput}
+                                setcancelReasonInput={setcancelReasonInput}
+                                setcancelReasonInputErr={setcancelReasonInputErr}
+                                cancelReasonInputErr={cancelReasonInputErr}
                                 getAppointmentList={getAppointmentList}
                             />
                         </Box>

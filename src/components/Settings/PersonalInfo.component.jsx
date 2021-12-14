@@ -53,7 +53,7 @@ const PersonalInfo = props => {
   const timezones = moment.tz.names()
   console.log(timezones)
 
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails } = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails ,setAlertColor} = props
   const [profilepic, setProfilePic] = useState('')
   const [prfileUrl, setProfileUrl] = useState('')
   const [updatedUrl, setUpdatedUrl] = useState('')
@@ -104,24 +104,27 @@ const PersonalInfo = props => {
     const memberData = get(response, ['data', 'data', 'data'], null)
     console.log('response', memberData)
 
-    const specialization = memberData.specialization
+    const specialization = memberData?.specialization
 
     var tSpecialization = []
-    specialization.map(s => {
-      const nSpl = {
-        id: s._id,
-        speciality_name: s.speciality_name,
-      }
-      tSpecialization.push(nSpl)
-    })
+    if (specialization) {
+      specialization.map(s => {
+        const nSpl = {
+          id: s._id,
+          speciality_name: s.speciality_name,
+        }
+        tSpecialization.push(nSpl)
+      })
+    }
     console.log('tSpecialization', tSpecialization)
     dispatch(memberSpecialties(tSpecialization))
   }
-  useEffect( async () => {
-    fetchCountries()   
+
+  useEffect(async () => {
+    fetchCountries()
     await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
-    if (get(userDetails, ['biograhpy_object'], null)) {
+    if (get(userDetails, ['biograhpy_object', 'blocks', '0', 'text'], null)) {
       userDetails.biograhpy_object.entityMap = {}
       const data = convertFromRaw(userDetails.biograhpy_object)
       setEditorState(EditorState.createWithContent(data))
@@ -229,6 +232,7 @@ const PersonalInfo = props => {
       setOpenFlash(true)
       setAlertMsg('Updated')
       setSubLabel('Your changes are updated successfully')
+      setAlertColor('success')
       getMemberDetails()
     }
   }

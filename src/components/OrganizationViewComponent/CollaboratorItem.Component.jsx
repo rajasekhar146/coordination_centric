@@ -8,6 +8,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import { memberService } from '../../services'
+import history from '../../history'
+
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -92,7 +94,7 @@ const menuList = [
     {
         menu: 'pending_verification',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
@@ -102,7 +104,7 @@ const menuList = [
     {
         menu: 'cancelled',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
             // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
@@ -111,7 +113,7 @@ const menuList = [
     {
         menu: 'declined',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             // { text: 'Resent Invitation', icon: require('../../assets/icons/resent_invitation.png').default },
             // { text: 'Suspend', icon: require('../../assets/icons/suspend.png').default },
@@ -120,7 +122,7 @@ const menuList = [
     {
         menu: 'active',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
         ],
@@ -128,7 +130,7 @@ const menuList = [
     {
         menu: 'inactive',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Activate', fnKey: 'setIsActivateClicked', icon: require('../../assets/icons/activate.png').default },
         ],
@@ -136,7 +138,7 @@ const menuList = [
     {
         menu: 'invited',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             {
                 text: 'Resend Invitation',
                 fnKey: 'setIsResendClicked',
@@ -153,7 +155,7 @@ const menuList = [
     {
         menu: 'suspended',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
         ],
@@ -161,14 +163,14 @@ const menuList = [
     {
         menu: 'verified',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Deactivate', icon: require('../../assets/icons/edit_icon.png').default },
         ],
     },
     {
         menu: 'unverified',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -177,7 +179,7 @@ const menuList = [
     {
         menu: 'pending_acceptance',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -186,7 +188,7 @@ const menuList = [
     {
         menu: 'cancelled',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             {
                 text: 'Resend Invitation',
                 fnKey: 'setIsResendClicked',
@@ -235,13 +237,13 @@ const CollaboratorItemComponent = props => {
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -251,27 +253,27 @@ const CollaboratorItemComponent = props => {
     const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
     }
 
-    const handleActivate = async(org, status) => {
+    const handleActivate = async (org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setCollaboratorList([])
-           
+
         } else {
-            setSkip(1)
+            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -303,7 +305,8 @@ const CollaboratorItemComponent = props => {
                 break
             // case 'setIsActivateClicked':
             //   handleActivate()
-            case 'viewdetails':
+            case 'setIsViewClicked':
+                history.push(`/viewDetails/${row._id}`)
             // routeDirect(orgId)
 
             default:
@@ -326,7 +329,10 @@ const CollaboratorItemComponent = props => {
         }
     }
 
-    
+
+    const handleRowClick = async () => {
+        history.push(`/viewDetails/${row._id}`)
+    }
 
 
 
@@ -334,6 +340,9 @@ const CollaboratorItemComponent = props => {
         <TableRow
             hover
             role="checkbox"
+            onClick={() => {
+                handleRowClick(index, row)
+            }}
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]

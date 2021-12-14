@@ -32,6 +32,8 @@ const ForgotPasswordResend = props => {
     const [errMsg, setErrMsg] = useState('')
     const [IsValidEmail, setIsValidEmail] = useState(true)
     const [signinStoreData] = useStore(SigninStore);
+    const [activeLink, setActiveLink] = useState(false)
+    const [activeResend, setActiveResend] = useState(false)
 
     const {
         email,
@@ -112,13 +114,27 @@ const ForgotPasswordResend = props => {
                                 onSubmit()
                             }}
                             className="si__right__subtitle  io_margin_bottom30">
-                            Didn’t receive the email? Click to resend
+                            Didn’t receive the email? <span
+                                className={activeResend ? 'si_acive_resend' : ''}
+                                onMouseOver={() => {
+                                    setActiveResend(true)
+                                }}
+                                onMouseOut={() => {
+                                    setActiveResend(false)
+                                }} >Click to resend</span>
                         </div>
                         <div
                             onClick={() => {
                                 history.push('/signin')
                             }}
-                            className="si__forgot__link">
+                            onMouseOver={() => {
+                                setActiveLink(true)
+                            }}
+                            onMouseOut={() => {
+                                setActiveLink(false)
+                            }}
+                            className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
+                        >
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in

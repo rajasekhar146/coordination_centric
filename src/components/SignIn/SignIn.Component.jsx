@@ -33,6 +33,8 @@ const SignInComponent = () => {
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
   const [FCMToken, setFCMToken] = useState("");
+  const [activeLink, setActiveLink] = useState(false)
+  const [subLabel , setSubLabel] = useState(false)
 
 
   useEffect(() => {
@@ -97,7 +99,8 @@ const SignInComponent = () => {
         } else if (user.status_code === 400) {
           setIsValidUser(false)
           IsValidUser = false
-          setAlertMsg(get(user, ['message'], ''))
+          setSubLabel(get(user, ['message'], ''))
+          setAlertMsg('Error')
           setOpenFlash(true)
           // setErrMsg(user.message)
           if (user.message.includes('Password')) {
@@ -250,9 +253,15 @@ const SignInComponent = () => {
               </Button>{' '}
             </div>
             <div
-              className="si__forgot__link"
+              className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
               onClick={() => {
                 history.push('/forgotpassword')
+              }}
+              onMouseOver={() => {
+                setActiveLink(true)
+              }}
+              onMouseOut={() => {
+                setActiveLink(false)
               }}
             > Forgot Password?
             </div>
@@ -261,8 +270,9 @@ const SignInComponent = () => {
         <Alert
           handleCloseFlash={handleCloseFlash}
           alertMsg={alertMsg}
-          openflash={openflash} 
-          color = "fail"/>
+          openflash={openflash}
+          subLebel = {subLabel}
+          color="fail" />
       </form>
     </div>
   )

@@ -48,7 +48,7 @@ const TermsAndConditionsComponent = () => {
     else history.push('/bank-info')
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     const planType = localStorage.getItem('plan_type')
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
@@ -91,28 +91,38 @@ const TermsAndConditionsComponent = () => {
                       <div className="ac__row">
                         <FormGroup>
                           <div className="ac__column">
-                            <FormControlLabel
-                              control={
+                            <div className="ac__same__link">
+                              <div>
                                 <Checkbox
                                   onChange={e => {
                                     setReadTermsAndConditions(e.target.checked)
                                   }}
                                 />
-                              }
-                              label="I have read and agree with the Terms and Conditions"
-                            />
+                              </div>
+                              <div>
+                                I have read and agree with the{' '}
+                                <a href="#" className="ac__hyper__link">
+                                  Terms and Conditions
+                                </a>
+                              </div>
+                            </div>
                           </div>
                           <div className="ac__column">
-                            <FormControlLabel
-                              control={
+                            <div className="ac__same__link">
+                              <div>
                                 <Checkbox
                                   onChange={e => {
                                     setReadPrivacyPolicy(e.target.checked)
                                   }}
                                 />
-                              }
-                              label="I have read and agree with the Privacy Policy"
-                            />
+                              </div>
+                              <div>
+                                I have read and agree with the{' '}
+                                <a href="#" className="ac__hyper__link">
+                                  Privacy Policy
+                                </a>
+                              </div>
+                            </div>
                           </div>
                         </FormGroup>
                       </div>

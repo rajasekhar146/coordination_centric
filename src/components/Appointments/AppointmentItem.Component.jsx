@@ -60,10 +60,10 @@ const menuList = [
         //     { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
         // ],
         doctorOptions: [
-                { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-                { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
-                { text: 'Cancel Appointment', fnKey: 'setCancelAppointment', icon: require('../../assets/icons/reject.png').default },
-            ],
+            { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Re-schedule', fnKey: 'setIsRescheduleClicked', icon: require('../../assets/icons/resend_calender.png').default },
+            { text: 'Cancel Appointment', fnKey: 'setCancelAppointmentReason', icon: require('../../assets/icons/reject.png').default },
+        ],
         patientOptions: [
             { text: 'View', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Re-schedule', fnKey: 'setPatientReschedule', icon: require('../../assets/icons/resend_calender.png').default },
@@ -160,6 +160,7 @@ const AppointmentItemComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setCancelAppointmentReason,
         type
     } = props
     const dispatch = useDispatch()
@@ -202,6 +203,7 @@ const AppointmentItemComponent = props => {
                 setIsRescheduleClicked(true)
                 break
             case 'setIsViewClicked':
+                history.push(`/viewApointment/${type}/${row.appointmentid}`)
                 setIsViewClicked(true)
                 break
             case 'setIsViewClicked':
@@ -215,6 +217,9 @@ const AppointmentItemComponent = props => {
                 break
             case 'setCancelAppointment':
                 setCancelAppointment(true)
+                break
+            case 'setCancelAppointmentReason':
+                setCancelAppointmentReason(true)
         }
         setAnchorEl(null)
         setSelectedAppointment(row)
@@ -291,7 +296,7 @@ const AppointmentItemComponent = props => {
     }
 
     const handleRowClick = async (i, row) => {
-        history.push(`/viewApointment/${row.appointmentid}`)
+        history.push(`/viewApointment/${type}/${row.appointmentid}`)
     }
     return (
         <TableRow
@@ -328,8 +333,8 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                {/* <img className="ap_profile" src={value} alt="profile" /> */}
-                                <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} />
+                                <img className="ap_profile" src={value} alt="profile" className="nb__profile__image" />
+                                {/* <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} /> */}
                             </div>
                         </div>
                     </TableCell>

@@ -9,11 +9,14 @@ import history from '../../history'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import get from 'lodash.get'
 import { authenticationService } from '../../services'
+import { useSelector, useDispatch } from 'react-redux'
 
 const EnableTwoFactorAuth = () => {
   const [activeTab, setActiveTab] = useState('email')
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
+  const [enableTwofa, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
 
   const handleSubmit = () => {
     if (activeTab === 'email') {
@@ -31,8 +34,8 @@ const EnableTwoFactorAuth = () => {
   }
 
   useEffect(() => {
-    var twoFaVerfied = localStorage.getItem('twoFaVerfied')
-    if (twoFaVerfied) {
+    // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFactor_auth_type !== 'none' && !enableTwofa ) {
       history.push(`/dashboard`)
     }
   }, [])
@@ -55,7 +58,7 @@ const EnableTwoFactorAuth = () => {
           <h4 className="io__query">How would you like to recieve your authentication code</h4>
         </div>
         <div className="io__tf__options">
-          <div
+          {/* <div
             onClick={() => {
               setActiveTab('sms')
             }}
@@ -68,7 +71,7 @@ const EnableTwoFactorAuth = () => {
             <span className={activeTab === 1 ? 'io__active__icon' : 'io__nonactive__icon'}>
               <CircleIcon sx={{ color: activeTab === 'sms' ? '#E42346' : '#DCDCDC' }} />
             </span>
-          </div>
+          </div> */}
           <div
             onClick={() => {
               setActiveTab('email')

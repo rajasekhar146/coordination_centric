@@ -365,7 +365,7 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
 
                       {(item.module_slug =="new_appointment" || item.module_slug == "reschedule_appointment")&&(
                       <div className="button-section">
-                        <button className="button button-view" onClick={()=>{MarkAsRead(item._id);viewAppointment(item.appointmentId); history.push(`/viewApointment/${item.appointmentId}`)}}>
+                        <button className="button button-view" onClick={()=>{MarkAsRead(item._id);viewAppointment(item.appointmentId); history.push(`/viewApointment/upcoming/${item.appointmentId}`)}}>
                           <RemoveRedEyeOutlinedIcon style={{fontSize:14,marginRight:5}}/>
                           View</button>
 
@@ -400,7 +400,10 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
           >
             <div className="nb__profile__dropdown">
               <div>
-                <img src={profilePic} alt="Profile" className="nb__profile__image" />
+                {profilePic ? 
+                <img src={profilePic} alt="Profile" className="nb__profile__image" /> : 
+                <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image"  />
+                }
                 {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} /> */}
               </div>
               <div className="nb__profile__content">

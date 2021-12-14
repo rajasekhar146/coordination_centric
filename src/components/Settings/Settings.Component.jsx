@@ -60,9 +60,10 @@ const OrganizationViewComponent = () => {
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
-    const [alertColor , setAlertColor] = useState('');
-
+    const [alertColor, setAlertColor] = useState('');
     const role = get(userDetails, ['role'], '')
+    const [activeLink, setActiveLink] = useState(false)
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -152,9 +153,15 @@ const OrganizationViewComponent = () => {
     return (
         <div className="od__setting__div">
             <div
-                className="io__back_setting"
+                className={activeLink ? 'io__back_setting active_link' : 'io__back_setting'}
                 onClick={() => {
                     history.push('/dashboard')
+                }}
+                onMouseOver={() => {
+                    setActiveLink(true)
+                }}
+                onMouseOut={() => {
+                    setActiveLink(false)
                 }}
             >
                 <span className="io__back__arrow_setting">
@@ -206,7 +213,7 @@ const OrganizationViewComponent = () => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     getMemberDetails={getMemberDetails}
-                    setAlertColor ={setAlertColor}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -248,7 +255,12 @@ const OrganizationViewComponent = () => {
                     setAlertColor={setAlertColor}
                 />
             </TabPanel>
-            <Alert handleCloseFlash={handleCloseFlash} alertMsg={alertMsg} openflash={openflash} subLebel={subLebel} color = {alertColor}/>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+                color={alertColor} />
         </div>
     )
 }

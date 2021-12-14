@@ -137,16 +137,16 @@ const ProfileSetupComponent = () => {
               onClick={() =>
                 selectFiles({ accept: 'image/*' }, ({ name, size, source, file }) => {
                   const formData = new FormData()
-                  formData.append(`image`, file)
+                  formData.append(`files`, file)
                   console.log('Files Selected', { name, size, source, file })
                   memberService
-                    .uploadCertificate(formData, 'doctor', null)
+                    .uploadFile(formData)
                     .then(response => {
                       if (response?.data) {
-                        var fileData = response.data
-                        console.log('fileData', fileData)
-                        setProfilePicName(fileData.data)
-                        member.member.profilePic = fileData.data
+                        // var fileData = response.data
+                        // console.log('fileData', fileData)
+                        setProfilePicName(response.data.data)
+                        member.member.profilePic = response.data.data
                         dispatch(newMember(member.member))
                       }
                     })
@@ -161,15 +161,15 @@ const ProfileSetupComponent = () => {
             <div className="psp__label">Short Biography</div>
           </div>
 
-          <div className="psp__row psp__submit__btn__center__align">
-            <TextField className="psp__multiline__text__box" {...register('bio')} margin="normal" multiline  />
-            &nbsp; &nbsp;
-            <div className="psp__submit"> <Button className="psp__next__btn" type="submit">
+          <div className="two-grid">
+            <div className="tex-field">
+            <TextField className="psp__multiline__text__box" {...register('bio')}inputProps={{ maxLength: 500 }} margin="normal" multiline  />
+              </div>
+              <div className="psp__submit"> <Button className="psp__next__btn" type="submit">
             Submit &nbsp;
             <ArrowForwardIosRoundedIcon />
           </Button></div>
-           
-          </div>
+            </div>
         </div>
         <Modal open={openModel} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
           <Box sx={modalStyle}>

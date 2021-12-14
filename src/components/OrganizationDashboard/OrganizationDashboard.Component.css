@@ -219,6 +219,22 @@
     padding: 2px 8px  2px 6px !important;
 }
 
+.od__pending_bank_verification__status {
+    background-color: #F4F3FF !important;
+    border-radius: 16px;
+    text-transform: capitalize;
+    line-height: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    width: fit-content;
+    padding: 2px 8px  2px 6px !important;
+
+}
 .od__declined__status {
     background-color: #FEF3F2 !important;
     border-radius: 16px;
@@ -354,11 +370,10 @@
     align-items: left !important;
     justify-content: center;
     padding: 8px 4px 8px 4px !important;
-    margin-left: 20px;
 }
 
 .od__menu__text__column {
-    min-width: 100% !important;
+    min-width: 100px !important;
     display: flex;
     align-items: left !important;
     margin-left: 15px;
@@ -440,6 +455,12 @@
     color: #B54708;
     font-family: Lato;
 }
+.od__pending_bank_verification__label {
+    padding-left: 6px;
+    color: #B54708;
+    font-family: Lato;
+}
+
 .od__pending_acceptance__label {
     padding-left: 6px;
     color: #5925DC;
@@ -481,7 +502,6 @@
     display: flex;
     flex-direction: row-reverse;
     position: relative;
-    top: 4px;
     padding: 0 0 8px 0;
 }
 .od_flex_space_between {
@@ -506,4 +526,13 @@
     padding: 8px 10px 8px 10px !important;
     border-radius: 3px !important;
     width: 150px !important;
+}
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+    top: -7px !important;
+}
+.app_loader{
+    text-align: center;
+    padding-top: 17%;
+    padding-bottom: 17%;
 }

@@ -200,12 +200,11 @@ const OverView = ( props ) => {
             </Typography>
             <div className="det-valContainer">
               <div>
-                <div className="det-subtitle">Address Line</div>
+                <div className="det-subtitle"><b>Address Line</b></div>
                 <Typography
                   variant="subtitle2"
                   display="block"
                   className="det-value"
-                  style={{ marginLeft: 10 }}
                   gutterBottom
                 >
                   {orgDet && orgDet.facilityAddress}
@@ -213,13 +212,13 @@ const OverView = ( props ) => {
               </div>
               <div className="block-container">
                 <div className="subTitle-block">
-                  <div className="det-subtitle">Country</div>
+                  <div className="det-subtitle"><b>Country</b></div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
                     {orgDet && orgDet.country && orgDet.country}
                   </Typography>
                 </div>
                 <div className="subTitle-block">
-                  <div className="det-subtitle">State</div>
+                  <div className="det-subtitle"><b>State</b></div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
                     {orgDet && orgDet.state && orgDet.state}
                   </Typography>
@@ -227,15 +226,15 @@ const OverView = ( props ) => {
               </div>
               <div className="block-container">
                 <div className="subTitle-block">
-                  <div className="det-subtitle">City</div>
+                  <div className="det-subtitle"><b>City</b></div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
                     {orgDet && orgDet.city && orgDet.city}
                   </Typography>
                 </div>
                 <div className="subTitle-block">
-                  <div className="det-subtitle">Zip code</div>
+                  <div className="det-subtitle"><b>Zip code</b></div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-                    {orgDet && orgDet.facilityAddress}
+                    {orgDet && orgDet.zipcode}
                   </Typography>
                 </div>
               </div>
@@ -255,6 +254,14 @@ const OverView = ( props ) => {
             </Typography>
             <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
               {orgDet && orgDet.taxId}
+            </Typography>
+          </div>
+          <div className="detailWrapper">
+            <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
+              Medical Id
+            </Typography>
+            <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+              {orgDet && orgDet.medicalId}
             </Typography>
           </div>
           <div className="detailWrapper">

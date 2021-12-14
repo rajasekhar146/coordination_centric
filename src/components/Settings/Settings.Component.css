@@ -223,9 +223,20 @@
 }
 .upload_icon {
     position: absolute;
-    left: 8px;
-    top: 12px;
+    left: -30px;
+    top: 2px;
+    align-items: center;
+    justify-content: center;
 }
+
+
+.file_icon {
+    position: absolute;
+    top: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
 .od_dropzone_progress {
     position: relative;
     width: 100%;
@@ -287,7 +298,7 @@
 }
 .io_p_value {
     position: absolute;
-    right: 65px;
+    right: 15px;
     bottom: 22px;
 }
 .io_delete {
@@ -503,9 +514,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     background-color: #ccc;
   }
 .container input:checked ~ .checkmark {
-    border-color: #1C2043;
+    border-color: #E42346;
     background-position: 0 0;
-    background-image: url('../../assets/icons/checkbox_selected.svg')
+    background-image: url('../../assets/icons/checkbox_selected.svg');
+    background-color: #E42346;
  }
 .checkmark:after {
     content: "";
@@ -671,4 +683,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     text-align: center;
     padding: 5px;    
     border-radius: 50%;
+}
+.active_link {
+    color: #E42346;
 }

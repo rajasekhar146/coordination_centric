@@ -73,7 +73,7 @@ const EmailVerificationPage = props => {
 
   const handleVarification = async () => {
     console.log('currentUserEmail', currentUserEmail)
-    await accountService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
+    await authenticationService.sendEmailVerificationCode(currentUserEmail, verificationCode).then(data => {
       console.log('handleSendEmail >> ', data)
       if (data?.status == 200) window.location.href = "emailverification-success";
       else history.push('/emailverification-failed')
@@ -149,7 +149,7 @@ const EmailVerificationPage = props => {
           </Button>
           &nbsp; &nbsp;&nbsp; &nbsp;
           <Button
-            className={!verificationCode ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}
+            className={!verificationCode || (minutes === 0 && seconds === 0) ? 'evp__verify__btn_disabled' : 'evp__verify__btn'}
             onClick={handleVarification}>
             Verify &nbsp;{' '}
             {
@@ -179,7 +179,7 @@ const EmailVerificationPage = props => {
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
-        color = "success"
+        color="success"
       />
     </div>
   )

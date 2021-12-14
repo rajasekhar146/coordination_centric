@@ -94,7 +94,7 @@ const PersonalInfo = props => {
   // const [alertMsg, setAlertMsg] = useState('')
   // const [subLabel, setSubLabel] = useState('')
   const [npiIdErr, setNPIIdErr] = useState(false)
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails } = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props
   console.log('certificates', certificates)
   const ColoredLine = ({ color }) => (
     <hr
@@ -119,18 +119,22 @@ const PersonalInfo = props => {
     })
   }
 
-  const handleDeleteFile = idx => {
+  const handleDeleteFile = (fName, idx) => {
+    console.log('handleDeleteFile >> fName', fName)
+    console.log('handleDeleteFile >> idx', idx, certificates)
+    console.log('handleDeleteFile >> certificates', certificates)
+    console.log('handleDeleteFile >> selectedFiles', selectedFiles)
     var newFiles = []
     var newTempFiles = []
     certificates.forEach((file, index) => {
-      console.log('update-certificate-redux', file, index, idx)
-      if (index != idx) {
+      console.log('update-certificate-redux', file)
+      if (file.certificate_name != fName) {
         newFiles.push({ certificate_name: file.certificate_name })
       }
     })
     selectedFiles.forEach((file, index) => {
-      console.log('update-certificate-local', file, index, idx)
-      if (index != idx) {
+      console.log('update-certificate-local', file)
+      if (idx != index) {
         newTempFiles.push(file)
       }
     })
@@ -194,6 +198,14 @@ const PersonalInfo = props => {
       var files = mpInfo.certificates
       //files.push('Prkaash.doc')
       setCertificates(files)
+      var newFiles = []
+      files.forEach(f => {
+        const c = {
+          certificate_name: f,
+        }
+        newFiles.push(c)
+      })
+      dispatch(memberProfessionalInfoCertificates(newFiles))
 
       console.log('files', files)
 
@@ -331,7 +343,8 @@ const PersonalInfo = props => {
       console.log('Successfull')
       setOpenFlash(true)
       setAlertMsg('Saved')
-      setSubLabel('Your changes are saved')
+      setSubLabel('Your changes are updated successfully')
+      setAlertColor('success')
       getMemberDetails()
     }
   }
@@ -342,7 +355,7 @@ const PersonalInfo = props => {
   const getDateTime = (dayName, time) => {
     console.log('getDateTime', dayName, time)
     if (moment(time).isValid()) return moment(time).format('YYYY-MM-DD HH:mm')
-    else {      
+    else {
       var dayDateTime = getDay(dayName)
       var hourAndMinute = time.split(':')
       const retDate = moment(dayDateTime).set({ hour: parseInt(hourAndMinute[0]), minute: parseInt(hourAndMinute[1]) })
@@ -442,8 +455,18 @@ const PersonalInfo = props => {
       setAvailabilities(nAvailable)
       dispatch(memberAvaliabilities(nAvailable))
     } else {
-      setAvailabilities(defaultValues)
-      dispatch(memberAvaliabilities(defaultValues))
+      const nAvailable = defaultValues.map(n => {
+        return {
+          day: n.day,
+          first_half_starting_time: moment(n.first_half_starting_time).format('HH:mm'),
+          first_half_ending_time: moment(n.first_half_ending_time).format('HH:mm'),
+          second_half_starting_time: moment(n.second_half_starting_time).format('HH:mm'),
+          second_half_ending_time: moment(n.second_half_ending_time).format('HH:mm'),
+          is_available: false,
+        }
+      })
+      setAvailabilities(nAvailable)
+      dispatch(memberAvaliabilities(nAvailable))
     }
   }
 
@@ -453,8 +476,11 @@ const PersonalInfo = props => {
   }
 
   const viewCertificates = async fileName => {
+    console.log('viewCertificates', fileName)
     let certificateResponse = await organizationService.downloadFile({ name: fileName })
-    window.open(get(certificateResponse, ['data', 'data']), '_blank')
+    const url = get(certificateResponse, ['data', 'data', 'url'], '')
+    console.log('certificateResponse', url)
+    window.open(url, '_blank')
   }
 
   const deleteCertificate = async filename => {
@@ -493,9 +519,21 @@ const PersonalInfo = props => {
           <FormControl variant="outlined" className={classes.formControl}>
             <TextField
               {...register('npiId', {
-                required: 'NPI ID is required.',
-                onChange: e => setNPIID(e.target.value),
-              })}
+                required: {
+                    value: true,
+                    message: "NPI ID is required.",
+                },
+                pattern: {
+                    value: /^[1-9]\d*(\d+)?$/i,
+                    message: 'Phone Number accepts only integer',
+                }
+              }
+              
+             )}
+             onChange={e => {
+              setValue('npiId', e.target.value.replace(/[^0-9]/g, ''));
+              setNPIID(e.target.value.replace(/[^0-9]/g, ''))
+            }}
               margin="normal"
               InputProps={{
                 className: classes.input,

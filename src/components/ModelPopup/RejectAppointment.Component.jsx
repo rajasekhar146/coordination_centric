@@ -7,6 +7,8 @@ import { appointmentService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import moment from 'moment'
+import Box from '@mui/material/Box'
 
 const styles = theme => ({
     // root: {
@@ -34,6 +36,32 @@ const styles = theme => ({
     // },
 });
 
+const rejectAppointment = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 950,
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    boxShadow: 24,
+    borderRadius: 3,
+    p: 2,
+}
+
+const rejectPopupWithoutSecondary = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    boxShadow: 24,
+    borderRadius: 3,
+    p: 2,
+}
+
 
 
 const RejectAppointmentComponent = props => {
@@ -48,7 +76,32 @@ const RejectAppointmentComponent = props => {
         getAppointmentList
     } = props
 
-    const [activeTab, setActiveTab] = useState('primary')
+    const [secondarySlots, setSecondarySlots] = useState(null)
+    const [selectedSlot, setSelectedSlot] = useState(null)
+
+
+    useEffect(async () => {
+        const res = await appointmentService.getSecondaryAppointment(selectedAppointment.appointmentid)
+        if (res.status === 200) {
+            const element = get(res, ['data', 'data'], {})
+            const recordNew = {
+                name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
+                profile: element?.userId?.profilePic,
+                location: 'Online',
+                date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
+                time: (element?.startTime ? moment(element?.startTime).format('h:mm a') : "") + " - " + (element?.endTime ? moment(element?.endTime).format('h:mm a') : ''),
+                status: element?.status,
+                gender: element?.userId?.gender,
+                _id: element?.userId?._id,
+                appointmentid: element?._id,
+                startTime: element?.startTime,
+                endTime: element?.endTime
+            }
+            setSecondarySlots(recordNew)
+        } else {
+
+        }
+    }, [])
 
 
     const handleReject = async () => {
@@ -69,69 +122,93 @@ const RejectAppointmentComponent = props => {
 
 
     return (
-        <div className="io_reschedule">
-            <div className="io__row io__icon io_mb25">
-                <img src={ResendCalender} alt="Approve Org" />
-            </div>
-            <div className="io__row io__text__center io_width97">
-                <label className="io__title">
-                    Do you want to reject this appointment?
-
-                </label>
-            </div>
-            <div className="io_appointment_details">
-                <div style={{ width: '50%' }} className="io_slot_selector">
-                    <div>
-                        <label className="io_user_label">
-                            Patient
-                        </label>
-                    </div>
-                    <div>
-                        <label className="io_user_name">
-                            {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
-                        </label>
-                    </div>
-
+        <Box sx={get(secondarySlots, ['startTime'], null) && get(secondarySlots, ['endTime'], null)
+            ? rejectAppointment
+            : rejectPopupWithoutSecondary}>
+            <div className="io_reschedule">
+                <div className="io__row io__icon io_mb25">
+                    <img src={ResendCalender} alt="Approve Org" />
                 </div>
-                <div style={{ width: '50%' }} className="io_slot_selector">
-                    <div>
-                        <label className="io_user_label">
-                            Primary - Date and Time
-                        </label>
-                    </div>
-                    <div>
-                        <label className="io_user_name">
-                            Thu, 7th Oct - 8am
-                        </label>
-                    </div>
-                </div>
-            </div>
+                <div className="io__row io__text__center io_width97">
+                    <label className="io__title">
+                        Do you want to reject this appointment?
 
-            <div className="io__row io__btn io_width97">
-                <div className="io__same__line">
-                    <div className="io__cancel">
-                        <Button className="io__cancel__btn" onClick={clickCloseButton}>
-                            Back
-                        </Button>
+                    </label>
+                </div>
+                <div className="io_appointment_details">
+                    <div style={{ width: '33%' }} className="io_slot_selector">
+                        <div>
+                            <label className="io_user_label">
+                                Patient
+                            </label>
+                        </div>
+                        <div>
+                            <label className="io_user_name">
+                                {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
+                            </label>
+                        </div>
+
                     </div>
-                    <div className="io__cancel">
-                        <Button className="io__cancel__btn io_reschedule_btn"
-                            onClick={() => {
-                                setIsRescheduleClicked(true)
-                                clickCloseButton()
-                            }}>
-                            Re-schedule
-                        </Button>
+                    <div style={{ width: '33%' }} className="io_slot_selector">
+                        <div>
+                            <label className="io_user_label">
+                                Primary - Date and Time
+                            </label>
+                        </div>
+                        <div>
+                            <label className="io_user_name">
+                                {`${selectedAppointment.date} ${selectedAppointment.time}`}
+                            </label>
+                        </div>
                     </div>
-                    <div className="io__approve">
-                        <Button type="submit" className="io__Approve__btn"
-                            onClick={handleReject}>
-                            Reject
-                        </Button>
+                    {get(secondarySlots, ['startTime'], null) && get(secondarySlots, ['endTime'], null)
+                        && <div
+                        style={{ width: '33%' }}
+                            className="io_slot_selector">
+                            <div>
+                                <label className="io_user_label">
+                                    Secondary - Date and Time
+
+                                </label>
+                            </div>
+                            <div>
+                                <label className="io_user_name">
+                                    {`${get(secondarySlots, ['date'], '')} ${get(secondarySlots, ['time'], '')}`}
+                                </label>
+                            </div>
+
+                        </div>
+
+                    }
+                </div>
+
+
+                <div className="io__row io__btn io_width97">
+                    <div className="io__same__line">
+                        <div className="io__cancel">
+                            <Button className="io__cancel__btn" onClick={clickCloseButton}>
+                                Back
+                            </Button>
+                        </div>
+                        <div className="io__cancel">
+                            <Button className="io__cancel__btn io_reschedule_btn"
+                                onClick={() => {
+                                    setIsRescheduleClicked(true)
+                                    clickCloseButton()
+                                }}>
+                                Re-schedule
+                            </Button>
+                        </div>
+                        <div className="io__approve">
+                            <Button type="submit" className="io__Approve__btn"
+                                onClick={handleReject}>
+                                Reject
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Box>
     )
 }
 

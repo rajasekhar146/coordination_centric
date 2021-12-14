@@ -5,7 +5,7 @@ import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
 const ApproveModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor } = props
 
   const handleSubmit = async () => {
     const params = {
@@ -17,17 +17,18 @@ const ApproveModel = props => {
     })
     console.log('Approve Model Popup >> 1 ', response)
     if (response.status === 200) {
-      const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
-        console.log(err)
-      })
-      if (res.status === 200) {
+      // const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
+      //   console.log(err)
+      // })
+      // if (res.status === 200) {
         setOrganizations([])
-        setSkip(1)
+        setSkip(0)
         setOpenFlash(true)
         setAlertMsg('Verified')
         setSubLabel('This account was successfully verified.')
+        setAlertColor('success')
         props.clickCloseButton()
-      }
+      // }
     }
   }
 

@@ -21,6 +21,7 @@ import { memberService, commonService } from '../../services'
 import get from 'lodash.get'
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { capitalize } from 'lodash'
 
 
 const styles = theme => ({
@@ -51,12 +52,6 @@ const styles = theme => ({
 
 
 
-const roles = [
-    { name: 'Doctor', value: 'doctor' },
-    { name: 'NP', value: 'np' },
-    { name: 'PA', value: 'pa' },
-    { name: 'Receptionist', value: 'receptionist' }
-]
 
 
 const InviteMemberComponent = props => {
@@ -75,14 +70,16 @@ const InviteMemberComponent = props => {
         setMembersList
     } = props;
 
-    useEffect(() => {
-        const res = commonService.getAllRoles()
+    useEffect(async() => {
+        const res = await commonService.getAllRoles();
+        setRoles(res.data.data.data);
     }, [])
 
 
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors },
     } = useForm()
@@ -98,7 +95,7 @@ const InviteMemberComponent = props => {
 
     const [isSubmit, setIsSubmit] = useState(false)
     const [isExist, setIsExist] = useState('')
-
+    const [roles , setRoles] = useState([]);
     const onSubmit = (requestData) => {
         setIsSubmit(true)
         requestData.refUserId = organizationId
@@ -141,6 +138,16 @@ const InviteMemberComponent = props => {
                                 {...register('first_name', {
                                     required: 'First Name is required.',
                                 })}
+                                onChange={(e) => {
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('first_name', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityName && isSubmit}
                                 InputProps={{
@@ -168,6 +175,16 @@ const InviteMemberComponent = props => {
                                 {...register('last_name', {
                                     required: 'Last Name Required.'
                                 })}
+                                onChange={(e) => {
+                                    let val;
+                                    if (e.target.value.length === 1) {
+                                      val = capitalize(e.target.value)
+                                    }
+                                    else {
+                                      val = e.target.value
+                                    }
+                                    setValue('last_name', val)
+                                  }}
                                 margin="normal"
                                 error={errors.facilityEmail && isSubmit}
                                 InputProps={{
@@ -231,8 +248,8 @@ const InviteMemberComponent = props => {
                                 Select an Option
                             </MenuItem> */}
                                 {roles.map(role => (
-                                    <MenuItem key={role.name} value={role.value}>
-                                        <ListItemText primary={role.name} />
+                                    <MenuItem key={role.role_name} value={role.role_name}>
+                                        <ListItemText primary={role.role_name} />
                                     </MenuItem>
                                 ))}
                             </Select>

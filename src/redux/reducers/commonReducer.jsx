@@ -44,11 +44,12 @@ const flagMsg = {
   openFlash: false,
   alertMsg: '',
   subLabel: '',
+  color: ''
 }
 
 const buildTimeSlots = () => {
-  var startTime = moment().set({ hour: 8, minute: 0 })
-  const endTime = moment().set({ hour: 22, minute: 0 })
+  var startTime = moment().set({ hour: 6, minute: 0 })
+  const endTime = moment().set({ hour: 23, minute: 0 })
   const interval = 30
   var timeSlots = []
   do {
@@ -60,6 +61,8 @@ const buildTimeSlots = () => {
       endTime: eTime,
       isSelected: false,
       isEnabled: true,
+      isPrimary: false,
+      isSecondary: false,
     }
     timeSlots.push(timeSlot)
     // console.log('startTime', timeSlot)
@@ -194,3 +197,28 @@ export const completeProfileReducer = (state = false, { type, payload }) => {
   }
 }
 
+export const enableTwofaReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.ENABLE_TWO_FA:
+      return payload
+    default:
+      return state
+  }
+}
+export const reschedulePrimaryAppointmentDateReducer = (state = primaryppointments, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.RESCHEDULE_APPOINTMENT_PRIMARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}
+
+export const rescheduleSecondaryAppointmentDateReducer = (state = secondaryAppointment, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.RESCHEDULE_APPOINTMENT_SECONDARY_DATE:
+      return payload
+    default:
+      return state
+  }
+}

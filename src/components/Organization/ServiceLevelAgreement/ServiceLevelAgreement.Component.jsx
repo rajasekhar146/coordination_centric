@@ -180,9 +180,9 @@ const ServiceLevelAgreementComponent = props => {
                     <div className="sla__download__text" onClick={onButtonClick}>
                       <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
                     </div>
-                    <div className="sla__download__text">
+                    {/* <div className="sla__download__text">
                       <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div>

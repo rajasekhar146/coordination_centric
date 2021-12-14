@@ -19,6 +19,9 @@ import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
 import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
 import Stack from '@mui/material/Stack'
 import Pagination from '@mui/material/Pagination'
+import CircularProgress from '@mui/material/CircularProgress';
+import TablePagination from '@mui/material/TablePagination'
+
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -80,16 +83,22 @@ const CollaboratorsComponent = props => {
     const [totalPage, setTotalPage] = React.useState(0)
     const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
     const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
-    const [page, setPage] = React.useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(0)
+    const [count, setCount] = useState(50)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
+   
     const getStaffList = async () => {
-        const res = await memberService.getStaffList(organizationId, 'facility', limit, skip)
-        if (res.status === 200) {
+        setIsLoading(true)
+        memberService.getStaffList(organizationId, 'facility', limit, skip).then((res) => {
             setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
-        } else {
-
-        }
-
+            setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], []))
+            setIsLoading(false)
+        }).catch((err) => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
 
     useEffect(() => {
@@ -109,12 +118,20 @@ const CollaboratorsComponent = props => {
         setOpenInviteCollaboratorSuccess(false)
     }
 
-    const handleChangePage = async (event, newPage) => {
-        setPage(newPage)
-        const skipRecords = (newPage - 1) * 10
-        setSkip(skipRecords)
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+        setSkip(limit * newPage)
+        setIsLoading(true)
+    };
 
-    }
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+        setSkip(0)
+        setLimit(parseInt(event.target.value, 10))
+        setIsLoading(true)
+    };
+
 
     return (
         <div className="od__main__div">
@@ -127,12 +144,12 @@ const CollaboratorsComponent = props => {
                                 setOpenInviteCollaborator(true)
                             }}
                             className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
-                            >
+                        >
                             &nbsp;&nbsp; Add Collaborator
                         </Button>
                     </div>
                 }
-               
+
             </div>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
@@ -157,25 +174,51 @@ const CollaboratorsComponent = props => {
                                 )}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {collaboratorList.map((row, index) => (
-                                <CollaboratorItem
-                                    row={row}
-                                    index={index}
-                                    columns={columns}
-                                    setOpenFlash={setOpenFlash}
-                                    setAlertMsg={setAlertMsg}
-                                    setSubLabel={setSubLabel}
-                                    setCollaboratorList={setCollaboratorList}
-                                    setSkip={setSkip}
-                                    organizationId={organizationId}
-                                />
-                            ))
-                            }
+                        {isLoading
+                            ? <TableBody>
+                                <tr>
+                                    <td className="app_loader" colSpan={15}>
+                                        <CircularProgress />
+                                    </td>
+                                </tr>
+                            </TableBody>
+                            :
+                            <TableBody >
 
-                        </TableBody>
+                                {collaboratorList.length === 0
+                                    ? <tr>
+                                        <td className="app_loader" colSpan={15}>
+                                            <label>No Results Found</label>
+                                        </td>
+
+                                    </tr> :
+                                    collaboratorList.map((row, index) => (
+                                        <CollaboratorItem
+                                            row={row}
+                                            index={index}
+                                            columns={columns}
+                                            setOpenFlash={setOpenFlash}
+                                            setAlertMsg={setAlertMsg}
+                                            setSubLabel={setSubLabel}
+                                            setCollaboratorList={setCollaboratorList}
+                                            setSkip={setSkip}
+                                            organizationId={organizationId}
+                                        />
+                                    ))
+                                }
+                            </TableBody>
+                        }
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Paper>
             <Modal
                 open={openInviteCollaborator}
@@ -219,7 +262,7 @@ const CollaboratorsComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color = "success"
+                color="success"
             />
         </div>
 

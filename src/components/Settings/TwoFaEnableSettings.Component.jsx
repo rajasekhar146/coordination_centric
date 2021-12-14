@@ -8,6 +8,8 @@ import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import DisableTwoFaSetting from '../ModelPopup/DisableTwoFaSettingPopup'
 import history from '../../history'
+import { useDispatch } from 'react-redux'
+import { enableTwofa } from '../../redux/actions/commonActions'
 
 
 const disableModelStyle = {
@@ -38,6 +40,7 @@ const TwoFaEnableSettings = props => {
     } = props
     const [twoFaValue, setTwoFaValue] = useState(null)
     const [disableTwoFaPopup, setDisableTwoFaPopup] = useState(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setTwoFaValue(enableTwoFa)
@@ -115,6 +118,7 @@ const TwoFaEnableSettings = props => {
                             onClick={() => {
                                 setTwoFaValue('enabled')
                                 history.push('/enable2fa')
+                                dispatch(enableTwofa(true))
                             }}
                             src={ToggleOnIcOff}
                             alt="upload"
