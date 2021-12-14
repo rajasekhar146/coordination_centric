@@ -234,7 +234,7 @@ const OverView = ( props ) => {
                 <div className="subTitle-block">
                   <div className="det-subtitle"><b>Zip code</b></div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-                    {orgDet && orgDet.facilityAddress}
+                    {orgDet && orgDet.zipcode}
                   </Typography>
                 </div>
               </div>

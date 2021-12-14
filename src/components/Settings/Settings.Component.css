@@ -684,3 +684,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding: 5px;    
     border-radius: 50%;
 }
+.active_link {
+    color: #E42346;
+}

@@ -188,6 +188,16 @@ const menuList = [
     ],
   },
   {
+    menu: 'pending_bank_verification',
+    options: [
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+    ],
+  },
+  {
     menu: 'cancelled',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
@@ -371,6 +381,7 @@ const colorcodes = {
   cancelled: '#757500',
   inactive: '#A0A4A8',
   declined: '#B42318',
+  pending_bank_verification: '#F79009'
 }
 
 const createData = (name, code, population, size) => {

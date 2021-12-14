@@ -14,6 +14,7 @@ import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
 import { getTokenFn } from '../../firebase'
 import Alert from '../Alert/Alert.component'
+import { enableTwofa } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +55,7 @@ const TwoFaEnabled = props => {
   const [openflash, setOpenFlash] = useState(false)
   const [alertcolor, setAlertColor] = useState('success')
   const [activeResend, setActiveResend] = useState(false)
+  const [activeLink, setActiveLink] = useState(false)
 
   const {
     email,
@@ -200,9 +202,17 @@ const TwoFaEnabled = props => {
           <label className="io_resend_label io_mr_20">or </label>
           <label
             onClick={() => {
-              history.push('./enable2fa')
+              dispatch(enableTwofa(true))
+              history.push('/enable2fa')
             }}
-            className="io_resend_label io_mr_20 pointer">
+            onMouseOver={() => {
+              setActiveLink(true)
+            }}
+            onMouseOut={() => {
+              setActiveLink(false)
+            }}
+            className={activeLink ? 'io_resend_label io_mr_20 active_link' : 'io_resend_label io_mr_20'}
+            >
             Choose another authentication method
           </label>
         </div>

@@ -61,6 +61,7 @@ const CollaboratorComponent = props => {
         setIsLoading(true)
         memberService.getStaffList(organizationId, 'facility', limit, skip).then((res) => {
             setCollaboratorList(get(res, ['data', 'data', '0', 'totalData'], []))
+            setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], []))
             setIsLoading(false)
         }).catch((err) => {
             console.log(err)

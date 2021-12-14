@@ -117,7 +117,14 @@ const InviteOrganizationComponent = props => {
               margin="normal"
               error={errors.facilityName && isSubmit}
               onChange={(e) => {
-                setValue('facilityName', capitalize(e.target.value))
+                let val;
+                if (e.target.value.length === 1) {
+                  val = capitalize(e.target.value)
+                }
+                else {
+                  val = e.target.value
+                }
+                setValue('facilityName', val)
               }}
               inputProps={{ minLength: 3 }}
               InputProps={{
