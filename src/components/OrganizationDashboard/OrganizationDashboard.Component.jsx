@@ -408,7 +408,7 @@ const rows1 = [
 
 const OrganizationDashboardComponent = () => {
   const classes = useStyles()
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = React.useState(0)
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
