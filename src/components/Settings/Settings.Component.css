@@ -229,6 +229,13 @@
     justify-content: center;
 }
 
+.pd_upload_icon {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    align-items: center;
+    justify-content: center;
+}
 
 .file_icon {
     position: absolute;
