@@ -78,7 +78,6 @@ const getWeekDays = () => {
   const timeSlots = buildTimeSlots()
   weekDays.forEach(d => {
     const currentDate = moment().add(d, 'd')
-    console.log('day', currentDate.format('dddd, DD'), d)
     const availabilityDayDetail = {
       dayDesc: currentDate.format('dddd, DD'),
       availableTimeSlots: timeSlots,

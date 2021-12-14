@@ -3,8 +3,6 @@ import { authenticationService } from '../services'
 
 export function authHeader() {
   const currentUser = authenticationService?.currentUserValue
-  console.log('authHeader >> currentUser >> ', currentUser)
-  // console.log('currentUser', currentUser?.data)
   if (currentUser && currentUser.data && currentUser.data.token) {
     return {
       'x-access-token': `${currentUser.data.token}`,
