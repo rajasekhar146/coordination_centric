@@ -11,11 +11,13 @@ import {setIdentity,
         setTwilioAccessToken, 
         setRoomId, 
         setShowVideoCallMeeting,
-        setIsFullScreen
+        setIsFullScreen,
+        setVideoTokenErrorMsz,
+        setVideoCallDuration,
+        setUserType
         } from '../../redux/actions/video-call-actions';
 import { connectToRoom, getTokenFromTwilio } from './utils/TwilioUtils';
 import Overlay from './Overlay';
-import {useHistory} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import CallControl from './CallControl/CallControl';
 import VideoAside from './VideoAside/VideoAside';
@@ -30,11 +32,15 @@ const  VideoCallWidget=({
   roomId,
   isFullScreen,
   showOverlay,
+  userType,
   setRoomIdAction,
   setIdentityAction,
   setTwilioAccessTokenAction,
   setShowVideoCallMeetingAction,
   setIsFullScreenAction,
+  setVideoTokenErrorMszAction,
+  setVideoCallDurationAction,
+  setUserTypeAction
   })=>{
   const watingList = [
     {
@@ -53,20 +59,28 @@ const  VideoCallWidget=({
 
     const initialVideoCallData= async()=>{
       try{
-        let userName = JSON.parse(localStorage.getItem('currentUser')).data.data.first_name;
-        setIdentityAction(userName)
+        let userInfo =  JSON.parse(localStorage.getItem('currentUser'));
+        let userName =  userInfo.data.data.first_name;
+        let userTypeLocal =  userInfo.data.data.role;
+        setIdentityAction(userName);
+        if(userTypeLocal === "patient"){
+          let usertypeLocal = {...userType}
+          usertypeLocal.user = "patient"
+          setUserTypeAction(usertypeLocal)
+        }
         let meetingUrl = window.location.pathname;
         let meetingUrlSplit = meetingUrl.split('/');
         setRoomIdAction(meetingUrlSplit[2]);
-         getTokenFromTwilio(meetingUrlSplit[2],userName,setTwilioAccessTokenAction);
-        setShowVideoCallMeetingAction(true)
+         getTokenFromTwilio(meetingUrlSplit[2],userName,setTwilioAccessTokenAction,setVideoTokenErrorMszAction,setVideoCallDurationAction)
+        setShowVideoCallMeetingAction(true);
+        
        
       }catch{
         console.log("User not found")
       }
     }
   
-    const history = useHistory();
+  
     const [toggleWatingList, setToggleWatingList] = useState(false);
     const [room, setRoom] = useState('');
    
@@ -116,11 +130,43 @@ const closeChatFun = ()=>{
     },[])
 
   
-    ReactDOM.render(
-      <>
+    // ReactDOM.render(
+    //   <>
     
-      <Provider store={store}>
-                        <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
+    //   <Provider store={store}>
+    //                     <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
+    //                       <div className="full-screen" onClick={toggleFullScreen}> 
+    //                           <FullscreenIcon/>
+    //                       </div>
+    //                                                 <CallControl
+    //                                                 room={room}
+    //                                                 setRoom={setRoom}
+    //                                                 watingList={watingList}
+    //                                                 toggleWatingList={toggleWatingList}
+    //                                                 setToggleWatingList={setToggleWatingList}
+    //                                                 toggleWatingListHandel={toggleWatingListHandel}
+    //                                                 togglePatientRecordsFun={togglePatientRecordsFun}
+    //                                                 toggleChatFun={toggleChatFun}
+    //                                                 setToggleChat={setToggleChat}
+    //                                                 toggleExtend={toggleExtend}
+    //                                                 toggleExtendFun={toggleExtendFun}
+    //                                                 setToggleExtend={setToggleExtend}
+    //                                                 toggleShare={toggleShare}
+    //                                                 toggleShareFun={toggleShareFun}
+    //                                                 setToggleShare={setToggleShare}
+    //                                                 roomToken={setToggleShare}
+    //                                                 redireactToDashboard={redireactToDashboard}
+    //                                                 />
+    //                                                 <VideoSection room={room} setRoom={setRoom}/>
+    //                                                 { toggleChat && <Chat closeChatFun={closeChatFun}/> }
+    //                                                 { togglePatientRecords && (<div className="video-call-aside-wrp"> <VideoAside roomId={roomId} /> </div>) }
+    //                                                 {/* {showOverlay && <Overlay/>} */}
+    //                                             </div>
+    //   </Provider>
+    //   </>
+    //     ,document.getElementById("video_portal"));
+        return(<>
+         <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
                           <div className="full-screen" onClick={toggleFullScreen}> 
                               <FullscreenIcon/>
                           </div>
@@ -147,10 +193,7 @@ const closeChatFun = ()=>{
                                                     { togglePatientRecords && (<div className="video-call-aside-wrp"> <VideoAside roomId={roomId} /> </div>) }
                                                     {/* {showOverlay && <Overlay/>} */}
                                                 </div>
-      </Provider>
-      </>
-        ,document.getElementById("video_portal"));
-        return(<></>)
+        </>)
 
 }
 
@@ -164,9 +207,11 @@ const mapActionsToProps=(dispatch)=>{
       setRoomIdAction:(roomId)=> dispatch(setRoomId(roomId)),
       setIdentityAction:(identity)=> dispatch(setIdentity(identity)),
       setTwilioAccessTokenAction:(token)=> dispatch(setTwilioAccessToken(token)),
+      setVideoTokenErrorMszAction:(erroMsz)=> dispatch(setVideoTokenErrorMsz(erroMsz)),
+      setVideoCallDurationAction:(videoCallDuration)=> dispatch(setVideoCallDuration(videoCallDuration)),
       setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
-      setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
-      setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting))
+      setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting)),
+      setUserTypeAction:(userTypea)=> dispatch(setUserType(userTypea))
     }
 }
 

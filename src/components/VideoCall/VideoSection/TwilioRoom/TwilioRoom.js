@@ -21,9 +21,10 @@ export default class TwilioRoom extends Component {
       }
     
       componentDidMount() {
-        this.props.room.on("participantConnected", (participant) =>
-          this.addParticipant(participant)
-        );
+        this.props.room.on("participantConnected", (participant) =>{
+          console.log("PPPPPPPPP>>>>>>>>>>>>>", participant);
+          return this.addParticipant(participant)
+        });
     
         this.props.room.on("participantDisconnected", (participant) => {
           this.removeParticipant(participant);

@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-const VideoTrack = ({ track }) => {
+const VideoTrack = ({ track,name}) => {
   const trackRef = useRef();
 
   useEffect(() => {
+    console.log("sssss video")
     const child = track.attach();
     trackRef.current.classList.add(track.kind);
     trackRef.current.appendChild(child);
@@ -18,7 +19,9 @@ const VideoTrack = ({ track }) => {
 
   return (
     <div className="video_track_container">
-      <div ref={trackRef}></div>
+      <div ref={trackRef}>
+        <div class="author-name">{name}</div>
+      </div>
     </div>
   )
 

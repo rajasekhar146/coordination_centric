@@ -4,8 +4,10 @@ import { sendMessageUsignDataChannel } from '../utils/TwilioUtils';
 export default function NewMessage() {
     const [message, setMessage] = useState('');
     const sendMessage = ()=>{
-        sendMessageUsignDataChannel(message, true)
-        setMessage('');
+        if(message){
+            sendMessageUsignDataChannel(message, true)
+            setMessage('');
+        }
     }
     const keyPressHandel = (event)=>{
         if(event.key === 'Enter'){
@@ -17,6 +19,7 @@ export default function NewMessage() {
     const textChangeHandel = (event)=>{
         setMessage(event.target.value);
     }
+  
     return (
         <div className="chat-inp-wrp">
         <div className="chat-inp-inner-wrp">
