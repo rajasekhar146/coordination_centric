@@ -16,7 +16,7 @@ import TablePagination from '@mui/material/TablePagination'
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
-    { id: 'first_name', label: 'Name', minWidth: 180, align: 'left', visible: true },
+    { id: 'name', label: 'Name', minWidth: 180, align: 'left', visible: true },
     { id: 'email', label: 'Email', minWidth: 100, align: 'left', visible: true },
     { id: 'role', label: 'Role', minWidth: 200, align: 'left', visible: true },
     { id: 'memberStatus', label: 'Status', minWidth: 150, align: 'left', visible: true },

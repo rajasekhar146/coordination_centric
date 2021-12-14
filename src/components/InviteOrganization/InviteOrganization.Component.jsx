@@ -126,6 +126,7 @@ const InviteOrganizationComponent = props => {
                 }
                 setValue('facilityName', val)
               }}
+              inputProps={{ minLength: 3 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

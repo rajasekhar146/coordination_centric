@@ -34,6 +34,7 @@ const SignInComponent = () => {
   const [alertMsg, setAlertMsg] = React.useState('')
   const [FCMToken, setFCMToken] = useState("");
   const [activeLink, setActiveLink] = useState(false)
+  const [subLabel , setSubLabel] = useState(false)
 
 
   useEffect(() => {
@@ -98,7 +99,8 @@ const SignInComponent = () => {
         } else if (user.status_code === 400) {
           setIsValidUser(false)
           IsValidUser = false
-          setAlertMsg(get(user, ['message'], ''))
+          setSubLabel(get(user, ['message'], ''))
+          setAlertMsg('Error')
           setOpenFlash(true)
           // setErrMsg(user.message)
           if (user.message.includes('Password')) {
@@ -269,6 +271,7 @@ const SignInComponent = () => {
           handleCloseFlash={handleCloseFlash}
           alertMsg={alertMsg}
           openflash={openflash}
+          subLebel = {subLabel}
           color="fail" />
       </form>
     </div>
