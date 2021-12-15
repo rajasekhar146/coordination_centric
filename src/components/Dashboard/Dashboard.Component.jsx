@@ -245,6 +245,7 @@ const DashboardComponent = () => {
   const [elementsStats, setElementStats] = useState([])
   const [dashboardDetails, setDashboardDetails] = useState(null)
   const isLoggedToken = get(JSON.parse(localStorage.getItem('currentUser')), ['data', 'token'], null)
+  const [twoFaSkipped, setSkipTwoFa] = useState(useSelector(state => state.skipTwoFaValue))
 
 
 
@@ -252,7 +253,7 @@ const DashboardComponent = () => {
     if (!isLoggedToken) {
       history.push('signin')
     }
-    if (!last_login_time) {
+    if (!last_login_time && !twoFaSkipped) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     }
@@ -278,6 +279,7 @@ const DashboardComponent = () => {
     //   // dispatch(setCopmletPropfilePopup(true))
     // })
     setIsOpen2FA(false)
+
     if(isShowCopleateProfile()) {
       setIsOpenCompleateProfile(true)
     }
