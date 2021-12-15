@@ -96,6 +96,15 @@ const availableTimeSlotsInitialState = {
   },
 }
 
+const getTwofaValueFromLocalStorage = () => {
+  if (localStorage.getItem('isSkippedTwoFa')) {
+    const val = localStorage.getItem('isSkippedTwoFa');
+    return true;
+  }
+  return false
+}
+  ;
+
 export const commonReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_COUNTRIES:
@@ -179,9 +188,10 @@ export const setFlashMsgReducer = (state = flagMsg, { type, payload }) => {
   }
 }
 
-export const skipTwoFaReducer = (state = false, { type, payload }) => {
+export const skipTwoFaReducer = (state = getTwofaValueFromLocalStorage(), { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_SKIP_TWOFA:
+      localStorage.setItem('isSkippedTwoFa', true)
       return payload
     default:
       return state

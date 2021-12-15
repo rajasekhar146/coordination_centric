@@ -252,7 +252,7 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
     console.log('action', action)
     if (action.toLowerCase() === 'logout') {
       authenticationService.logout()
-      localStorage.removeItem('IsShow2FAPopup')
+      localStorage.clear()
       history.push('/signin')
     } else if (action.toLowerCase() === 'profile'){
       history.push(`/settings/${userId}`)
