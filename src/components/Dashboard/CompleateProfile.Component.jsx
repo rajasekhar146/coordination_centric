@@ -29,7 +29,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const CompleateProfile = props => {
-    const { userId } = props
+    const {
+        userId,
+        setIsOpenCompleateProfile
+    } = props
     const classes = useStyles()
     const dispatch = useDispatch()
     return (
@@ -48,11 +51,12 @@ const CompleateProfile = props => {
             <div className="io__complete">
                 <div style={{ textAlign: "center" }}>
                     <Button
-                    onClick={() => {
-                        history.push(`/settings/${userId}`)
-                        dispatch(setCompleteProfile(false))
-                    }}
-                     type="submit" className="io__done__btn">
+                        onClick={() => {
+                            history.push(`/settings/${userId}`)
+                            setIsOpenCompleateProfile(false)
+                            dispatch(setCompleteProfile(false))
+                        }}
+                        type="submit" className="io__done__btn">
                         Complete Profile
                     </Button>
                 </div>

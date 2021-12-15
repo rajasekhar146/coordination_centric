@@ -77,12 +77,13 @@ const delImageHandle = (file , index) =>{
                 <CloseIcon className="svg_icons"/>
             </div>
                 <span className="io_delete">
-                    {progress === 100
-                        ? <img className="upload_icon" src={UploadSuccess} alt="upload" />
-                        : <img className="upload_icon" src={DeleteIcon} alt="upload" />
-                    }
-                </span>
-                <img className="upload_icon" src={UploadFileIcon} alt="upload" />
+          {progress === 100 ? (
+            <img className="pd_upload_icon" src={UploadSuccess} alt="upload" />
+          ) : (
+            <img className="pd_upload_icon" src={DeleteIcon} alt="upload" />
+          )}
+        </span>
+        <img className="pd_upload_icon" src={UploadFileIcon} alt="upload" />
                 <div className="io_filename">
                     <label >{file.name}</label>
                 </div >

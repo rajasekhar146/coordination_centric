@@ -306,7 +306,7 @@ const CollaboratorItemComponent = props => {
             // case 'setIsActivateClicked':
             //   handleActivate()
             case 'setIsViewClicked':
-                history.push(`/viewDetails/${row._id}`)
+                history.push(`/viewCollaborator/${row._id}`)
             // routeDirect(orgId)
 
             default:
@@ -331,7 +331,7 @@ const CollaboratorItemComponent = props => {
 
 
     const handleRowClick = async () => {
-        history.push(`/viewDetails/${row._id}`)
+        history.push(`/viewCollaborator/${row._id}`)
     }
 
 

@@ -4,9 +4,15 @@ import PatientRecordsWid from './PatientRecordsWid/PatientRecordsWid';
 import ChatWid from './ChatWid/ChatWid';
 import ExtendWid from './ExtendWid/ExtendWid';
 import ShareWid from './ShareWid/ShareWid';
-import {setTimerCount,setCallActive} from '../../../../redux/actions/video-call-actions';
+import {setTimerCount,
+        setCallActive, 
+        setShowApplicationPopup, 
+        setApplicationPopupVal} from '../../../../redux/actions/video-call-actions';
 import store from '../../../../redux/store';
+import {useHistory} from 'react-router-dom';
 import './RightSideControl.css';
+
+
 const callEnd = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-end.mp3");
 export default function RightSideControl({
     togglePatientRecordsFun,
@@ -20,10 +26,10 @@ export default function RightSideControl({
     room
 }) {
 //------------- Count down ---------------------
-
+const history = useHistory();
 const TimeOutTem = () => <span>Time Out ..! </span>;
 const CallEnd = () => <span>Call ended </span>;
-const countDownTime = 2000000;
+const countDownTime = store.getState().videoCallReducer.videoCallDuration;
 
 // Renderer callback with condition
 
@@ -34,11 +40,21 @@ let renderer = ({ hours, minutes, seconds, completed }) => (<span> {zeroPad(hour
 const countDownTimeHide = ()=>{
   store.dispatch(setCallActive(false));
   room.localParticipant.videoTracks.forEach((localVideoTrackPublication) => {
-    localVideoTrackPublication.track.disable();
-    const siteUrl = window.location.origin+"/dashboard";
-    window.location.href = siteUrl;
-    callEnd.play();
-  });
+    localVideoTrackPublication.track.stop();
+    });
+    room.localParticipant.audioTracks.forEach((localAuideoTrackPublication) => {
+        localAuideoTrackPublication.track.stop();
+    });
+    room.disconnect();
+    setTimeout(()=>{
+      if(store.getState().videoCallReducer.userType.user === "patient"){
+        store.dispatch(setShowApplicationPopup(true));
+        store.dispatch(setApplicationPopupVal("PatientFeedback"));
+      }
+        history.push('/dashboard');
+    },2000)
+   
+  callEnd.play();
 }
 
     return (

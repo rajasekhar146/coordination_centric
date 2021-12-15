@@ -11,6 +11,7 @@ import CircleIcon from '@mui/icons-material/Circle'
 import { useSelector, useDispatch } from 'react-redux'
 import ProblemAndSymptomsComponent from './ProblemAndSymptoms.Component'
 import { appointmentService } from '../../services'
+import moment from 'moment'
 
 const styles = theme => ({
   root: {
@@ -52,12 +53,24 @@ const PatientConfimationAppointment = props => {
   const secondaryDate = useSelector(state => state.secondaryAppointmentDate)
   const { selectedAppointment, clickCloseButton, clickConfirmButton } = props
   const [activeTab, setActiveTab] = useState('primary')
+  const [primaryDateDesc, setPrimaryDateDesc] = useState('')
+  const [secondaryDateDesc, setSecondaryDateDesc] = useState('')
   const dispatch = useDispatch()
   console.log('primaryDate', primaryDate, 'secondaryDate', secondaryDate)
-  // useEffect(() => {
-  //   const res = commonService.getAllRoles()
-  // }, [])
+  useEffect(() => {
+    setPrimaryDateDesc(getDateTimeDesc(primaryDate))
+    setSecondaryDateDesc(getDateTimeDesc(secondaryDate))
+  }, [])
 
+  const getDateTimeDesc = (val) => {
+    var nDate = val.Day
+    var startTime = val.timings.startTime
+    var date = nDate + ' ' + startTime
+    const actualDate = moment(date).format('D MMM, YYYY HH:mm a')
+    console.log('getDateTimeDesc', date, actualDate)
+    return actualDate
+   // console.log('getDateTimeDesc', nDate, startTime, actualDate)
+  }
   // const onSubmit = () => {
   //   const res = await appointmentService.makeAppointment(requestData)
   //   if (res.status === 200) {
@@ -93,13 +106,13 @@ const PatientConfimationAppointment = props => {
           <label className="pca__label">Primary - Date and Time</label>
           <label className="pca__value__text">
             {' '}
-            <label className="pca__value__text">{`${primaryDate.Day} - ${primaryDate.timings.startTime}`}</label>
+            <label className="pca__value__text">{`${primaryDateDesc}`}</label>
           </label>
         </div>
         {secondaryDate.Day && (
           <div className="pca__primary__column pca__card">
             <label className="pca__label">Secondary - Date and Time</label>
-            <label className="pca__value__text">{`${secondaryDate.Day} - ${secondaryDate.timings.startTime}`}</label>
+            <label className="pca__value__text">{`${secondaryDateDesc}`}</label>
           </div>
         )}
       </div>

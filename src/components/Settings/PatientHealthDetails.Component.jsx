@@ -25,8 +25,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import DeleteIcon from '../../assets/icons/delete_icon.png'
 import { memberMedicalReports } from '../../redux/actions/memberActions'
-
-
+import { organizationService } from '../../services'
 
 const styles = theme => ({
   root: {
@@ -157,7 +156,7 @@ const PatientHealthDetails = props => {
       setProblems(get(healthIfo, ['problems'], []))
       const medReports = get(healthIfo, ['reports'], [])
       console.log('medReports', medReports)
-      setReportsArray(medReports)      
+      setReportsArray(medReports)
     }
   }, [healthIfo])
 
@@ -179,20 +178,26 @@ const PatientHealthDetails = props => {
       respData.problems.push(data.others)
     }
     console.log('reportsArray', reportsArray)
-    respData.reports = medicalReports;
-        respData.patient_id = userDetails._id
+    respData.reports = medicalReports
+    respData.patient_id = userDetails._id
 
-        console.log('formData >> Patient health info ', respData)
-        const res = await settinService.addHealthInfo(respData).catch((err) => {
-        })
-        if (get(res, ['data', 'status'], '') === 200) {
-            setOpenFlash(true)
-            setAlertMsg('Saved')
-            setSubLabel('Your health info was successfully updated.')
-            setAlertColor('success')
-            getMemberDetails()
-        }
+    console.log('formData >> Patient health info ', respData)
+    const res = await settinService.addHealthInfo(respData).catch(err => {})
+    if (get(res, ['data', 'status'], '') === 200) {
+      setOpenFlash(true)
+      setAlertMsg('Saved')
+      setSubLabel('Your health info was successfully updated.')
+      setAlertColor('success')
+      getMemberDetails()
     }
+  }
+  const viewCertificates = async fileName => {
+    console.log('viewCertificates', fileName)
+    let certificateResponse = await organizationService.downloadFile({ name: fileName })
+    const url = get(certificateResponse, ['data', 'data', 'url'], '')
+    console.log('certificateResponse', url)
+    window.open(url, '_blank')
+  }
 
   const deleteMedicalReport = async filename => {
     const data = reportsArray.filter(f => f !== filename) //Duplicate state.
@@ -406,21 +411,21 @@ const PatientHealthDetails = props => {
               />
             ))}
 
-           {medicalReports &&
-            medicalReports.map((file, index) => (
+            {medicalReports &&
+              medicalReports.map((file, index) => (
                 <div className="od__certificate__main">
                   <div className="od__icon">
                     <DescriptionOutlinedIcon />
                   </div>
                   <div className="od__file__name"> {file} </div>
-                  <div className="od__icon od__cursor">
-                    <FileDownloadOutlinedIcon />
+                  <div className="od__icon od__cursor" onClick={() => viewCertificates(file)}>
+                    <FileDownloadOutlinedIcon  />
                   </div>
                   <div className="od__icon od__cursor" onClick={() => deleteMedicalReport(file)}>
                     <img src={DeleteIcon} alt="upload" />
                   </div>
                 </div>
-              ))} 
+              ))}
           </div>
         </div>
         <ColoredLine color="#E4E7EC" />

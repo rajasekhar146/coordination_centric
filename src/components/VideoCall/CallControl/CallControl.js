@@ -20,7 +20,8 @@ export default function CallControl({
   toggleShareFun,
   setToggleShare,
   room,
-  setRoom
+  setRoom,
+  redireactToDashboard
 }) {
 
     const videoCallReducer = useSelector(state => state.videoCallReducer);
@@ -40,6 +41,7 @@ export default function CallControl({
                             />
                             
                         <RightSideControl
+                         redireactToDashboard={redireactToDashboard}
                            setToggleChat={setToggleChat}
                            togglePatientRecordsFun={togglePatientRecordsFun}
                            toggleChatFun={toggleChatFun}

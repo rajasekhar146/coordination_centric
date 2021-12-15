@@ -78,7 +78,6 @@ const getWeekDays = () => {
   const timeSlots = buildTimeSlots()
   weekDays.forEach(d => {
     const currentDate = moment().add(d, 'd')
-    console.log('day', currentDate.format('dddd, DD'), d)
     const availabilityDayDetail = {
       dayDesc: currentDate.format('dddd, DD'),
       availableTimeSlots: timeSlots,
@@ -96,6 +95,15 @@ const availableTimeSlotsInitialState = {
     Day: moment().format('DD'),
   },
 }
+
+const getTwofaValueFromLocalStorage = () => {
+  if (localStorage.getItem('isSkippedTwoFa')) {
+    const val = localStorage.getItem('isSkippedTwoFa');
+    return true;
+  }
+  return false
+}
+  ;
 
 export const commonReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -180,9 +188,10 @@ export const setFlashMsgReducer = (state = flagMsg, { type, payload }) => {
   }
 }
 
-export const skipTwoFaReducer = (state = false, { type, payload }) => {
+export const skipTwoFaReducer = (state = getTwofaValueFromLocalStorage(), { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_SKIP_TWOFA:
+      localStorage.setItem('isSkippedTwoFa', true)
       return payload
     default:
       return state

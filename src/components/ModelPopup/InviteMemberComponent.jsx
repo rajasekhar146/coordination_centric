@@ -105,7 +105,7 @@ const InviteMemberComponent = props => {
             setOpenInviteMemberSuccess(true)
             setMembersList([])
         }).catch((err) => {
-            setIsExist(get(err.response, ['body', 'message'], null))
+            setIsExist(get(err.response, ['data', 'message'], null))
         })
         // MembersStore.load('InviteMember', {
         //     requestData,
