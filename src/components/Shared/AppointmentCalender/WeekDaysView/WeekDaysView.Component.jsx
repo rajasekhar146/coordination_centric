@@ -561,6 +561,17 @@ const WeekDaysViewComponent = props => {
 
   const clickRequestClose = () => {
     setClickedSubmit(false)
+    const defaultValue = {
+      Day: null,
+      timings: {
+        startTime: null,
+        endTime: null,
+        timeSlotId: null,
+      },
+    }
+    dispatch(primaryAppointmentDate(defaultValue))
+    dispatch(secondaryAppointmentDate(defaultValue))
+    
     history.push('/appointments')
   }
 

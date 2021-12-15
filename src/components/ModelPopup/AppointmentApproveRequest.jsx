@@ -1,8 +1,26 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ApproveAppointmentImage from '../../assets/images/approve_ppointment.png' //'../../assets/images/approve_ppointment.png'
 import Button from '@mui/material/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  primaryAppointmentDate,
+  secondaryAppointmentDate,
+} from '../../redux/actions/commonActions'
 
-const AppointmentApproveRequest = (props) => {
+const AppointmentApproveRequest = props => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const defaultValue = {
+      Day: null,
+      timings: {
+        startTime: null,
+        endTime: null,
+        timeSlotId: null,
+      },
+    }
+    dispatch(primaryAppointmentDate(defaultValue))
+    dispatch(secondaryAppointmentDate(defaultValue))
+  }, [])
   return (
     <div className="aar__main__div">
       <div className="aar__row">
@@ -17,7 +35,9 @@ const AppointmentApproveRequest = (props) => {
         </div>
       </div>
       <div className="aar__row">
-        <Button className="aar__close__btn" onClick={props.clickRequestClose} >Close</Button>
+        <Button className="aar__close__btn" onClick={props.clickRequestClose}>
+          Close
+        </Button>
       </div>
     </div>
   )
