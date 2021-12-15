@@ -426,6 +426,10 @@ input[type="email"] {
     text-transform: lowercase;
 }
 
+input::placeholder{
+    text-transform: capitalize;
+}
+
 ::-webkit-input-placeholder {
     text-transform: initial;
  }
