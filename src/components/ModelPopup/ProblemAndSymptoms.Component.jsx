@@ -8,6 +8,8 @@ import UploadFile from '../Settings/UploadFile.Component'
 import CloseIcon from '@mui/icons-material/Close'
 import { useForm } from 'react-hook-form'
 import InviteMember from './InviteMemberItem'
+import { memberService } from '../../services'
+import galary_icon from '../../assets/icons/galary_icon.png';
 
 const ProblemAndSymptomsComponent = props => {
   const setInvitedMembers = props.setInvitedMembers
@@ -24,6 +26,7 @@ const ProblemAndSymptomsComponent = props => {
   const [inputValues, setInputValues] = useState({})
   const [imgCounter, setImgCounter] = useState(0)
   const [showUpload, setshowUpload] = useState(false)
+  const [documentsArray , setDocumentsArray ] = useState([])
 
   const handleAddMembers = () => {
     console.log('Clicked')
@@ -37,11 +40,30 @@ const ProblemAndSymptomsComponent = props => {
     setInvitedMembers(members)
   }
   const handleDrop = files => {
+    const formData = new FormData()
     files.forEach((file, index) => {
-      selectedFiles.push(file)
-      setSelectedFiles([...selectedFiles])
+      formData.append('files', file)
+      const reader = new FileReader()
     })
+    memberService
+    .uploadFile('appointment_patient_records', formData
+    )
+    .then(response => {
+      selectedFiles.push(response.data.data)
+      setSelectedFiles([...selectedFiles])
+      getDocs(response.data.data)
+    })
+
+    .catch(() => {})
   }
+
+  const getDocs =  async (documents) =>{
+      let file = 
+      { "name":documents }
+      let res = await memberService.downloadFileUrl(file);
+      setDocumentsArray([...documentsArray ,res.data.data])
+  }
+
   const handleClose = (e, index) => {
     var members = [...invitedMembers]
     members.splice(index, 1)
@@ -137,7 +159,15 @@ const ProblemAndSymptomsComponent = props => {
       </div>
 
       <div className="od_input_p">
-        {selectedFiles &&
+      {documentsArray&& documentsArray.map(docs => (
+                <span className="docs-view">
+                  <img src={galary_icon} className="absolute"  alt="success_icon" />
+                  <span className="align__img__name docs_name" > {docs.metadata?.name}</span>
+                  <span className="align__img__name img_size"> {docs.metadata?.size}</span>
+
+                </span>
+              ))}
+        {/* {selectedFiles &&
           selectedFiles.map((file, index) => (
             <UploadFile
               file={file}
@@ -147,7 +177,7 @@ const ProblemAndSymptomsComponent = props => {
               setSelectedFiles={setSelectedFiles}
               selectedFiles={selectedFiles}
             />
-          ))}
+          ))} */}
         {showUpload && (
           <div className="od_dropzone_prof mb_25">
             <Dropzone

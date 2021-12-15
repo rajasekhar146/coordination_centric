@@ -3,33 +3,27 @@ import React, { useEffect, useState } from 'react'
 import history from '../../history';
 import { useParams } from 'react-router-dom'
 import { appointmentService } from '../../services'
-import ViewImageComponent from '../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
-import view_details from '../../assets/icons/Vector.svg'
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
+import view_details from '../../assets/icons/download_icon.png'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import moment from 'moment'
 import galary_icon from '../../assets/icons/galary_icon.png';
 import get from 'lodash.get';
 import { authenticationService } from '../../services'
-import Chat from '../VideoCall/Chat/Chat'
 import CircleIcon from '@mui/icons-material/Circle'
 import sendIcon from '../../assets/icons/Vector.png'
 import chatIcon from '../../assets/icons/chat_icon.png'
 import reject from '../../assets/icons/reject.png'
-// import {ChatBox} from 'react-chatbox-component';
-// import 'react-chatbox-component/dist/style.css';
+import { memberService } from '../../services'
 function ViewAppointmentComponent() {
 
   const { id, type } = useParams()
   const [appointmentList, setAppointmentList] = useState([]);
-  const [showImage, setShowImage] = useState(false);
-  const [imageValue, setImageValue] = useState();
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const userId = get(currentUser, ['data', 'data', '_id'], '')
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([]);
+  const [documentsArray , setDocumentsArray ] = useState([]);
   const [toggleChat, setToggleChat] = useState(false);
   const [senderUserId, setSenderUserId] = useState('');
   const [recieverUserId, setRecieverUserId] = useState('')
@@ -48,14 +42,23 @@ function ViewAppointmentComponent() {
     }
   }, [])
 
-  const openImage = (docs) => {
-    setShowImage(true);
-    setImageValue(docs);
-  }
-  const handleClose = () => {
-    setShowImage(false);
-  }
-  const getAppointmentDetails = async () => {
+const openImage = async (docs)=>{
+    window.open(docs.url, '_blank');
+}
+const getDocs =  (documents) =>{
+  const temp = [];
+  setDocumentsArray([]);
+  documents && documents.map( async (docs) =>{
+    let file = 
+    { "name":docs }
+    let res = await memberService.downloadFileUrl(file);
+    temp.push(res.data.data);
+    if(temp.length == documents.length){
+      setDocumentsArray(temp);
+    }
+  })
+}
+const getAppointmentDetails = async () => {
     let res = await appointmentService.getAppointmentById(id);
     if (res.data.data.doctorId == userId) {
       setSenderUserId(res.data.data.doctorId)
@@ -70,8 +73,10 @@ function ViewAppointmentComponent() {
       setRecieverImg(res.data.data.profilePic)
     }
     setAppointmentList(res.data);
-    console.log('params', res.data.data)
-  }
+    if(res.data.data.documents.length > 0){
+      getDocs(res.data.data.documents)
+    }
+}
 
   const getAppointmentChat = async () => {
     let chat = await appointmentService.getAppointmentChat(id);
@@ -206,65 +211,65 @@ function ViewAppointmentComponent() {
               <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
               {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
               <p>{appointmentList.data?.doctorName}</p>
-            </p>
+              </p>
           )}
+          <div className="row-details">
+            <p className="row-title">Primary Time</p>
+            <p className="row-data">{moment(new Date(appointmentList.data?.startTime)).format('DD/MM/YYYY HH:mm')}</p>
+          </div>
+          <div className="row-details">
+            <p className="row-title">Secondary Time</p>
+            <p className="row-data">{moment(new Date(appointmentList.data?.endTime)).format('DD/MM/YYYY HH:mm')}</p>
+          </div>
+          <div className="row-details">
+            <p className="row-title">Reason for appointment</p>
+            <p className="row-data">{appointmentList.data?.appointmentReason}</p>
+          </div>
+          <div className="row-details">
+            <p className="row-title">Previous Health Condition</p>
+            <p className="row-data">
+              {appointmentList.data?.healthinfo[0]?.problems.map(d => (
+                <span> {d} </span>
+              ))}
+            </p>
         </div>
-        {role == 'patient' && (
+        {role == 'patient' && 
           <div className="row-details">
             <p className="row-title">Specialty</p>
             <p className="row-data">
-              {appointmentList.data?.speciality.map(d => (
-                <span>{d} </span>
+               {documentsArray.map(docs => (
+                <span className="docs-view">
+                  <img src={galary_icon} className="galary_icon" alt="success_icon" />
+
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                   <p className="align__img__name docs_name"> {docs.metadata.name}</p>
+                  <p className="align__img__name img_size"> {docs.metadata.size}</p>
+
+                </span>
               ))}
             </p>
           </div>
-        )}
-        <div className="row-details">
-          <p className="row-title">Date / Time</p>
-          <p className="row-data">{moment(new Date(appointmentList.data?.startTime)).format('ddd, Do MMMM YYYY ')}</p>
-        </div>
-        <div className="row-details">
-          <p className="row-title">Reason for appointment</p>
-          <p className="row-data">{appointmentList.data?.appointmentReason}</p>
-        </div>
-        <div className="row-details">
-          <p className="row-title">Previous Health Condition</p>
-          <p className="row-data">
-            {appointmentList.data?.healthinfo[0]?.problems.map(d => (
-              <span> {d} </span>
-            ))}
-          </p>
-        </div>
-        <div className="row-details">
-          <p className="row-title">Documents</p>
-          <p className="row-data">
-            {appointmentList.data?.documents.map(docs => (
-              <span className="docs-view">
-                <img src={galary_icon} className="galary_icon" alt="success_icon" />
-
-                <img
-                  onClick={() => {
-                    openImage(docs)
-                  }}
-                  src={view_details}
-                  className="right"
-                  alt="success_icon"
-                />
-                <p className="align__img__name"> {docs}</p>
-              </span>
-            ))}
-          </p>
-        </div>
-        <div className="row-details">
-          <p className="row-title">Chat</p>
-
-          <div>
-            {type == 'history' && !showChat &&
-              <button className={messages.length <= 0 ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'} className="" disabled={messages.length <= 0} onClick={showChatDialog}>
-                {messages.length > 0 && <img className="msg__icon" src={chatIcon} alt="upload" />}
-                View Chat History</button>
-            }
-            {type == 'history' && showChat &&
+}
+          {
+           ( role == 'doctor' || role == 'patient') && 
+          
+          <div className="row-details">
+            <p className="row-title">Chat</p>
+            
+            <div>
+              {type == 'history' && !showChat &&
+              <button  className={messages.length <= 0  ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'}  className="" disabled={messages.length <= 0} onClick={showChatDialog}>
+                  { messages.length > 0 &&   <img className="msg__icon" src={chatIcon}  alt="upload" />}
+                 View Chat History</button>
+              }
+              {type == 'history' && showChat &&
               <p className="close_chat" onClick={showChatDialog}>
                 <img className="chat__close__icon" src={reject} alt="reject" />
                 Close Chat History</p>
@@ -314,19 +319,9 @@ function ViewAppointmentComponent() {
           </div>
 
         </div>
-
-        <Modal open={showImage} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-          <Box sx={confirmAppointment}>
-            <ViewImageComponent
-              category={'doctors_certificate'}
-              pic={imageValue}
-              imageClass={'show_img_div'}
-              showClose="true"
-              handleClose={handleClose}
-            />
-          </Box>
-        </Modal>
+}
       </div>
+    </div>
     </div>
   )
 
