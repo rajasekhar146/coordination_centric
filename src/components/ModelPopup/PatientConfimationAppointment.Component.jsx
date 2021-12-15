@@ -58,18 +58,18 @@ const PatientConfimationAppointment = props => {
   const dispatch = useDispatch()
   console.log('primaryDate', primaryDate, 'secondaryDate', secondaryDate)
   useEffect(() => {
-    const pDate = moment(primaryDate).format('YYYY-DD HH:mm A')
     setPrimaryDateDesc(getDateTimeDesc(primaryDate))
     setSecondaryDateDesc(getDateTimeDesc(secondaryDate))
   }, [])
 
   const getDateTimeDesc = (val) => {
-    const nDate = val.Day
-    const startTime = val.timings.startTime
-    const date = nDate + ' ' + startTime
-    const actualDate = moment(date).format('ddd MM, YYYY HH:mm a')
+    var nDate = val.Day
+    var startTime = val.timings.startTime
+    var date = nDate + ' ' + startTime
+    const actualDate = moment(date).format('D MMM, YYYY HH:mm a')
+    console.log('getDateTimeDesc', date, actualDate)
     return actualDate
-    console.log('getDateTimeDesc', nDate, startTime, actualDate)
+   // console.log('getDateTimeDesc', nDate, startTime, actualDate)
   }
   // const onSubmit = () => {
   //   const res = await appointmentService.makeAppointment(requestData)
