@@ -24,7 +24,8 @@ export const memberService = {
   resendInvite,
   updateStatus,
   uploadFile,
-  getDetailsById
+  getDetailsById,
+  downloadFileUrl
 }
 
 function inviteMember(data) {
@@ -76,6 +77,21 @@ function uploadFile(type , file) {
   )
 }
 
+function downloadFileUrl(file) {
+  let axiosConfig = {
+    headers: authHeader()
+  }
+  return (
+    axios
+      .post(`${apiURL}/files/download_url` , file , axiosConfig)
+      .then(data => {
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
 function saveMember(member) {
   return (
     axios

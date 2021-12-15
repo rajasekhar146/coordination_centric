@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import PatientAvatar from './patient-avatar.png';
 import './PatientRecordsDeatils.css';
-import CloseIcon from '@mui/icons-material/Close';
 import {appointmentService} from '../../../services'
 import moment from 'moment'
 import galary_icon from '../../../assets/icons/galary_icon.png';
-import view_details from '../../../assets/icons/Vector.svg'
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
+import view_details from '../../../assets/icons/download_icon.png'
+import { memberService } from '../../../services'
 const PatientRecordsDeatils = (props) => {
     const [appointmentData, setAppointmentData] = useState([]);
-    const [showImage , setShowImage] = useState(false);
-    const [imageValue, setImageValue ] = useState();
+    const [documentsArray , setDocumentsArray ] = useState([]);
     const {
        rowData,
        meetingid
@@ -21,18 +17,30 @@ const PatientRecordsDeatils = (props) => {
         getPatientRecords();
     }, []);
 
-    const openImage = (docs)=>{
-        setShowImage(true);
-        setImageValue(docs);
-      }
-      const closePopup = () =>{
-        setShowImage(false);
 
-      }
     const getPatientRecords =async () =>{
         let res = await appointmentService.getAppointmentById(props.roomId);
         setAppointmentData(res.data);
+        if(res.data.data.documents.length > 0){
+            getDocs(res.data.data.documents)
+          }
     }
+    const openImage = async (docs)=>{
+        window.open(docs.url, '_blank');
+    }
+    const getDocs =  (documents) =>{
+        const temp = [];
+        setDocumentsArray([]);
+        documents && documents.map( async (docs) =>{
+          let file = 
+          { "name":docs }
+          let res = await memberService.downloadFileUrl(file);
+          temp.push(res.data.data);
+          if(temp.length == documents.length){
+            setDocumentsArray(temp);
+          }
+        })
+      }
     const confirmAppointment = {
         position: 'absolute',
         top: '50%',
@@ -65,15 +73,11 @@ const PatientRecordsDeatils = (props) => {
                         <ul className="patient-list">
                             <li className="patient-list-itm"> 
                                 <div>
-                                    <p className="main-title"> Specialty </p>
-                                    <p className="sub-title">{appointmentData.data?.speciality?.map((d)=>
-            <span>{d} </span> )}</p>
-                                </div>
-                            </li>
-                            <li className="patient-list-itm"> 
-                                <div>
-                                    <p className="main-title"> Date / Time </p>
-                                    <p className="sub-title">  {moment(new Date(appointmentData.data?.startTime)).format('ddd, Do MMMM YYYY ')} </p>
+                                    <p className="main-title">Start Time - End Time </p>
+                                    <p className="sub-title"> 
+                                    <span className = "mar-right-5"> {moment(new Date(appointmentData.data?.startTime)).format('DD/MM/YYYY HH:mm')}</span>   - 
+                                    <span className = "mar-left-5"> {moment(new Date(appointmentData.data?.endTime)).format('DD/MM/YYYY HH:mm')}</span>   
+                                     </p>
                                 </div>
                             </li>
                             <li className="patient-list-itm"> 
@@ -94,35 +98,30 @@ const PatientRecordsDeatils = (props) => {
                             <li className="patient-list-itm"> 
                                 <div>
                                     <p className="main-title"> Documents </p>
-                                    <p className="sub-title">{appointmentData.data?.documents?.map((docs) => 
-                <span className="docs-view" >
+                                    <p className="row-data">
+               {documentsArray.map(docs => (
+                <span className="docs-view">
                   <img src={galary_icon} className="galary_icon" alt="success_icon" />
 
-                  <img onClick={()=>{
-                  openImage(docs)
-                }} src={view_details} className="right" alt="success_icon" />
-                  <p className="align__img__name"> {docs.slice(-18)}</p> 
-                   </span>
-              
-            )}</p>
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                   <p className="align__img__name docs_name"> {docs.metadata.name}</p>
+                  <p className="align__img__name img_size"> {docs.metadata.size}</p>
+
+                </span>
+              ))} 
+            </p>
                                 </div>
                             </li>
                         </ul>
                 </div>
-                <Modal
-                open={showImage}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={confirmAppointment}>
-                    <div>
-                        <CloseIcon onClick={closePopup} className="right" />
-                  <img src={imageValue} className="galary_icon" alt="success_icon" />
-                  </div>
-
-                {/* <ViewImageComponent category={'doctors_certificate'} pic={imageValue} imageClass={"show_img_div"} showClose = 'true' handleClose={handleClose} /> */}
-                </Box>
-            </Modal>
+               
         </div>
     )
 }

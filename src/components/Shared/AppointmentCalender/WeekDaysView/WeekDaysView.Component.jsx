@@ -538,7 +538,7 @@ const WeekDaysViewComponent = props => {
     }
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email)
-    reqData.documents = reportsArray.map(x => x)
+    reqData.documents = selectedFiles.map(x => x)
 
     if (role === 'doctor') {
       reqData.patientId = appointmentDetails.id

@@ -316,8 +316,6 @@ const PersonalDetailComponent = () => {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       value={dateOfBirth}
-                      openTo={new Date('1980/01/01')}
-                      maxDate={new Date('12/31/1995')}    
                       onChange={newValue => {
                         setDOB(newValue)
                         setDateEntered(true)

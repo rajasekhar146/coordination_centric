@@ -118,7 +118,7 @@ const OverView = ( props ) => {
 
   const viewCertificates = async (fileName)=>{
     let certificateResponse = await organizationService.downloadFile({name:fileName});
-    window.open(get(certificateResponse,["data","url"]), '_blank');
+    window.open(get(certificateResponse,["data","data","url"]), '_blank');
   }
  
 
