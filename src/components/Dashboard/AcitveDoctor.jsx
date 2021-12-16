@@ -9,7 +9,7 @@ import get from 'lodash.get'
 const styles = theme => ({
     superAdminCard: {
         background: "#FFFFFF",
-        width: "30%",
+        width: "31%",
         margin: 10,
         boxShadow: '0px 12px 26px rgba(16, 30, 115, 0.06)',
         borderRadius: '8px'
@@ -39,13 +39,13 @@ const AcitveDoctors = (props) => {
         switch (role) {
             case 'doctor':
             case 'patient':
-                return get(dashboardDetails, ['activeDoctors'], '')
+                return get(dashboardDetails, ['activeDoctors'], 0)
                 break
             case 'superadmin':
-                return get(dashboardDetails, ['0', 'totals', 'activeUsers'], '')
+                return get(dashboardDetails, ['0', 'totals', 'activeUsers'], 0)
                 break
             case 'admin':
-                return get(dashboardDetails, ['0', 'totals', 'activeDoctors'], '')
+                return get(dashboardDetails, ['0', 'totals', 'activeDoctors'], 0)
         }
     }
 
@@ -56,6 +56,7 @@ const AcitveDoctors = (props) => {
                 background: '#fff',
                 boxShadow: '0 2px 4px #00000029',
                 borderRadius: '4px',
+                marginRight: '20px'
             }}
         >
             <CardContent className={classes.content}>

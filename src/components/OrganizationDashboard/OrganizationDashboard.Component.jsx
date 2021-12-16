@@ -331,6 +331,9 @@ const statusNames = [
     name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
   },
   {
+    name: 'Pending Bank Verification', value: "Pending Bank Verification", key: "pending_bank_verification"
+  },
+  {
     name: 'Declined', value: "Declined", key: "declined"
   },
   {

@@ -9,7 +9,7 @@ import HeartBeat from '../../assets/icons/heart_beat.png'
 const styles = theme => ({
     superAdminCard: {
         background: "#FFFFFF",
-        width: "30%",
+        width: "31%",
         margin: 10,
         boxShadow: '0px 12px 26px rgba(16, 30, 115, 0.06)',
         borderRadius: '8px'
