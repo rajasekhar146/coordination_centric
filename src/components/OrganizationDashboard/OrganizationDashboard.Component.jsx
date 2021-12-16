@@ -266,7 +266,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClickedFromSuspend', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
@@ -442,6 +442,7 @@ const OrganizationDashboardComponent = () => {
   const [isVerifyBankClicked , setIsVerifyBankClicked] = useState(false);
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [isAcivated, setIsActivateClicked] = useState(false)
+  const [isActivateClickedFromSuspend , setIsActivateClickedFromSuspend] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -464,8 +465,8 @@ const OrganizationDashboardComponent = () => {
   const [subLebel, setSubLabel] = useState('')
   const [alertColor, setAlertColor] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [firstDeposit, setFirstDeposit] = useState()
-  const [secondDeposit, setSecondDeposit] = useState()
+  const [firstDeposit, setFirstDeposit] = useState(0)
+  const [secondDeposit, setSecondDeposit] = useState(0)
   const [secondDepositErr , setSecondDepositErr] = useState(false)
   const [firstDepositErr , setFirstDepositErr] = useState(false)
 
@@ -673,18 +674,29 @@ const OrganizationDashboardComponent = () => {
       return
     }
     const amnt = [];
-    amnt.push(firstDeposit)
-    amnt.push(secondDeposit)
+    amnt.push(Number(firstDeposit))
+    amnt.push(Number(secondDeposit))
     const bankDetail = {
-      payment: {
       amount : amnt,
-      userId : organizationId,
       facilityId:selectedOrg.id
-      },
     }
 
-    organizationService.verifyBankHanlde(bankDetail).then((data) => {
-      getOrganization()
+    organizationService.verifyBankHanlde(bankDetail).then((data , err) => {
+      if(data.data){
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel(data.data )
+        setAlertColor('success')
+      }else{
+        setOpenFlash(true)
+        setAlertMsg('Error')
+        setSubLabel('You have tried to verify 3 times. To continue please reach out to us directly.')
+        setAlertColor('fail')
+      }
+      setIsVerifyBankClicked(false)
+      getOrganization();
+      
+     
     })
 
   }
@@ -924,6 +936,7 @@ const OrganizationDashboardComponent = () => {
                             setIsActivateClicked={setIsActivateClicked}
                             role={role}
                             setAlertcolor={setAlertColor}
+                            setIsActivateClickedFromSuspend = {setIsActivateClickedFromSuspend}
                           />
                         ))
                         : null
