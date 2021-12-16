@@ -164,7 +164,7 @@ const PatienRecordsComponent = (props) => {
     setIsLoading(true)
     memberService.getPatientRecords(userId, limit, skip).then((res) => {
       setPatientRecords(get(res, ['data', 'data', '0', 'totalData'], []))
-      // setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], []))
+      // setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], 0))
       setIsLoading(false)
     }).catch((err) => {
       console.log(err)
