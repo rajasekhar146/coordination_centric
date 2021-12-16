@@ -19,6 +19,7 @@ const colorcodes = {
     cancelled: '#757500',
     inactive: '#A0A4A8',
     declined: '#B42318',
+    pending_bank_verification: '#F79009'
 }
 
 const useStyles = makeStyles(theme => ({
@@ -69,6 +70,9 @@ const getValue = val => {
         case 'pending_verification':
             return 'Pending verification'
             break
+        case 'pending_bank_verification':
+            return 'Pending Bank Verification'
+            break
         case 'pending_acceptance':
             return 'Pending acceptance'
             break
@@ -93,6 +97,16 @@ const menuList = [
     },
     {
         menu: 'pending_verification',
+        options: [
+            { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
+            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+        ],
+    },
+    {
+        menu: 'pending_bank_verification',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
             { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },

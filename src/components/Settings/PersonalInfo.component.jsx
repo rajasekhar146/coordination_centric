@@ -124,11 +124,17 @@ const PersonalInfo = props => {
     fetchCountries()
     await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
-    if (get(userDetails, ['biograhpy_object', 'blocks', '0', 'text'], null)) {
+    if (get(userDetails, ['biograhpy_object', 'blocks'], []).length) {
+      let count = 0;
+      get(userDetails, ['biograhpy_object', 'blocks'], []).forEach(element => {
+        count += element.text.length
+      });
+      setTextCount(count)
       userDetails.biograhpy_object.entityMap = {}
       const data = convertFromRaw(userDetails.biograhpy_object)
       setEditorState(EditorState.createWithContent(data))
     } else if (get(userDetails, ['bio'], '')) {
+      setTextCount(get(userDetails, ['bio'], '').length)
       setEditorState(
         EditorState.createWithContent(
           convertFromRaw({

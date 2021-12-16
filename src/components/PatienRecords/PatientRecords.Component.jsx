@@ -27,6 +27,7 @@ import { authenticationService } from '../../services'
 import get from 'lodash.get'
 import TablePagination from '@mui/material/TablePagination'
 import CircularProgress from '@mui/material/CircularProgress';
+import AddPatientRecordPopup from './AddrecordPopup'
 import './PatientRecords.Component.css'
 
 const useStyles = makeStyles(theme => ({
@@ -108,6 +109,19 @@ const invitePatientSuccess = {
   padding: '15px',
 }
 
+const addRecordStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 900,
+  bgcolor: 'background.paper',
+  border: 0,
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '10px',
+  padding: '15px',
+}
 const menuList = getOptions()
 
 const PatienRecordsComponent = (props) => {
@@ -134,6 +148,7 @@ const PatienRecordsComponent = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const open = Boolean(anchorEl)
   const classes = useStyles()
+  const [addPatientRecordPopup, setAddPatientRecordPopup] = useState(false)
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -186,17 +201,23 @@ const PatienRecordsComponent = (props) => {
     setIsLoading(true)
   };
 
+  const closeInviteSuccessModel = () => {
+    setAddPatientRecordPopup(false)
+  }
+
   return (
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">Patient Records</div>
-        {/* <div className="od__btn__div od__align__right">
-          {1 === 1 ? (
-            <Button className="od__add__organization__btn">
-              <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Add Record
-            </Button>
-          ) : null}
-        </div> */}
+        <div className="od__btn__div od">
+          <Button
+            onClick={() => {
+              setAddPatientRecordPopup(true)
+            }}
+            className="od_add_member_btn">
+            &nbsp;&nbsp; Add Record
+          </Button>
+        </div>
       </div>
       <div className="od__row">
         <div className="od__table__org">
@@ -299,7 +320,7 @@ const PatienRecordsComponent = (props) => {
         <Box sx={invitePatientSuccess}>
           <InvitePatientSuccess
             clickCloseButton={closeModel}
-
+            getPatientRecords={getPatientRecords}
           />
         </Box>
       </Modal>
@@ -313,6 +334,18 @@ const PatienRecordsComponent = (props) => {
           <SharePatientRecord
             clickCloseButton={closeModel}
 
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={addPatientRecordPopup}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={addRecordStyle}>
+          <AddPatientRecordPopup 
+            clickCloseButton={closeInviteSuccessModel}
+            getPatientRecords={getPatientRecords}
           />
         </Box>
       </Modal>
