@@ -1,14 +1,16 @@
 import React,{useState} from 'react'
 import CameraButtonImg from './camera.svg';
 import CameraOffButtonImg from './cameraOff.svg';
+import store from '../../../redux/store';
 export default function CameraButton({room}) {
     const [isLocalVideoTrackDisabled, setIsLocalVideoTrackDisabled] =
     useState(false);
 
   const handleCameraButtonPressed = () => {
-    isLocalVideoTrackDisabled ? startVideo() : stopVideo();
-
-    setIsLocalVideoTrackDisabled(!isLocalVideoTrackDisabled);
+    if(store.getState().videoCallReducer.isRoomConnect){
+      isLocalVideoTrackDisabled ? startVideo() : stopVideo();
+      setIsLocalVideoTrackDisabled(!isLocalVideoTrackDisabled);
+    }
   };
 
   const startVideo = () => {

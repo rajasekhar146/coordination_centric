@@ -1,8 +1,9 @@
 import React from 'react'
 import WatingListWidget from './WatingListWidget/WatingListWidget';
 import MicButton from '../MicButton';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import CameraButton from '../CameraButton';
+import store from '../../../../redux/store';
 import './LeftSideControl.css';
 
 const LeftSideControl = ({
@@ -16,12 +17,14 @@ const LeftSideControl = ({
 
     return (
         <div className="left-side-control">
-            <WatingListWidget 
-                watingList={watingList} 
-                toggleWatingListHandel={toggleWatingListHandel} 
-                toggleWatingList={toggleWatingList} 
-                setToggleWatingList={setToggleWatingList}
-            />
+            {store.getState().videoCallReducer.user.role === "doctor" && (<WatingListWidget 
+                                                                            watingList={watingList} 
+                                                                            toggleWatingListHandel={toggleWatingListHandel} 
+                                                                            toggleWatingList={toggleWatingList} 
+                                                                            setToggleWatingList={setToggleWatingList}
+                                                                        />)
+            }
+          
             <MicButton room={room}/>
             {
                 !connectOnlyWithAudio && <CameraButton room={room}/>

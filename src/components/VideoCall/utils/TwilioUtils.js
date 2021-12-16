@@ -11,6 +11,7 @@ import {
 import { setMessages,setShowOverlay,setTimerCount,setCallActive} from '../../../redux/actions/video-call-actions';
 import * as env from '../../../environments/environment';
 import { authHeader } from '../../../helpers';
+
 const callStart = new Audio("https://videocall-service-6533-dev.twil.io/sound/call-start.mp3");
 const apiURL = env.environment.apiBaseUrl
 
@@ -28,22 +29,27 @@ const videoConstraints = {
 };
 let dataChannel = null;
 let dataFunctionChannel = null;
-export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoTokenErrorMsz,setVideoCallDuration)=>{
+export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoTokenErrorMsz,setVideoCallDuration,setRoomConnect)=>{
   let axiosConfig = {
     headers: authHeader(),
   }
   
-    const randomId = uuidv4();
     axios.get(`${apiURL}/video/videotoken?identity=${roomId}${identity}`,axiosConfig)
     .then((response)=>{
       const data = response.data;
       if(data.accessToken){
+        setRoomConnect(true)
         setAccessToken(data.accessToken);
-        setVideoCallDuration(data.timeduration)
+        setVideoCallDuration(data.timeduration);
         //setVideoCallDuration(6000000)
       }
     }).catch((err)=>{
-      setVideoTokenErrorMsz(err);
+      setRoomConnect(false)
+      try{
+        setVideoTokenErrorMsz(err.response.data.message);
+      }catch{
+
+      }
     })
 }
 export const connectToRoom = async (
@@ -108,8 +114,10 @@ export const checkIfRoomExists = async(roomId)=>{
 // Data chennel utils 
 export  const sendMessageUsignDataChannel =(content,messageCreatedByMe=false)=>{
       const identity = store.getState().videoCallReducer.identity;
+      const applicationUserId = store.getState().videoCallReducer.user.id;
       const ownMessage = {
         identity,
+        applicationUserId,
         content,
         messageCreatedByMe
       };
