@@ -91,18 +91,7 @@ const getAppointmentDetails = async () => {
     request_to_reschedule: '#F79009',
     rescheduled: '#F79009'
   }
-  const confirmAppointment = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 550,
-    bgcolor: 'background.paper',
-    border: '2px solid white',
-    boxShadow: 24,
-    borderRadius: 3,
-    p: 3,
-  }
+
   const getValue = val => {
     switch (val) {
       case 'accepted':
@@ -210,9 +199,11 @@ const getAppointmentDetails = async () => {
             <p className="row-data flex-dr">
               <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
               {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
-              <p>{appointmentList.data?.doctorName}</p>
+              <p className="mar-left-10">{appointmentList.data?.doctorName}</p>
               </p>
           )}
+    </div>
+
           <div className="row-details">
             <p className="row-title">Primary Time</p>
             <p className="row-data">{moment(new Date(appointmentList.data?.startTime)).format('DD/MM/YYYY HH:mm')}</p>
@@ -321,7 +312,6 @@ const getAppointmentDetails = async () => {
         </div>
 }
       </div>
-    </div>
     </div>
   )
 

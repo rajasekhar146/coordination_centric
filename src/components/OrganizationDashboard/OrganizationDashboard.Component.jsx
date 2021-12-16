@@ -39,6 +39,7 @@ import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
 import DeactivateOrganization from '../../pages/deactivate_model'
 import CancelInviteModel from '../ModelPopup/CancelInviteModel'
+import VerifyBankingInfoPopup from '../ModelPopup/VerifyBankingInfoPopup'
 import { makeStyles } from '@material-ui/core/styles'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
@@ -48,7 +49,6 @@ import get from 'lodash.get'
 import { authenticationService, memberService } from '../../services'
 import MenuItemComponent from "./MenuItemComponent";
 import CircularProgress from '@mui/material/CircularProgress';
-
 
 const style = {
   position: 'absolute',
@@ -83,6 +83,19 @@ const rejectModelStyle = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   height: 360,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+const verifyBankModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 320,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -192,7 +205,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      { text: 'Verify', fnKey: 'setIsVerifyBankClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -253,7 +266,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClickedFromSuspend', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
@@ -426,8 +439,10 @@ const OrganizationDashboardComponent = () => {
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
+  const [isVerifyBankClicked , setIsVerifyBankClicked] = useState(false);
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [isAcivated, setIsActivateClicked] = useState(false)
+  const [isActivateClickedFromSuspend , setIsActivateClickedFromSuspend] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -450,7 +465,10 @@ const OrganizationDashboardComponent = () => {
   const [subLebel, setSubLabel] = useState('')
   const [alertColor, setAlertColor] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const [firstDeposit, setFirstDeposit] = useState(0)
+  const [secondDeposit, setSecondDeposit] = useState(0)
+  const [secondDepositErr , setSecondDepositErr] = useState(false)
+  const [firstDepositErr , setFirstDepositErr] = useState(false)
 
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
@@ -631,6 +649,56 @@ const OrganizationDashboardComponent = () => {
     setIsDeactivateClicked(false)
     setIsCancelInviteClicked(false)
     getOrganization()
+  }
+
+  const closeVerifyBankButton =()=>{
+    setIsVerifyBankClicked(false)
+    getOrganization()
+
+  }
+
+  const verifyBankHanlde = () =>{
+    setFirstDepositErr(false);
+      setSecondDepositErr(false)
+    if(!firstDeposit && !secondDeposit){
+      setFirstDepositErr(true);
+      setSecondDepositErr(true)
+      return;
+    }
+    if(!firstDeposit ){
+      setFirstDepositErr(true);
+      return
+    }
+    if(!secondDeposit){
+      setSecondDepositErr(true)
+      return
+    }
+    const amnt = [];
+    amnt.push(Number(firstDeposit))
+    amnt.push(Number(secondDeposit))
+    const bankDetail = {
+      amount : amnt,
+      facilityId:selectedOrg.id
+    }
+
+    organizationService.verifyBankHanlde(bankDetail).then((data , err) => {
+      if(data.data){
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel(data.data )
+        setAlertColor('success')
+      }else{
+        setOpenFlash(true)
+        setAlertMsg('Error')
+        setSubLabel('You have tried to verify 3 times. To continue please reach out to us directly.')
+        setAlertColor('fail')
+      }
+      setIsVerifyBankClicked(false)
+      getOrganization();
+      
+     
+    })
+
   }
 
   const handleAddOrganizationOpen = () => {
@@ -854,6 +922,7 @@ const OrganizationDashboardComponent = () => {
                             setIsRejectClicked={setIsRejectClicked}
                             setIsAcceptClicked={setIsAcceptClicked}
                             setIsDeactivateClicked={setIsDeactivateClicked}
+                            setIsVerifyBankClicked = {setIsVerifyBankClicked}
                             getTextColor={getTextColor}
                             setSelectedOrg={setSelectedOrg}
                             rows={rows}
@@ -867,6 +936,7 @@ const OrganizationDashboardComponent = () => {
                             setIsActivateClicked={setIsActivateClicked}
                             role={role}
                             setAlertcolor={setAlertColor}
+                            setIsActivateClickedFromSuspend = {setIsActivateClickedFromSuspend}
                           />
                         ))
                         : null
@@ -992,6 +1062,36 @@ const OrganizationDashboardComponent = () => {
           />
         </Box>
       </Modal>
+      <Modal
+        open={isVerifyBankClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={verifyBankModelStyle}>
+          <VerifyBankingInfoPopup
+            clickCloseButton={closeVerifyBankButton}
+            clickSubmitButton = {verifyBankHanlde}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
+            setFirstDeposit = {setFirstDeposit}
+            setSecondDeposit = {setSecondDeposit}
+            firstDeposit = {firstDeposit}
+            secondDeposit = {secondDeposit}
+            firstDepositErr = {firstDepositErr}
+            secondDepositErr = {secondDepositErr}
+            setFirstDepositErr = {setFirstDepositErr}
+            setSecondDepositErr = {setSecondDepositErr}
+
+          />
+        </Box>
+      </Modal>
+      
       <Alert
         handleCloseFlash={handleCloseFlash}
         alertMsg={alertMsg}

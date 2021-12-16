@@ -37,6 +37,7 @@ export default function PatientFeedback() {
             store.dispatch(setShowApplicationPopup(true));
             store.dispatch(setApplicationPopupVal("PatientFeedbackThank"));
             let postFeedbackData = {
+                howAppointment:appointment,
                 appointmentId:store.getState().videoCallReducer.roomId,
                 ratin: starRateValue,
                 comment:comment
@@ -74,11 +75,11 @@ export default function PatientFeedback() {
                             justifyContent="center"
                             alignItems="center">
                         <h1>Videocall Review</h1>
-                        <p className='subtitle'>Please let us know how it was your appointment.</p>
+                        <p className='subtitle'>Please let us know how was your appointment.</p>
                     </Grid>
             </Grid>
             <Grid container direction="column" >
-                    <Typography component="legend">How it was the appointment?</Typography>
+                    <Typography component="legend">How was the appointment?</Typography>
                     <div>
                         <TextField value={appointment} fullWidth id="how_appointment" onChange={appointmentValHandel}/>
                     </div>

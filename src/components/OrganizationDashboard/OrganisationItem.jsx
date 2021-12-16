@@ -35,7 +35,9 @@ const OrganisationItem = props => {
     setSubLabel,
     setIsActivateClicked,
     role,
-    setAlertcolor
+    setAlertcolor,
+    setIsVerifyBankClicked,
+    setIsActivateClickedFromSuspend
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -59,20 +61,30 @@ const OrganisationItem = props => {
     setAnchorEl(null)
   }
 
-  const handleActivate = org => {
+  const handleActivate = (org , data , from)=> {
     const params = {
       facilityId: org.id,
     }
-    console.log('handleActivate', params)
+    if(from =! 'suspend'){
     const response = organizationService.subscriptionOrganization(params).catch(err => {
-      console.log(err)
     })
-    console.log('handleActivate >> 1 ', response)
     if (response.status === 200) {
+        const res = organizationService.updateOrganization(org.id, 'active').catch(err => {
+        })
+        if (res.status === 200) {
+          setOrganizations([])
+          setSkip(0)
+          setAlertMsg('Activated')
+          setSubLabel('This account was successfully activated.')
+          setAlertcolor('success')
+          setOpenFlash(true)
+          setIsActivateClicked(false)
+        }
+      }
+    }else{
       const res = organizationService.updateOrganization(org.id, 'active').catch(err => {
         console.log(err)
       })
-      console.log('handleActivate >> 2 ', res)
       if (res.status === 200) {
         setOrganizations([])
         setSkip(0)
@@ -115,12 +127,21 @@ const OrganisationItem = props => {
         setIsCancelInviteClicked(true)
         break
       case 'setIsActivateClicked':
-        handleActivate(row, 'active')
+        handleActivate(row, 'active' , 'pending_verify')
         setIsActivateClicked(true)
         break
       case 'setIsResendClicked':
         handleResend(row, 'resend')
         break
+      case 'setIsVerifyBankClicked' : 
+      setIsVerifyBankClicked(true);
+      break;
+      case 'setIsActivateClickedFromSuspend' :
+        handleActivate(row, 'active' , 'suspend')
+
+        setIsActivateClickedFromSuspend(true)
+        break;
+      // handleBankVerify()
       // case 'setIsActivateClicked':
       //   handleActivate()
       case 'viewdetails':

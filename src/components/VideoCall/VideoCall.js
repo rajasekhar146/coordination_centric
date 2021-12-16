@@ -14,7 +14,8 @@ import {setIdentity,
         setIsFullScreen,
         setVideoTokenErrorMsz,
         setVideoCallDuration,
-        setUserType
+        setUser,
+        setRoomConnect
         } from '../../redux/actions/video-call-actions';
 import { connectToRoom, getTokenFromTwilio } from './utils/TwilioUtils';
 import Overlay from './Overlay';
@@ -27,12 +28,14 @@ import store from '../../redux/store';
 import './VideoCall.css';
 import {v4 as uuidv4} from 'uuid';
 
+
 const  VideoCallWidget=({
+  isRoomConnect,
   identity,
   roomId,
   isFullScreen,
   showOverlay,
-  userType,
+  user,
   setRoomIdAction,
   setIdentityAction,
   setTwilioAccessTokenAction,
@@ -40,7 +43,8 @@ const  VideoCallWidget=({
   setIsFullScreenAction,
   setVideoTokenErrorMszAction,
   setVideoCallDurationAction,
-  setUserTypeAction
+  setUserAction,
+  setRoomConnectAction
   })=>{
   const watingList = [
     {
@@ -57,25 +61,44 @@ const  VideoCallWidget=({
     }
 ]
 
+const userNotLogin =(setVideoTokenErrorMszAction)=>{
+  setRoomConnectAction(false)
+  setVideoTokenErrorMszAction("You need to login as authorized user with CC application to access this meeting")
+}
     const initialVideoCallData= async()=>{
+      let meetingUrl = window.location.pathname;
+      let meetingUrlSplit = meetingUrl.split('/');
+      setRoomIdAction(meetingUrlSplit[2]);
       try{
-        let userInfo =  JSON.parse(localStorage.getItem('currentUser'));
-        let userName =  userInfo.data.data.first_name;
-        let userTypeLocal =  userInfo.data.data.role;
-        setIdentityAction(userName);
-        if(userTypeLocal === "patient"){
-          let usertypeLocal = {...userType}
-          usertypeLocal.user = "patient"
-          setUserTypeAction(usertypeLocal)
+        let user =  JSON.parse(localStorage.getItem('currentUser'));
+        let userFirstName = user.data.data.first_name;
+        let userRole =  user.data.data.role;
+        let userId =  user.data.data._id;
+        let userImg =  user.data.data.profilePic;
+
+        let applicationUser = {...user}
+        applicationUser.id =userId;
+        applicationUser.first_name =userFirstName;
+        applicationUser.img = userImg;
+
+        setIdentityAction(userFirstName);
+
+        if(userRole === "patient"){
+          applicationUser.role = "patient";
+          setUserAction(applicationUser)
         }
-        let meetingUrl = window.location.pathname;
-        let meetingUrlSplit = meetingUrl.split('/');
-        setRoomIdAction(meetingUrlSplit[2]);
-         getTokenFromTwilio(meetingUrlSplit[2],userName,setTwilioAccessTokenAction,setVideoTokenErrorMszAction,setVideoCallDurationAction)
-        setShowVideoCallMeetingAction(true);
+        if(userRole === "doctor"){
+          applicationUser.role = "doctor";
+          setUserAction(applicationUser)
+        }
         
-       
-      }catch{
+         getTokenFromTwilio(meetingUrlSplit[2],userFirstName,setTwilioAccessTokenAction,setVideoTokenErrorMszAction,setVideoCallDurationAction,setRoomConnectAction)
+         setShowVideoCallMeetingAction(true);
+         
+         
+        }catch{
+        userNotLogin(setVideoTokenErrorMszAction);
+
         console.log("User not found")
       }
     }
@@ -116,10 +139,12 @@ const  VideoCallWidget=({
   
 
   const toggleChatFun = ()=>{
-    if(togglePatientRecords === true){
-      setTogglePatientRecords(false)
+    if(isRoomConnect){
+      if(togglePatientRecords === true){
+        setTogglePatientRecords(false)
+      }
+      setToggleChat(!toggleChat)
     }
-    setToggleChat(!toggleChat)
   }
 const closeChatFun = ()=>{
   setToggleChat(false)
@@ -167,9 +192,9 @@ const closeChatFun = ()=>{
     //     ,document.getElementById("video_portal"));
         return(<>
          <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
-                          <div className="full-screen" onClick={toggleFullScreen}> 
+                          {/* <div className="full-screen" onClick={toggleFullScreen}> 
                               <FullscreenIcon/>
-                          </div>
+                          </div> */}
                                                     <CallControl
                                                     room={room}
                                                     setRoom={setRoom}
@@ -211,7 +236,8 @@ const mapActionsToProps=(dispatch)=>{
       setVideoCallDurationAction:(videoCallDuration)=> dispatch(setVideoCallDuration(videoCallDuration)),
       setIsFullScreenAction:(isFullScreen)=> dispatch(setIsFullScreen(isFullScreen)),
       setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting)),
-      setUserTypeAction:(userTypea)=> dispatch(setUserType(userTypea))
+      setUserAction:(user)=> dispatch(setUser(user)),
+      setRoomConnectAction:(roomConnect)=> dispatch(setRoomConnect(roomConnect)),
     }
 }
 

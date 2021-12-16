@@ -27,7 +27,8 @@ export const organizationService = {
   getPrices,
   subscriptionOrganization,
   paymentSubscription,
-  downloadFile
+  downloadFile,
+  verifyBankHanlde
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -428,6 +429,20 @@ function downloadFile(fileObj) {
       //.then(handleResponse)
       .then(data => {
         return data
+      })
+  )
+}
+function verifyBankHanlde(bodyMsg){
+  return (
+    axios
+      .post(`${apiURL}/payment/verifyBankAccount`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
       })
   )
 }
