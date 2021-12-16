@@ -297,17 +297,7 @@ const ServiceLevelAgreementComponent = props => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ position: 'relative', marginBottom: '33px' }}>
-                      <h4
-                        style={{
-                          position: 'absolute',
-                          left: '19%',
-                          bottom: '0',
-                        }}
-                      >
-                        {organisationName}
-                      </h4>
-                    </div>
+                    <div className="sla__column eulaa__label user_name"> {organisationName}</div>
                     <div className="ac__gap__div"></div>
 
                     <div className="ac__row">

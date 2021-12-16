@@ -135,3 +135,7 @@
     border-bottom: 1px solid #252B42 !important;
   }
   
+  .user_name{
+    height: 20px;
+    margin-top: -32px;
+}

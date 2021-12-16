@@ -200,7 +200,6 @@ const SignInComponent = () => {
                 error={errors.email && isSubmit}
                 InputProps={{
                   className: 'si__text__box',
-                  placeholder: 'Email'
                 }}
 
               />

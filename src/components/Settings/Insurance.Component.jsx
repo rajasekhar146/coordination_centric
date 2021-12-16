@@ -70,7 +70,7 @@ const InsuranceComponent = props => {
     const [errMsg, setErrMsg] = useState('')
     const [insuranceInfo, setInsuranceInfo] = useState(null)
     const [policyList, setPolicyList] = useState([])
-
+    const [policy_type , setPolicy_type] = useState('')
     const {
         register,
         handleSubmit,
@@ -83,13 +83,13 @@ const InsuranceComponent = props => {
         // e.preventDefault()
         // e.stopPropagation()
         // setIsSubmit(true)
-        data.policy_type = policyType;
+        // data.policy_type = policyType;
         const res = settinService.addInsuranceInfo(data)
         res.then(() => {
             // history.push('/resetpasswordsuccess')
             setOpenFlash(true)
             setAlertMsg('Updated')
-            setSubLabel('Your insurance information was successfully updated.')
+            setSubLabel('Your Insurance Information was successfully updated.')
             setAlertColor('success')
             getMemberDetails()
         }).catch(() => {
@@ -137,7 +137,7 @@ const InsuranceComponent = props => {
         if (insuranceInfo) {
             setValue('company_name', get(insuranceInfo, ['company_name'], ''))
             setValue('policy_id', get(insuranceInfo, ['policy_id'], ''))
-            setPolicyType(get(insuranceInfo, ['policy_type'], ''))
+            setValue('policy_type', get(insuranceInfo, ['policy_type'], ''))
             setValue('policy_validity', get(insuranceInfo, ['policy_validity'], ''))
         }
     }, [insuranceInfo])
@@ -207,7 +207,17 @@ const InsuranceComponent = props => {
                             Policy Type
                         </div>
                         <div className="od_input_p io_radio">
-                            <FormControl variant="outlined" className={classes.formControl}>
+                        <TextField
+                                // {...useInput('facilityName', { isRequired: true })}
+                                {...register('policy_type', {
+                                    required: 'policy Type is required.'
+                                })}
+                                margin="normal"
+                                type="text"
+                                className={classes.input}
+                                InputProps={{ className: 'si__right__content_resend' }}
+                            />
+                            {/* <FormControl variant="outlined" className={classes.formControl}>
                                 <Select
                                     onChange={(e) => {
                                         setPolicyType(e.target.value)
@@ -225,7 +235,7 @@ const InsuranceComponent = props => {
                                             </MenuItem>
                                         ))}
                                 </Select>
-                            </FormControl>
+                            </FormControl> */}
 
                         </div>
                     </div>
