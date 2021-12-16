@@ -176,11 +176,17 @@ const WeekDaysViewComponent = props => {
     if (res.status === 200) {
       const response = get(res, ['data', 'data'], null)
       console.log('response', response)
-      const resAppointments = response.appointments
+      var resAppointments = response.appointments
       const resAvailabilities = response.availabilities
+      console.log('resAppointments', resAppointments)
       console.log('resAvailabilities', resAvailabilities)
       var appointments = []
       var availabilities = []
+
+      //Excludes the status declined, cancelled from appointments
+      resAppointments = resAppointments.filter(a => !(a.status == 'declined' || a.status == 'cancelled'))
+      console.log('resAppointments >> excludes', resAppointments)
+      
 
       resAppointments.map(a => {
         const app = {
@@ -188,10 +194,13 @@ const WeekDaysViewComponent = props => {
           startDate: a.startTime,
           endDate: a.endTime,
         }
-        const appDay = moment(a.startTime).format('YYYY-MM-DD')
-        const appStartTime = moment(a.startTime).format('HH:mm A')
-        const appEndTime = moment(a.endTime).format('HH:mm A')
-        console.log('times', appDay, appStartTime, appEndTime) //times.format('HH:mm a'))
+        const timezoneDiff = (new Date()).getTimezoneOffset()
+        const localEndDateTime = moment(a.endTime).add(timezoneDiff, 'minutes')
+        const localStartDateTime = moment(a.startTime).add(timezoneDiff, 'minutes')
+        const appDay = moment(localStartDateTime).format('YYYY-MM-DD')
+        const appStartTime = moment(localStartDateTime).format('HH:mm A')
+        const appEndTime = moment(localEndDateTime).format('HH:mm A')
+        console.log('booked >> times', a.startTime, appDay, appStartTime, appEndTime) //times.format('HH:mm a'))
 
         const appBookedTimings = {
           startTime: appStartTime,
@@ -200,9 +209,9 @@ const WeekDaysViewComponent = props => {
           isEnabled: false,
         }
         const appDetail = {
-          dayDesc: moment(a.startTime).format('dddd, DD'),
+          dayDesc: moment(localStartDateTime).format('dddd, DD'),
           availableTimeSlots: appBookedTimings,
-          day: moment(a.startTime).format('YYYY-MM-DD'),
+          day: moment(localStartDateTime).format('YYYY-MM-DD'),
         }
         appointments.push(appDetail)
       })
@@ -391,15 +400,30 @@ const WeekDaysViewComponent = props => {
     var newAvailableTimeSlots = availableTimeSlots
 
     bookedSlots.forEach(b => {
-      if (b.day === dDate) {
+      console.log('b.day == dDate', b.day, dDate)
+      if (b.day == dDate) {
         const startTime = b.availableTimeSlots.startTime.split(' ')
+        const endTime = b.availableTimeSlots.endTime.split(' ')
         console.log('doctorBookedSlots', 'Present', b.availableTimeSlots.startTime, startTime[0])
         if (startTime.length > 0) {
           const sTime = startTime[0]
+          console.log('doctorBookedSlots >> sTime', sTime)
           newAvailableTimeSlots.map(a => {
             if (a.startTime == sTime) {
               a.isEnabled = false
-              console.log('doctorBookedSlots >> Updated', dDate, a)
+              console.log('doctorBookedSlots >> sTime >> Updated', dDate, a)
+              return a
+            } else return a
+          })
+        }
+
+        if (endTime.length > 0) {
+          const eTime = endTime[0]
+          console.log('doctorBookedSlots >> eTime', eTime)
+          newAvailableTimeSlots.map(a => {
+            if (a.endTime == eTime) {
+              a.isEnabled = false
+              console.log('doctorBookedSlots >> eTime >> Updated', dDate, a)
               return a
             } else return a
           })
@@ -483,6 +507,9 @@ const WeekDaysViewComponent = props => {
         'YYYY-MM-DD HH:mm'
       ).format('YYYY-MM-DD HH:mm:ss')
     }
+
+    console.log('reqData.primaryStartTime', primaryDate.Day, reqData.primaryStartTime)
+    console.log('reqData.secondaryStartTime', secondaryDate.Day, reqData.secondaryStartTime)
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email)
     reqData.documents = selectedFiles.map(x => x.path)
@@ -575,6 +602,10 @@ const WeekDaysViewComponent = props => {
         'YYYY-MM-DD HH:mm'
       ).format('YYYY-MM-DD HH:mm:ss')
     }
+
+    console.log('reqData.primaryStartTime', primaryDate.Day, reqData.primaryStartTime)
+    console.log('reqData.secondaryStartTime', secondaryDate.Day, reqData.secondaryStartTime)
+   
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email)
     reqData.documents = selectedFiles.map(x => x)
