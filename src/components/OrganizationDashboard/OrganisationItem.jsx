@@ -35,7 +35,8 @@ const OrganisationItem = props => {
     setSubLabel,
     setIsActivateClicked,
     role,
-    setAlertcolor
+    setAlertcolor,
+    setIsVerifyBankClicked
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -121,6 +122,10 @@ const OrganisationItem = props => {
       case 'setIsResendClicked':
         handleResend(row, 'resend')
         break
+      case 'setIsVerifyBankClicked' : 
+      setIsVerifyBankClicked(true);
+      break;
+      // handleBankVerify()
       // case 'setIsActivateClicked':
       //   handleActivate()
       case 'viewdetails':

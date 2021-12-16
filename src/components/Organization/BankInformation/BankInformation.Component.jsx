@@ -522,7 +522,7 @@ const BankInformationComponent = () => {
                               <div className="bi__or__pay__text">
                                 {' '}
                                 <Button onClick={handleCardSection} color="inherit">
-                                  Or pay with {cardSection ? 'Direct' : 'Credit'} card
+                                Or Pay with {cardSection ? 'Banking Information' : ' Credit Card'} 
                                 </Button>
                               </div>
                             </div>

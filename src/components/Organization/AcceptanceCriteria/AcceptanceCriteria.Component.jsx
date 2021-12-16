@@ -35,6 +35,7 @@ const AcceptanceCriteriaComponent = props => {
   const dispatch = useDispatch()
   const [states, setStates] = useState(null)
   const [countries, setAllCountries] = useState([])
+  const [adminEmailSame , setAdminEmailSame] = useState()
 
   var {
     register,
@@ -54,6 +55,9 @@ const AcceptanceCriteriaComponent = props => {
     // setValue('state', data[0].statecode)
   }
   const onSubmit = data => {
+    if(data.email == data.facilityEmail){
+      return
+    }
     const admin = {
       fullName: data.fullName,
       email: data.email,
@@ -148,6 +152,13 @@ const AcceptanceCriteriaComponent = props => {
     else setPlanType(planType)
   }, [])
 
+  const checkAdminEmail = (e) =>{
+      if(e.target.value == facilityEmail ){
+        setAdminEmailSame(true);
+      }else{
+        setAdminEmailSame(false);
+      }
+  }
   const handleBack = () => {
     if (referredby === undefined || referredby === null) referredby = 0
 
@@ -233,12 +244,14 @@ const AcceptanceCriteriaComponent = props => {
                                   message: 'Enter a valid e-mail address',
                                 },
                               })}
+                              onChange={checkAdminEmail}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={email}
                               // name="email"
                               // value={initialValues ? initialValues.email : ''}
                             />
+                            {adminEmailSame && <p className = "ac__required" > Admin Email should not be same as Organization's Email </p>}
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
 
@@ -523,12 +536,7 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField
-                              {...register('website',  {
-                                pattern: {
-                                    value: /^(https?:\/\/)?[a-z0-9-]*\.+?[a-z0-9-]+\.[a-z0-9-]+(\/[^<>]*)?$/,
-                                    message: 'Invalid Web url',
-                                }
-                          })}
+                              {...register('website')}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={website}

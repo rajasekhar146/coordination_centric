@@ -537,7 +537,7 @@
     color: #fff !important;
 }
 
-.mar-bot-10{
+.mar-top-10{
     margin-top: 10px;
 }
 .od_input_p{
@@ -668,4 +668,7 @@
     padding: 5px;
     width: 350px;
     border: 1px solid grey;
+}
+.mar-top-30{
+    margin-top: 30px;
 }

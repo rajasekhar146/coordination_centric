@@ -9,7 +9,7 @@ const AppointmentApproveRequest = (props) => {
         <img src={ApproveAppointmentImage} alt="Appointment" />
       </div>
       <div className="aar__row">
-        <div className="aar__title">Appointment Request Submited</div>
+        <div className="aar__title">Appointment Request Submitted</div>
       </div>
       <div className="aar__row">
         <div className="aar__thank__text">
