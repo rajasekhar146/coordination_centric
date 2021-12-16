@@ -68,6 +68,7 @@ const SignInComponent = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     watch,
   } = useForm()
@@ -162,8 +163,8 @@ const SignInComponent = () => {
     event.preventDefault()
   }
 
-  const handleChange = prop => event => {
-    //setValues({ ...values, [prop]: event.target.value });
+  const handleChange = e => {
+    setValue('password', e.target.value);
   }
 
   return (
@@ -217,7 +218,7 @@ const SignInComponent = () => {
                     required: 'Password is required.',
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  onChange={handleChange()}
+                  // onChange={handleChange}
                   placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">

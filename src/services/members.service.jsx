@@ -25,7 +25,8 @@ export const memberService = {
   updateStatus,
   uploadFile,
   getDetailsById,
-  downloadFileUrl
+  downloadFileUrl,
+  addNewPatientRecord
 }
 
 function inviteMember(data) {
@@ -276,3 +277,20 @@ function getDetailsById(id) {
   )
 }
 
+function addNewPatientRecord(reqData) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+    .post(`${apiURL}/users/AddPatient`, reqData, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
