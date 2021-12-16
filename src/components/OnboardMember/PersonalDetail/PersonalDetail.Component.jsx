@@ -170,7 +170,7 @@ const PersonalDetailComponent = () => {
       setValue('ssn', newMemberDetail.ssn)
       setValue('occupation', newMemberDetail.occupation)
       setValue('dob', newMemberDetail.dob)
-      setValue('phoneNumber', newMemberDetail.phoneNumber)
+      setValue('phoneNo', newMemberDetail.phoneNo)
       setValue('gender', newMemberDetail.gender)
       setValue('address', newMemberDetail.address)
       setValue('country', newMemberDetail.country)

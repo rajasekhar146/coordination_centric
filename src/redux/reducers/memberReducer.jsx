@@ -35,7 +35,7 @@ const newMemberInitialState = {
     occupation: '',
     email: '',
     dob: '',
-    phoneNumber: '',
+    phoneNo: '',
     gender: '',
     address: '',
     country: '',

@@ -104,3 +104,10 @@ export const rescheduleSecondaryAppointmentDate = secondaryAppointment => {
     payload: secondaryAppointment,
   }
 }
+
+export const leftMenus = menus => {
+  return {
+    type: ActionTypes.LEFT_MENU_ITEMS,
+    payload: menus,
+  }
+}

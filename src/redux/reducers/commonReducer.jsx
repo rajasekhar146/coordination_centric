@@ -232,3 +232,12 @@ export const rescheduleSecondaryAppointmentDateReducer = (state = secondaryAppoi
       return state
   }
 }
+
+export const leftMenusReducer = (state = [], { type, payload }) => {
+  switch (type) {
+    case ActionTypes.LEFT_MENU_ITEMS:
+      return payload
+    default:
+      return state
+  }
+}
