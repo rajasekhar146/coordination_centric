@@ -1,6 +1,7 @@
 import Actions from "../actions/video-call-actions";
 
 const initState = {
+  isRoomConnect:false,
   identity: "",
   isRoomHost: false,
   connectOnlyWithAudio: false,
@@ -18,9 +19,12 @@ const initState = {
   showApplicationPopup:false,
   applicationPopup:'',
   applicationPopupVal:'',
-  userType:{
-    user:null,
-    host:false
+  user:{
+    id:null,
+    first_name:null,
+    role:null,
+    host:false,
+    img:null,
   },
 };
 
@@ -111,10 +115,15 @@ const VideoCallReducer = (state = initState, action) => {
           ...state,
           applicationPopupVal: action.applicationPopupVal,
         };
-      case Actions.SET_USER_TYPE:
+      case Actions.SET_USER:
         return {
           ...state,
-          userType: action.userType,
+          user: action.user,
+        };
+      case Actions.SET_ROOM_CONNECT:
+        return {
+          ...state,
+          isRoomConnect: action.isRoomConnect,
         };
     default:
       return state;

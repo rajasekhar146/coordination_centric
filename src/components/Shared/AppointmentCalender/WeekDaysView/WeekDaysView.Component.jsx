@@ -287,9 +287,14 @@ const WeekDaysViewComponent = props => {
       })
 
       // console.log('appointments >> ', appointments)
+
+      const doctorAvailability = {
+        availabilities: availabilities,
+        bookedSlots: appointments,
+      }
       console.log('appointments >> availabilities ', availabilities)
 
-      return availabilities
+      return doctorAvailability
     } else {
       return null
     }
@@ -316,8 +321,13 @@ const WeekDaysViewComponent = props => {
     if (selectedDate < newStartDate) selectedDate = newStartDate
 
     const doctorAvailability = await getAvailablities(selectedDate)
-    setNewAvailabilities(doctorAvailability)
-    await getWeekDays(selectedDate, doctorAvailability)
+    // const doctorAvailability = {
+    //   availabilities: availabilities,
+    //   bookedSlots: appointments
+    // }
+
+    setNewAvailabilities(doctorAvailability.availabilities)
+    await getWeekDays(selectedDate, doctorAvailability.availabilities, doctorAvailability.bookedSlots)
     console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
     console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
   }, [selectedCalender])
@@ -326,7 +336,7 @@ const WeekDaysViewComponent = props => {
     const selectedDay = year + '-' + month + '-' + day
     return moment(selectedDay)
   }
-  const getWeekDays = async (selectedDay, newAvailabilities) => {
+  const getWeekDays = async (selectedDay, newAvailabilities, bookedSlots) => {
     const timings = buildTimeSlots(
       selectedDay,
       selectedDay,
@@ -360,7 +370,10 @@ const WeekDaysViewComponent = props => {
           availableTimeSlots: newDayAvailability.availableTimeSlots,
           day: currentDate.format('YYYY-MM-DD'),
         }
-
+      const newTimeSlots = getUnBookedSlots(currentDate, availabilityDayDetail.availableTimeSlots, bookedSlots)
+      console.log('newTimeSlots', currentDate.format('YYYY-MM-DD'), newTimeSlots)
+      availabilityDayDetail.availableTimeSlots = newTimeSlots
+      console.log('new >> doctorBookedSlots >> Updated', availabilityDayDetail)
       weekDaysAvailablities.push(availabilityDayDetail)
     })
 
@@ -368,8 +381,34 @@ const WeekDaysViewComponent = props => {
 
     setAvaliableAppointmentDays(weekDaysAvailablities)
     console.log('newAvailabilities', weekDaysAvailablities)
-    console.log('buinding >> weekDaysAvailablities', weekDaysAvailablities)
+    console.log('buinding >> weekDaysAvailablities ', weekDaysAvailablities)
     dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
+  }
+
+  const getUnBookedSlots = (date, availableTimeSlots, bookedSlots) => {
+    const dDate = date.format('YYYY-MM-DD')
+    console.log('doctorBookedSlots >> before', bookedSlots)
+    var newAvailableTimeSlots = availableTimeSlots
+
+    bookedSlots.forEach(b => {
+      if (b.day === dDate) {
+        const startTime = b.availableTimeSlots.startTime.split(' ')
+        console.log('doctorBookedSlots', 'Present', b.availableTimeSlots.startTime, startTime[0])
+        if (startTime.length > 0) {
+          const sTime = startTime[0]
+          newAvailableTimeSlots.map(a => {
+            if (a.startTime == sTime) {
+              a.isEnabled = false
+              console.log('doctorBookedSlots >> Updated', dDate, a)
+              return a
+            } else return a
+          })
+        }
+      }
+    })
+
+    console.log('doctorBookedSlots >> after', newAvailableTimeSlots)
+    return newAvailableTimeSlots
   }
 
   const moveBack = async () => {
@@ -561,6 +600,17 @@ const WeekDaysViewComponent = props => {
 
   const clickRequestClose = () => {
     setClickedSubmit(false)
+    const defaultValue = {
+      Day: null,
+      timings: {
+        startTime: null,
+        endTime: null,
+        timeSlotId: null,
+      },
+    }
+    dispatch(primaryAppointmentDate(defaultValue))
+    dispatch(secondaryAppointmentDate(defaultValue))
+
     history.push('/appointments')
   }
 

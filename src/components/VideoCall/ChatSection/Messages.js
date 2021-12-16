@@ -1,19 +1,31 @@
 import React from 'react';
 import { connect } from "react-redux";
 import ChatPatientImg from './chat-patient.png';
-import ChatDoctorImg from './chat-doctor.png';
+import ChatDoctorDefaultImg from './doctor_default.png';
+import ChatPatientDefaultImg from './doctor_default.png';
+import store from '../../../redux/store';
 import './Messages.css';
 const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
     const alignClass = messageCreatedByMe ? 'woner':'user';
     const authorText = messageCreatedByMe ? "Doctor": author;
+    const applicationUserImg = store.getState().videoCallReducer.user.img;
     const contentAdditanalStyle = messageCreatedByMe ? 'message_right_styles ':'message_left_styles';
+    const onImageErro = (e)=>{
+        e.target.onerror = null; 
+        if(store.getState().videoCallReducer.user.role === "doctor"){
+            e.target.src=ChatDoctorDefaultImg;
+        }else {
+            e.target.src=ChatPatientDefaultImg;
+        }
+
+    }
     return(
         <>
                 {
                    <div className={`chat-tile ${alignClass}`}>
                         {
                             messageCreatedByMe &&  (  <div className="chat-tile-img">
-                                                            <img src={ChatDoctorImg}/>
+                                                            <img src={applicationUserImg} onError={onImageErro}/>
                                                             <div className="triangle-left"></div>
                                                         </div>
                                                     )
