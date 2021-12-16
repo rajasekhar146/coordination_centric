@@ -7,22 +7,23 @@ import store from '../../../../redux/store';
 import './LeftSideControl.css';
 
 const LeftSideControl = ({
+    user,
     watingList,
     toggleWatingListHandel,
     toggleWatingList,
     setToggleWatingList,
     room,
-   connectOnlyWithAudio
+   connectOnlyWithAudio,
 })=>{
 
     return (
         <div className="left-side-control">
-            {store.getState().videoCallReducer.user.role === "doctor" && (<WatingListWidget 
-                                                                            watingList={watingList} 
-                                                                            toggleWatingListHandel={toggleWatingListHandel} 
-                                                                            toggleWatingList={toggleWatingList} 
-                                                                            setToggleWatingList={setToggleWatingList}
-                                                                        />)
+            {user.role === "doctor" && (<WatingListWidget 
+                                            watingList={watingList} 
+                                            toggleWatingListHandel={toggleWatingListHandel} 
+                                            toggleWatingList={toggleWatingList} 
+                                            setToggleWatingList={setToggleWatingList}
+                                        />)
             }
           
             <MicButton room={room}/>

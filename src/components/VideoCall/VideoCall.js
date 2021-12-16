@@ -87,6 +87,11 @@ const userNotLogin =(setVideoTokenErrorMszAction)=>{
           applicationUser.role = "patient";
           setUserAction(applicationUser)
         }
+        if(userRole === "doctor"){
+          applicationUser.role = "doctor";
+          setUserAction(applicationUser)
+        }
+        
          getTokenFromTwilio(meetingUrlSplit[2],userFirstName,setTwilioAccessTokenAction,setVideoTokenErrorMszAction,setVideoCallDurationAction,setRoomConnectAction)
          setShowVideoCallMeetingAction(true);
          
