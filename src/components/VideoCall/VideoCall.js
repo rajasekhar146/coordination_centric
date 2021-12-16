@@ -30,6 +30,7 @@ import {v4 as uuidv4} from 'uuid';
 
 
 const  VideoCallWidget=({
+  isRoomConnect,
   identity,
   roomId,
   isFullScreen,
@@ -133,10 +134,12 @@ const userNotLogin =(setVideoTokenErrorMszAction)=>{
   
 
   const toggleChatFun = ()=>{
-    if(togglePatientRecords === true){
-      setTogglePatientRecords(false)
+    if(isRoomConnect){
+      if(togglePatientRecords === true){
+        setTogglePatientRecords(false)
+      }
+      setToggleChat(!toggleChat)
     }
-    setToggleChat(!toggleChat)
   }
 const closeChatFun = ()=>{
   setToggleChat(false)
