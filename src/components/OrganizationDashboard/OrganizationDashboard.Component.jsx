@@ -685,7 +685,7 @@ const OrganizationDashboardComponent = () => {
       if(data.data){
         setOpenFlash(true)
         setAlertMsg('Verified')
-        setSubLabel(data.data )
+        setSubLabel(data.data.message )
         setAlertColor('success')
       }else{
         setOpenFlash(true)
