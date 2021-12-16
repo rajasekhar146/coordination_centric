@@ -28,7 +28,7 @@ export default function LeaveRoomButton({room, setRoom}) {
             room.disconnect();
             
             setTimeout(()=>{
-                if(store.getState().videoCallReducer.userType.user === "patient"){
+                if(store.getState().videoCallReducer.user.role === "patient"){
                     store.dispatch(setShowApplicationPopup(true));
                     store.dispatch(setApplicationPopupVal("PatientFeedback"));
                   }

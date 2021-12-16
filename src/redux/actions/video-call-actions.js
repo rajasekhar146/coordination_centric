@@ -15,7 +15,8 @@ const Actions = {
     SET_CALL_ACTIVE:"SET_CALL_ACTIVE",
     SET_VIDEO_CALL_DURATION:"SET_VIDEO_CALL_DURATION",
     SET_SHOW_APPLICATION_POPUP:"SET_SHOW_APPLICATION_POPUP",
-    SET_USER_TYPE:"SET_USER_TYPE"
+    SET_USER:"SET_USER",
+    SET_ROOM_CONNECT:"SET_ROOM_CONNECT",
   };
   
   export const setIdentity = (identity) => {
@@ -131,11 +132,16 @@ const Actions = {
       applicationPopupVal,
     };
   };
-  
-  export const setUserType = (userType ) => {
+  export const setUser = (user) => {
     return {
-      type: Actions.SET_USER_TYPE,
-      userType,
+      type: Actions.SET_USER,
+      user,
+    };
+  };
+  export const setRoomConnect = (isRoomConnect) => {
+    return {
+      type: Actions.SET_ROOM_CONNECT,
+      isRoomConnect,
     };
   };
 

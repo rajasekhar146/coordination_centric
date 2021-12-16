@@ -22,7 +22,7 @@ const Videos = ({room,setRoom,roomId,twilioAccessToken}) =>{
             {/* {
             !videoCallReducer.isFullScreen && <RoomLabel roomId={roomId}/>
             } */}
-                {msz &&  (<div className='video-error-msz'> {roomId +" "+ msz} <ErrorOutlineIcon/></div>)}
+                {msz &&  (<div className='video-error-msz'> {msz} <ErrorOutlineIcon/></div>)}
                 {room && <TwilioRoom room={room}/>}
         </div>
     )

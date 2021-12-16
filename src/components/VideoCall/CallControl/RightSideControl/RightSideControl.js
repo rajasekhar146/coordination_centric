@@ -47,7 +47,7 @@ const countDownTimeHide = ()=>{
     });
     room.disconnect();
     setTimeout(()=>{
-      if(store.getState().videoCallReducer.userType.user === "patient"){
+      if(store.getState().videoCallReducer.user.role === "patient"){
         store.dispatch(setShowApplicationPopup(true));
         store.dispatch(setApplicationPopupVal("PatientFeedback"));
       }
@@ -59,24 +59,23 @@ const countDownTimeHide = ()=>{
 
     return (
       <> 
-            {
-            !store.getState().videoCallReducer.isFullScreen && (
-                                                <div className="right-side-control">         
-                                                {/* {videoToken} */}
-                                             {store.getState().videoCallReducer.callActive &&  <div className="timer-wid"><Countdown date={Date.now() + countDownTime} renderer={renderer} onComplete={countDownTimeHide}/></div> }  
-                                            
-                                                    
-                                                    
-                                                    {/* <InviteWid/> */}
-                                                    {/* <CallExtendConfirm/> */}
-                                                    <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/>
-                                                    <ChatWid toggleChatFun={toggleChatFun}/>
-                                                    <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>
-                                                    {/* <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/> */}
-                                                
-                                                </div>
-                                              )
-            }
+            <div className="right-side-control">         
+            {/* {videoToken} */}
+            {store.getState().videoCallReducer.callActive &&  <div className="timer-wid"><Countdown date={Date.now() + countDownTime} renderer={renderer} onComplete={countDownTimeHide}/></div> }  
+        
+                
+                
+                {/* <InviteWid/> */}
+                {/* <CallExtendConfirm/> */}
+                {store.getState().videoCallReducer.user.role === "doctor" && <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/> }
+                <ChatWid toggleChatFun={toggleChatFun}/>
+                {store.getState().videoCallReducer.user.role === "doctor" &&  <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>}
+               
+                {/* <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/> */}
+            
+            </div>
+                                              
+            
       </>
       
     )
