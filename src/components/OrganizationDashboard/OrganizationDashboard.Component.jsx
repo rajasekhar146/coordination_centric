@@ -194,7 +194,7 @@ const menuList = [
     menu: 'pending_verification',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -204,8 +204,8 @@ const menuList = [
     menu: 'pending_bank_verification',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Verify', fnKey: 'setIsVerifyBankClicked', icon: require('../../assets/icons/approve.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -289,7 +289,7 @@ const menuList = [
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -329,6 +329,9 @@ const statusNames = [
   },
   {
     name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
+  },
+  {
+    name: 'Pending Bank Verification', value: "Pending Bank Verification", key: "pending_bank_verification"
   },
   {
     name: 'Declined', value: "Declined", key: "declined"
@@ -809,9 +812,11 @@ const OrganizationDashboardComponent = () => {
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
+                inputProps={{ placeholder: 'select' }}
+
                 value={selectedStatus}
                 // onChange={e => handleSearchStatus(e)}
-                input={<OutlinedInput />}
+                input={<OutlinedInput placeholder='Status' />}
                 renderValue={selected => {
                   return selected.map(element => element.name).join(', ')
 

@@ -433,6 +433,16 @@ input::placeholder{
 ::-webkit-input-placeholder {
     text-transform: initial;
  }
+
+ :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    text-transform: initial;
+ }
+ ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    text-transform: initial;
+ }
+ :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    text-transform: initial;
+ }
  
 .si_acive_resend {
     color: #E42346 !important;
