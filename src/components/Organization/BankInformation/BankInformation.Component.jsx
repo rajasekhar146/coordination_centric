@@ -321,7 +321,7 @@ const BankInformationComponent = () => {
             {
               <div className="ac__main__div">
                 <div className="ac__title__text">Banking Information</div>
-                <div className="ac__subtitle__text">Please provide us your prefered payment method.</div>
+                <div className="ac__subtitle__text">Please provide us your preferred payment method.</div>
                 <div>
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="ac__form">

@@ -77,7 +77,7 @@ const TwoFaEnableSettings = props => {
                 <div className="od__p_title io_pl0">
                     Enable / Disable 2 Factor-Authentication
                     <div className="io_p_info_label">
-                        Here you can enable, disable or update your prefered 2FA method
+                        Here you can enable, disable or update your preferred 2FA method
                     </div>
                 </div>
 

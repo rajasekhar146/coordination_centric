@@ -270,7 +270,7 @@ const ServiceLevelAgreementComponent = props => {
                           <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
                             <div className="sla__text__align__center">
-                              <p className="ac__required">Please sigh here</p>
+                              <p className="ac__required">Please sign here</p>
                             </div>
                           )}
                         </div>

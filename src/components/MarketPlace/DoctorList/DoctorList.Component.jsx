@@ -18,7 +18,7 @@ const columns = [
   { id: 'id', label: 'ID', minWidth: '0px', align: 'left', visible: false },
   { id: 'pic', label: '', minWidth: '80px', align: 'center', visible: true },
   { id: 'Name', label: 'Name', minWidth: '200px', align: 'left', visible: true },
-  { id: 'specilaty', label: 'Specilaty', minWidth: '160px', align: 'left', visible: true },
+  { id: 'specilaty', label: 'Speciality', minWidth: '160px', align: 'left', visible: true },
   { id: 'location', label: 'Location', minWidth: '160px', align: 'left', visible: true },
   { id: 'availability', label: 'Availability', minWidth: '120px', align: 'left', visible: false },
   { id: 'action', label: 'Actions', minWidth: '100px', align: 'center', visible: true },

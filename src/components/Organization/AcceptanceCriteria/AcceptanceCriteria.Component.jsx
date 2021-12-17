@@ -457,7 +457,10 @@ const AcceptanceCriteriaComponent = props => {
                               Zipcode <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('zipcode', { required: 'Zipcode is required ', maxLength: 20 })}
+                              {...register('zipcode', { required: 'Zipcode is required ' })}
+                              inputProps={{
+                                maxLength: 20
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={nip}
@@ -499,9 +502,14 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Tax ID</div>
                             <TextField
-                              {...register('taxId')}
+                              {...register('taxId' , {
+                                pattern: {
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Tax Id accepts only integer',
+                              }
+                              })}
                               inputProps={{
-                                maxLength: 11,
+                                maxLength: 20,
                               }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
@@ -509,6 +517,7 @@ const AcceptanceCriteriaComponent = props => {
                               // name="taxId"
                               // value={initialValues ? initialValues.taxId : ''}
                             />
+                            {errors.taxId && <p className="ac__required">{errors.taxId.message}</p>}
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">Medical ID</div>
@@ -549,7 +558,10 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">How did you hear about us?</div>
                             <TextField
-                              {...register('about', { maxLength: 20 })}
+                              {...register('about')}
+                              inputProps={{
+                                maxLength: 120,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={about}

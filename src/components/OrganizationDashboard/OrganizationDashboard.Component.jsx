@@ -804,7 +804,7 @@ const OrganizationDashboardComponent = () => {
         <div className="od__right__section od_status">
           <div style={{ width: "162px" }} className="od__btn__div">
             <FormControl sx={{ m: 1, width: 200 }}>
-              <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
+              {/* <InputLabel id="demo-multiple-checkbox-label">Status</InputLabel> */}
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"

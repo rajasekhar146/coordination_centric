@@ -45,7 +45,7 @@ const UserVerificationPage = props => {
           </Button>
         </div>
         <div className="io_trouble_label">
-          <label>Trouble Verifying? Contact Us</label>
+          {/* <label>Trouble Verifying? Contact Us</label> */}
         </div>
       </div>
       <div className="io__back"

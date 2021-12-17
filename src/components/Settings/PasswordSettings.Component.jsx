@@ -74,7 +74,7 @@ const PersonalInfo = props => {
     const [showPassword, setShowPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
+    const [formSubmitted , setFormSubmitted] = useState(false)
     const [validations, setValidations] = useState({
         passwordLength: false,
         symbol: false,
@@ -128,8 +128,11 @@ const PersonalInfo = props => {
     }, [newPassword])
 
     const handleSubmit = (e) => {
+        setFormSubmitted(true);
         e.preventDefault()
         e.stopPropagation()
+        if(oldPassword && newPassword && confirmPassword){
+      if(validations.passwordLength && validations.symbol && validations.number && validations.capital && validations.small ){
         if (newPassword === confirmPassword) {
             // setIsSubmit(true)
             const data = {};
@@ -137,6 +140,7 @@ const PersonalInfo = props => {
             data.newPassword = newPassword;
             const res = authenticationService.changePassword(data)
             res.then(() => {
+        setFormSubmitted(false);
                 // history.push('/resetpasswordsuccess')
                 setOpenFlash(true)
                 setAlertMsg('Updated')
@@ -162,6 +166,13 @@ const PersonalInfo = props => {
         } else {
             setErrMsg('The password confirmation doesn’t match.')
         }
+    }else{
+        setSubLabel('Password should match the given requirements')
+        setOpenFlash(true)
+        setAlertColor('fail')
+        setAlertMsg('Password mismatch')
+    }
+    }
 
     }
 
@@ -222,6 +233,7 @@ const PersonalInfo = props => {
                                     </InputAdornment>
                                 }
                             />
+            {!oldPassword && formSubmitted && <p className="io__required">Current Password is Required</p>}
                         </div>
                     </div>
                     <ColoredLine color="#E4E7EC" />
@@ -253,6 +265,7 @@ const PersonalInfo = props => {
                                     </InputAdornment>
                                 }
                             />
+            {!newPassword && formSubmitted && <p className="io__required">New Password is Required</p>}
                         </div>
                     </div>
                     <ColoredLine color="#E4E7EC" />
@@ -285,6 +298,7 @@ const PersonalInfo = props => {
                                     </InputAdornment>
                                 }
                             />
+                        {!confirmPassword && formSubmitted && <p className="io__required">Confirm Password is Required</p>}
                             {errMsg && <p className="ac__required">{errMsg}</p>}
 
                         </div>
