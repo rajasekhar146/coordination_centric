@@ -31,7 +31,7 @@ const AppointmentApproveRequest = props => {
       </div>
       <div className="aar__row">
         <div className="aar__thank__text">
-          Thanks for your appointment request. In 24h hours you’ll receive a confirmation of this appointment.
+          Thanks for your appointment request. In 24 hours you’ll receive a confirmation of this appointment.
         </div>
       </div>
       <div className="aar__row">

@@ -497,7 +497,7 @@ const PersonalInfo = props => {
                   className: undefined,
                   component: undefined,
                   dropdownClassName: undefined,
-                  options: ['unordered', 'ordered', 'indent', 'outdent'],
+                  options: ['unordered', 'ordered'],
                 },
               }}
             />

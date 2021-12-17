@@ -12,11 +12,13 @@ const MasterLayoutWithLefuMenuComponent = ({ children }) => {
         <div className="master__main__edge__navbar">
           <NavBarComponent />
         </div>
+        <div className="main-div">
         <div className="master__left__menu__section">
           <LeftMenuComponent />
         </div>
         <div className="master__right__content__section">
           <div className="master__contect__placeholder">{children}</div>
+        </div>
         </div>
       </div>
     </>

@@ -304,7 +304,7 @@ const OverView = ( props ) => {
               <div className="agreeContainer">
                 <div className="agreeFile">
                   <DescriptionOutlinedIcon className="descicon" />
-                  {orgDet.business_certificate}
+                  <span className="black"> {orgDet.business_certificate}</span>
                 </div>
                 <div className="agreeIcons">
                   {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={()=>{viewCertificates(orgDet.business_certificate)}} /> */}
@@ -328,7 +328,7 @@ const OverView = ( props ) => {
                 <div className="agreeContainer">
                   <div className="agreeFile">
                     <DescriptionOutlinedIcon className="descicon" />
-                    {orgDet.saas_certificate}
+                  <span className="black"> {orgDet.saas_certificate}</span>
                   </div>
                   <div className="agreeIcons">
                     {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} /> */}
@@ -353,7 +353,7 @@ const OverView = ( props ) => {
                 <div className="agreeContainer">
                   <div className="agreeFile">
                     <DescriptionOutlinedIcon className="descicon" />
-                    {orgDet.eula_certificate}
+                  <span className="black"> {orgDet.eula_certificate}</span>
                   </div>
                   <div className="agreeIcons">
                     {/* <RemoveRedEyeOutlinedIcon className="mod-icon" onClick={handleOpen} /> */}

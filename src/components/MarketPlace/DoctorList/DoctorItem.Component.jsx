@@ -36,7 +36,7 @@ const DoctorListComponent = props => {
       <TableCell component="th" scope="row" align="left">
         {row.name}
       </TableCell>
-      <TableCell align="left">{row.speciality}</TableCell>
+      <TableCell align="left">{row.speciality+ ' '}</TableCell>
       <TableCell align="left">{row.location}</TableCell>
       {/* <TableCell align="left">{row.availability}</TableCell> */}
       <TableCell align="center">
