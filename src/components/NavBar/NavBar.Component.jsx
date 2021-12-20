@@ -274,7 +274,7 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
     }
     setName(fullName)
     setRole(roleName)
-    setProfilePic(data.profilePic);
+    setProfilePic(data?.profilePic);
 
   }, [])
   const handleCloseFlash = (event, reason) => {
