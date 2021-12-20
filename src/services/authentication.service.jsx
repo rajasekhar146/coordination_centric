@@ -22,6 +22,7 @@ export const authenticationService = {
   requestPassword,
   skipTwoFa,
   sendEmailVerificationCode,
+  validateToken,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -254,6 +255,21 @@ async function sendEmailVerificationCode(email, code) {
     })
     .catch(err => {
       console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
+      return err.response
+    })
+}
+
+async function validateToken(token) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  return await axios
+    .get(`${apiURL}/users/linkValidation?token=${token}`, axiosConfig)
+    //.then(handleResponse)
+    .then(response => {
+      return response
+    })
+    .catch(err => {
       return err.response
     })
 }
