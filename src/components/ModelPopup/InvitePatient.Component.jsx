@@ -214,17 +214,17 @@ const InvitePatientComponent = props => {
                             <img src={PlusIcon} alt="Approve Org" />  Add another
                         </label>
                     </div> */}
-                    <div className="io__row">
-                        <div style={{ marginTop: "50px" }} className="io__same__line">
-                            <div className="io__column">
-                                <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
+                    <div className="">
+                        <div  className="io__same__line">
+                            <div className="">
+                                <Button style={{width : "100%"}} className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
                                     Cancel
                                 </Button>
                             </div>
                             <div
-                                style={{ marginLeft: "15px" }}
-                                className="io__column io__invite__org__btn">
-                                <Button type="submit" className="io__add__organization__btn">
+                                
+                                className=" io__invite__org__btn">
+                                <Button style={{ minWidth: "100px" }} type="submit" className="io__add__organization__btn">
                                     Send Invite
                                 </Button>
                             </div>

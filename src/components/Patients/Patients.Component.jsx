@@ -100,7 +100,7 @@ const PatientComponent = props => {
 
             </div>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+                <TableContainer id="scrollableDiv" sx={{ maxHeight: 540 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>

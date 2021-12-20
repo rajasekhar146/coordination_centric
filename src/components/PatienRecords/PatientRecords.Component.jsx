@@ -89,11 +89,9 @@ const invitepatientModelStyle = {
   boxShadow: 24,
   p: 4,
   borderRadius: '10px',
-  padding: '15px',
-  paddingBottom: '40px',
+  padding: '0px',
   paddingTop: 0,
-  height: '580px',
-  overflow: 'scroll'
+  overflow: 'auto'
 }
 
 const invitePatientSuccess = {
@@ -228,7 +226,7 @@ const PatienRecordsComponent = (props) => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 530 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>

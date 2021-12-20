@@ -76,15 +76,12 @@ const TwoFaEnabled = props => {
       'deviceType': 'web'
     }
     notificationService.addDevice(devieInfo).then((res) => {
-      console.log("Add device", res);
     }, error => {
-      console.log("Add device", error);
     })
   }
   useEffect(async () => {
     if (twoFactor_auth_type === 'none') {
       let fcmToken = await getTokenFn(setFCMToken);
-      console.log("fcmToken", fcmToken);
       history.push(`/dashboard`)
     }
   }, [])
@@ -114,7 +111,6 @@ const TwoFaEnabled = props => {
     res
       .then(async () => {
         let fcmToken = await getTokenFn(setFCMToken);
-        console.log("fcmToken", fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {

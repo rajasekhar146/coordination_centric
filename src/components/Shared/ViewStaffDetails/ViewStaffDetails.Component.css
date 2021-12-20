@@ -196,7 +196,7 @@
     padding: 18px 10px;
     background: white;
     margin-bottom: 15px;
-    width: 400px;
+    width: 400px !important;
     border-radius: 6px;
 }
 

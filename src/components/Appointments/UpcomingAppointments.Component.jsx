@@ -166,7 +166,7 @@ const UpcomongAppointmentComponent = props => {
             let res = await appointmentService.cancelAppointment(selectedAppointment.appointmentid, cancelReasonInput);
             if (res.data) {
                 setOpenFlash(true)
-                setAlertMsg('Canceled')
+                setAlertMsg('Cancelled')
                 setAlertColor('cancel')
                 setSubLabel(get(res, ['data', 'message'], ''));
             }
@@ -260,7 +260,7 @@ const UpcomongAppointmentComponent = props => {
         <div>
             {showGrid
                 ? <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-                    <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+                    <TableContainer id="scrollableDiv" sx={{ maxHeight: 480 }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
@@ -370,6 +370,8 @@ const UpcomongAppointmentComponent = props => {
                             setSubLabel={setSubLabel}
                             setAlertColor={setAlertColor}
                             getAppointmentList={getAppointmentList}
+                            patientReschedule = {patientReschedule}
+                            setPatientReschedule={setPatientReschedule}
                         />
 
                     </Modal>

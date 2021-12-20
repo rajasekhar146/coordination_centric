@@ -40,7 +40,6 @@ const InviteOrganizationComponent = props => {
     formState: { errors },
   } = useForm()
 
-  console.log(errors)
 
   const customErrorAttribute = {
     className: 'has-error',
@@ -80,7 +79,6 @@ const InviteOrganizationComponent = props => {
       }
     }
 
-    console.log('orgDetail', orgDetail)
 
     const res = organizationService.addOrganization(orgDetail, currentUserRole)
     res.then((response) => {
@@ -91,7 +89,6 @@ const InviteOrganizationComponent = props => {
       clickCloseButton()
       localStorage.removeItem('facility')
     }).catch((error) => {
-      console.log(error.response)
       if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
         setIsExist('Email Already Registered')
       }

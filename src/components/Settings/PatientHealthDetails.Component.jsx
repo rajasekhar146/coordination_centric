@@ -26,6 +26,9 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import DeleteIcon from '../../assets/icons/delete_icon.png'
 import { memberMedicalReports } from '../../redux/actions/memberActions'
 import { organizationService } from '../../services'
+import view_details from '../../assets/icons/download_icon.png'
+import { memberService } from '../../services'
+import galary_icon from '../../assets/icons/galary_icon.png';
 
 const styles = theme => ({
   root: {
@@ -77,7 +80,7 @@ const PatientHealthDetails = props => {
   const [mediName, setMediName] = useState('')
   const [healthIfo, setHealthInfo] = useState(null)
   const medicalReports = useSelector(state => state.memberMedicalReports)
-  console.log('medicalReports >> initial ', medicalReports)
+  const [documentsArray , setDocumentsArray ] = useState([]);
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -95,10 +98,20 @@ const PatientHealthDetails = props => {
   } = useForm()
 
   const handleDrop = files => {
-    files.forEach((file, index) => {
-      selectedFiles.push(file)
-      setSelectedFiles([...selectedFiles])
-    })
+    const formData = new FormData()
+    files.forEach(file => {
+      formData.append('files', file)
+      const reader = new FileReader()
+  })
+  memberService
+      .uploadFile('patient_records', formData
+      )
+      .then(response => {
+        const url = response.data.data;
+        medicalReports.push(url)
+        getIndividualDocs(url);
+      })
+      .catch(() => {})
   }
 
   const onEditorStateChange = editorState => {
@@ -140,6 +153,30 @@ const PatientHealthDetails = props => {
     console.log('medicalReports >> fetchHealthInfo', response, medReports)
     dispatch(memberMedicalReports(medReports))
   }
+  const getDocs =  (documents) =>{
+    const temp = [];
+    setDocumentsArray([]);
+    documents && documents.map( async (docs) =>{
+      let file = 
+      { "name":docs }
+      let res = await memberService.downloadFileUrl(file);
+      if(res){
+        temp.push(res.data.data);
+        if(temp.length == documents.length){
+          setDocumentsArray(temp);
+        }
+      }
+    
+    })
+  }
+  const getIndividualDocs = async (documents) =>{
+    const temp = [];
+    let file = 
+    { "name":documents }
+    let res = await memberService.downloadFileUrl(file);
+    temp.push(res.data.data);
+    setDocumentsArray([...documentsArray , res.data.data])
+  }
 
   useEffect(() => {
     fetchCountries()
@@ -157,6 +194,9 @@ const PatientHealthDetails = props => {
       const medReports = get(healthIfo, ['reports'], [])
       console.log('medReports', medReports)
       setReportsArray(medReports)
+      if(medReports.length > 0){
+        getDocs(medReports)
+      }
     }
   }, [healthIfo])
 
@@ -198,7 +238,15 @@ const PatientHealthDetails = props => {
     console.log('certificateResponse', url)
     window.open(url, '_blank')
   }
-
+  const openImage = async (docs)=>{
+    window.open(docs.url, '_blank');
+  }
+  const delImage = async (docs , index) =>{
+    var data = [...documentsArray]
+    data.splice(index , 1);
+    medicalReports.splice(index , 1);
+    setDocumentsArray(data);
+  }
   const deleteMedicalReport = async filename => {
     const data = reportsArray.filter(f => f !== filename) //Duplicate state.
     console.log('deleteMedicalReport', data)
@@ -399,7 +447,7 @@ const PatientHealthDetails = props => {
                 )}
               </Dropzone>
             </div>
-
+{/* 
             {selectedFiles.map((file, index) => (
               <UploadFile
                 file={file}
@@ -409,9 +457,9 @@ const PatientHealthDetails = props => {
                 setSelectedFiles={setSelectedFiles}
                 selectedFiles={selectedFiles}
               />
-            ))}
+            ))} */}
 
-            {medicalReports &&
+            {/* {medicalReports &&
               medicalReports.map((file, index) => (
                 <div className="od__certificate__main">
                   <div className="od__icon">
@@ -425,6 +473,22 @@ const PatientHealthDetails = props => {
                     <img src={DeleteIcon} alt="upload" />
                   </div>
                 </div>
+              ))} */}
+               {documentsArray.map((docs , index) => (
+                <span className="docs-view">
+                  <img src={galary_icon} className="galary_icon" alt="success_icon" />
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                  <img src={DeleteIcon} className="del_icon"  onClick={() => {delImage(docs , index)}} alt="delete_icon" />
+                   <p className="align__img__name docs_name"> {docs?.metadata?.name}</p>
+                  <p className="align__img__name img_size"> {docs?.metadata?.size}</p>
+                </span>
               ))}
           </div>
         </div>

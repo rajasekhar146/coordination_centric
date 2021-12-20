@@ -63,7 +63,8 @@ const ConfimationAppointment = props => {
         clickCloseButton,
         selectedAppointment,
         setAlertColor,
-        getAppointmentList
+        getAppointmentList,
+        from
     } = props
 
     const [activeTab, setActiveTab] = useState(null)
@@ -88,7 +89,9 @@ const ConfimationAppointment = props => {
                 _id: element?.userId?._id,
                 appointmentid: element?._id,
                 startTime: element?.startTime,
-                endTime: element?.endTime
+                endTime: element?.endTime,
+                doctorName : element.doctorId?.first_name + " " + (element?.doctorId?.last_name),
+                doctorGender: element?.doctorId?.gender
             }
             setSecondarySlots(recordNew)
         } else {
@@ -136,12 +139,21 @@ const ConfimationAppointment = props => {
             <div className="io__row io_user_fields">
                 <div>
                     <label className="io_user_label">
-                        Patient
+                    {from == 'notification' ? 'Doctor' : 'Patient' }   
                     </label>
                 </div>
+                {/* {from == 'notification' && 
+                        <div>
+                            <label className="io_user_name">
+                                {`${secondarySlots.doctorGender === 'male' ? 'Mr.' : 'Ms.'} ${secondarySlots.doctorName}`}
+                            </label>
+                        </div>
+                        } */}
                 <div>
                     <label className="io_user_name">
-                        Mr. {selectedAppointment.name}
+                    {from == 'notification' ? secondarySlots?.doctorName : selectedAppointment?.name }
+
+                        {/* Mr. {selectedAppointment.name} */}
                     </label>
                 </div>
 

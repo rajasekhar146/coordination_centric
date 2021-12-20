@@ -145,7 +145,6 @@ function ViewAppointmentComponent() {
     }
   }
   const sendMessage = async () => {
-    console.log('do validate', inputValue);
     if (inputValue.length > 0) {
       const msgRequest = {
         "messages":
@@ -278,53 +277,56 @@ function ViewAppointmentComponent() {
                   View Chat History</button>
               }
               {type == 'history' && showChat &&
-                <p className="close_chat" onClick={showChatDialog}>
-                  <img className="chat__close__icon" src={reject} alt="reject" />
-                  Close Chat History</p>
-              }
-              {showChat &&
-                <div className="chat_content">
-                  {messages.map(d => (
-                    <div className="chat_body ">
-                      {d.from == userId && (
-                        <p >
-                          <img
-                            src={recieverImg}
-                            alt="Profile"
-                            className="nb__chat__image left_img"
-                          />
-                          <div className="from_chat chat__box">
-                            {d.message}
-                          </div>
-                        </p>
-                      )}
-                      {d.from != userId && (
-                        <p >
-                          <div className="to_chat chat__box">
-                            {d.message}
-                          </div>
+              <p className="close_chat" onClick={showChatDialog}>
+                <img className="chat__close__icon" src={reject} alt="reject" />
+                Close Chat History</p>
+            }
+            {showChat &&
+              <div className="chat_content">
+                {messages.map(d => (
+                  <div className="chat_body ">
+                    {d.from == userId && (
+                      <p>
+                        <img
+                          src={recieverImg}
+                          alt="Profile"
+                          className="nb__chat__image left_img"
+                        />
+                        <div className="from_chat chat__box">
+                          {d.message}
+                        <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
+                        </div>
+                      </p>
+                    )}
+                    {d.from != userId && (
+                      <p >
+                        <div className="to_chat chat__box">
+                          {d.message}
+                        <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
+                        </div>
 
-                          <img
-                            src={senderImg}
-                            alt="Profile"
-                            className="nb__chat__image right_img"
-                          />
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              }
-              {type == 'upcoming' &&
-                <div className="send_message_textbox">
-                  <input className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
-                    value={inputValue} onInput={e => setInputValue(e.target.value)}
-                  />
-                  <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
+                        <img
+                          src={senderImg}
+                          alt="Profile"
+                          className="nb__chat__image right_img"
+                        />
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            }
+            {type == 'upcoming' &&
+              <div className="send_message_textbox">
+                <input className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
+                  value={inputValue} onInput={e => setInputValue(e.target.value)}
+                />
+                <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
 
-                </div>
-              }
-            </div>
+              </div>
+            }
+          </div>
+
 
           </div>
         }

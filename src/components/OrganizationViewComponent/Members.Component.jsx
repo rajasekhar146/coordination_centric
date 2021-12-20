@@ -80,7 +80,7 @@ const MembersComponent = props => {
     return (
         <div>
             <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-                <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+                <TableContainer id="scrollableDiv" sx={{ maxHeight: 480 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>

@@ -84,7 +84,6 @@ const VerificationCodePage = props => {
 
 
   const handleSubmit = () => {
-    console.log('handleSubmit 4444', verificationCode, method, currentUserEmail)
     const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
     res
       .then(() => {
