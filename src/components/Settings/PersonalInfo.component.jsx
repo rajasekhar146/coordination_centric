@@ -306,6 +306,7 @@ const PersonalInfo = props => {
                 {...register('email', {
                   required: 'Email is required.',
                 })}
+                type="email"
                 margin="normal"
                 InputProps={{
                   className: classes.input,

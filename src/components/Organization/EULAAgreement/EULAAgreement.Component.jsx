@@ -20,9 +20,8 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
-import useStore from '../../../hooks/use-store';
+import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
-
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
@@ -38,13 +37,10 @@ const EULAAgreementComponent = () => {
   const [activeStep, setActiveStep] = React.useState(1)
   const [facility, setFacility] = useState({})
 
+  const [signinStoreData] = useStore(SigninStore)
 
-  const [signinStoreData] = useStore(SigninStore);
-
-  const {
-    organisationName,
-  } = signinStoreData;
-
+  const { organisationName } = signinStoreData
+  const [isVisible, setVisible] = useState(true)
   const handleNext = () => {
     // var updatedFacility = {
     //   ...facility,
@@ -100,6 +96,7 @@ const EULAAgreementComponent = () => {
   }, [])
 
   const onButtonClick = () => {
+    setVisible(false)
     console.log('Child >> trigered')
     let domElement = document.getElementById('my-node')
     console.log(domElement)
@@ -118,6 +115,9 @@ const EULAAgreementComponent = () => {
       .catch(function (error) {
         console.error('oops, something went wrong!', error)
       })
+    setTimeout(() => {
+      setVisible(true)
+    }, 2000)
   }
 
   return (
@@ -146,16 +146,15 @@ const EULAAgreementComponent = () => {
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
-                <div className="sla__download__print__section">
-                  <div className="sla__download__print">
-                    <div className="sla__download__text" onClick={onButtonClick}>
-                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                {isVisible && (
+                  <div className="sla__download__print__section">
+                    <div className="sla__download__print">
+                      <div className="sla__download__text" onClick={onButtonClick}>
+                        <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                      </div>
                     </div>
-                    {/* <div className="sla__download__text">
-                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
-                    </div> */}
                   </div>
-                </div>
+                )}
                 <div>
                   <div className="ac__form">
                     <div id="my-node">
@@ -230,7 +229,6 @@ const EULAAgreementComponent = () => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
@@ -248,7 +246,6 @@ const EULAAgreementComponent = () => {
                         </div>
 
                         <div className="eulaa__column">
-                         
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -272,21 +269,22 @@ const EULAAgreementComponent = () => {
                     </div>
                     <div className="sla__column eulaa__label user_name"> {organisationName}</div>
                     <div className="ac__gap__div"></div>
+                    {isVisible && (
+                      <div className="ac__row">
+                        <div className="ac__column ac__left__action">
+                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                            Back
+                          </Button>
+                        </div>
 
-                    <div className="ac__row">
-                      <div className="ac__column ac__left__action">
-                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                          Back
-                        </Button>
+                        <div className="ac__column ac__right__action">
+                          <Button className="ac__next__btn" onClick={handleNext}>
+                            Save & Next
+                            <ArrowForwardIosRoundedIcon />
+                          </Button>
+                        </div>
                       </div>
-
-                      <div className="ac__column ac__right__action">
-                        <Button className="ac__next__btn" onClick={handleNext}>
-                          Save & Next
-                          <ArrowForwardIosRoundedIcon />
-                        </Button>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="ac__gap__bottom__div"></div>

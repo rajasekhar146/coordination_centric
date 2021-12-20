@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import NavBarComponent from '../NavBar/NavBar.Component'
 
 import '../MasterLayoutWithLefuMenu/MasterLayoutWithLefuMenu.Component'
+import get from 'lodash.get'
 
 const MasterLayoutWithoutLeftMenuComponent = ({ children }) => {
   return (
@@ -20,16 +21,33 @@ const MasterLayoutWithoutLeftMenuComponent = ({ children }) => {
   )
 }
 
-const MasterLayoutWithoutLeftMenuRoute = ({ component: Component, ...rest }) => {
+const MasterLayoutWithoutLeftMenuRoute = ({ component: Component, path, ...rest }) => {
+  const isLoggedToken = get(JSON.parse(localStorage.getItem('currentUser')), ['data', 'token'], null)
+
   return (
     <Route
-      {...rest}
-      render={matchProps => (
+    {...rest}
+    path={path}
+    render={matchProps => {
+      return isLoggedToken ? (
         <MasterLayoutWithoutLeftMenuComponent>
           <Component {...matchProps} />
         </MasterLayoutWithoutLeftMenuComponent>
-      )}
-    />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/signin",
+            state: {
+              prevLocation: path,
+            },
+          }}
+        />
+      );
+    }
+
+
+    }
+  />
   )
 }
 

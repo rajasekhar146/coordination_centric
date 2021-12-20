@@ -152,6 +152,7 @@ const InviteOrganizationComponent = props => {
                 },
               })}
               margin="normal"
+              type="email"
               error={errors.facilityEmail && isSubmit}
               InputProps={{
                 startAdornment: (

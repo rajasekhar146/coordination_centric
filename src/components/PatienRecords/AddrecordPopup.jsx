@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
@@ -20,6 +20,8 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import { memberService } from '../../services'
 import moment from 'moment'
+import get from 'lodash.get'
+import { authenticationService } from '../../services'
 
 const styles = theme => ({
     dropdownStyle: {
@@ -63,7 +65,10 @@ const AddPatientRecord = props => {
         selectedOrg,
         clickCloseButton,
         classes,
-        getPatientRecords
+        getPatientRecords,
+        setAlertMsg,
+        setOpenFlash,
+        setSubLabel,
     } = props
 
 
@@ -76,14 +81,28 @@ const AddPatientRecord = props => {
         formState: { errors },
     } = useForm()
     const [dateOfBirth, setDOB] = React.useState(null)
+    const [errorMsg, setError] = useState('')
+    const currentUser = authenticationService.currentUserValue
 
+    const organisationName = get(currentUser, ['data', 'data', 'first_name'], false)
+
+    useEffect(() => {
+        setValue('organization_name', organisationName)
+    }, [])
 
     const onSubmit = (data) => {
         memberService.addNewPatientRecord(data).then((res) => {
-            getPatientRecords()
-            clickCloseButton()
+            if(get(res, ['data', 'status_code'], '') === 400) {
+                setError(get(res, ['data', 'message'], ''))
+            } else if (get(res, ['data', 'status_code'], '') === 200) {
+                clickCloseButton()
+                setOpenFlash(true)
+                setSubLabel(get(res, ['data', 'message'], ''))
+                // setAlertMsg('Successfully Added new Record')
+                getPatientRecords()
+            }
         }).catch((err) => {
-
+            setError(get(err, ['response','data', 'message'], ''))
         })
     }
 
@@ -191,6 +210,7 @@ const AddPatientRecord = props => {
                                         message: 'Please enter a valid email',
                                     },
                                 })}
+                                type="email"
                                 margin="normal"
                                 InputProps={{
                                     startAdornment: (
@@ -202,7 +222,7 @@ const AddPatientRecord = props => {
                             />
                         </FormControl>
                         {errors.email && <p className="io__required">{errors.email.message}</p>}
-
+                        {errorMsg && <p className="io__required">{errorMsg}</p>}
                     </div>
                     
                     <div style={{ width: "30%" }}>
@@ -316,21 +336,21 @@ const AddPatientRecord = props => {
                                 {...register('organization_name', {
                                     required: 'Organization Name is required.'
                                 })}
-                                onChange={(e) => {
-                                    let val;
-                                    if (e.target.value.length === 1) {
-                                        val = capitalize(e.target.value)
-                                    }
-                                    else {
-                                        val = e.target.value
-                                    }
-                                    setValue('organization_name', val)
-                                }}
+                                // onChange={(e) => {
+                                //     let val;
+                                //     if (e.target.value.length === 1) {
+                                //         val = capitalize(e.target.value)
+                                //     }
+                                //     else {
+                                //         val = e.target.value
+                                //     }
+                                //     setValue('organization_name', val)
+                                // }}
                                 margin="normal"
-
+                                disabled
                             />
                         </FormControl>
-                        {errors.organization_name && <p className="io__required">{errors.organization_name.message}</p>}
+                        {/* {errors.organization_name && <p className="io__required">{errors.organization_name.message}</p>} */}
 
                     </div>
                 </div>

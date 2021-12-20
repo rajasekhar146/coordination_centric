@@ -244,6 +244,7 @@ const AcceptanceCriteriaComponent = props => {
                                   message: 'Enter a valid e-mail address',
                                 },
                               })}
+                              type="email"
                               onChange={checkAdminEmail}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
