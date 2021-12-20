@@ -69,9 +69,8 @@ const OrganisationItem = props => {
     const response = organizationService.subscriptionOrganization(params).catch(err => {
     })
     if (response.status === 200) {
-        const res = organizationService.updateOrganization(org.id, 'active').catch(err => {
-        })
-        if (res.status === 200) {
+        const res = organizationService.updateOrganization(org.id, 'active')
+        res.then(()=>{
           setOrganizations([])
           setSkip(0)
           setAlertMsg('Activated')
@@ -79,13 +78,13 @@ const OrganisationItem = props => {
           setAlertcolor('success')
           setOpenFlash(true)
           setIsActivateClicked(false)
-        }
+        }).catch(err => {
+        })
+       
       }
     }else{
-      const res = organizationService.updateOrganization(org.id, 'active').catch(err => {
-        console.log(err)
-      })
-      if (res.status === 200) {
+      const res = organizationService.updateOrganization(org.id, 'active')
+    res.then((response)=>{
         setOrganizations([])
         setSkip(0)
         setAlertMsg('Activated')
@@ -93,7 +92,11 @@ const OrganisationItem = props => {
         setAlertcolor('success')
         setOpenFlash(true)
         setIsActivateClicked(false)
-      }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
     }
   }
 

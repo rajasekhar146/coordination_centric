@@ -8,14 +8,14 @@ var firebaseConfig = {
   // storageBucket: "storemax-50908.appspot.com",
   // messagingSenderId: "606599051782",
   // appId: "1:606599051782:web:e53a0dfd668450c729a187"
-  apiKey: "AIzaSyBi-ONUDtzM88vA6UpPkIz1xmqfVKvQiPQ",
-  authDomain: "cc-dev-90032.firebaseapp.com",
-  databaseURL: "https://cc-dev-90032-default-rtdb.firebaseio.com",
-  projectId: "cc-dev-90032",
-  storageBucket: "cc-dev-90032.appspot.com",
-  messagingSenderId: "423483013139",
-  appId: "1:423483013139:web:43bfca44522459edc4e7e6",
-  measurementId: "G-52YCFYG0R2"
+  apiKey: "AIzaSyCPuX7XTiB9CCptNnpXmg-z63qEybKarH4",
+  authDomain: "csuites-push-notifications-dev.firebaseapp.com",
+  databaseURL: "https://csuites-push-notifications-dev-default-rtdb.firebaseio.com",
+  projectId: "csuites-push-notifications-dev",
+  storageBucket: "csuites-push-notifications-dev.appspot.com",
+  messagingSenderId: "767019714733",
+  appId: "1:767019714733:web:dd40f568d073f610491e24",
+  measurementId: "G-PL4NKWM93F"
 };
 
 let messaging=null;
