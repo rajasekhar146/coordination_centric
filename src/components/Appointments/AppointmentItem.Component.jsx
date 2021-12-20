@@ -174,7 +174,6 @@ const AppointmentItemComponent = props => {
         event.stopPropagation()
         setAnchorEl(event.currentTarget)
         const menus = menuList.filter(m => m.menu === status.toLowerCase())
-        console.log('menus', menus)
         if (menus.length > 0) {
             if (type === 'upcoming') {
                 role === 'doctor' ? setMenuOptions(menus[0].doctorOptions) : setMenuOptions(menus[0].patientOptions)
@@ -187,14 +186,12 @@ const AppointmentItemComponent = props => {
         }
         else setMenuOptions([])
 
-        console.log('menus[0].options', menus[0].options)
     }
 
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
         dispatch(setAppointmentDetails(row))
-        console.log('orgId', orgId)
         switch (action) {
             case 'setIsConfirmClicked':
                 setIsConfirmClicked(true)

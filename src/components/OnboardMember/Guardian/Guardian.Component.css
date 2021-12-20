@@ -92,7 +92,8 @@
     border-radius: 5px !important;
     text-transform: uppercase !important;
     padding: 4px 16px 4px 16px !important;
-    color: #fff !important
+    color: #fff !important;
+    min-width: 100px !important;
 }
 
 .gn__close__btn {

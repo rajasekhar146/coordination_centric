@@ -130,7 +130,6 @@ const getAppointmentDetails = async () => {
     }
   }
   const sendMessage = async () => {
-    console.log('do validate', inputValue);
     if (inputValue.length > 0) {
       const msgRequest = {
         "messages":
@@ -270,7 +269,7 @@ const getAppointmentDetails = async () => {
                 {messages.map(d => (
                   <div className="chat_body ">
                     {d.from == userId && (
-                      <p >
+                      <p>
                         <img
                           src={recieverImg}
                           alt="Profile"
@@ -278,6 +277,7 @@ const getAppointmentDetails = async () => {
                         />
                         <div className="from_chat chat__box">
                           {d.message}
+                        <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
                       </p>
                     )}
@@ -285,6 +285,7 @@ const getAppointmentDetails = async () => {
                       <p >
                         <div className="to_chat chat__box">
                           {d.message}
+                        <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
 
                         <img
