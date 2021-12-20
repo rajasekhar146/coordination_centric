@@ -14,7 +14,7 @@ import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
 import { getTokenFn } from '../../firebase'
 import Alert from '../Alert/Alert.component'
-import { enableTwofa } from '../../redux/actions/commonActions'
+import { enableTwofa, chooseAnotherAuth } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -203,6 +203,8 @@ const TwoFaEnabled = props => {
           <label
             onClick={() => {
               dispatch(enableTwofa(true))
+              dispatch(chooseAnotherAuth(true))
+
               history.push('/enable2fa')
             }}
             onMouseOver={() => {

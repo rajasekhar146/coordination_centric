@@ -4,9 +4,12 @@ import history from '../../history'
 import CClogo from '../../assets/icons/cc_logo.png'
 import SuccessIcon from '../../assets/icons/success_icon.png'
 import Button from '@mui/material/Button'
+import { useSelector } from 'react-redux'
 
 const TwoFaVerificationSuccess = props => {
-  useEffect(() => {}, [])
+  useEffect(() => { }, [])
+  const [chooseAnotherAuth, setEnableTwofa] = useState(useSelector(state => state.chooseAnotherAuth))
+
 
   return (
     <div>
@@ -28,10 +31,16 @@ const TwoFaVerificationSuccess = props => {
             <Button
               className="io__activate__enable io__margin25"
               onClick={() => {
-                history.push('/dashboard')
+                if (chooseAnotherAuth) {
+                  history.push('/signin')
+                } else {
+                  history.push('/dashboard')
+                }
               }}
             >
-              Go to Dashboard
+              {chooseAnotherAuth ? 'Continue' : 'Go to Dashboard'}
+              
+              
             </Button>
           </div>
         </div>

@@ -58,7 +58,7 @@ const NewOnboardingComponent = () => {
                           <div className="ac__label">
                             Email <span className="ac__required">*</span>
                           </div>
-                          <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
+                          <TextField id="" type="email" defaultValue="" className="ac__text__box" margin="normal" />
                         </div>
 
                         <div className="ac__column">
@@ -86,7 +86,7 @@ const NewOnboardingComponent = () => {
                           <div className="ac__label">
                             Email <span className="ac__required">*</span>
                           </div>
-                          <TextField id="" defaultValue="" className="ac__text__box" margin="normal" />
+                          <TextField id="" type="email" defaultValue="" className="ac__text__box" margin="normal" />
                         </div>
                       </div>
 
