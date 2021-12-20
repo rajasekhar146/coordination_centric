@@ -49,7 +49,7 @@ function ViewAppointmentComponent() {
       const res = await appointmentService.getSecondaryAppointment(appointmentId)
       if (res.status === 200) {
         const element = get(res, ['data', 'data'], {})
-        setSecondaryTimings(moment(element?.startTime).format('h:mm a') + " - " + (moment(element?.endTime).format('h:mm a')))
+        setSecondaryTimings(moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + (moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')))
       } else {
 
       }
