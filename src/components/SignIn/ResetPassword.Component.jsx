@@ -45,7 +45,7 @@ const ResetPasswordPage = props => {
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
     const [activeLink, setActiveLink] = useState(false)
-
+    const [isValidLink, setIsValidLink] = useState(false)
 
     const [validations, setValidations] = useState({
         passwordLength: false,
@@ -66,9 +66,10 @@ const ResetPasswordPage = props => {
         setShowConfirmPassword(!showConfirmPassword)
     }
 
+
     const handleCloseFlash = () => {
         setOpenFlash(false)
-      }
+    }
 
     useEffect(() => {
         const validationsObj = {
@@ -104,11 +105,27 @@ const ResetPasswordPage = props => {
         // }
     }, [password])
 
+    useEffect(() => {
+        authenticationService.validateToken(token).then((res) => {
+            if(get(res, ['data', 'status_code'], '') === 400) {
+                setIsValidLink(false)
+                setSubLabel(get(res, ['data', 'message'], ''))
+            } else if (get(res, ['data', 'status_code'], '') === 200) {
+                setIsValidLink(true)
+                setSubLabel(get(res, ['data', 'message'], ''))
+            }
+        }).catch((err) => {
+           
+        })
+    }, [])
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (password === conformPassword) {
+        if (!isValidLink) {
+            setOpenFlash(true)
+        } else if (password === conformPassword) {
             setIsSubmit(true)
             const resetData = {};
             resetData.password = password;
@@ -334,9 +351,10 @@ const ResetPasswordPage = props => {
                 </div>
                 <Alert
                     handleCloseFlash={handleCloseFlash}
-                    subLebel={subLebel}
+                    alertMsg={alertMsg}
                     openflash={openflash}
-                    color = "success" />
+                    subLebel={subLebel}
+                    color="fail" />
             </form>
         </div>
     )

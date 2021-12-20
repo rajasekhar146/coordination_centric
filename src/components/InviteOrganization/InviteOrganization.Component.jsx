@@ -133,8 +133,9 @@ const InviteOrganizationComponent = props => {
                 className: 'io__text__box',
               }}
             />
-            {errors.facilityName && <p className="io__required">Organization Name is required.</p>}
-          </div>
+            {errors.facilityName && errors.facilityName.type === "required" && (<p className="io__required">Organization Name is required.</p>)}
+            {errors.facilityName && errors.facilityName.type === "minLength" && (<p className="io__required">Organization Name must be at least 3 characters.</p>)}
+             </div>
 
           <div className="io__row">
             <div className="io__label">

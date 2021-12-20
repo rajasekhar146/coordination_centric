@@ -71,6 +71,7 @@ const WeekDaysViewComponent = props => {
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
+  console.log('Logged User Role', role)
   const getUserId = role => {
     switch (role) {
       case 'doctor':
@@ -114,7 +115,7 @@ const WeekDaysViewComponent = props => {
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false)
   const [reportsArray, setReportsArray] = useState([])
   const [isPastMonth, setPastMonth] = useState(false)
-
+  
   const buildTimeSlots = (
     startDate,
     endDate,
@@ -186,7 +187,6 @@ const WeekDaysViewComponent = props => {
       //Excludes the status declined, cancelled from appointments
       resAppointments = resAppointments.filter(a => !(a.status == 'declined' || a.status == 'cancelled'))
       console.log('resAppointments >> excludes', resAppointments)
-      
 
       resAppointments.map(a => {
         const app = {
@@ -194,7 +194,7 @@ const WeekDaysViewComponent = props => {
           startDate: a.startTime,
           endDate: a.endTime,
         }
-        const timezoneDiff = (new Date()).getTimezoneOffset()
+        const timezoneDiff = new Date().getTimezoneOffset()
         const localEndDateTime = moment(a.endTime).add(timezoneDiff, 'minutes')
         const localStartDateTime = moment(a.startTime).add(timezoneDiff, 'minutes')
         const appDay = moment(localStartDateTime).format('YYYY-MM-DD')
@@ -396,11 +396,32 @@ const WeekDaysViewComponent = props => {
 
   const getUnBookedSlots = (date, availableTimeSlots, bookedSlots) => {
     const dDate = date.format('YYYY-MM-DD')
-    console.log('doctorBookedSlots >> before', bookedSlots)
+    const dDateTime = date.format('HH:mm')
+    console.log('doctorBookedSlots >> before', date, bookedSlots)
     var newAvailableTimeSlots = availableTimeSlots
-
+    const today = moment(new Date()).format('YYYY-MM-DD')
+    const time = moment(new Date()).format('HH:mm')
+    console.log('today >> getUnBookedSlots', today, time, dDate)
+    console.log('availableTimeSlots >> getUnBookedSlots', availableTimeSlots)
     bookedSlots.forEach(b => {
       console.log('b.day == dDate', b.day, dDate)
+      if (today === dDate) {
+        // const startTime = b.availableTimeSlots.startTime.split(' ')
+        // const endTime = b.availableTimeSlots.endTime.split(' ')
+        // console.log('Current Date', b.availableTimeSlots.startTime, startTime[0])
+        // if (startTime.length > 0) {
+        //   const sTime = startTime[0]
+        //   console.log('Current Date >> sTime', time, sTime)
+        //   newAvailableTimeSlots.map(a => {
+        //     if (time > sTime) {
+        //       console.log('Current Date >> Befor', time, sTime)
+        //       a.isEnabled = false
+        //       console.log('Current Date >> Updated 123', dDate, a)
+        //       return a
+        //     } else return a
+        //   })
+        // }
+      }
       if (b.day == dDate) {
         const startTime = b.availableTimeSlots.startTime.split(' ')
         const endTime = b.availableTimeSlots.endTime.split(' ')
@@ -605,7 +626,7 @@ const WeekDaysViewComponent = props => {
 
     console.log('reqData.primaryStartTime', primaryDate.Day, reqData.primaryStartTime)
     console.log('reqData.secondaryStartTime', secondaryDate.Day, reqData.secondaryStartTime)
-   
+
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email)
     reqData.documents = selectedFiles.map(x => x)
@@ -661,7 +682,8 @@ const WeekDaysViewComponent = props => {
       </div>
       <div className="wdv__row">
         <div className="wdv__section">
-          {primaryDate.Day === null || secondaryDate.Day === null ? (
+          {(role === 'doctor' && primaryDate.Day === null) || 
+          (role === 'patient' && (primaryDate.Day === null || secondaryDate.Day === null))? (
             <Button className="wdv__next__btn">Next</Button>
           ) : null}
 
