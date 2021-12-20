@@ -90,7 +90,7 @@ const VerificationCodePage = props => {
       .then(() => {
         // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        if (!last_login_time && isShowCopleateProfile()) {
+        if (!last_login_time && isShowCopleateProfile() && !enableTwofavalue) {
           dispatch(setCompleteProfile(true))
         }
         dispatch(enableTwofa(false))
