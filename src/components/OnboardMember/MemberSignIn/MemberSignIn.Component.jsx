@@ -248,6 +248,7 @@ const MemberSignInComponent = () => {
                     message: 'Please enter a valid email',
                   },
                 })}
+                type="email"
                 disabled="true"
                 margin="normal"
                 placeholder="Email"

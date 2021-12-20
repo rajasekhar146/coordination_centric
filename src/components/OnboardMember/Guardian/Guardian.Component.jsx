@@ -141,6 +141,7 @@ const GuardianComponent = props => {
                 },
               })}
               margin="normal"
+              type="email"
               InputProps={{
                 maxLength: 15,
                 startAdornment: (

@@ -27,7 +27,7 @@ export default function InviteWid() {
                         </div>
                         <div> 
                             <label> Email*</label> 
-                            <input type="text"/>
+                            <input type="email"/>
                         </div>
                         <div> 
                             <div> AddIcon</div>

@@ -241,3 +241,13 @@ export const leftMenusReducer = (state = [], { type, payload }) => {
       return state
   }
 }
+
+export const chooseAnotherAuthReducer = (state = false, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_CHOOSE_ANOTHER_AUTH:
+      return payload
+    default:
+      return state
+  }
+}
+

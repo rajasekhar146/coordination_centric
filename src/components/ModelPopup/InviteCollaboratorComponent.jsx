@@ -164,6 +164,7 @@ const InviteCollaboratorComponent = props => {
                                     },
                                 })}
                                 margin="normal"
+                                type="email"
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">

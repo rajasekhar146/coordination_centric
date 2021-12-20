@@ -28,6 +28,7 @@ import get from 'lodash.get'
 import TablePagination from '@mui/material/TablePagination'
 import CircularProgress from '@mui/material/CircularProgress';
 import AddPatientRecordPopup from './AddrecordPopup'
+import Alert from '../Alert/Alert.component'
 import './PatientRecords.Component.css'
 
 const useStyles = makeStyles(theme => ({
@@ -149,7 +150,9 @@ const PatienRecordsComponent = (props) => {
   const open = Boolean(anchorEl)
   const classes = useStyles()
   const [addPatientRecordPopup, setAddPatientRecordPopup] = useState(false)
-
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
+  const [subLebel, setSubLabel] = useState('')
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -177,6 +180,9 @@ const PatienRecordsComponent = (props) => {
     getPatientRecords()
   }, [skip, limit, rowsPerPage])
 
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -296,6 +302,13 @@ const PatienRecordsComponent = (props) => {
           </Paper>
         </div>
       </div>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color="success"
+      />
       <Modal
         open={invitePatientClicked}
         // onClose={setIsAcceptClicked}
@@ -343,9 +356,12 @@ const PatienRecordsComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={addRecordStyle}>
-          <AddPatientRecordPopup 
+          <AddPatientRecordPopup
             clickCloseButton={closeInviteSuccessModel}
             getPatientRecords={getPatientRecords}
+            setAlertMsg={setAlertMsg}
+            setOpenFlash={setOpenFlash}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>

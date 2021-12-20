@@ -290,7 +290,7 @@ function addNewPatientRecord(reqData) {
         return data
       })
       .catch(err => {
-        return err
+        return err.response
       })
   )
 }

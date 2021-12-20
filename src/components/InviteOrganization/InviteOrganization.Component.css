@@ -133,6 +133,7 @@
     width: 380px !important;
     /* color: #A0A4A8 !important; */
     height: 48px !important;
+    text-transform: lowercase;
 }
 
 .has-error {
