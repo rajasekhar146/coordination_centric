@@ -152,7 +152,7 @@ const PersonalInfo = props => {
       { "name":docs }
       let res = await memberService.downloadFileUrl(file);
       if(res){
-        temp.push(res.data.data);
+        temp.push(res?.data?.data);
         if(temp.length == documents.length){
           setDocumentsArray(temp);
         }
