@@ -98,7 +98,7 @@ const EULAAgreementComponent = () => {
   const onButtonClick = () => {
     setVisible(false)
     console.log('Child >> trigered')
-    let domElement = document.getElementById('my-node')
+    let domElement = document.getElementById('my-certificate')
     console.log(domElement)
     htmlToImage
       .toPng(domElement)
@@ -141,7 +141,7 @@ const EULAAgreementComponent = () => {
               })}
             </Stepper>
             {
-              <div className="ac__main__div">
+              <div className="ac__main__div" id="my-certificate">
                 <div className="ac__title__text">EULA Agreement</div>
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
