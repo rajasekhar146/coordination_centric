@@ -8,7 +8,7 @@ export default function Chat({closeChatFun}) {
    
     return (
         <div className="chat-wrp">
-            <div class="chat-wrp-2">
+            <div className="chat-wrp-2">
             <ChatLabel closeChatFun={closeChatFun} />
             <Messages/>
             <NewMessage/>

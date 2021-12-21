@@ -19,6 +19,7 @@ const initState = {
   showApplicationPopup:false,
   applicationPopup:'',
   applicationPopupVal:'',
+  videoApiResponce:{},
   user:{
     id:null,
     first_name:null,
@@ -26,6 +27,7 @@ const initState = {
     host:false,
     img:null,
   },
+  countDownResult:false,
 };
 
 const VideoCallReducer = (state = initState, action) => {
@@ -124,6 +126,16 @@ const VideoCallReducer = (state = initState, action) => {
         return {
           ...state,
           isRoomConnect: action.isRoomConnect,
+        };
+      case Actions.SET_VIDEO_API_RESPONCE:
+        return {
+          ...state,
+          videoApiResponce: action.videoApiResponce,
+        };
+      case Actions.SET_COUNT_DOWN_RESULT:
+        return {
+          ...state,
+          countDownResult: action.countDownResult,
         };
     default:
       return state;
