@@ -39,7 +39,7 @@ const OtherUsers = (props) => {
                 return get(dashboardDetails, ['0', 'totals', 'otherUsers'], 0)
                 break
             case 'admin':
-                return get(dashboardDetails, ['0', 'totals', 'otherActiveUsers'], 0)
+                return get(dashboardDetails, ['0', 'totals', 'total'], 0)
         }
     }
     return (
@@ -57,7 +57,7 @@ const OtherUsers = (props) => {
                 </div>
                 <div className="db_stats_label_fields">
                     <label className="db_stats_label">
-                    Other Users
+                    Total Users
                     </label>
                     <label className="db_stats_value">{getValue()}</label>
                 </div>

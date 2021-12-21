@@ -95,7 +95,7 @@ const menuList = [
         menu: 'pending_verification',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -171,7 +171,7 @@ const menuList = [
         menu: 'unverified',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -180,7 +180,7 @@ const menuList = [
         menu: 'pending_acceptance',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -213,10 +213,11 @@ const StaffItemComponent = props => {
         setSubLabel,
         setStaffList,
         type,
-        role
+        role,
+        setAlertColor
     } = props
 
-    const resendInvite = async(org, status) => {
+    const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, type)
         if (res.status === 200) {
             setSkip(0)
@@ -227,11 +228,11 @@ const StaffItemComponent = props => {
         } else {
             setSkip(0)
             setOpenFlash(true)
-            setAlertMsg('Error')
+            // setAlertMsg('Error')
             // setSubLabel('Another invitation was sended to this Member.')
         }
     }
-    const cancelInvite = async(org, status) => {
+    const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, type)
 
         if (res.status === 200) {
@@ -240,24 +241,29 @@ const StaffItemComponent = props => {
             setStaffList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
+            setAlertColor('cancel')
         } else {
             setSkip(0)
             setOpenFlash(true)
-            setAlertMsg('Error')
+            // setAlertMsg('Error')
         }
     }
 
-    const handleActivate = async(org, status) => {
+    const handleActivate = async (org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
             setSkip(0)
             setOpenFlash(true)
             setStaffList([])
-           
+            if (status === 'inactive') {
+                setAlertColor('fail')
+            } else {
+                setAlertColor('success')
+            }
         } else {
             setSkip(0)
             setOpenFlash(true)
-            setAlertMsg('Error')
+            // setAlertMsg('Error')
             setSubLabel('')
         }
     }
@@ -330,25 +336,25 @@ const StaffItemComponent = props => {
                 return 'defaultStyle'
         }
     }
-    const handleRowClick = async(i, row) =>{
+    const handleRowClick = async (i, row) => {
         history.push(`/viewDetails/${row._id}`)
-     }
+    }
 
 
     return (
         <TableRow
             hover
             role="checkbox"
-            onClick = {()=>{
-                handleRowClick(index,row)
+            onClick={() => {
+                handleRowClick(index, row)
             }}
-            style={{ width: '100%',cursor:"pointer" }} tabIndex={-1} key={row.id}>
+            style={{ width: '100%', cursor: "pointer" }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]
-                if(column.id == 'role'){
-                    if (row[column.id]) 
-                    value = <span style={{textTransform: 'capitalize'}}> {row[column.id]}</span> 
-                }else{
+                if (column.id == 'role') {
+                    if (row[column.id])
+                        value = <span style={{ textTransform: 'capitalize' }}> {row[column.id]}</span>
+                } else {
                     if (row[column.id]) value = row[column.id]
                 }
                 // else if (column.id === 'orgName') value = 'John Deo'

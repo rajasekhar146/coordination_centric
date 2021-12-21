@@ -11,7 +11,7 @@ const getOptions = () => {
             menu: 'pending_verification',
             options: [
                 { text: 'View Details', fnKey: 'viewdetails', icon: require('../../src/assets/icons/view_details.png').default },
-                { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
+                // { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
                 { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../src/assets/icons/approve.png').default },
                 // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
                 { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../src/assets/icons/reject.png').default },
@@ -87,7 +87,7 @@ const getOptions = () => {
             menu: 'unverified',
             options: [
                 { text: 'View Details', fnKey: 'viewdetails', icon: require('../../src/assets/icons/view_details.png').default },
-                { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
+                // { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
                 { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../src/assets/icons/approve.png').default },
                 { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../src/assets/icons/reject.png').default },
             ],
@@ -96,7 +96,7 @@ const getOptions = () => {
             menu: 'pending_acceptance',
             options: [
                 { text: 'View Details', fnKey: 'viewdetails', icon: require('../../src/assets/icons/view_details.png').default },
-                { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
+                // { text: 'Send Message', icon: require('../../src/assets/icons/edit_icon.png').default },
                 { text: 'Verify', icon: require('../../src/assets/icons/suspend.png').default },
                 { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../src/assets/icons/reject.png').default },
             ],

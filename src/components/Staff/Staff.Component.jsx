@@ -82,6 +82,7 @@ const StaffComponent = props => {
     const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [alertColor, setAlertColor] = useState('success')
 
     const getStaffList = async () => {
         setIsLoading(true)
@@ -197,6 +198,7 @@ const StaffComponent = props => {
                                             setStaffList={setStaffList}
                                             type="member"
                                             role="staff"
+                                            setAlertColor={setAlertColor}
                                         // colorcodes={colorcodes}
                                         />
                                     ))
@@ -248,7 +250,7 @@ const StaffComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color="success"
+                color={alertColor}
             />
         </div>
 
