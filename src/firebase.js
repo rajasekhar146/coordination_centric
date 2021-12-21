@@ -9,7 +9,7 @@ var firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APPID,
-  measurementId: process.env.REACT_APP__MEASUREMENTID
+  measurementId: process.env.REACT_APP_MEASUREMENTID
 };
 let messaging=null;
 if (firebase.messaging.isSupported()) {
