@@ -115,7 +115,7 @@ const WeekDaysViewComponent = props => {
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false)
   const [reportsArray, setReportsArray] = useState([])
   const [isPastMonth, setPastMonth] = useState(false)
-  
+
   const buildTimeSlots = (
     startDate,
     endDate,
@@ -380,8 +380,12 @@ const WeekDaysViewComponent = props => {
           day: currentDate.format('YYYY-MM-DD'),
         }
       const newTimeSlots = getUnBookedSlots(currentDate, availabilityDayDetail.availableTimeSlots, bookedSlots)
+
+      const actualTimeSlots = disabledPassedTime(currentDate, newTimeSlots)
+      console.log('Actual TimeSlots', actualTimeSlots)
+
       console.log('newTimeSlots', currentDate.format('YYYY-MM-DD'), newTimeSlots)
-      availabilityDayDetail.availableTimeSlots = newTimeSlots
+      availabilityDayDetail.availableTimeSlots = actualTimeSlots
       console.log('new >> doctorBookedSlots >> Updated', availabilityDayDetail)
       weekDaysAvailablities.push(availabilityDayDetail)
     })
@@ -394,6 +398,60 @@ const WeekDaysViewComponent = props => {
     dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
   }
 
+  const disabledPassedTime = (date, timeSlots) => {
+    const dDate = date.format('YYYY-MM-DD')
+    const today = moment(new Date()).format('YYYY-MM-DD')
+    const todayWithTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    const time = moment(new Date()).format('HH:mm')
+    console.log('Current Day >> dDate, today', dDate, today)
+    const timezoneDiff = new Date().getTimezoneOffset()
+    console.log('Current Day >> timezoneDiff', timezoneDiff)
+
+    timeSlots.map(ts => {
+      if (today === dDate) {
+        const startTime = ts.startTime.split(' ')
+        const endTime = ts.endTime.split(' ')
+        var aDateTime = moment(dDate + ' ' + startTime).format('YYYY-MM-DD HH:mm:ss') //.add(-timezoneDiff, 'minutes').format('YYYY-MM-DD HH:mm:ss')
+        console.log('Current Day >> before', ts)
+        console.log('Current Day >> before >> date ', todayWithTime, aDateTime)
+        const a = moment(todayWithTime).isBefore(aDateTime)
+        console.log('Current Day >> before >> a', a)
+        const subDate = moment(todayWithTime).subtract(moment(aDateTime)).add(timezoneDiff, 'minutes')
+        console.log('Current Day >> before >> subDate', subDate.format('HH:mm'))
+        if (todayWithTime > aDateTime) {
+          console.log('Current Day >> Passed')
+          ts.isEnabled = false
+          return ts
+        } else {
+          console.log('Current Day >> Not Passed', ts)
+          return ts
+        }
+        // if (startTime.length > 0) {
+        //   const sTime = startTime[0]
+        //   console.log('Current Day >> cond', time, sTime)
+        //   if (time > sTime) {
+        //     console.log('Current Day >> update >> AM')
+        //     ts.isEnabled = false
+        //     return ts
+        //   }
+        // }
+        // if (endTime.length > 0) {
+        //   const eTime = startTime[0]
+        //   console.log('Current Day >> cond', time, eTime)
+        //   if (time > eTime) {
+        //     console.log('Current Day >> update >> PM')
+        //     ts.isEnabled = false
+        //     return ts
+        //   }
+        // }
+      } else {
+        console.log('Current Day >> Not today')
+        return ts
+      }
+    })
+
+    return timeSlots
+  }
   const getUnBookedSlots = (date, availableTimeSlots, bookedSlots) => {
     const dDate = date.format('YYYY-MM-DD')
     const dDateTime = date.format('HH:mm')
@@ -682,8 +740,8 @@ const WeekDaysViewComponent = props => {
       </div>
       <div className="wdv__row">
         <div className="wdv__section">
-          {(role === 'doctor' && primaryDate.Day === null) || 
-          (role === 'patient' && (primaryDate.Day === null || secondaryDate.Day === null))? (
+          {(role === 'doctor' && primaryDate.Day === null) ||
+          (role === 'patient' && (primaryDate.Day === null || secondaryDate.Day === null)) ? (
             <Button className="wdv__next__btn">Next</Button>
           ) : null}
 
