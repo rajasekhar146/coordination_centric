@@ -20,7 +20,7 @@ const VideoTrack = ({ track,name}) => {
   return (
     <div className="video_track_container">
       <div ref={trackRef}>
-        <div class="author-name">{name}</div>
+        <div className="author-name">{name}</div>
       </div>
     </div>
   )

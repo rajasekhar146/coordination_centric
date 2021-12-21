@@ -9,7 +9,7 @@ import {setTimerCount,
         setShowApplicationPopup, 
         setApplicationPopupVal} from '../../../../redux/actions/video-call-actions';
 import store from '../../../../redux/store';
-import {useHistory} from 'react-router-dom';
+import SocketIoComponent from '../../SocketIoComponent/SocketIoComponent';
 import './RightSideControl.css';
 
 
@@ -23,53 +23,44 @@ export default function RightSideControl({
     toggleShare,
     toggleShareFun,
     setToggleShare,
-    room
+    room,
+    meetingStartTime,
+    meetingEndTime,
+    meetingDuration,
+    meetingRemainingTime,
+    setMeetingStartTime,
+    setMeetingEndTime,
+    setMeetingDuration,
+    setMeetingRemainingTime,
+    setCountDownResultAction
 }) {
-//------------- Count down ---------------------
-const history = useHistory();
-const TimeOutTem = () => <span>Time Out ..! </span>;
-const CallEnd = () => <span>Call ended </span>;
-const countDownTime = store.getState().videoCallReducer.videoCallDuration;
 
-// Renderer callback with condition
-
-
-// Renderer callback with condition
-let renderer = ({ hours, minutes, seconds, completed }) => (<span> {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>);
-
-const countDownTimeHide = ()=>{
-  store.dispatch(setCallActive(false));
-  room.localParticipant.videoTracks.forEach((localVideoTrackPublication) => {
-    localVideoTrackPublication.track.stop();
-    });
-    room.localParticipant.audioTracks.forEach((localAuideoTrackPublication) => {
-        localAuideoTrackPublication.track.stop();
-    });
-    room.disconnect();
-    setTimeout(()=>{
-      if(store.getState().videoCallReducer.user.role === "patient"){
-        store.dispatch(setShowApplicationPopup(true));
-        store.dispatch(setApplicationPopupVal("PatientFeedback"));
-      }
-        history.push('/dashboard');
-    },2000)
-   
-  callEnd.play();
-}
 
     return (
       <> 
             <div className="right-side-control">         
             {/* {videoToken} */}
-            {store.getState().videoCallReducer.callActive &&  <div className="timer-wid"><Countdown date={Date.now() + countDownTime} renderer={renderer} onComplete={countDownTimeHide}/></div> }  
-        
-                
+            {/* {store.getState().videoCallReducer.callActive &&  <div className="timer-wid"><Countdown date={Date.now() + countDownTime} renderer={renderer} onComplete={countDownTimeHide}/></div> }   */}
+             {(room) &&  <SocketIoComponent
+                                  room={room}                     
+                                  meetingStartTime={meetingStartTime}
+                                  meetingEndTime={meetingEndTime}
+                                  meetingDuration={meetingDuration}
+                                  meetingRemainingTime={meetingRemainingTime}
+
+                                  setMeetingStartTime={setMeetingStartTime}
+                                  setMeetingEndTime={setMeetingEndTime}
+                                  setMeetingDuration={setMeetingDuration}
+                                  setMeetingRemainingTime={setMeetingRemainingTime}
+                                  setCountDownResultAction={setCountDownResultAction}
+                              />
+                }
                 
                 {/* <InviteWid/> */}
                 {/* <CallExtendConfirm/> */}
                 {store.getState().videoCallReducer.user.role === "doctor" && <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/> }
                 <ChatWid toggleChatFun={toggleChatFun}/>
-                {store.getState().videoCallReducer.user.role === "doctor" &&  <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend}/>}
+                {store.getState().videoCallReducer.user.role === "doctor" &&  <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend} meetingEndTime={meetingEndTime}/>}
                
                 {/* <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/> */}
             

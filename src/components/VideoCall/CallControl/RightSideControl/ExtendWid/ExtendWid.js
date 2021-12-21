@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { ExtendWidService } from './ExtendWid.service';
+import {useSelector} from 'react-redux';
 import "./ExtendWid.css";
 import TimerImg from  "./timer.png";
-export default function ExtendWid({toggleExtend, toggleExtendFun, setToggleExtend}) {
+export default function ExtendWid({toggleExtend, toggleExtendFun, setToggleExtend, meetingEndTime}) {
     const [extendWith,setExtendWith] = useState("");
+    const videoCallReducer = useSelector(state => state.videoCallReducer);
     const timerExtend = [
         {
             name: "5 minutes",
@@ -21,14 +24,21 @@ export default function ExtendWid({toggleExtend, toggleExtendFun, setToggleExten
     ]
 
     const selectExtendWith = (itm)=>{
+        let endDate = new Date(new Date(meetingEndTime.date).getTime() + itm.milliseconds).toISOString();
+        let postData = {
+            meetingid:videoCallReducer.roomId,
+            meetingendtime:endDate
+        }
+        ExtendWidService(postData)
         setToggleExtend(false);
-        console.log("your selected", itm)
+        console.log("your meetingEndTime", endDate)
+        // console.log("your selected", itm, videoCallReducer.roomId, dt)
     }
     return (
-        <div class="extend-wrap">
+        <div className="extend-wrap">
             {
                 toggleExtend ? (
-                                    <div class="extend-dropdown-wrap">
+                                    <div className="extend-dropdown-wrap">
                                             <div className="dropdown-title">
                                                 <p> Extend Meeting </p>
                                             </div>

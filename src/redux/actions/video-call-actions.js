@@ -17,6 +17,8 @@ const Actions = {
     SET_SHOW_APPLICATION_POPUP:"SET_SHOW_APPLICATION_POPUP",
     SET_USER:"SET_USER",
     SET_ROOM_CONNECT:"SET_ROOM_CONNECT",
+    SET_VIDEO_API_RESPONCE:"SET_VIDEO_API_RESPONCE",
+    SET_COUNT_DOWN_RESULT:"SET_COUNT_DOWN_RESULT",
   };
   
   export const setIdentity = (identity) => {
@@ -145,9 +147,19 @@ const Actions = {
     };
   };
 
+  export const setVideoApiresponce = (videoApiResponce) => {
+    return {
+      type: Actions.SET_VIDEO_API_RESPONCE,
+      videoApiResponce,
+    };
+  };
 
-
-
+  export const setCountDownResult = (countDownResult) => {
+    return {
+      type: Actions.SET_COUNT_DOWN_RESULT,
+      countDownResult,
+    };
+  };
 
   
   export default Actions;
