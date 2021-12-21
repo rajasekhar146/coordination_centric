@@ -62,7 +62,7 @@ const SignInComponent = () => {
     addDevice(FCMToken)
   }, [FCMToken])
 
-  const addDevice = FCMToken => {
+  const addDevice = (FCMToken) => {
     if (!FCMToken) return
     let devieInfo = {
       deviceId: '',
@@ -147,7 +147,9 @@ const SignInComponent = () => {
           else if (twoFactor == 'none') {
             let fcmToken = await getTokenFn(setFCMToken)
             console.log('fcmToken', fcmToken)
-            window.location.href = 'dashboard'
+            setTimeout(()=>{
+              history.push('/dashboard')
+            },1000)
           } else if (twoFactor == 'app') {
             history.push('/2facodeverification')
           } else if (twoFactor == 'email') {
@@ -162,7 +164,9 @@ const SignInComponent = () => {
           } else {
             let fcmToken = await getTokenFn(setFCMToken)
             console.log('fcmToken', fcmToken)
-            window.location.href = 'dashboard'
+            setTimeout(()=>{
+              history.push('/dashboard')
+            },1000)
             // history.push('/dashboard')
           }
         }
