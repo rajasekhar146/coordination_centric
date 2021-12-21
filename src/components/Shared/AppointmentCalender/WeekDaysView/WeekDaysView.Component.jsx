@@ -745,7 +745,7 @@ const WeekDaysViewComponent = props => {
             <Button className="wdv__next__btn">Next</Button>
           ) : null}
 
-          {role === 'doctor' && primaryDate.Day != null ? (
+          {role === 'doctor' && (primaryDate.Day != null || secondaryDate.Day != null) ? (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
               Request Appointment
             </Button>
