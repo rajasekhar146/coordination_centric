@@ -176,6 +176,11 @@ transition: all 500ms;
 .participants .participant .video_track_container .video video{
   transition: all 400ms;
   width: 100%;
+
+}
+
+.participants .participant .video_track_container .video video{
+  transform: scaleX(-1);
 }
 /* #min-screen .video_section_container .videos_container .room .participants {
   width: 300px;

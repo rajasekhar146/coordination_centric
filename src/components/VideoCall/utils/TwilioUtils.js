@@ -29,7 +29,15 @@ const videoConstraints = {
 };
 let dataChannel = null;
 let dataFunctionChannel = null;
-export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoTokenErrorMsz,setVideoCallDuration,setRoomConnect)=>{
+
+export const getTokenFromTwilio = async(
+  roomId,
+  identity,
+  setAccessToken,
+  setVideoTokenErrorMsz,
+  setVideoCallDuration,
+  setRoomConnect,
+  setVideoApiresponce)=>{
   let axiosConfig = {
     headers: authHeader(),
   }
@@ -38,9 +46,11 @@ export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoT
     .then((response)=>{
       const data = response.data;
       if(data.accessToken){
-        setRoomConnect(true)
+        setVideoApiresponce(data);
+        setVideoCallDuration(new Date(data.meetingendtime) - new Date(data.meetingstarttime));
+        setRoomConnect(true);
         setAccessToken(data.accessToken);
-        setVideoCallDuration(data.timeduration);
+        // console.log("data.meetingendtime", new Date(data.meetingendtime) - new Date(data.meetingstarttime))
         //setVideoCallDuration(6000000)
       }
     }).catch((err)=>{
@@ -55,7 +65,8 @@ export const getTokenFromTwilio = async(roomId,identity,setAccessToken,setVideoT
 export const connectToRoom = async (
   accessToken,
   roomId = "test-room",
-  setRoom
+  setRoom,
+  setCountDownResultAction
 ) => {
   const onlyWithAudio = store.getState().videoCallReducer.connectOnlyWithAudio;
   const constraints = onlyWithAudio ? audioConstraints : videoConstraints;
@@ -89,6 +100,7 @@ export const connectToRoom = async (
                     });
                     console.log("succesfully connected with twilio room");
                     console.log(room);
+                    setCountDownResultAction(true)
                     store.dispatch(setCallActive(true));
                     // store.dispatch(setTimerCountF(true));
                     callStart.play()
