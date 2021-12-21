@@ -31,7 +31,8 @@ export default function CallControl({
   setMeetingEndTime,
   setMeetingDuration,
   setMeetingRemainingTime,
-  setCountDownResultAction
+  setCountDownResultAction,
+  watingListSync
 }) {
     useEffect(() => {
     },[])
@@ -50,6 +51,7 @@ export default function CallControl({
                             setToggleWatingList={setToggleWatingList} 
                             toggleWatingListHandel={toggleWatingListHandel}
                             room={room}
+                            watingListSync={watingListSync}
                             />
                             
                         <RightSideControl

@@ -14,12 +14,13 @@ const LeftSideControl = ({
     setToggleWatingList,
     room,
    connectOnlyWithAudio,
+   watingListSync
 })=>{
 
     return (
         <div className="left-side-control">
             {user.role === "doctor" && (<WatingListWidget 
-                                            watingList={watingList} 
+                                            watingListSync={watingListSync} 
                                             toggleWatingListHandel={toggleWatingListHandel} 
                                             toggleWatingList={toggleWatingList} 
                                             setToggleWatingList={setToggleWatingList}

@@ -65,6 +65,7 @@ const  VideoCallWidget=({
     const [meetingEndTime,setMeetingEndTime]=useState({date:null});
     const [meetingDuration,setMeetingDuration]=useState();
     const [meetingRemainingTime,setMeetingRemainingTime]=useState(0);
+    const [watingListSync,setWatingListSync]=useState({});
 
   const watingList = [
     {
@@ -232,6 +233,9 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
       
       socket.on(SocketEventNames.WAITING_ROOM_DATA, (data) => {
         console.log("waiting room data:",data);
+        if(data){
+          setWatingListSync({...watingListSync,...data})
+        }
       });
       //-------------------------------------------------------
       
@@ -273,6 +277,7 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
                                                     setMeetingDuration={setMeetingDuration}
                                                     setMeetingRemainingTime={setMeetingRemainingTime}
                                                     setCountDownResultAction={setCountDownResultAction}
+                                                    watingListSync={watingListSync}
                                                     />
                                                     <VideoSection room={room} setRoom={setRoom}/>
                                                     { toggleChat && <Chat closeChatFun={closeChatFun}/> }

@@ -70,6 +70,8 @@ color:#CACCCF;
 }
 .img-wrp img {
     margin-right: 10px;
+    width: 45px;
+    height: 45px;
 }
 
 .wating-action .add-btn{
