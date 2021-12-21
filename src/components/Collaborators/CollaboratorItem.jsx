@@ -99,20 +99,20 @@ const menuList = [
         menu: 'pending_verification',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+            // // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+            // { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
         menu: 'pending_bank_verification',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+            // // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+            // { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
@@ -185,18 +185,18 @@ const menuList = [
         menu: 'unverified',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+            // { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
         menu: 'pending_acceptance',
         options: [
             { text: 'View Details', fnKey: 'setIsViewClicked', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
-            { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
-            { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+            // { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
     },
     {
@@ -264,7 +264,6 @@ const CollaboratorComponent = props => {
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
-        console.log('orgId', orgId)
         switch (action) {
             case 'setIsAcceptClicked':
                 // setIsAcceptClicked(true)
@@ -310,11 +309,9 @@ const CollaboratorComponent = props => {
         event.stopPropagation()
         setAnchorEl(event.currentTarget)
         const menus = menuList.filter(m => m.menu === status.toLowerCase())
-        console.log('menus', menus)
         if (menus.length > 0) setMenuOptions(menus[0].options)
         else setMenuOptions([])
 
-        console.log('menus[0].options', menus[0].options)
     }
 
 

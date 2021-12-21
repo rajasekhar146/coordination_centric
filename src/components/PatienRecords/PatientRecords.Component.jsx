@@ -28,6 +28,7 @@ import get from 'lodash.get'
 import TablePagination from '@mui/material/TablePagination'
 import CircularProgress from '@mui/material/CircularProgress';
 import AddPatientRecordPopup from './AddrecordPopup'
+import Alert from '../Alert/Alert.component'
 import './PatientRecords.Component.css'
 
 const useStyles = makeStyles(theme => ({
@@ -88,11 +89,9 @@ const invitepatientModelStyle = {
   boxShadow: 24,
   p: 4,
   borderRadius: '10px',
-  padding: '15px',
-  paddingBottom: '40px',
+  padding: '0px',
   paddingTop: 0,
-  height: '580px',
-  overflow: 'scroll'
+  overflow: 'auto'
 }
 
 const invitePatientSuccess = {
@@ -149,7 +148,9 @@ const PatienRecordsComponent = (props) => {
   const open = Boolean(anchorEl)
   const classes = useStyles()
   const [addPatientRecordPopup, setAddPatientRecordPopup] = useState(false)
-
+  const [openflash, setOpenFlash] = React.useState(false)
+  const [alertMsg, setAlertMsg] = React.useState('')
+  const [subLebel, setSubLabel] = useState('')
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -177,6 +178,9 @@ const PatienRecordsComponent = (props) => {
     getPatientRecords()
   }, [skip, limit, rowsPerPage])
 
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+  }
 
   const columns = [
     { id: 'id', label: 'ID', minWidth: 50, align: 'left', visible: false },
@@ -222,7 +226,7 @@ const PatienRecordsComponent = (props) => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 530 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -296,6 +300,13 @@ const PatienRecordsComponent = (props) => {
           </Paper>
         </div>
       </div>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color="success"
+      />
       <Modal
         open={invitePatientClicked}
         // onClose={setIsAcceptClicked}
@@ -343,9 +354,12 @@ const PatienRecordsComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={addRecordStyle}>
-          <AddPatientRecordPopup 
+          <AddPatientRecordPopup
             clickCloseButton={closeInviteSuccessModel}
             getPatientRecords={getPatientRecords}
+            setAlertMsg={setAlertMsg}
+            setOpenFlash={setOpenFlash}
+            setSubLabel={setSubLabel}
           />
         </Box>
       </Modal>

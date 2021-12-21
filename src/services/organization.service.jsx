@@ -8,9 +8,7 @@ import get from 'lodash.get'
 import * as env from '../environments/environment'
 const apiURL = env.environment.apiBaseUrl
 
-const axiosConfig = {
-  headers: authHeader(),
-}
+
 
 export const organizationService = {
   allOrganization,
@@ -32,6 +30,9 @@ export const organizationService = {
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
@@ -103,6 +104,9 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
 }
 
 function addOrganization(bodyMsg, role) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
 
   var url = `${apiURL}/facilityList/inviteFacility`
@@ -122,6 +126,9 @@ function addOrganization(bodyMsg, role) {
 }
 
 function updateOrganization(id, status, reason = null) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`
   // if (status === 'declined') {
@@ -138,6 +145,9 @@ function updateOrganization(id, status, reason = null) {
 }
 
 function getOrganizationDetails(orgId) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   return (
     axios
       .get(`${apiURL}/facilityList/getDetailsById?id=${orgId}`, axiosConfig)
@@ -157,6 +167,9 @@ function getOrganizationDetails(orgId) {
   )
 }
 function signupOrganization(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -172,6 +185,9 @@ function signupOrganization(bodyMsg) {
 }
 
 function subscriptionOrganization(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -188,6 +204,9 @@ function subscriptionOrganization(bodyMsg) {
 }
 
 async function uploadCertificate(bodyMsg, certificateType) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   const currentUser = authenticationService?.currentUserValue
   console.log('currentUser', currentUser)
@@ -316,6 +335,9 @@ async function uploadCertificate(bodyMsg, certificateType) {
 //     })
 
 function resendInvite(id , type) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -328,6 +350,9 @@ function resendInvite(id , type) {
 }
 
 function cancelIvitation(id, type) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -340,6 +365,9 @@ function cancelIvitation(id, type) {
 }
 
 function validateToken(token) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   const bobyMsg = {
     inviteToken: token,
   }
@@ -359,6 +387,9 @@ function validateToken(token) {
 }
 
 function registerMember(data) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -375,6 +406,10 @@ function registerMember(data) {
 }
 
 function disableTwoFa() {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -391,6 +426,9 @@ function disableTwoFa() {
 }
 
 function getPrices() {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -403,6 +441,9 @@ function getPrices() {
 }
 
 function paymentSubscription(bodyMsg){
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   // const response = organizationService.subscriptionOrganization(params).catch(err => {
   //   console.log(err)
   // })
@@ -422,6 +463,9 @@ function paymentSubscription(bodyMsg){
 }
 
 function downloadFile(fileObj) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -433,6 +477,9 @@ function downloadFile(fileObj) {
   )
 }
 function verifyBankHanlde(bodyMsg){
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   return (
     axios
       .post(`${apiURL}/payment/verifyBankAccount`, bodyMsg, axiosConfig)

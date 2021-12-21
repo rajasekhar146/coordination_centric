@@ -23,14 +23,16 @@ function ViewAppointmentComponent() {
   const userId = get(currentUser, ['data', 'data', '_id'], '')
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState([]);
-  const [documentsArray , setDocumentsArray ] = useState([]);
+  const [documentsArray, setDocumentsArray] = useState([]);
   const [toggleChat, setToggleChat] = useState(false);
   const [senderUserId, setSenderUserId] = useState('');
   const [recieverUserId, setRecieverUserId] = useState('')
   const [senderImg, setSenderImg] = useState('')
   const [recieverImg, setRecieverImg] = useState('');
   const [showChat, setShowChat] = useState(false);
-
+  const timezoneDiff = (new Date()).getTimezoneOffset()
+  const [appointmentId, setAppointmentId] = useState(null)
+  const [secondaryTimings, setSecondaryTimings] = useState(null)
 
   useEffect(() => {
     getAppointmentDetails();
@@ -42,23 +44,35 @@ function ViewAppointmentComponent() {
     }
   }, [])
 
-const openImage = async (docs)=>{
-    window.open(docs.url, '_blank');
-}
-const getDocs =  (documents) =>{
-  const temp = [];
-  setDocumentsArray([]);
-  documents && documents.map( async (docs) =>{
-    let file = 
-    { "name":docs }
-    let res = await memberService.downloadFileUrl(file);
-    temp.push(res.data.data);
-    if(temp.length == documents.length){
-      setDocumentsArray(temp);
+  useEffect(async () => {
+    if (appointmentId) {
+      const res = await appointmentService.getSecondaryAppointment(appointmentId)
+      if (res.status === 200) {
+        const element = get(res, ['data', 'data'], {})
+        setSecondaryTimings(moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + (moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')))
+      } else {
+
+      }
     }
-  })
-}
-const getAppointmentDetails = async () => {
+  }, [appointmentId])
+
+  const openImage = async (docs) => {
+    window.open(docs.url, '_blank');
+  }
+  const getDocs = (documents) => {
+    const temp = [];
+    setDocumentsArray([]);
+    documents && documents.map(async (docs) => {
+      let file =
+        { "name": docs }
+      let res = await memberService.downloadFileUrl(file);
+      temp.push(res.data.data);
+      if (temp.length == documents.length) {
+        setDocumentsArray(temp);
+      }
+    })
+  }
+  const getAppointmentDetails = async () => {
     let res = await appointmentService.getAppointmentById(id);
     if (res.data.data.doctorId == userId) {
       setSenderUserId(res.data.data.doctorId)
@@ -73,10 +87,11 @@ const getAppointmentDetails = async () => {
       setRecieverImg(res.data.data.profilePic)
     }
     setAppointmentList(res.data);
-    if(res.data.data.documents.length > 0){
+    setAppointmentId(res.data?.data?.appointmentId)
+    if (res.data.data.documents.length > 0) {
       getDocs(res.data.data.documents)
     }
-}
+  }
 
   const getAppointmentChat = async () => {
     let chat = await appointmentService.getAppointmentChat(id);
@@ -130,7 +145,6 @@ const getAppointmentDetails = async () => {
     }
   }
   const sendMessage = async () => {
-    console.log('do validate', inputValue);
     if (inputValue.length > 0) {
       const msgRequest = {
         "messages":
@@ -174,7 +188,7 @@ const getAppointmentDetails = async () => {
         {appointmentList.data?.appointmentStatus === 'accepted'
           && <div className="od__join_call"
             onClick={() => {
-                history.push(`/video-call/${appointmentList.data.appointmentId}`)
+              history.push(`/video-call/${appointmentList.data.appointmentId}`)
             }}
           >
             Join video call
@@ -200,35 +214,37 @@ const getAppointmentDetails = async () => {
               <img src={appointmentList.data?.profilePic} alt="Profile" className="nb__profile__image" />
               {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePic} imageClass={"ap_profile mar-right-10"} /> */}
               <p className="mar-left-10">{appointmentList.data?.doctorName}</p>
-              </p>
-          )}
-    </div>
-
-          <div className="row-details">
-            <p className="row-title">Primary Time</p>
-            <p className="row-data">{moment(new Date(appointmentList.data?.startTime)).format('DD/MM/YYYY HH:mm')}</p>
-          </div>
-          <div className="row-details">
-            <p className="row-title">Secondary Time</p>
-            <p className="row-data">{moment(new Date(appointmentList.data?.endTime)).format('DD/MM/YYYY HH:mm')}</p>
-          </div>
-          <div className="row-details">
-            <p className="row-title">Reason for appointment</p>
-            <p className="row-data">{appointmentList.data?.appointmentReason}</p>
-          </div>
-          <div className="row-details">
-            <p className="row-title">Previous Health Condition</p>
-            <p className="row-data">
-              {appointmentList.data?.healthinfo[0]?.problems.map(d => (
-                <span> {d} </span>
-              ))}
             </p>
+          )}
         </div>
-        {role == 'patient' && 
+
+        <div className="row-details">
+          <p className="row-title">Primary Time</p>
+          <p className="row-data">
+          {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+          </p>
+        </div>
+        <div className="row-details">
+          <p className="row-title">Secondary Time</p>
+          <p className="row-data">{`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
+        </div>
+        <div className="row-details">
+          <p className="row-title">Reason for appointment</p>
+          <p className="row-data">{appointmentList.data?.appointmentReason}</p>
+        </div>
+        <div className="row-details">
+          <p className="row-title">Previous Health Condition</p>
+          <p className="row-data">
+            {appointmentList.data?.healthinfo[0]?.problems.map(d => (
+              <span> {d} </span>
+            ))}
+          </p>
+        </div>
+        {role == 'patient' &&
           <div className="row-details">
             <p className="row-title">Specialty</p>
             <p className="row-data">
-               {documentsArray.map(docs => (
+              {documentsArray.map(docs => (
                 <span className="docs-view">
                   <img src={galary_icon} className="galary_icon" alt="success_icon" />
 
@@ -240,25 +256,25 @@ const getAppointmentDetails = async () => {
                     className="right"
                     alt="success_icon"
                   />
-                   <p className="align__img__name docs_name"> {docs.metadata.name}</p>
+                  <p className="align__img__name docs_name"> {docs.metadata.name}</p>
                   <p className="align__img__name img_size"> {docs.metadata.size}</p>
 
                 </span>
               ))}
             </p>
           </div>
-}
-          {
-           ( role == 'doctor' || role == 'patient') && 
-          
+        }
+        {
+          (role == 'doctor' || role == 'patient') &&
+
           <div className="row-details">
             <p className="row-title">Chat</p>
-            
+
             <div>
               {type == 'history' && !showChat &&
-              <button  className={messages.length <= 0  ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'}  className="" disabled={messages.length <= 0} onClick={showChatDialog}>
-                  { messages.length > 0 &&   <img className="msg__icon" src={chatIcon}  alt="upload" />}
-                 View Chat History</button>
+                <button className={messages.length <= 0 ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'} className="" disabled={messages.length <= 0} onClick={showChatDialog}>
+                  {messages.length > 0 && <img className="msg__icon" src={chatIcon} alt="upload" />}
+                  View Chat History</button>
               }
               {type == 'history' && showChat &&
               <p className="close_chat" onClick={showChatDialog}>
@@ -270,7 +286,7 @@ const getAppointmentDetails = async () => {
                 {messages.map(d => (
                   <div className="chat_body ">
                     {d.from == userId && (
-                      <p >
+                      <p>
                         <img
                           src={recieverImg}
                           alt="Profile"
@@ -278,6 +294,7 @@ const getAppointmentDetails = async () => {
                         />
                         <div className="from_chat chat__box">
                           {d.message}
+                        <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
                       </p>
                     )}
@@ -285,6 +302,7 @@ const getAppointmentDetails = async () => {
                       <p >
                         <div className="to_chat chat__box">
                           {d.message}
+                        <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
 
                         <img
@@ -309,8 +327,9 @@ const getAppointmentDetails = async () => {
             }
           </div>
 
-        </div>
-}
+
+          </div>
+        }
       </div>
     </div>
   )

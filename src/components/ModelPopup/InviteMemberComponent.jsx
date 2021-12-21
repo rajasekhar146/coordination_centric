@@ -212,6 +212,7 @@ const InviteMemberComponent = props => {
                                         message: 'Please enter a valid email',
                                     },
                                 })}
+                                type="email"
                                 margin="normal"
                                 InputProps={{
                                     startAdornment: (

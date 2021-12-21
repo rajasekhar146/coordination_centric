@@ -111,3 +111,10 @@ export const leftMenus = menus => {
     payload: menus,
   }
 }
+
+export const chooseAnotherAuth = val => {
+  return {
+    type: ActionTypes.SET_CHOOSE_ANOTHER_AUTH,
+    payload: val,
+  }
+}

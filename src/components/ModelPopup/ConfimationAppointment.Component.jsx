@@ -63,12 +63,14 @@ const ConfimationAppointment = props => {
         clickCloseButton,
         selectedAppointment,
         setAlertColor,
-        getAppointmentList
+        getAppointmentList,
+        from
     } = props
 
     const [activeTab, setActiveTab] = useState(null)
     const [secondarySlots, setSecondarySlots] = useState(null)
     const [selectedSlot, setSelectedSlot] = useState(null)
+    const timezoneDiff = (new Date()).getTimezoneOffset()
 
 
 
@@ -80,14 +82,16 @@ const ConfimationAppointment = props => {
                 name: element?.userId?.first_name || "" + " " + (element?.userId?.last_name || ""),
                 profile: element?.userId?.profilePic,
                 location: 'Online',
-                date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
-                time: (element?.startTime ? moment(element?.startTime).format('h:mm a') : "") + " - " + (element?.endTime ? moment(element?.endTime).format('h:mm a') : ''),
+                date: element?.startTime ? moment(element?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                time: (element?.startTime ? moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element?.endTime ? moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : ''),
                 status: element?.status,
                 gender: element?.userId?.gender,
                 _id: element?.userId?._id,
                 appointmentid: element?._id,
                 startTime: element?.startTime,
-                endTime: element?.endTime
+                endTime: element?.endTime,
+                doctorName : element.doctorId?.first_name + " " + (element?.doctorId?.last_name),
+                doctorGender: element?.doctorId?.gender
             }
             setSecondarySlots(recordNew)
         } else {
@@ -135,12 +139,21 @@ const ConfimationAppointment = props => {
             <div className="io__row io_user_fields">
                 <div>
                     <label className="io_user_label">
-                        Patient
+                    {from == 'notification' ? 'Doctor' : 'Patient' }   
                     </label>
                 </div>
+                {/* {from == 'notification' && 
+                        <div>
+                            <label className="io_user_name">
+                                {`${secondarySlots.doctorGender === 'male' ? 'Mr.' : 'Ms.'} ${secondarySlots.doctorName}`}
+                            </label>
+                        </div>
+                        } */}
                 <div>
                     <label className="io_user_name">
-                        Mr. {selectedAppointment.name}
+                    {from == 'notification' ? secondarySlots?.doctorName : selectedAppointment?.name }
+
+                        {/* Mr. {selectedAppointment.name} */}
                     </label>
                 </div>
 

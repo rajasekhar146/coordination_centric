@@ -21,7 +21,8 @@ import { get } from 'lodash'
 import Alert from '../Alert/Alert.component'
 import SigninStore from '../../stores/signinstore'
 import { getTokenFn } from '../../firebase'
-
+import moment from 'moment'
+import Cookies from 'js-cookie'
 
 const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -32,29 +33,50 @@ const SignInComponent = () => {
   const [IsValidPassword, setIsValidPassword] = useState(true)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
-  const [FCMToken, setFCMToken] = useState("");
+  const [FCMToken, setFCMToken] = useState('')
   const [activeLink, setActiveLink] = useState(false)
-  const [subLabel , setSubLabel] = useState(false)
+  const [subLabel, setSubLabel] = useState(false)
+  const [keepMeSignIn, setKeepMeSignIn] = useState(false)
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm()
+
+  console.log(errors)
 
   useEffect(() => {
-    addDevice(FCMToken);
+    var tz = moment.tz.guess()
+    var zone = moment.tz(tz).format('Z')
+    console.log('Local Time', tz, zone)
+    var b = moment(new Date(), 'YYYY-MM-DD HH:mm a').tz('UTC').format()
+    var c = moment(new Date()).local().format('YYYY-MM-DD HH:mm a')
+    console.log('Local Time 1', c)
+    const userEmail = Cookies.get('username')
+    const userPWD = Cookies.get('password')
+    setValue('email', userEmail)
+    setValue('password', userPWD)
+    if(userEmail) setKeepMeSignIn(true)
+    addDevice(FCMToken)
   }, [FCMToken])
 
-
-  const addDevice = (FCMToken) => {
-    if (!FCMToken)
-      return;
+  const addDevice = FCMToken => {
+    if (!FCMToken) return
     let devieInfo = {
-      'deviceId': '',
-      'fcmId': FCMToken,
-      'deviceType': 'web'
+      deviceId: '',
+      fcmId: FCMToken,
+      deviceType: 'web',
     }
-    notificationService.addDevice(devieInfo).then((res) => {
-      console.log("Add device", res);
-    }, error => {
-      console.log("Add device", error);
-    })
+    notificationService.addDevice(devieInfo).then(
+      res => {
+        console.log('Add device', res)
+      },
+      error => {
+        console.log('Add device', error)
+      }
+    )
   }
   const handleCloseFlash = () => {
     setOpenFlash(false)
@@ -65,26 +87,16 @@ const SignInComponent = () => {
     password: '',
   }
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    watch,
-  } = useForm()
-
-  console.log(errors)
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  const onSubmit = () => {
+  const onSubmit = data => {
     //history.push('/dashboard');
     setIsSubmit(true)
-    SigninStore.set({ email: watch('email') })
-    defaultValues.email = watch('email')
-    defaultValues.password = watch('password')
+    SigninStore.set({ email: data.email })
+    defaultValues.email = data.email
+    defaultValues.password = data.password
 
     var IsValidUser = false
 
@@ -92,6 +104,13 @@ const SignInComponent = () => {
     authenticationService.login(defaultValues.email, defaultValues.password).then(
       async user => {
         console.log('logged user', user)
+        if (keepMeSignIn) {
+          Cookies.set('username', defaultValues.email)
+          Cookies.set('password', defaultValues.password)
+        } else {
+          Cookies.remove('username')
+          Cookies.remove('password')
+        }
         setIsValidPassword(true)
         setIsValidEmail(true)
         setIsValidUser(true)
@@ -126,11 +145,10 @@ const SignInComponent = () => {
           const twoFactor = get(user, ['data', 'data', 'twoFactor_auth_type'], false)
           if (!userVerified) history.push('/userverification')
           else if (twoFactor == 'none') {
-            let fcmToken = await getTokenFn(setFCMToken);
-            console.log("fcmToken", fcmToken);
-            window.location.href = "dashboard";
-          }
-          else if (twoFactor == 'app') {
+            let fcmToken = await getTokenFn(setFCMToken)
+            console.log('fcmToken', fcmToken)
+            window.location.href = 'dashboard'
+          } else if (twoFactor == 'app') {
             history.push('/2facodeverification')
           } else if (twoFactor == 'email') {
             authenticationService
@@ -142,9 +160,9 @@ const SignInComponent = () => {
                 console.log(error)
               })
           } else {
-            let fcmToken = await getTokenFn(setFCMToken);
-            console.log("fcmToken", fcmToken)
-            window.location.href = "dashboard";
+            let fcmToken = await getTokenFn(setFCMToken)
+            console.log('fcmToken', fcmToken)
+            window.location.href = 'dashboard'
             // history.push('/dashboard')
           }
         }
@@ -163,8 +181,8 @@ const SignInComponent = () => {
     event.preventDefault()
   }
 
-  const handleChange = e => {
-    setValue('password', e.target.value);
+  const handleChange = prop => event => {
+    //setValues({ ...values, [prop]: event.target.value });
   }
 
   return (
@@ -201,8 +219,8 @@ const SignInComponent = () => {
                 error={errors.email && isSubmit}
                 InputProps={{
                   className: 'si__text__box',
+                  placeholder: 'Email',
                 }}
-
               />
               {errors.email && <p className="ac__required">{errors.email.message}</p>}
               {!IsValidEmail && !errors.email && <p className="ac__required">{errMsg}</p>}
@@ -218,7 +236,9 @@ const SignInComponent = () => {
                     required: 'Password is required.',
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  // onChange={handleChange}
+                  onChange={(e) => {
+                    setValue('password', e.target.value)
+                  }}
                   placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
@@ -237,13 +257,8 @@ const SignInComponent = () => {
               {errors.password && <p className="ac__required">Password is required.</p>}
               {!IsValidPassword && <p className="ac__required">{errMsg}</p>}
             </div>
-            <div>
-              {' '}
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                className="si__check__box__text"
-                label="Keep me signed in?"
-              />{' '}
+            <div>              
+              <Checkbox style={{marginLeft: -10}} checked={keepMeSignIn} onChange={e => setKeepMeSignIn(e.target.checked)} />Keep me signed in?
             </div>
             <div>
               {' '}
@@ -263,7 +278,9 @@ const SignInComponent = () => {
               onMouseOut={() => {
                 setActiveLink(false)
               }}
-            > Forgot Password?
+            >
+              {' '}
+              Forgot Password?
             </div>
           </div>
         </div>
@@ -271,8 +288,9 @@ const SignInComponent = () => {
           handleCloseFlash={handleCloseFlash}
           alertMsg={alertMsg}
           openflash={openflash}
-          subLebel = {subLabel}
-          color="fail" />
+          subLebel={subLabel}
+          color="fail"
+        />
       </form>
     </div>
   )

@@ -37,6 +37,8 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import { organizationService } from '../../services'
 import DeleteIcon from '../../assets/icons/delete_icon.png'
+import galary_icon from '../../assets/icons/galary_icon.png';
+import view_details from '../../assets/icons/download_icon.png'
 
 const styles = theme => ({
   root: {
@@ -94,7 +96,9 @@ const PersonalInfo = props => {
   // const [alertMsg, setAlertMsg] = useState('')
   // const [subLabel, setSubLabel] = useState('')
   const [npiIdErr, setNPIIdErr] = useState(false)
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props;
+  const [documentsArray , setDocumentsArray ] = useState([]);
+
   console.log('certificates', certificates)
   const ColoredLine = ({ color }) => (
     <hr
@@ -113,12 +117,61 @@ const PersonalInfo = props => {
   } = useForm()
 
   const handleDrop = files => {
-    files.forEach((file, index) => {
-      selectedFiles.push(file)
-      setSelectedFiles([...selectedFiles])
+    // files.forEach((file, index) => {
+    //   selectedFiles.push(file)
+    //   setSelectedFiles([...selectedFiles])
+    // })
+    const formData = new FormData()
+    files.forEach(file => {
+      formData.append('files', file)
+      const reader = new FileReader()
+  })
+  memberService
+      .uploadFile('doctors_certificate', formData
+      )
+      .then(response => {
+        const url = response.data.data;
+        setCertificates([...certificateList , response.data.data])
+        getIndividualDocs(url);
+      })
+      .catch(() => {})
+  }
+  const getIndividualDocs = async (documents) =>{
+    const temp = [];
+    let file = 
+    { "name":documents }
+    let res = await memberService.downloadFileUrl(file);
+    temp.push(res.data.data);
+    setDocumentsArray([...documentsArray , res.data.data])
+  }
+  const getDocs =  (documents) =>{
+    const temp = [];
+    setDocumentsArray([]);
+    documents && documents.map( async (docs) =>{
+      let file = 
+      { "name":docs }
+      let res = await memberService.downloadFileUrl(file);
+      if(res){
+        temp.push(res?.data?.data);
+        if(temp.length == documents.length){
+          setDocumentsArray(temp);
+        }
+      }
+    
     })
   }
-
+  const openImage = async (docs)=>{
+    window.open(docs.url, '_blank');
+  }
+  const delImage = async (docs , index) =>{
+    var data = [...documentsArray]
+    var data1 = [...certificateList]
+    data.splice(index , 1);
+    data1.splice(index , 1)
+    setCertificates(data1);
+    // certificates.splice(index , 1);
+    setDocumentsArray(data);
+  }
   const handleDeleteFile = (fName, idx) => {
     console.log('handleDeleteFile >> fName', fName)
     console.log('handleDeleteFile >> idx', idx, certificates)
@@ -195,7 +248,10 @@ const PersonalInfo = props => {
       setPCToggleOn(services?.consultation)
 
       const specialization = mpInfo.specialization
-      var files = mpInfo.certificates
+      var files = mpInfo.certificates;
+      if(files.length > 0){
+        getDocs(mpInfo.certificates)
+      }
       //files.push('Prkaash.doc')
       setCertificates(files)
       var newFiles = []
@@ -327,7 +383,7 @@ const PersonalInfo = props => {
     const formData = {
       email: email,
       npiID: npiId,
-      certificates: newCertificates,
+      certificates: certificateList,
       speciality: newSpecialties,
       availabilities: { days: newAvailabilities },
       services: {
@@ -579,7 +635,7 @@ const PersonalInfo = props => {
           {selectedFiles.map((file, index) => (
             <UploadCertificateFile file={file} index={index} handleDeleteFile={handleDeleteFile} />
           ))}
-          {certificateList &&
+          {/* {certificateList &&
             certificateList.map((file, index) => (
               <div className="od__certificate__main">
                 <div className="od__icon">
@@ -593,7 +649,23 @@ const PersonalInfo = props => {
                   <img src={DeleteIcon} alt="upload" />
                 </div>
               </div>
-            ))}
+            ))} */}
+            {documentsArray.map((docs , index) => (
+                <span className="docs-view">
+                  <img src={galary_icon} className="galary_icon" alt="success_icon" />
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                  <img src={DeleteIcon} className="del_icon"  onClick={() => {delImage(docs , index)}} alt="delete_icon" />
+                   <p className="align__img__name docs_name"> {docs?.metadata?.name}</p>
+                  <p className="align__img__name img_size"> {docs?.metadata?.size}</p>
+                </span>
+              ))}
         </div>
       </div>
       <ColoredLine color="#E4E7EC" />

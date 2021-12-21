@@ -40,7 +40,6 @@ const InviteOrganizationComponent = props => {
     formState: { errors },
   } = useForm()
 
-  console.log(errors)
 
   const customErrorAttribute = {
     className: 'has-error',
@@ -80,7 +79,6 @@ const InviteOrganizationComponent = props => {
       }
     }
 
-    console.log('orgDetail', orgDetail)
 
     const res = organizationService.addOrganization(orgDetail, currentUserRole)
     res.then((response) => {
@@ -91,7 +89,6 @@ const InviteOrganizationComponent = props => {
       clickCloseButton()
       localStorage.removeItem('facility')
     }).catch((error) => {
-      console.log(error.response)
       if (get(error, ['response', 'data', 'message'], '') === "Organization Already Exists") {
         setIsExist('Email Already Registered')
       }
@@ -113,15 +110,14 @@ const InviteOrganizationComponent = props => {
             </div>
             <TextField
               // {...useInput('facilityName', { isRequired: true })}
-              {...register('facilityName', { required: true })}
+              {...register('facilityName', { required: true, minLength: 3 })}
               margin="normal"
               error={errors.facilityName && isSubmit}
-              onChange={(e) => {
-                let val;
+              onChange={e => {
+                let val
                 if (e.target.value.length === 1) {
                   val = capitalize(e.target.value)
-                }
-                else {
+                } else {
                   val = e.target.value
                 }
                 setValue('facilityName', val)
@@ -136,7 +132,12 @@ const InviteOrganizationComponent = props => {
                 className: 'io__text__box',
               }}
             />
-            {errors.facilityName && <p className="io__required">Organization Name is required.</p>}
+            {errors.facilityName && errors.facilityName.type === 'required' && (
+              <p className="io__required">Organization Name is required.</p>
+            )}
+            {errors.facilityName && errors.facilityName.type === 'minLength' && (
+              <p className="io__required">Organization Name must be at least 3 characters.</p>
+            )}
           </div>
 
           <div className="io__row">
@@ -154,6 +155,7 @@ const InviteOrganizationComponent = props => {
                 },
               })}
               margin="normal"
+              type="email"
               error={errors.facilityEmail && isSubmit}
               InputProps={{
                 startAdornment: (

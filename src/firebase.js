@@ -2,22 +2,15 @@ import firebase from 'firebase/app';
 import 'firebase/messaging';
 
 var firebaseConfig = {
-  // apiKey: "AIzaSyBXAFWdnCz5SNYKJVXUC01Y70DhYgAgSqo",
-  // authDomain: "storemax-50908.firebaseapp.com",
-  // projectId: "storemax-50908",
-  // storageBucket: "storemax-50908.appspot.com",
-  // messagingSenderId: "606599051782",
-  // appId: "1:606599051782:web:e53a0dfd668450c729a187"
-  apiKey: "AIzaSyBi-ONUDtzM88vA6UpPkIz1xmqfVKvQiPQ",
-  authDomain: "cc-dev-90032.firebaseapp.com",
-  databaseURL: "https://cc-dev-90032-default-rtdb.firebaseio.com",
-  projectId: "cc-dev-90032",
-  storageBucket: "cc-dev-90032.appspot.com",
-  messagingSenderId: "423483013139",
-  appId: "1:423483013139:web:43bfca44522459edc4e7e6",
-  measurementId: "G-52YCFYG0R2"
+  apiKey: process.env.REACT_APP_APIKEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APPID,
+  measurementId: process.env.REACT_APP__MEASUREMENTID
 };
-
 let messaging=null;
 if (firebase.messaging.isSupported()) {
   firebase.initializeApp(firebaseConfig);

@@ -71,6 +71,7 @@ const WeekDaysViewComponent = props => {
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
+  console.log('Logged User Role', role)
   const getUserId = role => {
     switch (role) {
       case 'doctor':
@@ -114,7 +115,7 @@ const WeekDaysViewComponent = props => {
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false)
   const [reportsArray, setReportsArray] = useState([])
   const [isPastMonth, setPastMonth] = useState(false)
-
+  const [isEligibleForBook, setEligibleForBook] = useState(false)
   const buildTimeSlots = (
     startDate,
     endDate,
@@ -163,6 +164,17 @@ const WeekDaysViewComponent = props => {
     return timeSlots
   }
 
+  useEffect(() => {
+    console.log('useEffect >> primary and secondary', primaryDate, secondaryDate)
+    if (role == 'doctor') {
+      if (primaryDate.Day != null || secondaryDate.Day != null) setEligibleForBook(true)
+      else setEligibleForBook(false)
+    } else if (role == 'patient') {
+      if (primaryDate.Day != null && secondaryDate.Day != null) setEligibleForBook(true)
+      else setEligibleForBook(false)
+    }
+  }, [primaryDate, secondaryDate])
+
   const getAvailablities = async sDate => {
     var selectedDate = sDate
     if (!moment(selectedDate).isValid) {
@@ -186,7 +198,6 @@ const WeekDaysViewComponent = props => {
       //Excludes the status declined, cancelled from appointments
       resAppointments = resAppointments.filter(a => !(a.status == 'declined' || a.status == 'cancelled'))
       console.log('resAppointments >> excludes', resAppointments)
-      
 
       resAppointments.map(a => {
         const app = {
@@ -194,7 +205,7 @@ const WeekDaysViewComponent = props => {
           startDate: a.startTime,
           endDate: a.endTime,
         }
-        const timezoneDiff = (new Date()).getTimezoneOffset()
+        const timezoneDiff = new Date().getTimezoneOffset()
         const localEndDateTime = moment(a.endTime).add(timezoneDiff, 'minutes')
         const localStartDateTime = moment(a.startTime).add(timezoneDiff, 'minutes')
         const appDay = moment(localStartDateTime).format('YYYY-MM-DD')
@@ -380,8 +391,12 @@ const WeekDaysViewComponent = props => {
           day: currentDate.format('YYYY-MM-DD'),
         }
       const newTimeSlots = getUnBookedSlots(currentDate, availabilityDayDetail.availableTimeSlots, bookedSlots)
+
+      const actualTimeSlots = disabledPassedTime(currentDate, newTimeSlots)
+      console.log('Actual TimeSlots', actualTimeSlots)
+
       console.log('newTimeSlots', currentDate.format('YYYY-MM-DD'), newTimeSlots)
-      availabilityDayDetail.availableTimeSlots = newTimeSlots
+      availabilityDayDetail.availableTimeSlots = actualTimeSlots
       console.log('new >> doctorBookedSlots >> Updated', availabilityDayDetail)
       weekDaysAvailablities.push(availabilityDayDetail)
     })
@@ -394,13 +409,88 @@ const WeekDaysViewComponent = props => {
     dispatch(appointmentAvailableTimeSlots(weekDaysAvailablities))
   }
 
+  const disabledPassedTime = (date, timeSlots) => {
+    const dDate = date.format('YYYY-MM-DD')
+    const today = moment(new Date()).format('YYYY-MM-DD')
+    const todayWithTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    const time = moment(new Date()).format('HH:mm')
+    console.log('Current Day >> dDate, today', dDate, today)
+    const timezoneDiff = new Date().getTimezoneOffset()
+    console.log('Current Day >> timezoneDiff', timezoneDiff)
+
+    timeSlots.map(ts => {
+      if (today === dDate) {
+        const startTime = ts.startTime.split(' ')
+        const endTime = ts.endTime.split(' ')
+        var aDateTime = moment(dDate + ' ' + startTime).format('YYYY-MM-DD HH:mm:ss') //.add(-timezoneDiff, 'minutes').format('YYYY-MM-DD HH:mm:ss')
+        console.log('Current Day >> before', ts)
+        console.log('Current Day >> before >> date ', todayWithTime, aDateTime)
+        const a = moment(todayWithTime).isBefore(aDateTime)
+        console.log('Current Day >> before >> a', a)
+        const subDate = moment(todayWithTime).subtract(moment(aDateTime)).add(timezoneDiff, 'minutes')
+        console.log('Current Day >> before >> subDate', subDate.format('HH:mm'))
+        if (todayWithTime > aDateTime) {
+          console.log('Current Day >> Passed')
+          ts.isEnabled = false
+          return ts
+        } else {
+          console.log('Current Day >> Not Passed', ts)
+          return ts
+        }
+        // if (startTime.length > 0) {
+        //   const sTime = startTime[0]
+        //   console.log('Current Day >> cond', time, sTime)
+        //   if (time > sTime) {
+        //     console.log('Current Day >> update >> AM')
+        //     ts.isEnabled = false
+        //     return ts
+        //   }
+        // }
+        // if (endTime.length > 0) {
+        //   const eTime = startTime[0]
+        //   console.log('Current Day >> cond', time, eTime)
+        //   if (time > eTime) {
+        //     console.log('Current Day >> update >> PM')
+        //     ts.isEnabled = false
+        //     return ts
+        //   }
+        // }
+      } else {
+        console.log('Current Day >> Not today')
+        return ts
+      }
+    })
+
+    return timeSlots
+  }
   const getUnBookedSlots = (date, availableTimeSlots, bookedSlots) => {
     const dDate = date.format('YYYY-MM-DD')
-    console.log('doctorBookedSlots >> before', bookedSlots)
+    const dDateTime = date.format('HH:mm')
+    console.log('doctorBookedSlots >> before', date, bookedSlots)
     var newAvailableTimeSlots = availableTimeSlots
-
+    const today = moment(new Date()).format('YYYY-MM-DD')
+    const time = moment(new Date()).format('HH:mm')
+    console.log('today >> getUnBookedSlots', today, time, dDate)
+    console.log('availableTimeSlots >> getUnBookedSlots', availableTimeSlots)
     bookedSlots.forEach(b => {
       console.log('b.day == dDate', b.day, dDate)
+      if (today === dDate) {
+        // const startTime = b.availableTimeSlots.startTime.split(' ')
+        // const endTime = b.availableTimeSlots.endTime.split(' ')
+        // console.log('Current Date', b.availableTimeSlots.startTime, startTime[0])
+        // if (startTime.length > 0) {
+        //   const sTime = startTime[0]
+        //   console.log('Current Date >> sTime', time, sTime)
+        //   newAvailableTimeSlots.map(a => {
+        //     if (time > sTime) {
+        //       console.log('Current Date >> Befor', time, sTime)
+        //       a.isEnabled = false
+        //       console.log('Current Date >> Updated 123', dDate, a)
+        //       return a
+        //     } else return a
+        //   })
+        // }
+      }
       if (b.day == dDate) {
         const startTime = b.availableTimeSlots.startTime.split(' ')
         const endTime = b.availableTimeSlots.endTime.split(' ')
@@ -605,7 +695,7 @@ const WeekDaysViewComponent = props => {
 
     console.log('reqData.primaryStartTime', primaryDate.Day, reqData.primaryStartTime)
     console.log('reqData.secondaryStartTime', secondaryDate.Day, reqData.secondaryStartTime)
-   
+
     reqData.appointmentReason = appointmentReason
     reqData.email = invitedMembers.map(x => x.email)
     reqData.documents = selectedFiles.map(x => x)
@@ -661,21 +751,13 @@ const WeekDaysViewComponent = props => {
       </div>
       <div className="wdv__row">
         <div className="wdv__section">
-          {primaryDate.Day === null || secondaryDate.Day === null ? (
+          {!isEligibleForBook ? (
             <Button className="wdv__next__btn">Next</Button>
-          ) : null}
-
-          {role === 'doctor' && primaryDate.Day != null ? (
+          ) : (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
               Request Appointment
             </Button>
-          ) : null}
-
-          {role === 'patient' && primaryDate.Day != null && secondaryDate.Day != null ? (
-            <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
-              Request Appointment
-            </Button>
-          ) : null}
+          )}
         </div>
       </div>
 

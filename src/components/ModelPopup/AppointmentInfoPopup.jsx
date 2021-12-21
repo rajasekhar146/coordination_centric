@@ -113,7 +113,7 @@ const ConfirmRescheduleComponent = props => {
                     style={{ width: '50%' }}
                     id="floatContainer"
                     for="userType"
-                    class="float_container"
+                    className="float_container"
                 // style={{ backgroundColor: "#E0E0E0" }}
                 >
                     <label for="userType">
@@ -134,7 +134,7 @@ const ConfirmRescheduleComponent = props => {
                     style={{ width: '50%' }}
                     id="floatContainer"
                     for="userType"
-                    class="float_container"
+                    className="float_container"
                 // style={{ backgroundColor: "#E0E0E0" }}
                 >
                     <label for="userType">

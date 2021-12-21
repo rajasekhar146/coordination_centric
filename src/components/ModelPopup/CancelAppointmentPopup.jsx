@@ -24,12 +24,12 @@ const CancelAppointment = props => {
             </div>
             <div className="io__row io__text__center io_width_50">
                 <label className="io__title">
-                    Appointment Canceling Terms & Conditions
+                    Appointment Cancelling Terms & Conditions
                 </label>
             </div>
             <div className="io__row io__text__center width_80">
                 <label className="io__head_info">
-                    Please read carefuly and accept this terms before canceling your appointment.
+                    Please read carefuly and accept this terms before cancelling your appointment.
 
                 </label>
             </div>

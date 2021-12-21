@@ -123,7 +123,7 @@ const InviteCollaboratorComponent = props => {
                             <TextField
                                 // {...useInput('facilityName', { isRequired: true })}
                                 {...register('facilityName', {
-                                    required: 'Name is required.'
+                                    required: true,  minLength: 3 
                                 })}
                                 onChange={(e) => {
                                     let val;
@@ -147,7 +147,12 @@ const InviteCollaboratorComponent = props => {
                                 }}
                             />
                         </FormControl>
-                        {errors.facilityName && <p className="io__required">{errors.facilityName.message}</p>}
+                        {errors.facilityName && errors.facilityName.type === 'required' && (
+                            <p className="io__required">Organization Name is required.</p>
+                          )}
+                          {errors.facilityName && errors.facilityName.type === 'minLength' && (
+                            <p className="io__required">Organization Name must be at least 3 characters.</p>
+                          )}
                     </div>
 
 
@@ -164,6 +169,7 @@ const InviteCollaboratorComponent = props => {
                                     },
                                 })}
                                 margin="normal"
+                                type="email"
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">

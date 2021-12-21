@@ -111,7 +111,7 @@
 
 .io__same__line {
     display: flex;
-    cursor: pointer;
+    justify-content: space-between
 }
 .io__flex__spcebetween {
     display: flex;
@@ -133,6 +133,7 @@
     width: 380px !important;
     /* color: #A0A4A8 !important; */
     height: 48px !important;
+    text-transform: lowercase;
 }
 
 .has-error {
