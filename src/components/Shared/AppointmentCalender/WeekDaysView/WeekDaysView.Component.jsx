@@ -115,7 +115,7 @@ const WeekDaysViewComponent = props => {
   const [appointmentReasonErr, setappointmentReasonErr] = useState(false)
   const [reportsArray, setReportsArray] = useState([])
   const [isPastMonth, setPastMonth] = useState(false)
-
+  const [isEligibleForBook, setEligibleForBook] = useState(false)
   const buildTimeSlots = (
     startDate,
     endDate,
@@ -163,6 +163,17 @@ const WeekDaysViewComponent = props => {
     } while (startTime < endTime)
     return timeSlots
   }
+
+  useEffect(() => {
+    console.log('useEffect >> primary and secondary', primaryDate, secondaryDate)
+    if (role == 'doctor') {
+      if (primaryDate.Day != null || secondaryDate.Day != null) setEligibleForBook(true)
+      else setEligibleForBook(false)
+    } else if (role == 'patient') {
+      if (primaryDate.Day != null && secondaryDate.Day != null) setEligibleForBook(true)
+      else setEligibleForBook(false)
+    }
+  }, [primaryDate, secondaryDate])
 
   const getAvailablities = async sDate => {
     var selectedDate = sDate
@@ -740,22 +751,13 @@ const WeekDaysViewComponent = props => {
       </div>
       <div className="wdv__row">
         <div className="wdv__section">
-          {(role === 'doctor' && primaryDate.Day === null) ||
-          (role === 'patient' && (primaryDate.Day === null || secondaryDate.Day === null)) ? (
+          {!isEligibleForBook ? (
             <Button className="wdv__next__btn">Next</Button>
-          ) : null}
-
-          {role === 'doctor' && (primaryDate.Day != null || secondaryDate.Day != null) ? (
+          ) : (
             <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
               Request Appointment
             </Button>
-          ) : null}
-
-          {role === 'patient' && primaryDate.Day != null && secondaryDate.Day != null ? (
-            <Button className="wdv__request__appointment" onClick={() => setClickedAppointment(true)}>
-              Request Appointment
-            </Button>
-          ) : null}
+          )}
         </div>
       </div>
 

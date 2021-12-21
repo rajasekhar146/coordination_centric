@@ -111,7 +111,7 @@ const AddPatientRecord = props => {
             } else if (get(res, ['data', 'status_code'], '') === 200) {
                 clickCloseButton()
                 setOpenFlash(true)
-                setSubLabel(get(res, ['data', 'message'], ''))
+                setSubLabel('Patient Record added Successfully')
                 // setAlertMsg('Successfully Added new Record')
                 getPatientRecords()
             }

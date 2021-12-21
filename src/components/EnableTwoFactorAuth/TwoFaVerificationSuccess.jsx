@@ -17,7 +17,7 @@ const TwoFaVerificationSuccess = props => {
         <img src={CClogo} alt="cc_logo" />
       </div>
       <div className="io__two_fa io_ml30">
-        <div className="io__two_justify">
+        <div className="io__two_justify_success">
           <img src={SuccessIcon} alt="success_logo" />
           <div className="io_error_label">
             <label>
@@ -27,6 +27,11 @@ const TwoFaVerificationSuccess = props => {
           <div className="io_apologize_label">
             <label>Your account is extra secured now</label>
           </div>
+          {!chooseAnotherAuth &&
+            <div className="io_apologize_label">
+              <label>You need to login again for Security Reasons</label>
+            </div>
+          }
           <div className="io_width90">
             <Button
               className="io__activate__enable io__margin25"
@@ -38,9 +43,9 @@ const TwoFaVerificationSuccess = props => {
                 }
               }}
             >
-              {chooseAnotherAuth ? 'Continue' : 'Go to Dashboard'}
-              
-              
+              {!chooseAnotherAuth ? 'Continue' : 'Go to Dashboard'}
+
+
             </Button>
           </div>
         </div>

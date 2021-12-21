@@ -335,16 +335,16 @@ const PersonalDetailComponent = () => {
                     Phone Number <span className="pdc__required">*</span>
                   </div>
                   <TextField
-                    {...register('phoneNumber', {
+                    {...register('phoneNo', {
                       required: {
-                          value: true,
-                          message: "Phone Number is required",
+                        value: true,
+                        message: 'Phone Number is required',
                       },
                       pattern: {
-                          value: /^[1-9]\d*(\d+)?$/i,
-                          message: 'Phone Number accepts only integer',
-                      }
-                })}
+                        value: /^[1-9]\d*(\d+)?$/i,
+                        message: 'Phone Number accepts only integer',
+                      },
+                    })}
                     margin="normal"
                     inputProps={{
                       maxLength: 15,

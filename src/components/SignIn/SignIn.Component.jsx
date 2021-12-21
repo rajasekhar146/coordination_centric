@@ -240,7 +240,9 @@ const SignInComponent = () => {
                     required: 'Password is required.',
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  onChange={handleChange()}
+                  onChange={(e) => {
+                    setValue('password', e.target.value)
+                  }}
                   placeholder="Password"
                   endAdornment={
                     <InputAdornment position="end">
