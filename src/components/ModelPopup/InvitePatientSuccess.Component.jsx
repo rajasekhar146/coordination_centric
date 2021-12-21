@@ -25,10 +25,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const InvitePatientSuccess = props => {
-    const { selectedOrg, clickCloseButton } = props
+    const { selectedOrg, 
+        clickCloseButton,
+        getPatientRecords
+    } = props
 
     const handleSubmit = () => {
         clickCloseButton()
+        getPatientRecords()
     }
     const classes = useStyles()
     return (

@@ -15,6 +15,7 @@ const EnableTwoFactorAuth = () => {
   const [activeTab, setActiveTab] = useState('email')
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const currentUserId = get(currentUser, ['data', 'data', '_id'], '')
   const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
   const [enableTwofa, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
 
@@ -120,7 +121,7 @@ const EnableTwoFactorAuth = () => {
       <div
         className="io__back"
         onClick={() => {
-          history.push('/dashboard')
+          history.push(`/settings/${currentUserId}`)
         }}
       >
         <span className="io__back__arrow">

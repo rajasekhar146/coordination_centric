@@ -9,7 +9,7 @@ import get from 'lodash.get'
 const styles = theme => ({
     card: {
         background: "#FFFFFF",
-        width: "30%",
+        width: "31%",
         margin: 10,
         boxShadow: '0px 12px 26px rgba(16, 30, 115, 0.06)',
         borderRadius: '8px'
@@ -32,13 +32,13 @@ const TotalAppointments = (props) => {
         switch (role) {
             case 'doctor':
             case 'patient':
-                return get(dashboardDetails, ['totalAppointmentCount'], '')
+                return get(dashboardDetails, ['totalAppointmentCount'], 0)
                 break
             case 'superadmin':
-                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], '')
+                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], 0)
                 break
             case 'admin':
-                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], '')
+                return get(dashboardDetails, ['0', 'totals', 'totalAppointments'], 0)
         }
     }
 

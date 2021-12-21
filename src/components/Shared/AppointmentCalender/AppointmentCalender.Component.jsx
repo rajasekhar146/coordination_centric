@@ -15,7 +15,7 @@ const AppointmentCalenderComponent = props => {
     <div className="acv__main__div">
       <div className="acv__row acv__appointment__text">Make an Appointment</div>
       <div className="acv__row acv__subtitle__text">
-        Choose your primary and secondary prefered date from the available slots.
+        Choose your primary and secondary preferred date from the available slots.
       </div>
       <NavMonthYearComponent />
       <WeekDaysViewComponent id={doctorId} name={doctorName} appointmentDetails={doctorDetails} />

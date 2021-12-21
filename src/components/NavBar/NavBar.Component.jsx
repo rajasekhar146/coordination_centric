@@ -5,14 +5,12 @@ import EventNoteIcon from '@mui/icons-material/EventNote'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 import NotificationImportantOutlinedIcon from '@mui/icons-material/NotificationImportantOutlined'
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
-
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded'
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded'
-
 import { styled, alpha } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
@@ -34,10 +32,9 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import eventBus from "./../../helpers/eventbus";
 import Alert from '../Alert/Alert.component';
-
 import { useSelector, useDispatch } from 'react-redux'
 import { setFlashMsg } from '../../redux/actions/commonActions'
-
+import Capitalize from 'lodash.capitalize'
 
 const profileMenus = [
   { label: 'Profile', icon: ProfileImage },
@@ -277,7 +274,7 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
     }
     setName(fullName)
     setRole(roleName)
-    setProfilePic(data.profilePic);
+    setProfilePic(data?.profilePic);
 
   }, [])
   const handleCloseFlash = (event, reason) => {
@@ -407,8 +404,8 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
                 {/* <ViewImageComponent category={'doctors_certificate'} pic={profilePic} imageClass={"nb__profile__image"} /> */}
               </div>
               <div className="nb__profile__content">
-                <div className="nb__profile__name">{name}</div>
-                <div className="nb__profile__role">{role}</div>
+                <div className="nb__profile__name">{Capitalize(name)}</div>
+                <div className="nb__profile__role">{Capitalize(role)}</div>
               </div>
             </div>
           </Button>

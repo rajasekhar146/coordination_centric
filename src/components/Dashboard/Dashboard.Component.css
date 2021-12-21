@@ -1,6 +1,6 @@
 .dashboard__main__div{
     background: #F6F8FB;
-    height: 100vh;
+    height: calc(100vh - 20vh);
     padding: 20px;
 }
 

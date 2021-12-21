@@ -5,7 +5,7 @@ import history from '../../../history'
 import Doctor from '../../../assets/images/doctor1.png'
 import ViewImageComponent from '../../Shared/AppointmentCalender/ViewImage/ViewImage.Component'
 const TopDoctorComponent = props => {
-  const { id, name, speciality, profilePic } = props.doctor
+  const { _id, name, speciality, profilePic } = props.doctor
   return (
     <div className="tdl__main__div">
       <div className="tdl__row">
@@ -26,7 +26,10 @@ const TopDoctorComponent = props => {
       <div className="tdl__row">
         <div className="tdl__action__section">
           {' '}
-          <Button className="tdl__button" onClick={() => history.push('/marketplace/make-a-appointments')}>
+          <Button className="tdl__button" onClick={() => history.push({
+              pathname: '/marketplace/make-a-appointments',
+              state: { id: _id, name: name }
+              })}>
             Book Appointment
           </Button>
         </div>

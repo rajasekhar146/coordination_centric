@@ -14,7 +14,7 @@ import SigninStore from '../../stores/signinstore'
 import { useDispatch } from 'react-redux'
 import { getTokenFn } from '../../firebase'
 import Alert from '../Alert/Alert.component'
-import { enableTwofa } from '../../redux/actions/commonActions'
+import { enableTwofa, chooseAnotherAuth } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -76,15 +76,12 @@ const TwoFaEnabled = props => {
       'deviceType': 'web'
     }
     notificationService.addDevice(devieInfo).then((res) => {
-      console.log("Add device", res);
     }, error => {
-      console.log("Add device", error);
     })
   }
   useEffect(async () => {
     if (twoFactor_auth_type === 'none') {
       let fcmToken = await getTokenFn(setFCMToken);
-      console.log("fcmToken", fcmToken);
       history.push(`/dashboard`)
     }
   }, [])
@@ -114,7 +111,6 @@ const TwoFaEnabled = props => {
     res
       .then(async () => {
         let fcmToken = await getTokenFn(setFCMToken);
-        console.log("fcmToken", fcmToken);
         history.push(`/dashboard`)
       })
       .catch(() => {
@@ -203,6 +199,8 @@ const TwoFaEnabled = props => {
           <label
             onClick={() => {
               dispatch(enableTwofa(true))
+              dispatch(chooseAnotherAuth(true))
+
               history.push('/enable2fa')
             }}
             onMouseOver={() => {

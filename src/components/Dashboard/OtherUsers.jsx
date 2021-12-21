@@ -10,7 +10,7 @@ import get from 'lodash.get'
 const styles = theme => ({
     card: {
         background: "#FFFFFF",
-        width: "30%",
+        width: "31%",
         margin: 10,
         boxShadow: '0px 12px 26px rgba(16, 30, 115, 0.06)',
         borderRadius: '8px'
@@ -33,13 +33,13 @@ const OtherUsers = (props) => {
         switch (role) {
             case 'doctor':
             case 'patient':
-                return get(dashboardDetails, ['otherUsers'], '')
+                return get(dashboardDetails, ['otherUsers'], 0)
                 break
             case 'superadmin':
-                return get(dashboardDetails, ['0', 'totals', 'otherUsers'], '')
+                return get(dashboardDetails, ['0', 'totals', 'otherUsers'], 0)
                 break
             case 'admin':
-                return get(dashboardDetails, ['0', 'totals', 'otherActiveUsers'], '')
+                return get(dashboardDetails, ['0', 'totals', 'total'], 0)
         }
     }
     return (
@@ -57,7 +57,7 @@ const OtherUsers = (props) => {
                 </div>
                 <div className="db_stats_label_fields">
                     <label className="db_stats_label">
-                    Other Users
+                    Total Users
                     </label>
                     <label className="db_stats_value">{getValue()}</label>
                 </div>

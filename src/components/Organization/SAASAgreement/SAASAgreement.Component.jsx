@@ -20,7 +20,7 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
-import useStore from '../../../hooks/use-store';
+import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
@@ -33,13 +33,12 @@ const SAASAgreementComponent = props => {
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
   const [activeStep, setActiveStep] = React.useState(1)
-  const [signinStoreData] = useStore(SigninStore);
+  const [signinStoreData] = useStore(SigninStore)
 
-  const {
-    organisationName,
-  } = signinStoreData;
+  const { organisationName } = signinStoreData
 
   const [facility, setFacility] = useState({})
+  const [isVisible, setVisible] = useState(true)
 
   const handleNext = () => {
     // var updatedFacility = {
@@ -57,7 +56,7 @@ const SAASAgreementComponent = props => {
     setSigned(!sigPad.isEmpty())
 
     if (value != null && !sigPad.isEmpty()) {
-      let domElement = document.getElementById('my-node')
+      let domElement = document.getElementById('my-certificate')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
         base64String = base64String.replace('data:image/png;base64,', '')
@@ -79,11 +78,9 @@ const SAASAgreementComponent = props => {
     var inviteToken = nfacility?.inviteToken
     var invitedBy = nfacility?.invited_by
 
-    if(referredBy === undefined || referredBy === null)
-      referredBy = 0
-  
-    if(invitedBy === undefined || invitedBy === null)  
-      invitedBy = 0
+    if (referredBy === undefined || referredBy === null) referredBy = 0
+
+    if (invitedBy === undefined || invitedBy === null) invitedBy = 0
 
     history.push(`/service-level-agreement/${inviteToken}/${referredBy}/${invitedBy}`)
   }
@@ -109,8 +106,9 @@ const SAASAgreementComponent = props => {
   }
 
   const onButtonClick = () => {
+    setVisible(false)
     console.log('Child >> trigered')
-    let domElement = document.getElementById('my-node')
+    let domElement = document.getElementById('my-certificate')
     console.log(domElement)
     htmlToImage
       .toPng(domElement)
@@ -127,6 +125,10 @@ const SAASAgreementComponent = props => {
       .catch(function (error) {
         console.error('oops, something went wrong!', error)
       })
+
+    setTimeout(() => {
+      setVisible(true)
+    }, 2000)
   }
 
   return (
@@ -150,21 +152,21 @@ const SAASAgreementComponent = props => {
               })}
             </Stepper>
             {
-              <div className="ac__main__div">
+              <div className="ac__main__div" id="my-certificate">
                 <div className="ac__title__text">SAAS Agreement</div>
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
-                <div className="sla__download__print__section">
-                  <div className="sla__download__print">
-                    <div className="sla__download__text" onClick={onButtonClick}>
-                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                {isVisible && (
+                  <div className="sla__download__print__section">
+                    <div className="sla__download__print">
+                      <div className="sla__download__text" onClick={onButtonClick}>
+                        <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                      </div>
                     </div>
-                    {/* <div className="sla__download__text">
-                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
-                    </div> */}
                   </div>
-                </div>
+                )}
+
                 <div>
                   <div className="ac__form">
                     <div id="my-node">
@@ -239,7 +241,6 @@ const SAASAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
@@ -251,13 +252,12 @@ const SAASAgreementComponent = props => {
                           <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
                             <div className="sla__text__align__center">
-                              <p className="ac__required">Please sigh here</p>
+                              <p className="ac__required">Please sign here</p>
                             </div>
                           )}
                         </div>
 
                         <div className="eulaa__column">
-                          
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -282,20 +282,22 @@ const SAASAgreementComponent = props => {
                     <div className="sla__column eulaa__label user_name"> {organisationName}</div>
                     <div className="ac__gap__div"></div>
 
-                    <div className="ac__row">
-                      <div className="ac__column ac__left__action">
-                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                          Back
-                        </Button>
-                      </div>
+                    {isVisible && (
+                      <div className="ac__row">
+                        <div className="ac__column ac__left__action">
+                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                            Back
+                          </Button>
+                        </div>
 
-                      <div className="ac__column ac__right__action">
-                        <Button className="ac__next__btn" onClick={handleNext}>
-                          Save & Next
-                          <ArrowForwardIosRoundedIcon />
-                        </Button>
+                        <div className="ac__column ac__right__action">
+                          <Button className="ac__next__btn" onClick={handleNext}>
+                            Save & Next
+                            <ArrowForwardIosRoundedIcon />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="ac__gap__bottom__div"></div>

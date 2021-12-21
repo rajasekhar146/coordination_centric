@@ -84,13 +84,12 @@ const VerificationCodePage = props => {
 
 
   const handleSubmit = () => {
-    console.log('handleSubmit 4444', verificationCode, method, currentUserEmail)
     const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
     res
       .then(() => {
         // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
-        if (!last_login_time && isShowCopleateProfile()) {
+        if (!last_login_time && isShowCopleateProfile() && !enableTwofavalue) {
           dispatch(setCompleteProfile(true))
         }
         dispatch(enableTwofa(false))

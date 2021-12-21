@@ -94,6 +94,7 @@ const ForgotPasswordComponent = (props) => {
                                         message: 'Please enter a valid email',
                                     },
                                 })}
+                                type="email"
                                 margin="normal"
                                 placeholder="Email"
                                 error={errors.email && isSubmit}

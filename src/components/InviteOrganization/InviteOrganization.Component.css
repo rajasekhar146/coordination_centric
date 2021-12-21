@@ -111,12 +111,12 @@
 
 .io__same__line {
     display: flex;
-    cursor: pointer;
+    justify-content: space-between
 }
 .io__flex__spcebetween {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .io__invite__org__btn {
@@ -133,6 +133,7 @@
     width: 380px !important;
     /* color: #A0A4A8 !important; */
     height: 48px !important;
+    text-transform: lowercase;
 }
 
 .has-error {
@@ -145,3 +146,9 @@
     font-size: 12px !important;
 }
 
+.width-100{
+    width: 100%;
+}
+.width-50{
+    width: 50%;
+}

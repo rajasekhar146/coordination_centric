@@ -212,6 +212,7 @@ const InviteMemberComponent = props => {
                                         message: 'Please enter a valid email',
                                     },
                                 })}
+                                type="email"
                                 margin="normal"
                                 InputProps={{
                                     startAdornment: (
@@ -259,14 +260,14 @@ const InviteMemberComponent = props => {
                     </div>
 
                     <div className="io__row">
-                        <div style={{ marginTop: "50px" }} className="io__flex_btn">
-                            <div className="io__column">
-                                <Button className="io__add__organization__btn__close" onClick={props.clickCloseButton}>
+                        <div style={{ marginTop: "30px" }} className="io__flex_btn">
+                            <div className="io__column width-50 ">
+                                <Button className="io__add__organization__btn__close width-100" onClick={props.clickCloseButton}>
                                     Close
                                 </Button>
                             </div>
-                            <div style={{ marginLeft: "15px" }} className="io__column io__invite__org__btn">
-                                <Button type="submit" className="io__add__organization__btn">
+                            <div style={{ marginLeft: "15px" , width: "50%" }} className="io__column io__invite__org__btn">
+                                <Button type="submit" className="io__add__organization__btn width-100">
                                     Invite Member
                                 </Button>
                             </div>

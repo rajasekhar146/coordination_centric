@@ -69,10 +69,10 @@ const BankInformationComponent = () => {
   const [countries, setAllCountries] = useState([])
   const [facility, setFacility] = useState({})
   const [message, setMessage] = useState(null)
-  const [readSubscriptionAgreement , setReadSubscriptionAgreement]= useState(true);
+  const [readSubscriptionAgreement, setReadSubscriptionAgreement] = useState(true)
   const [openflash, setOpenFlash] = React.useState(false)
-  const [alertMsg, setAlertMsg] = React.useState("")
-  const [subLebel, setSubLabel] = useState("")
+  const [alertMsg, setAlertMsg] = React.useState('')
+  const [subLebel, setSubLabel] = useState('')
   var sigPad = {}
 
   const {
@@ -86,12 +86,12 @@ const BankInformationComponent = () => {
   const [activeStep, setActiveStep] = React.useState(2)
 
   const onSubmit = data => {
-    if(readSubscriptionAgreement){
+    if (readSubscriptionAgreement) {
       setMessage(null)
       console.log('card data', data)
       getCardDetail(data)
-    }else{
-            setOpenFlash(true)
+    } else {
+      setOpenFlash(true)
     }
     //history.push('/terms-condition')
   }
@@ -349,9 +349,7 @@ const BankInformationComponent = () => {
                                     })}
                                   />
                                 </div>
-                                {errors.nameOnCard && (
-                                    <p className="ac__required">{errors.nameOnCard.message}</p>
-                                  )}
+                                {errors.nameOnCard && <p className="ac__required">{errors.nameOnCard.message}</p>}
                                 <div className="ac__row">
                                   <div className="ac__label">Card number</div>
                                 </div>
@@ -376,16 +374,14 @@ const BankInformationComponent = () => {
                                     })}
                                   />
                                 </div>
-                                {errors.cardNumber && (
-                                    <p className="ac__required">{errors.cardNumber.message}</p>
-                                  )}
+                                {errors.cardNumber && <p className="ac__required">{errors.cardNumber.message}</p>}
                                 {/* <div className="ac__row">
                                   <div className="ac__label bi__space__expiry">Expiry</div>
                                   <div className="ac__label">CVV</div>
                                 </div> */}
                                 <div className="two-row-grid">
                                   <div className="bi__expiry__text__box">
-                                  <div className="ac__label bi__space__expiry">Expiry</div>
+                                    <div className="ac__label bi__space__expiry">Expiry</div>
 
                                     <TextField
                                       margin="normal"
@@ -405,30 +401,29 @@ const BankInformationComponent = () => {
                                         // },
                                       })}
                                     />
-                                  {errors.expiry && <p className="ac__required">{errors.expiry.message}</p>}
+                                    {errors.expiry && <p className="ac__required">{errors.expiry.message}</p>}
                                   </div>
                                   <div className="bi__expiry__text__box">
-                                  <div className="ac__label">CVV</div>
+                                    <div className="ac__label">CVV</div>
                                     <TextField
                                       id=""
                                       type="password"
                                       margin="normal"
-                                      maxLength={4}
-                                      characterLimit={4}
-                                      onInput={e => {
-                                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
-                                      }}
-                                      onChange={e => setCardExpiry(e.target.value)}
+                                      onChange={e =>
+                                        setCardExpiry(Math.max(0, parseInt(e.target.value)).toString().slice(0, 4))
+                                      }
                                       {...register('cvv', {
-                                        required: 'cvv is required.',
-                                        // pattern: {
-                                        //   value:
-                                        //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                        //   message: 'Please enter a valid email',
-                                        // },
+                                        required: 'CVV is required.',
+                                        pattern: {
+                                          value: /^[1-9]\d*(\d+)?$/i,
+                                          message: 'CVV accepts only integer',
+                                        },
                                       })}
+                                      inputProps={{
+                                        maxLength: 4,
+                                      }}
                                     />
-                                  {errors.cvv && <p className="ac__required">{errors.cvv.message}</p>}
+                                    {errors.cvv && <p className="ac__required">{errors.cvv.message}</p>}
                                   </div>
                                 </div>
                                 <div className="ac__row">
@@ -522,7 +517,7 @@ const BankInformationComponent = () => {
                               <div className="bi__or__pay__text">
                                 {' '}
                                 <Button onClick={handleCardSection} color="inherit">
-                                Or Pay with {cardSection ? 'Banking Information' : ' Credit Card'} 
+                                  Or pay with {cardSection ? 'Direct' : 'Credit'} card
                                 </Button>
                               </div>
                             </div>
@@ -572,13 +567,12 @@ const BankInformationComponent = () => {
           </Box>
         </div>
         <Alert
-      
-      handleCloseFlash={handleCloseFlash}
-      alertMsg= "Subscription Agreement"
-      openflash={openflash}
-      subLebel = "Please select the subscription agreement checkbox"
-      color = "cancel"
-  />
+          handleCloseFlash={handleCloseFlash}
+          alertMsg="Subscription Agreement"
+          openflash={openflash}
+          subLebel="Please select the subscription agreement checkbox"
+          color="cancel"
+        />
       </div>
     </div>
   )

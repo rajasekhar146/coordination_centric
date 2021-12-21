@@ -194,7 +194,7 @@ const menuList = [
     menu: 'pending_verification',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -204,7 +204,7 @@ const menuList = [
     menu: 'pending_bank_verification',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsVerifyBankClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -266,7 +266,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClickedFromSuspend', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
@@ -289,7 +289,7 @@ const menuList = [
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -329,6 +329,9 @@ const statusNames = [
   },
   {
     name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
+  },
+  {
+    name: 'Pending Bank Verification', value: "Pending Bank Verification", key: "pending_bank_verification"
   },
   {
     name: 'Declined', value: "Declined", key: "declined"
@@ -442,6 +445,7 @@ const OrganizationDashboardComponent = () => {
   const [isVerifyBankClicked , setIsVerifyBankClicked] = useState(false);
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [isAcivated, setIsActivateClicked] = useState(false)
+  const [isActivateClickedFromSuspend , setIsActivateClickedFromSuspend] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -464,8 +468,8 @@ const OrganizationDashboardComponent = () => {
   const [subLebel, setSubLabel] = useState('')
   const [alertColor, setAlertColor] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [firstDeposit, setFirstDeposit] = useState()
-  const [secondDeposit, setSecondDeposit] = useState()
+  const [firstDeposit, setFirstDeposit] = useState(0)
+  const [secondDeposit, setSecondDeposit] = useState(0)
   const [secondDepositErr , setSecondDepositErr] = useState(false)
   const [firstDepositErr , setFirstDepositErr] = useState(false)
 
@@ -673,18 +677,29 @@ const OrganizationDashboardComponent = () => {
       return
     }
     const amnt = [];
-    amnt.push(firstDeposit)
-    amnt.push(secondDeposit)
+    amnt.push(Number(firstDeposit))
+    amnt.push(Number(secondDeposit))
     const bankDetail = {
-      payment: {
       amount : amnt,
-      userId : organizationId,
       facilityId:selectedOrg.id
-      },
     }
 
-    organizationService.verifyBankHanlde(bankDetail).then((data) => {
-      getOrganization()
+    organizationService.verifyBankHanlde(bankDetail).then((data , err) => {
+      if(data.data){
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel(data.data.message )
+        setAlertColor('success')
+      }else{
+        setOpenFlash(true)
+        setAlertMsg('Error')
+        setSubLabel('You have tried to verify 3 times. To continue please reach out to us directly.')
+        setAlertColor('fail')
+      }
+      setIsVerifyBankClicked(false)
+      getOrganization();
+      
+     
     })
 
   }
@@ -792,14 +807,16 @@ const OrganizationDashboardComponent = () => {
         <div className="od__right__section od_status">
           <div style={{ width: "162px" }} className="od__btn__div">
             <FormControl sx={{ m: 1, width: 200 }}>
-              <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
+              {/* <InputLabel id="demo-multiple-checkbox-label">Status</InputLabel> */}
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
+                inputProps={{ placeholder: 'select' }}
+
                 value={selectedStatus}
                 // onChange={e => handleSearchStatus(e)}
-                input={<OutlinedInput />}
+                input={<OutlinedInput placeholder='Status' />}
                 renderValue={selected => {
                   return selected.map(element => element.name).join(', ')
 
@@ -850,7 +867,7 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 470 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -924,6 +941,7 @@ const OrganizationDashboardComponent = () => {
                             setIsActivateClicked={setIsActivateClicked}
                             role={role}
                             setAlertcolor={setAlertColor}
+                            setIsActivateClickedFromSuspend = {setIsActivateClickedFromSuspend}
                           />
                         ))
                         : null

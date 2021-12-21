@@ -20,6 +20,7 @@ import { commonService } from '../../../services'
 import get from 'lodash.get'
 import { async } from 'rxjs'
 import { setQuickProfileSetup } from '../../../redux/actions/commonActions'
+import Alert from '../../Alert/Alert.component'
 
 const modalStyle = {
   position: 'absolute',
@@ -48,7 +49,7 @@ const ProfileSetupComponent = () => {
   const member = useSelector(state => state.newMember)
   const [openModel, setBool] = useState('')
   const [prfileUrl, setProfileUrl] = useState('')
-
+  const [openflash, setOpenFlash] = React.useState(false)
   const { invitetoken } = useParams()
   const { referredby } = useParams()
   const { invitedBy } = useParams()
@@ -74,6 +75,9 @@ const ProfileSetupComponent = () => {
       setProfileUrl(arrayBufferToBase64(get(response, ['data', 'data', 'data', 'data'], [])))
     }
   }
+  const [alertMsg, setAlertMsg] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
+  const [subLebel, setSubLabel] = useState(useSelector(state => state.flashMsgObj.subLabel))
+  const [alertcolor, setAlertColor] = React.useState(useSelector(state => state.flashMsgObj.color))
   useEffect(async () => {
     dispatch(setQuickProfileSetup({ activeStep: 1 }))
     const newMemberDetail = member?.member
@@ -87,6 +91,9 @@ const ProfileSetupComponent = () => {
   const handleCloseModalPopup = () => {
     setBool(!openModel)
   }
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+}
   const onSubmit = async data => {
     var memberData = member.member
     memberData.bio = data.bio
@@ -94,14 +101,23 @@ const ProfileSetupComponent = () => {
     dispatch(newMember(memberData))
     console.log('save member data >> ', memberData)
     var response = await memberService.saveMember(memberData).catch(err => {
-      console.log(err)
     })
     dispatch(resetMember({}))
     console.log('save member data >> submit ', response)
   
     if (response.status === 200) {
+      setOpenFlash(true)
+      setAlertMsg('Success')
+      setAlertColor('success')
+      setSubLabel('User Registered successfully.')
+      setTimeout(() => {
       history.push('/signin')
+      }, 2000);
     } else {
+      setOpenFlash(true)
+      setAlertMsg('Fail')
+      setAlertColor('fail')
+      setSubLabel('User not registered.')
       console.log(response)
     }
   }
@@ -180,6 +196,7 @@ const ProfileSetupComponent = () => {
           </Box>
         </Modal>
       </form>
+      <Alert handleCloseFlash={handleCloseFlash} subLebel={subLebel}  alertMsg={alertMsg} openflash={openflash} color = {alertcolor} />
     </div>
   )
 }

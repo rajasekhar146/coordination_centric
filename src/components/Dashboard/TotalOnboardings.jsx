@@ -11,7 +11,7 @@ const styles = theme => ({
     card: {
         background: "#FFFFFF",
         width: "100%",
-        margin: 10,
+        // margin: 10,
         boxShadow: '0px 12px 26px rgba(16, 30, 115, 0.06)',
         borderRadius: '8px'
     },
@@ -98,7 +98,7 @@ const options = {
     ],
 }
 
-const OrganizationOnboardings = (props) => {
+const TotalOnboardings = (props) => {
     const {
         classes,
         checkDoctorOrPatent
@@ -112,10 +112,10 @@ const OrganizationOnboardings = (props) => {
                 borderRadius: '4px',
             }}
         >
-            <CardContent >
+            {/* <CardContent > */}
                 <Typography component="div" variant="h6">
                     <label className="db_org_graph">
-                        Organization Onboardings
+                    Total Onboardings
                     </label>
 
 
@@ -128,9 +128,9 @@ const OrganizationOnboardings = (props) => {
                     >
                     </ReactHighcharts>
                 </div>
-            </CardContent>
+            {/* </CardContent> */}
         </Card>
     )
 }
 
-export default withStyles(styles)(OrganizationOnboardings)
+export default withStyles(styles)(TotalOnboardings)

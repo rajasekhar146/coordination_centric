@@ -42,10 +42,10 @@ const CompleateProfile = props => {
                 <img width="200" src={TwoFaImg} alt="TwoFaImg" />
             </div>
             <div className="io__row io__icon">
-                <h5>Complete your profile</h5>
+                <h3>Complete your profile</h3>
                 <label>
                     Please complete your professional information to acccess
-                    all the funtionatilies of our platform.
+                    all the functionalities of our platform.
                 </label>
             </div>
             <div className="io__complete">

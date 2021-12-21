@@ -25,7 +25,9 @@ export const memberService = {
   updateStatus,
   uploadFile,
   getDetailsById,
-  downloadFileUrl
+  downloadFileUrl,
+  addNewPatientRecord,
+  getFacilityData
 }
 
 function inviteMember(data) {
@@ -276,3 +278,36 @@ function getDetailsById(id) {
   )
 }
 
+function addNewPatientRecord(reqData) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+    .post(`${apiURL}/users/AddPatient`, reqData, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+      .catch(err => {
+        return err.response
+      })
+  )
+}
+
+function getFacilityData(id) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+    .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${id}`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+      .catch(err => {
+        return err.response
+      })
+  )
+}

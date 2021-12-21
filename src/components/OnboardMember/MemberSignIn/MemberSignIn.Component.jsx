@@ -134,6 +134,7 @@ const MemberSignInComponent = () => {
 
     // console.log(password, confirmPassword)
     if (password === confirmPassword) {
+      if(validations.passwordLength && validations.symbol && validations.number && validations.capital && validations.small ){
       if(agreeTermsAndCondtion){
         member.member.password = password
 
@@ -158,11 +159,18 @@ const MemberSignInComponent = () => {
         setAlertMsg('Terms & Condition')
       }
 
+      }else{
+          setSubLabel('Password should match the given requirements')
+          setOpenFlash(true)
+          setAlertColor('fail')
+          setAlertMsg('Password mismatch')
+      }
+ 
     } else {
       setSubLabel('The password confirmation doesn’t match.')
       setAlertMsg('Password mismatch')
       setOpenFlash(true)
-      setAlertColor('success')
+      setAlertColor('fail')
 
     }
   }
@@ -240,6 +248,8 @@ const MemberSignInComponent = () => {
                     message: 'Please enter a valid email',
                   },
                 })}
+                type="email"
+                disabled="true"
                 margin="normal"
                 placeholder="Email"
                 error={errors.email && isSubmit}

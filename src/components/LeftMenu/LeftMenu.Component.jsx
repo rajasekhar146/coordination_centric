@@ -428,7 +428,6 @@ const getMenuList = role => {
 }
 const currentUser = authenticationService.currentUserValue
 const role = get(currentUser, ['data', 'data', 'role'], '')
-console.log('Left Menu', currentUser, role)
 const menus = getMenuList(role)
 
 const LeftMenuComponent = () => {
@@ -439,7 +438,6 @@ const LeftMenuComponent = () => {
   console.log('Menus filtered:', filteredMenus)
   const [newMenus, setMenus] = useState([])
   useEffect(() => {
-    console.log('useEffect')
     setMenus(filteredMenus)
   }, [filteredMenus])
   return newMenus.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
