@@ -217,6 +217,21 @@ function ViewAppointmentComponent() {
             </p>
           )}
         </div>
+        {role == 'patient' &&
+        <div className="row-details">
+        <p className="row-title">Speciality</p>
+        <p className="row-data">
+          {appointmentList.data?.speciality.map((d , index) => (
+            <span> {d + " "}
+            {index != (appointmentList.data?.speciality.length - 1) &&
+            <span> , </span>
+            }
+             </span>
+            
+          ))}
+        </p>
+      </div>
+         }
 
         <div className="row-details">
           <p className="row-title">Primary Time</p>
@@ -235,14 +250,18 @@ function ViewAppointmentComponent() {
         <div className="row-details">
           <p className="row-title">Previous Health Condition</p>
           <p className="row-data">
-            {appointmentList.data?.healthinfo[0]?.problems.map(d => (
-              <span> {d} </span>
+            {appointmentList.data?.healthinfo[0]?.problems.map((d, index) => (
+              <span> {d + " "} 
+              {index != (appointmentList.data?.healthinfo[0]?.problems.length - 1) &&
+            <span> , </span>
+            } </span>
             ))}
           </p>
         </div>
-        {role == 'patient' &&
+       
+       
           <div className="row-details">
-            <p className="row-title">Specialty</p>
+            <p className="row-title">Past Medical Reports</p>
             <p className="row-data">
               {documentsArray.map(docs => (
                 <span className="docs-view">
@@ -263,7 +282,7 @@ function ViewAppointmentComponent() {
               ))}
             </p>
           </div>
-        }
+        
         {
           (role == 'doctor' || role == 'patient') &&
 
@@ -288,12 +307,12 @@ function ViewAppointmentComponent() {
                     {d.from == userId && (
                       <p>
                         <img
-                          src={recieverImg}
+                          src={senderImg}
                           alt="Profile"
                           className="nb__chat__image left_img"
                         />
                         <div className="from_chat chat__box">
-                          {d.message}
+                        <span className="from_msg">  {d.message}</span>
                         <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
                       </p>
@@ -301,12 +320,12 @@ function ViewAppointmentComponent() {
                     {d.from != userId && (
                       <p >
                         <div className="to_chat chat__box">
-                          {d.message}
+                        <span className="from_msg">  {d.message}</span>
                         <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
                         </div>
 
-                        <img
-                          src={senderImg}
+                        <img 
+                          src={recieverImg}
                           alt="Profile"
                           className="nb__chat__image right_img"
                         />
@@ -318,7 +337,7 @@ function ViewAppointmentComponent() {
             }
             {type == 'upcoming' &&
               <div className="send_message_textbox">
-                <input className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
+                <textarea className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
                   value={inputValue} onInput={e => setInputValue(e.target.value)}
                 />
                 <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />

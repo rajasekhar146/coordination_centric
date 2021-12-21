@@ -91,7 +91,9 @@ const ConfimationAppointment = props => {
                 startTime: element?.startTime,
                 endTime: element?.endTime,
                 doctorName : element.doctorId?.first_name + " " + (element?.doctorId?.last_name),
-                doctorGender: element?.doctorId?.gender
+                doctorGender: element?.doctorId?.gender,
+                primayDate: element.slotMapping && element.slotMapping.startTime ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                primaryTime: (element.slotMapping && element.slotMapping.startTime  ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element.slotMapping && element.slotMapping.endTime ? moment(element.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : '')
             }
             setSecondarySlots(recordNew)
         } else {
@@ -173,9 +175,16 @@ const ConfimationAppointment = props => {
                     <span className={activeTab === 1 ? 'io__active__primary' : 'io__nonactive__primary'}>
                         <CircleIcon sx={{ color: activeTab === 'primary' ? '#E42346' : '#DCDCDC' }} />
                     </span>
+                    { from == 'notification' &&
+                    <label className="io_user_name">
+                        {`${secondarySlots && secondarySlots.primayDate} ${secondarySlots && secondarySlots.primaryTime}`}
+                    </label>
+                    }
+                    { from != 'notification' &&
                     <label className="io_user_name">
                         {`${selectedAppointment.date} ${selectedAppointment.time}`}
                     </label>
+                    }
                 </div>
 
             </div>

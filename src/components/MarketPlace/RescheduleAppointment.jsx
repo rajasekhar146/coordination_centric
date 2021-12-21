@@ -42,7 +42,7 @@ const confirmAppointment = {
 
 const RescheduleAppointment = () => {
   const appointmentDetails = useSelector(state => state.appointmentDetails)
-
+  const [type, setType] = useState();
   const [isOpenConfirmPopup, setIsOpenConfirmPopup] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
   const dispatch = useDispatch()
@@ -61,6 +61,11 @@ const RescheduleAppointment = () => {
     }
     dispatch(primaryAppointmentDate(defaultValue))
     dispatch(secondaryAppointmentDate(defaultValue))
+    if(appointmentDetails.module_slug){
+      setType('fromNotification')
+    }else{
+      setType('rescheduleByPatient')
+    }
   }, [])
   return (
     <div className="od__main__div">
@@ -76,9 +81,16 @@ const RescheduleAppointment = () => {
           >
             <ArrowBackIosNewIcon style={{ fontSize: '10', marginRight: '4' }} /> Back
           </Button>
+          { appointmentDetails.from && 
+        <h5 className="orgTitle">
+          {`${appointmentDetails?.gender === 'Male' ? 'Mr.' : 'Ms.'} ${ appointmentDetails.from?.first_name + " " + (appointmentDetails?.from?.last_name)}`}
+          </h5> 
+          }
+          {!appointmentDetails.from && 
           <h5 className="orgTitle">
-            {`${appointmentDetails.gender === 'male' ? 'Mr.' : 'Ms.'} ${appointmentDetails.name}`}
+        {`${appointmentDetails.gender === 'male' ? 'Mr.' : 'Ms.'} ${appointmentDetails.name}`}
           </h5>
+          }
         </div>
       </div>
       <div className="od__row">
@@ -88,7 +100,7 @@ const RescheduleAppointment = () => {
         </div>
       </div>
       <NavMonthYearComponent />
-      <WeekDaysViewComponent appointmentDetails={appointmentDetails} type="rescheduleByPatient" />
+      <WeekDaysViewComponent appointmentDetails={appointmentDetails} type={type} />
       {/* <div className="io__row">
                 <div className="io_next_btn">
                     <div className="io__approve">
