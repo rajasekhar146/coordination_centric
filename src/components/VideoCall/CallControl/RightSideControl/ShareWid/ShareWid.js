@@ -28,10 +28,10 @@ export default function ShareWid({toggleShare, toggleShareFun, setToggleShare}) 
     }
 
     return (
-        <div class="share-wrap">
+        <div className="share-wrap">
             {
                 toggleShare ? (
-                                    <div class="share-dropdown-wrap">
+                                    <div className="share-dropdown-wrap">
                                             <ul className="share-list">
                                                 <li onClick={()=>selectShare()}>
                                                     <div className="icon-wrp">

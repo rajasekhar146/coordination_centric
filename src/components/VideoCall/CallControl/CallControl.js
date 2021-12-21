@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import LeftSideControl from './LeftSideControl/LeftSideControl';
 import RightSideControl from './RightSideControl/RightSideControl';
 import LeaveRoomButton from './LeaveRoomButton';
@@ -21,8 +21,20 @@ export default function CallControl({
   setToggleShare,
   room,
   setRoom,
-  redireactToDashboard
+  redireactToDashboard,
+
+  meetingStartTime,
+  meetingEndTime,
+  meetingDuration,
+  meetingRemainingTime,
+  setMeetingStartTime,
+  setMeetingEndTime,
+  setMeetingDuration,
+  setMeetingRemainingTime,
+  setCountDownResultAction
 }) {
+    useEffect(() => {
+    },[])
 
     const videoCallReducer = useSelector(state => state.videoCallReducer);
     return (
@@ -41,7 +53,7 @@ export default function CallControl({
                             />
                             
                         <RightSideControl
-                         redireactToDashboard={redireactToDashboard}
+                           redireactToDashboard={redireactToDashboard}
                            setToggleChat={setToggleChat}
                            togglePatientRecordsFun={togglePatientRecordsFun}
                            toggleChatFun={toggleChatFun}
@@ -53,6 +65,15 @@ export default function CallControl({
                            toggleShareFun={toggleShareFun}
                            setToggleShare={setToggleShare}
                            room={room}
+                            meetingStartTime={meetingStartTime}
+                            meetingEndTime={meetingEndTime}
+                            meetingDuration={meetingDuration}
+                            meetingRemainingTime={meetingRemainingTime}
+                            setMeetingStartTime={setMeetingStartTime}
+                            setMeetingEndTime={setMeetingEndTime}
+                            setMeetingDuration={setMeetingDuration}
+                            setMeetingRemainingTime={setMeetingRemainingTime}
+                            setCountDownResultAction={setCountDownResultAction}
                         />
                     </div>
                     )}

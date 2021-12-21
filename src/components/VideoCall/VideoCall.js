@@ -15,7 +15,9 @@ import {setIdentity,
         setVideoTokenErrorMsz,
         setVideoCallDuration,
         setUser,
-        setRoomConnect
+        setRoomConnect,
+        setVideoApiresponce,
+        setCountDownResult
         } from '../../redux/actions/video-call-actions';
 import { connectToRoom, getTokenFromTwilio } from './utils/TwilioUtils';
 import Overlay from './Overlay';
@@ -25,10 +27,17 @@ import VideoAside from './VideoAside/VideoAside';
 import {useSelector,useDispatch} from 'react-redux';
 import { Provider } from 'react-redux'
 import store from '../../redux/store';
-import './VideoCall.css';
 import {v4 as uuidv4} from 'uuid';
 
-
+import SocketIoComponent from './SocketIoComponent/SocketIoComponent';
+import io from "socket.io-client";
+import './VideoCall.css';
+import * as env from '../../environments/environment';
+import { authHeader } from '../../helpers';
+const apiURL = env.environment.apiBaseUrl;
+const axiosConfig = {
+  headers: authHeader(),
+}
 const  VideoCallWidget=({
   isRoomConnect,
   identity,
@@ -36,6 +45,7 @@ const  VideoCallWidget=({
   isFullScreen,
   showOverlay,
   user,
+  videoApiResponce,
   setRoomIdAction,
   setIdentityAction,
   setTwilioAccessTokenAction,
@@ -44,8 +54,18 @@ const  VideoCallWidget=({
   setVideoTokenErrorMszAction,
   setVideoCallDurationAction,
   setUserAction,
-  setRoomConnectAction
+  setRoomConnectAction,
+  setVideoApiresponceAction,
+  countDownResult,
+  setCountDownResultAction
   })=>{
+
+    //const [socket,setSocket]=useState(null);
+    const [meetingStartTime,setMeetingStartTime]=useState({date:null});
+    const [meetingEndTime,setMeetingEndTime]=useState({date:null});
+    const [meetingDuration,setMeetingDuration]=useState();
+    const [meetingRemainingTime,setMeetingRemainingTime]=useState(0);
+
   const watingList = [
     {
       img:"John Doe",
@@ -70,11 +90,11 @@ const userNotLogin =(setVideoTokenErrorMszAction)=>{
       let meetingUrlSplit = meetingUrl.split('/');
       setRoomIdAction(meetingUrlSplit[2]);
       try{
-        let user =  JSON.parse(localStorage.getItem('currentUser'));
-        let userFirstName = user.data.data.first_name;
-        let userRole =  user.data.data.role;
-        let userId =  user.data.data._id;
-        let userImg =  user.data.data.profilePic;
+        let userLocal =  JSON.parse(localStorage.getItem('currentUser'));
+        let userFirstName = userLocal.data.data.first_name;
+        let userRole =  userLocal.data.data.role;
+        let userId =  userLocal.data.data._id;
+        let userImg =  userLocal.data.data.profilePic;
 
         let applicationUser = {...user}
         applicationUser.id =userId;
@@ -89,10 +109,18 @@ const userNotLogin =(setVideoTokenErrorMszAction)=>{
         }
         if(userRole === "doctor"){
           applicationUser.role = "doctor";
-          setUserAction(applicationUser)
+          setUserAction(applicationUser);
         }
         
-         getTokenFromTwilio(meetingUrlSplit[2],userFirstName,setTwilioAccessTokenAction,setVideoTokenErrorMszAction,setVideoCallDurationAction,setRoomConnectAction)
+         getTokenFromTwilio(meetingUrlSplit[2],
+          userFirstName,
+          setTwilioAccessTokenAction,
+          setVideoTokenErrorMszAction,
+          setVideoCallDurationAction,
+          setRoomConnectAction,
+          setVideoApiresponceAction,
+          setMeetingDuration,
+          )
          setShowVideoCallMeetingAction(true);
          
          
@@ -149,53 +177,74 @@ const userNotLogin =(setVideoTokenErrorMszAction)=>{
 const closeChatFun = ()=>{
   setToggleChat(false)
   }
+//-----------------------------------------------------
+// socketIOClient.connect()
+const SocketEventNames = {
+  JOIN:'join',
+  LEAVE:'leave',
+  SUBSCRIBE_WAITING_ROOM:'subscribe_to_waiting_room',
+  UNSUBSCRIBE_WAITING_ROOM:'unsubscribe_to_waiting_room',
+  WAITING_ROOM_DATA:'waiting_room_data',
+  MEETING_DATA:'meeting_data'
 
-    useEffect(() => {
+}
+const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
+  console.log("Join canned>>>>>>>>>>>>>>>>>>", socket,authToken,appointmentId,participantId)
+  socket.emit(SocketEventNames.JOIN,{
+      authToken,
+      appointmentId,
+      participantId
+  },(data)=>{
+      console.log('join reply:',data);
+      if(data){
+        setMeetingEndTime({...meetingEndTime,date:new Date(data.endTime)});
+      }
+  });
+};
+//-----------------------------------------------------
+    useEffect(async() => {
       initialVideoCallData();
+      //-------------------------------------------------------
+      let socket = io.connect(apiURL,{transports:['websocket']});
+      socket.on("connect", () => {
+        console.log(`Connected to server`,socket.id);
+          let currentUserLocal =  JSON.parse(localStorage.getItem("currentUser"));
+          const participantId = currentUserLocal.data.data._id;
+          const jwt = currentUserLocal.data.token;
+          const appointmentId = window.location.pathname.split("/")[2]; //of current meeting
+          
+          if(appointmentId && participantId){
+            sendJoinEvent(socket,jwt,appointmentId,participantId);
+          }
+          socket.emit(SocketEventNames.SUBSCRIBE_WAITING_ROOM,{authToken:jwt});
+      });
+      
+      socket.on("disconnect", () => {
+        console.log(`DisConnected to server`,socket.id);
+      });    
+      
+      socket.on(SocketEventNames.MEETING_DATA, (data) => {
+        console.log("meeting_data:",data);
+        if(data){
+          setMeetingEndTime({...meetingEndTime,date:new Date(data.endTime)});
+        }
+      });    
+      
+      socket.on(SocketEventNames.WAITING_ROOM_DATA, (data) => {
+        console.log("waiting room data:",data);
+      });
+      //-------------------------------------------------------
+      
     },[])
-
-  
-    // ReactDOM.render(
-    //   <>
-    
-    //   <Provider store={store}>
-    //                     <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
-    //                       <div className="full-screen" onClick={toggleFullScreen}> 
-    //                           <FullscreenIcon/>
-    //                       </div>
-    //                                                 <CallControl
-    //                                                 room={room}
-    //                                                 setRoom={setRoom}
-    //                                                 watingList={watingList}
-    //                                                 toggleWatingList={toggleWatingList}
-    //                                                 setToggleWatingList={setToggleWatingList}
-    //                                                 toggleWatingListHandel={toggleWatingListHandel}
-    //                                                 togglePatientRecordsFun={togglePatientRecordsFun}
-    //                                                 toggleChatFun={toggleChatFun}
-    //                                                 setToggleChat={setToggleChat}
-    //                                                 toggleExtend={toggleExtend}
-    //                                                 toggleExtendFun={toggleExtendFun}
-    //                                                 setToggleExtend={setToggleExtend}
-    //                                                 toggleShare={toggleShare}
-    //                                                 toggleShareFun={toggleShareFun}
-    //                                                 setToggleShare={setToggleShare}
-    //                                                 roomToken={setToggleShare}
-    //                                                 redireactToDashboard={redireactToDashboard}
-    //                                                 />
-    //                                                 <VideoSection room={room} setRoom={setRoom}/>
-    //                                                 { toggleChat && <Chat closeChatFun={closeChatFun}/> }
-    //                                                 { togglePatientRecords && (<div className="video-call-aside-wrp"> <VideoAside roomId={roomId} /> </div>) }
-    //                                                 {/* {showOverlay && <Overlay/>} */}
-    //                                             </div>
-    //   </Provider>
-    //   </>
-    //     ,document.getElementById("video_portal"));
+ 
         return(<>
          <div id={isFullScreen ? 'min-screen':'full-screen'} className="room_container">
                           {/* <div className="full-screen" onClick={toggleFullScreen}> 
                               <FullscreenIcon/>
                           </div> */}
-                                                    <CallControl
+
+                         
+                                                  <CallControl
                                                     room={room}
                                                     setRoom={setRoom}
                                                     watingList={watingList}
@@ -212,6 +261,18 @@ const closeChatFun = ()=>{
                                                     toggleShareFun={toggleShareFun}
                                                     setToggleShare={setToggleShare}
                                                     roomToken={setToggleShare}
+                                                    countDownResult={countDownResult}
+
+                                                    meetingStartTime={meetingStartTime}
+                                                    meetingEndTime={meetingEndTime}
+                                                    meetingDuration={meetingDuration}
+                                                    meetingRemainingTime={meetingRemainingTime}
+
+                                                    setMeetingStartTime={setMeetingStartTime}
+                                                    setMeetingEndTime={setMeetingEndTime}
+                                                    setMeetingDuration={setMeetingDuration}
+                                                    setMeetingRemainingTime={setMeetingRemainingTime}
+                                                    setCountDownResultAction={setCountDownResultAction}
                                                     />
                                                     <VideoSection room={room} setRoom={setRoom}/>
                                                     { toggleChat && <Chat closeChatFun={closeChatFun}/> }
@@ -238,6 +299,8 @@ const mapActionsToProps=(dispatch)=>{
       setShowVideoCallMeetingAction:(isShowVideoCallMeeting)=> dispatch(setShowVideoCallMeeting(isShowVideoCallMeeting)),
       setUserAction:(user)=> dispatch(setUser(user)),
       setRoomConnectAction:(roomConnect)=> dispatch(setRoomConnect(roomConnect)),
+      setVideoApiresponceAction:(videoApiResponce)=> dispatch(setVideoApiresponce(videoApiResponce)),
+      setCountDownResultAction:(countDownResult)=> dispatch(setCountDownResult(countDownResult))
     }
 }
 
