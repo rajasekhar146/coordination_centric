@@ -54,10 +54,16 @@ const RescheduuleAppointmentComponent = props => {
         clickCloseButton,
         selectedAppointment,
         setAlertColor,
-        getAppointmentList
+        getAppointmentList,
+        from,
+        setIsRescheduleClicked
+
     } = props
 
     const selectNewDates = () => {
+        if(from == 'notification'){
+            setIsRescheduleClicked(false)
+        }
         history.push('/selectdates')
     }
 

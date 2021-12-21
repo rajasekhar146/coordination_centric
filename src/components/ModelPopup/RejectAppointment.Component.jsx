@@ -100,8 +100,10 @@ const RejectAppointmentComponent = props => {
                 appointmentid: element?._id,
                 startTime: element?.startTime,
                 endTime: element?.endTime,
-                doctorName : element?.doctorId.first_name + " " + (element?.doctorId?.last_name),
+                doctorName : element?.doctorId?.first_name + " " + (element?.doctorId?.last_name),
                 doctorGender: element?.doctorId?.gender,
+                primayDate: element.slotMapping && element.slotMapping.startTime ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                primaryTime: (element.slotMapping && element.slotMapping.startTime  ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element.slotMapping && element.slotMapping.endTime ? moment(element.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : ''),
             }
             setSecondarySlots(recordNew)
         } else {
@@ -154,13 +156,14 @@ const RejectAppointmentComponent = props => {
                     <div style={{ width: '33%' }} className="io_slot_selector">
                         <div>
                             <label className="io_user_label">
-                            {from == 'notification' ? 'Doctor' : 'Patient' }   
+                            {role == 'doctor' ? 'Patient' : 'Doctor'}
                             </label>
                         </div>
                         {from == 'notification' && 
                         <div>
                             <label className="io_user_name">
-                                {`${secondarySlots?.doctorGender === 'male' ? 'Mr.' : 'Ms.'} ${secondarySlots?.doctorName}`}
+                        {selectedAppointment?.from?.gender === 'Male' ? 'Mr.' : 'Ms.'}
+                        {selectedAppointment?.from?.first_name + " " + selectedAppointment?.from?.last_name}
                             </label>
                         </div>
                         }
@@ -173,6 +176,21 @@ const RejectAppointmentComponent = props => {
                         }
 
                     </div>
+                    {from == 'notification' &&
+                    <div style={{ width: '33%' }} className="io_slot_selector">
+                     <div>
+                         <label className="io_user_label">
+                             Primary - Date and Time
+                         </label>
+                     </div>
+                     <div>
+                         <label className="io_user_name">
+                             
+                             {`${secondarySlots && secondarySlots.primayDate} ${secondarySlots && secondarySlots.primaryTime}`}
+                         </label>
+                     </div>
+                 </div>}
+                        {from != 'notification' &&
                     <div style={{ width: '33%' }} className="io_slot_selector">
                         <div>
                             <label className="io_user_label">
@@ -180,11 +198,11 @@ const RejectAppointmentComponent = props => {
                             </label>
                         </div>
                         <div>
-                            <label className="io_user_name">
-                                {`${selectedAppointment.date} ${selectedAppointment.time}`}
+                            <label className="io_user_name">                                 {`${selectedAppointment.date} ${selectedAppointment.time}`}
                             </label>
                         </div>
                     </div>
+                    }
                     {get(secondarySlots, ['startTime'], null) && get(secondarySlots, ['endTime'], null)
                         && <div
                         style={{ width: '33%' }}

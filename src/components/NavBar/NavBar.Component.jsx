@@ -682,6 +682,8 @@ const handleNextPopup = () => {
                                 setSubLabel={setSubLabel}
                                 setAlertColor={setAlertColor}
                                 getAppointmentList={getAppointmentList}
+                                from = "notification"
+                                setIsRescheduleClicked = {setIsRescheduleClicked}
                             />
                         </Box>
                     </Modal>
@@ -734,6 +736,8 @@ const handleNextPopup = () => {
                                 setSubLabel={setSubLabel}
                                 // handleNavigation={handleNavigation}
                                 getAppointmentList={getAppointmentList}
+                                setPatientReschedule = {setPatientReschedule}
+                                from = "notification"
                             />
                         </Box>
                     </Modal>
