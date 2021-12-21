@@ -82,13 +82,27 @@ const AddPatientRecord = props => {
     } = useForm()
     const [dateOfBirth, setDOB] = React.useState(null)
     const [errorMsg, setError] = useState('')
+    const [facilityName, setFacilityName] = useState('')
+
     const currentUser = authenticationService.currentUserValue
 
-    const organisationName = get(currentUser, ['data', 'data', 'first_name'], false)
+    const facilityId = get(currentUser, ['data', 'data', 'facility_id'], false)
+
+    const getFacilityDetials = () => {
+        memberService.getFacilityData(facilityId).then((data) => {
+            setFacilityName(get(data, ['data', 'data', 'facilityName'], ''))
+        }).catch(() => {
+
+        })
+    }
 
     useEffect(() => {
-        setValue('organization_name', organisationName)
+        getFacilityDetials()
     }, [])
+
+    useEffect(() => {
+        setValue('organization_name', facilityName)
+    }, [facilityName])
 
     const onSubmit = (data) => {
         memberService.addNewPatientRecord(data).then((res) => {
@@ -178,7 +192,7 @@ const AddPatientRecord = props => {
                                 <DatePicker
                                     value={dateOfBirth}
                                     openTo={new Date('1980/01/01')}
-                                    maxDate={new Date('12/31/1995')}
+                                    maxDate={new Date()}
                                     {...register('dob', {
                                         required: 'Dob is required.'
                                     })}

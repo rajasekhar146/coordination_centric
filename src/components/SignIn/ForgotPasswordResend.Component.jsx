@@ -34,6 +34,9 @@ const ForgotPasswordResend = props => {
     const [signinStoreData] = useStore(SigninStore);
     const [activeLink, setActiveLink] = useState(false)
     const [activeResend, setActiveResend] = useState(false)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [alertColor, setAlertColor] = useState('')
 
     const {
         email,
@@ -49,12 +52,17 @@ const ForgotPasswordResend = props => {
         SigninStore.load('RequestPassword', {
             email: email,
             successCallback: (data) => {
-                history.push('./forgotpasswordresend')
+                setOpenFlash(true)
+                setAlertMsg('Reset password link has been sent to your email')
+                setAlertColor('success')
             }
         })
     }
 
 
+    const handleCloseFlash = () => {
+        setOpenFlash(false)
+    }
 
 
 
@@ -143,7 +151,12 @@ const ForgotPasswordResend = props => {
                         </div>
                     </div>
                 </div>
-
+                <Alert
+                    handleCloseFlash={handleCloseFlash}
+                    alertMsg={alertMsg}
+                    openflash={openflash}
+                    // subLebel={subLabel}
+                    color={alertColor} />
             </form>
         </div>
     )
