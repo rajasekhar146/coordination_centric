@@ -23,12 +23,15 @@ const PatientReschedule = props => {
         selectedAppointment,
         setIsRescheduleClicked,
     } = props
-
     const [isChecked, setIsChecked] = useState(true)
 
 
     const handleReSchedule = async () => {
-        history.push('reschedule_appointment')
+        history.push({
+            pathname: 'reschedule_appointment',
+            state: { id: selectedAppointment?.from?._id, name: selectedAppointment.from.first_name, appointmentDetails:selectedAppointment },
+          })
+
     }
 
 

@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import moment from 'moment'
 import Box from '@mui/material/Box'
+import { authenticationService } from '../../services'
 
 const styles = theme => ({
     // root: {
@@ -61,7 +62,8 @@ const rejectPopupWithoutSecondary = {
     borderRadius: 3,
     p: 2,
 }
-
+const currentUser = authenticationService.currentUserValue;
+const role = get(currentUser, ['data', 'data', 'role'], '')
 
 
 const RejectAppointmentComponent = props => {
@@ -72,10 +74,11 @@ const RejectAppointmentComponent = props => {
         clickCloseButton,
         selectedAppointment,
         setIsRescheduleClicked,
+        setPatientReschedule,
         setAlertColor,
-        getAppointmentList
+        getAppointmentList,
+        from,
     } = props
-
     const [secondarySlots, setSecondarySlots] = useState(null)
     const [selectedSlot, setSelectedSlot] = useState(null)
 
@@ -95,7 +98,9 @@ const RejectAppointmentComponent = props => {
                 _id: element?.userId?._id,
                 appointmentid: element?._id,
                 startTime: element?.startTime,
-                endTime: element?.endTime
+                endTime: element?.endTime,
+                doctorName : element?.doctorId.first_name + " " + (element?.doctorId?.last_name),
+                doctorGender: element?.doctorId?.gender,
             }
             setSecondarySlots(recordNew)
         } else {
@@ -119,6 +124,15 @@ const RejectAppointmentComponent = props => {
 
     }
 
+    const handleReschedule = () =>{
+        if(role == 'doctor') {
+            setIsRescheduleClicked(true)
+        }else{
+            setPatientReschedule(true)
+        }
+        clickCloseButton()
+    }
+
 
 
     return (
@@ -139,14 +153,23 @@ const RejectAppointmentComponent = props => {
                     <div style={{ width: '33%' }} className="io_slot_selector">
                         <div>
                             <label className="io_user_label">
-                                Patient
+                            {from == 'notification' ? 'Doctor' : 'Patient' }   
                             </label>
                         </div>
+                        {from == 'notification' && 
+                        <div>
+                            <label className="io_user_name">
+                                {`${secondarySlots?.doctorGender === 'male' ? 'Mr.' : 'Ms.'} ${secondarySlots?.doctorName}`}
+                            </label>
+                        </div>
+                        }
+                         {from != 'notification' && 
                         <div>
                             <label className="io_user_name">
                                 {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
                             </label>
                         </div>
+                        }
 
                     </div>
                     <div style={{ width: '33%' }} className="io_slot_selector">
@@ -192,10 +215,7 @@ const RejectAppointmentComponent = props => {
                         </div>
                         <div className="io__cancel">
                             <Button className="io__cancel__btn io_reschedule_btn"
-                                onClick={() => {
-                                    setIsRescheduleClicked(true)
-                                    clickCloseButton()
-                                }}>
+                                onClick={handleReschedule}>
                                 Re-schedule
                             </Button>
                         </div>

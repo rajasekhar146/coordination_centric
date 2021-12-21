@@ -77,7 +77,7 @@ const WeekDaysViewComponent = props => {
       case 'doctor':
         return get(currentUser, ['data', 'data', '_id'], '')
       default:
-        return appointmentDetails._id
+        return appointmentDetails.from ? appointmentDetails.from._id : appointmentDetails._id  
     }
   }
 
