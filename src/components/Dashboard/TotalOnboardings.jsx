@@ -98,7 +98,7 @@ const options = {
     ],
 }
 
-const OrganizationOnboardings = (props) => {
+const TotalOnboardings = (props) => {
     const {
         classes,
         checkDoctorOrPatent
@@ -115,7 +115,7 @@ const OrganizationOnboardings = (props) => {
             {/* <CardContent > */}
                 <Typography component="div" variant="h6">
                     <label className="db_org_graph">
-                        Organization Onboardings
+                    Total Onboardings
                     </label>
 
 
@@ -133,4 +133,4 @@ const OrganizationOnboardings = (props) => {
     )
 }
 
-export default withStyles(styles)(OrganizationOnboardings)
+export default withStyles(styles)(TotalOnboardings)
