@@ -116,7 +116,7 @@ const UpcomongAppointmentComponent = props => {
     const [limit, setLimit] = useState(0)
     const [skip, setSkip] = useState(20)
     const [isLoading, setIsLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
 

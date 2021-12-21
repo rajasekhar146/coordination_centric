@@ -221,12 +221,12 @@ function ViewAppointmentComponent() {
         <div className="row-details">
           <p className="row-title">Primary Time</p>
           <p className="row-data">
-            {moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}
+          {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
           </p>
         </div>
         <div className="row-details">
           <p className="row-title">Secondary Time</p>
-          <p className="row-data">{secondaryTimings}</p>
+          <p className="row-data">{`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
         </div>
         <div className="row-details">
           <p className="row-title">Reason for appointment</p>

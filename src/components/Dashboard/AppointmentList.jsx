@@ -56,15 +56,16 @@ const AppointmentList = (props) => {
 
     useEffect(() => {
         let appointmentsArray = [];
+        const timezoneDiff = (new Date()).getTimezoneOffset()
         appointmentListArray.forEach(element => {
             let recordNew = {};
             if (role === "doctor") {
                 recordNew = {
-                    name: element?.userId?.first_name+ " " + (element?.userId?.last_name),
+                    name: element?.userId?.first_name + " " + (element?.userId?.last_name),
                     profile: element?.userId?.profilePic,
                     location: 'Online',
-                    date: element?.startTime ? moment(element?.startTime).format('ddd, Do MMM') : "",
-                    time: (element.startTime ? moment(element.startTime).format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).format('h:mm a') : ''),
+                    date: element?.startTime ? moment(element?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                    time: (element.startTime ? moment(element.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : ''),
                     status: element.status,
                     gender: element?.userId?.gender,
                     _id: element.userId._id,
@@ -75,11 +76,11 @@ const AppointmentList = (props) => {
 
             } else {
                 recordNew = {
-                    name: element?.doctorId?.first_name + " " + element?.doctorId?.last_name ,
+                    name: element?.doctorId?.first_name + " " + element?.doctorId?.last_name,
                     profile: element?.doctorId?.profilePic,
                     location: 'Online',
-                    date: moment(element.startTime).format('ddd, Do MMM'),
-                    time: element.startTime ? moment(element.startTime).format('h:mm a') : "" + " - " + element.endTime ? moment(element.endTime).format('h:mm a') : "",
+                    date: moment(element.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'),
+                    time: (element.startTime ? moment(element.startTime).add(timezoneDiff, 'minutes').format('hh:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).add(timezoneDiff, 'minutes').format('hh:mm a') : ''),
                     status: element.status,
                     gender: 'male',
                     _id: element?.doctorId?._id,

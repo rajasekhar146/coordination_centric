@@ -32,6 +32,7 @@ import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import get from 'lodash.get'
 import Alert from '../Alert/Alert.component'
+import { authenticationService } from '../../services'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
@@ -87,6 +88,9 @@ const OrganizationViewComponent = (props) => {
     const [membersList, setMembersList] = useState([])
     const [collaboratorList, setCollaboratorList] = React.useState([])
     const [patientList, setPatientList] = React.useState([])
+    const currentUser = authenticationService.currentUserValue
+    const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
+    const role = get(currentUser, ['data', 'data', 'role'], false)
 
 
 
@@ -165,10 +169,12 @@ const OrganizationViewComponent = (props) => {
                             onClick={() => {
                                 setOpenInviteCollaborator(true)
                             }}
-                            className="od_add_member_btn">
+                            className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
+                        >
                             &nbsp;&nbsp; Add Collaborator
                         </Button>
                     </div>
+                    
                 )
                 break
             default:
