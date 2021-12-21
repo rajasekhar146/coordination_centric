@@ -68,6 +68,7 @@
     "react-time-picker-input": "^2.0.5",
     "redux": "^4.1.2",
     "rxjs": "^7.3.1",
+    "socket.io-client": "^2.2.0",
     "twilio": "^3.71.2",
     "twilio-video": "^2.18.1",
     "use-file-upload": "^1.0.11",
