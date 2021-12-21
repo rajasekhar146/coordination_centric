@@ -29,7 +29,7 @@ import LastLoggedIn from './LastLoggedIn'
 import ReadingsFromLastweek from './ReadingsFromLastweek'
 import TotalAppointments from './TotalAppointments'
 import OrderstoExpireinXdays from './OrderstoExpireinXdays'
-import OrganizationOnboardings from './OrganizationOnboardings'
+import TotalOnboardings from './TotalOnboardings'
 import { dashboardService } from '../../services'
 import AppointmentList from './AppointmentList'
 import history from '../../history'
@@ -220,14 +220,20 @@ const componenetsMap = {
 
     },
   },
-  OrganizationOnboardings: {
-    component: OrganizationOnboardings,
+  // OrganizationOnboardings: {
+  //   component: OrganizationOnboardings,
+  //   componentProps: {
+
+  //   },
+  // },
+  AppointmentList: {
+    component: AppointmentList,
     componentProps: {
 
     },
   },
-  AppointmentList: {
-    component: AppointmentList,
+  TotalOnboardings: {
+    component: TotalOnboardings,
     componentProps: {
 
     },

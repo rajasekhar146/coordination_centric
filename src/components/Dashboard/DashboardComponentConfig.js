@@ -6,7 +6,7 @@ const config = {
         'AcitveDoctors',
         'UnassignedReadings',
         // 'OtherUsers',
-        'OrganizationOnboardings'
+        'TotalOnboardings'
     ],
     admin: [
         'TotalAppointments',
@@ -17,7 +17,7 @@ const config = {
 
         // 'Readings',
         // 'OrderstoExpireinXdays',
-        'OrganizationOnboardings'
+        'TotalOnboardings'
     ],
     doctor: [
         'ActivePatient',

@@ -92,17 +92,26 @@ const DayViewComponent = props => {
 
     //if (primaryDate.Day === null || primaryDate.Day === selectedDate.Day || primaryDate.Day === newDay) {
     if (
-      primaryDate.Day === null ||
+      (primaryDate.Day === null && secondaryDate.Day === null) ||
       (primaryDate.Day === tSelectedDate.Day && primaryDate.timings.startTime === tSelectedDate.timings.startTime)
     ) {
       console.log('cond >> selectedDate 1', selectedDate)
       dispatch(primaryAppointmentDate(selectedDate))
     } else if (
-      secondaryDate.Day === null ||
+      (primaryDate.Day != null && secondaryDate.Day === null) ||
       (secondaryDate.Day === tSelectedDate.Day && secondaryDate.timings.startTime === tSelectedDate.timings.startTime)
     ) {
       console.log('cond >> selectedDate 2', selectedDate)
       dispatch(secondaryAppointmentDate(selectedDate))
+    } else if (primaryDate.Day === null && secondaryDate.Day != null) {
+      console.log('cond >> selectedDate 2', selectedDate)
+      dispatch(primaryAppointmentDate(selectedDate))
+    } else if (primaryDate.Day != null && secondaryDate.Day === null) {
+      console.log('cond >> selectedDate 2', selectedDate)
+      dispatch(secondaryAppointmentDate(selectedDate))
+    } else if (primaryDate.Day === null && secondaryDate.Day === null) {
+      console.log('cond >> selectedDate 2', selectedDate)
+      dispatch(primaryAppointmentDate(selectedDate))
     }
     // console.log('conditions 1 >> ',
     // newDay ,primaryDate.Day,
