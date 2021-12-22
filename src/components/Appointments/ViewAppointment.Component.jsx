@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
-import history from '../../history';
+import history from '../../history'
 import { useParams } from 'react-router-dom'
 import { appointmentService } from '../../services'
 import view_details from '../../assets/icons/download_icon.png'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import moment from 'moment'
-import galary_icon from '../../assets/icons/galary_icon.png';
-import get from 'lodash.get';
+import galary_icon from '../../assets/icons/galary_icon.png'
+import get from 'lodash.get'
 import { authenticationService } from '../../services'
 import CircleIcon from '@mui/icons-material/Circle'
 import sendIcon from '../../assets/icons/Vector.png'
@@ -15,28 +15,30 @@ import chatIcon from '../../assets/icons/chat_icon.png'
 import reject from '../../assets/icons/reject.png'
 import { memberService } from '../../services'
 function ViewAppointmentComponent() {
-
   const { id, type } = useParams()
-  const [appointmentList, setAppointmentList] = useState([]);
+  const [appointmentList, setAppointmentList] = useState([])
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const userId = get(currentUser, ['data', 'data', '_id'], '')
-  const [inputValue, setInputValue] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [documentsArray, setDocumentsArray] = useState([]);
-  const [toggleChat, setToggleChat] = useState(false);
-  const [senderUserId, setSenderUserId] = useState('');
+  const [inputValue, setInputValue] = useState('')
+  const [messages, setMessages] = useState([])
+  const [documentsArray, setDocumentsArray] = useState([])
+  const [toggleChat, setToggleChat] = useState(false)
+  const [senderUserId, setSenderUserId] = useState('')
   const [recieverUserId, setRecieverUserId] = useState('')
   const [senderImg, setSenderImg] = useState('')
-  const [recieverImg, setRecieverImg] = useState('');
-  const [showChat, setShowChat] = useState(false);
-  const timezoneDiff = (new Date()).getTimezoneOffset()
+  const [recieverImg, setRecieverImg] = useState('')
+  const [showChat, setShowChat] = useState(false)
+  const timezoneDiff = new Date().getTimezoneOffset()
   const [appointmentId, setAppointmentId] = useState(null)
+  const [primaryTimings, setPrimaryTimings] = useState(null)
   const [secondaryTimings, setSecondaryTimings] = useState(null)
+  const [secondaryDate, setSecondaryDate] = useState(null)
+  const [primaryDate, setPrimaryDate] = useState(null)
 
   useEffect(() => {
-    getAppointmentDetails();
-    getAppointmentChat();
+    getAppointmentDetails()
+    getAppointmentChat()
     if (type == 'history') {
       setShowChat(false)
     } else {
@@ -47,46 +49,57 @@ function ViewAppointmentComponent() {
   useEffect(async () => {
     if (appointmentId) {
       const res = await appointmentService.getSecondaryAppointment(appointmentId)
+      console.log('View App >> res', res)
       if (res.status === 200) {
         const element = get(res, ['data', 'data'], {})
-        setSecondaryTimings(moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + (moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')))
+        setPrimaryTimings(
+          moment(element?.slotMapping.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
+            ' - ' +
+            moment(element?.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
+        )
+        setSecondaryTimings(
+          moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
+            ' - ' +
+            moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
+        )
+        setPrimaryDate(moment(element?.slotMapping.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'))
+        setSecondaryDate(moment(element?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'))
+        // setSecondaryDate(moment(element?.slotMapping.endTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'))
       } else {
-
       }
     }
   }, [appointmentId])
 
-  const openImage = async (docs) => {
-    window.open(docs.url, '_blank');
+  const openImage = async docs => {
+    window.open(docs.url, '_blank')
   }
-  const getDocs = (documents) => {
-    const temp = [];
-    setDocumentsArray([]);
-    documents && documents.map(async (docs) => {
-      let file =
-        { "name": docs }
-      let res = await memberService.downloadFileUrl(file);
-      temp.push(res.data.data);
-      if (temp.length == documents.length) {
-        setDocumentsArray(temp);
-      }
-    })
+  const getDocs = documents => {
+    const temp = []
+    setDocumentsArray([])
+    documents &&
+      documents.map(async docs => {
+        let file = { name: docs }
+        let res = await memberService.downloadFileUrl(file)
+        temp.push(res.data.data)
+        if (temp.length == documents.length) {
+          setDocumentsArray(temp)
+        }
+      })
   }
   const getAppointmentDetails = async () => {
-    let res = await appointmentService.getAppointmentById(id);
+    let res = await appointmentService.getAppointmentById(id)
     if (res.data.data.doctorId == userId) {
       setSenderUserId(res.data.data.doctorId)
       setRecieverUserId(res.data.data.patientId)
       setSenderImg(res.data.data.profilePic)
       setRecieverImg(res.data.data.profilePicPatient)
-
     } else {
       setSenderUserId(res.data.data.patientId)
       setRecieverUserId(res.data.data.doctorId)
       setSenderImg(res.data.data.profilePicPatient)
       setRecieverImg(res.data.data.profilePic)
     }
-    setAppointmentList(res.data);
+    setAppointmentList(res.data)
     setAppointmentId(res.data?.data?.appointmentId)
     if (res.data.data.documents.length > 0) {
       getDocs(res.data.data.documents)
@@ -94,9 +107,9 @@ function ViewAppointmentComponent() {
   }
 
   const getAppointmentChat = async () => {
-    let chat = await appointmentService.getAppointmentChat(id);
-    setMessages(chat.data?.data?.messages);
-
+    let chat = await appointmentService.getAppointmentChat(id)
+    if (chat) setMessages(chat.data?.data?.messages)
+    else setMessages([])
   }
   const colorcodes = {
     accepted: '#12B76A',
@@ -104,7 +117,7 @@ function ViewAppointmentComponent() {
     cancelled: '#757500',
     declined: '#B42318',
     request_to_reschedule: '#F79009',
-    rescheduled: '#F79009'
+    rescheduled: '#F79009',
   }
 
   const getValue = val => {
@@ -139,7 +152,7 @@ function ViewAppointmentComponent() {
     setShowChat(!showChat)
   }
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = e => {
     if (e.key === 'Enter') {
       sendMessage()
     }
@@ -147,20 +160,19 @@ function ViewAppointmentComponent() {
   const sendMessage = async () => {
     if (inputValue.length > 0) {
       const msgRequest = {
-        "messages":
-          [{
-            "message": inputValue,
-            "from": senderUserId,
-            "to": recieverUserId
-          }]
+        messages: [
+          {
+            message: inputValue,
+            from: senderUserId,
+            to: recieverUserId,
+          },
+        ],
       }
 
-      let chat = await appointmentService.sendMessage(id, msgRequest);
-      getAppointmentChat();
+      let chat = await appointmentService.sendMessage(id, msgRequest)
+      getAppointmentChat()
       setInputValue('')
     }
-
-
   }
   return (
     <div className="view-app">
@@ -185,17 +197,16 @@ function ViewAppointmentComponent() {
             {getValue(appointmentList.data?.appointmentStatus)}
           </div>
         </div>
-        {appointmentList.data?.appointmentStatus === 'accepted'
-          && <div className="od__join_call"
+        {appointmentList.data?.appointmentStatus === 'accepted' && (
+          <div
+            className="od__join_call"
             onClick={() => {
               history.push(`/video-call/${appointmentList.data.appointmentId}`)
             }}
           >
             Join video call
           </div>
-
-        }
-
+        )}
       </div>
 
       <div className="summary-page">
@@ -204,10 +215,15 @@ function ViewAppointmentComponent() {
 
           {role == 'doctor' && (
             <p className="row-data flex-dr">
-              {get(appointmentList, ['data', 'profilePicPatient'], '') ?
+              {get(appointmentList, ['data', 'profilePicPatient'], '') ? (
                 <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
-                : <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image" />
-              }
+              ) : (
+                <img
+                  src={require('../../assets/icons/default_profile_image.png').default}
+                  alt="profile"
+                  className="nb__profile__image"
+                />
+              )}
               {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} /> */}
               <p className="mar-left-10">{appointmentList.data?.patientName}</p>
             </p>
@@ -220,43 +236,46 @@ function ViewAppointmentComponent() {
             </p>
           )}
         </div>
-        {role == 'patient' &&
+        {role == 'patient' && (
           <div className="row-details">
             <p className="row-title">Speciality</p>
             <p className="row-data">
               {appointmentList.data?.speciality.map((d, index) => (
-                <span> {d + " "}
-                  {index != (appointmentList.data?.speciality.length - 1) &&
-                    <span> , </span>
-                  }
+                <span>
+                  {' '}
+                  {d + ' '}
+                  {index != appointmentList.data?.speciality.length - 1 && <span> , </span>}
                 </span>
-
               ))}
             </p>
           </div>
-        }
-        {appointmentList.data?.appointmentStatus == 'accepted' &&
+        )}
+        {appointmentList.data?.appointmentStatus == 'accepted' && (
           <div className="row-details">
             <p className="row-title">Appointment Time</p>
             <p className="row-data">
-              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${
+                moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
+                ' - ' +
+                moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
+              }`}
             </p>
           </div>
-        }
-        {appointmentList.data?.appointmentStatus != 'accepted' &&
+        )}
+        {appointmentList.data?.appointmentStatus != 'accepted' && (
           <div className="row-details">
             <p className="row-title">Primary Time</p>
             <p className="row-data">
-              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+              {`${primaryDate} ${primaryTimings}`}
             </p>
           </div>
-        }
-        {appointmentList.data?.appointmentStatus != 'accepted' &&
+        )}
+        {appointmentList.data?.appointmentStatus != 'accepted' && (
           <div className="row-details">
             <p className="row-title">Secondary Time</p>
-            <p className="row-data">{`${moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
+            <p className="row-data">{`${secondaryDate} ${secondaryTimings}`}</p>
           </div>
-        }
+        )}
         <div className="row-details">
           <p className="row-title">Reason for appointment</p>
           <p className="row-data">{appointmentList.data?.appointmentReason}</p>
@@ -265,14 +284,14 @@ function ViewAppointmentComponent() {
           <p className="row-title">Previous Health Condition</p>
           <p className="row-data">
             {appointmentList.data?.healthinfo[0]?.problems.map((d, index) => (
-              <span> {d + " "}
-                {index != (appointmentList.data?.healthinfo[0]?.problems.length - 1) &&
-                  <span> , </span>
-                } </span>
+              <span>
+                {' '}
+                {d + ' '}
+                {index != appointmentList.data?.healthinfo[0]?.problems.length - 1 && <span> , </span>}{' '}
+              </span>
             ))}
           </p>
         </div>
-
 
         <div className="row-details">
           <p className="row-title">Past Medical Reports</p>
@@ -291,84 +310,80 @@ function ViewAppointmentComponent() {
                 />
                 <p className="align__img__name docs_name"> {docs.metadata.name}</p>
                 <p className="align__img__name img_size"> {docs.metadata.size}</p>
-
               </span>
             ))}
           </p>
         </div>
 
-        {
-          (role == 'doctor' || role == 'patient') &&
-
+        {(role == 'doctor' || role == 'patient') && (
           <div className="row-details">
             <p className="row-title">Chat</p>
 
             <div>
-              {type == 'history' && !showChat &&
-                <button className={messages.length <= 0 ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'} className="" disabled={messages.length <= 0} onClick={showChatDialog}>
+              {type == 'history' && !showChat && (
+                <button
+                  className={
+                    messages.length <= 0 ? 'evp__verify__btn_disabled show__chat__btn' : 'ac__back__btn show__chat__btn'
+                  }
+                  className=""
+                  disabled={messages.length <= 0}
+                  onClick={showChatDialog}
+                >
                   {messages.length > 0 && <img className="msg__icon" src={chatIcon} alt="upload" />}
-                  View Chat History</button>
-              }
-              {type == 'history' && showChat &&
+                  View Chat History
+                </button>
+              )}
+              {type == 'history' && showChat && (
                 <p className="close_chat" onClick={showChatDialog}>
                   <img className="chat__close__icon" src={reject} alt="reject" />
-                  Close Chat History</p>
-              }
-              {showChat &&
+                  Close Chat History
+                </p>
+              )}
+              {showChat && (
                 <div className="chat_content">
                   {messages.map(d => (
                     <div className="chat_body ">
                       {d.from == userId && (
                         <p>
-                          <img
-                            src={senderImg}
-                            alt="Profile"
-                            className="nb__chat__image left_img"
-                          />
+                          <img src={senderImg} alt="Profile" className="nb__chat__image left_img" />
                           <div className="from_chat chat__box">
-                            <span className="from_msg">  {d.message}</span>
+                            <span className="from_msg"> {d.message}</span>
                             <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
                           </div>
                         </p>
                       )}
                       {d.from != userId && (
-                        <p >
+                        <p>
                           <div className="to_chat chat__box">
-                            <span className="from_msg">  {d.message}</span>
+                            <span className="from_msg"> {d.message}</span>
                             <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
                           </div>
 
-                          <img
-                            src={recieverImg}
-                            alt="Profile"
-                            className="nb__chat__image right_img"
-                          />
+                          <img src={recieverImg} alt="Profile" className="nb__chat__image right_img" />
                         </p>
                       )}
                     </div>
                   ))}
                 </div>
-              }
-              {type == 'upcoming' &&
+              )}
+              {type == 'upcoming' && (
                 <div className="send_message_textbox">
-                  <textarea className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
-                    value={inputValue} onInput={e => setInputValue(e.target.value)}
+                  <textarea
+                    className="chat_input"
+                    placeholder="Write something..."
+                    onKeyDown={handleKeyDown}
+                    value={inputValue}
+                    onInput={e => setInputValue(e.target.value)}
                   />
                   <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
-
                 </div>
-              }
+              )}
             </div>
-
-
           </div>
-        }
+        )}
       </div>
     </div>
   )
-
 }
 
-
-export default ViewAppointmentComponent;
-
+export default ViewAppointmentComponent

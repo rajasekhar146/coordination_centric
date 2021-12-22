@@ -250,17 +250,18 @@ function getAppointmentById(id) {
     ) 
 }
 
-function getAppointmentChat(id){
-    let axiosConfig = {
-        headers: authHeader(),
-    }
-    return (
-        axios
-            .get(`${apiURL}/appointmentChat/getChatList?appointment_id=${id}`, axiosConfig)
-            .then(data => {
-                return data
-            })
-    ) 
+function getAppointmentChat(id) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return axios
+    .get(`${apiURL}/appointmentChat/getChatList?appointment_id=${id}`, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return null
+    })
 }
 
 function sendMessage(id, messageRequest){
