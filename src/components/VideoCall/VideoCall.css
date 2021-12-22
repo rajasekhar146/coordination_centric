@@ -54,7 +54,7 @@
   margin: 0 25PX;
 }
 .call-btn-wrp {
-  background-color: red;
+  background-color: #338d50;
   width: 103px;
   height: 103px;
   border-radius: 100%;
@@ -73,7 +73,7 @@
 }
 .call-btn-wrp.call-active{
   top: -87px;
-  background-color: #338d50;
+  background-color: red;
   width: 105px;
   height: 105px;
 }

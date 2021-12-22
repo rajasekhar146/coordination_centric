@@ -3,36 +3,39 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { ExtendWidService } from './ExtendWid.service';
 import {useSelector} from 'react-redux';
+import moment from 'moment';
 import "./ExtendWid.css";
 import TimerImg from  "./timer.png";
-export default function ExtendWid({toggleExtend, toggleExtendFun, setToggleExtend, meetingEndTime}) {
+export default function ExtendWid({toggleExtend, toggleExtendFun, setToggleExtend, meetingEndTime,apiMeetingEndTime}) {
+    const timezoneDiff = (new Date()).getTimezoneOffset();
     const [extendWith,setExtendWith] = useState("");
     const videoCallReducer = useSelector(state => state.videoCallReducer);
     const timerExtend = [
         {
             name: "5 minutes",
-            milliseconds: 300000
+            milliseconds:5*60*1000
         },
         {
             name: "10 minutes",
-            milliseconds: 600000
+            milliseconds:10*60*1000
         },
         {
             name: "15 minutes",
-            milliseconds: 900000
+            milliseconds:15*60*1000
         }
     ]
 
     const selectExtendWith = (itm)=>{
-        let endDate = new Date(new Date(meetingEndTime.date).getTime() + itm.milliseconds).toISOString();
+        let dt1 = new Date(apiMeetingEndTime.date).getTime() + itm.milliseconds;
+        let dt2 = new Date(dt1).toISOString();
         let postData = {
             meetingid:videoCallReducer.roomId,
-            meetingendtime:endDate
+            meetingendtime:dt2
         }
         ExtendWidService(postData)
+        console.log(">>>>>>>",apiMeetingEndTime.date,">>>>>>>",itm.milliseconds);
         setToggleExtend(false);
-        console.log("your meetingEndTime", endDate)
-        // console.log("your selected", itm, videoCallReducer.roomId, dt)
+        
     }
     return (
         <div className="extend-wrap">
