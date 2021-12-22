@@ -39,6 +39,7 @@ const MembersComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setAlertColor
     } = props
     const [limit, setLimit] = useState(10)
     const [skip, setSkip] = useState(0)
@@ -131,6 +132,8 @@ const MembersComponent = props => {
                                             setMembersList={setMembersList}
                                             setSkip={setSkip}
                                             organizationId={organizationId}
+                                            getStaffList={getStaffList}
+                                            setAlertColor={setAlertColor}
                                         />
                                     ))
                                 }

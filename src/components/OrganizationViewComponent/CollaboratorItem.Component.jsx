@@ -7,7 +7,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
-import { memberService } from '../../services'
+import { memberService, organizationService } from '../../services'
 import history from '../../history'
 
 
@@ -228,7 +228,9 @@ const CollaboratorItemComponent = props => {
         setAlertMsg,
         setSubLabel,
         setCollaboratorList,
-        organizationId
+        organizationId,
+        getStaffList,
+        setAlertColor
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -251,13 +253,11 @@ const CollaboratorItemComponent = props => {
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setCollaboratorList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -267,27 +267,32 @@ const CollaboratorItemComponent = props => {
     const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setCollaboratorList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
     }
 
     const handleActivate = async (org, status) => {
-        const res = await memberService.updateStatus(org._id, status)
+        const res = await organizationService.updateOrganization(org._id, status)
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setCollaboratorList([])
+            if (status === 'active') {
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                setAlertColor('success')
+            } else {
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                setAlertColor('fail')
+            }
 
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')

@@ -96,6 +96,7 @@ const PersonalInfo = props => {
   // const [alertMsg, setAlertMsg] = useState('')
   // const [subLabel, setSubLabel] = useState('')
   const [npiIdErr, setNPIIdErr] = useState(false)
+  const [isSubmit, setIsSubmit] = useState(false)
   const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props;
   const [documentsArray , setDocumentsArray ] = useState([]);
 
@@ -333,6 +334,7 @@ const PersonalInfo = props => {
 
   const handleSave = async () => {
     setNPIIdErr(false)
+    setIsSubmit(true)
     if (npiId === null || npiId?.trim().length === 0) {
       console.log('Error')
       setNPIIdErr(true)
@@ -584,8 +586,8 @@ const PersonalInfo = props => {
                     message: 'Phone Number accepts only integer',
                 }
               }
-              
              )}
+             inputProps={{ maxLength:  11}}
              onChange={e => {
               setValue('npiId', e.target.value.replace(/[^0-9]/g, ''));
               setNPIID(e.target.value.replace(/[^0-9]/g, ''))
@@ -681,6 +683,7 @@ const PersonalInfo = props => {
                 onChange={(event, value) => {
                   console.log(value)
                   handleChange(event, value)
+                  setIsSubmit(false)
                 }}
                 options={specialities}
                 getOptionLabel={option => option.speciality_name}
@@ -688,6 +691,11 @@ const PersonalInfo = props => {
                 renderInput={params => <TextField {...params} />}
               />
             </Stack>
+            {speciality.length === 0 && isSubmit ? (
+            <div className="ac__required" style={{ marginTop: 10 }}>
+              Choose Your Specialities
+            </div>
+          ) : null}
           </div>
         </div>
       </div>

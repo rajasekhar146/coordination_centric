@@ -29,6 +29,8 @@ import { organizationService } from '../../services'
 import view_details from '../../assets/icons/download_icon.png'
 import { memberService } from '../../services'
 import galary_icon from '../../assets/icons/galary_icon.png';
+import intersection from 'lodash.intersection'
+import differenceWith from 'lodash.differencewith'
 
 const styles = theme => ({
   root: {
@@ -80,7 +82,7 @@ const PatientHealthDetails = props => {
   const [mediName, setMediName] = useState('')
   const [healthIfo, setHealthInfo] = useState(null)
   const medicalReports = useSelector(state => state.memberMedicalReports)
-  const [documentsArray , setDocumentsArray ] = useState([]);
+  const [documentsArray, setDocumentsArray] = useState([]);
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -102,8 +104,8 @@ const PatientHealthDetails = props => {
     files.forEach(file => {
       formData.append('files', file)
       const reader = new FileReader()
-  })
-  memberService
+    })
+    memberService
       .uploadFile('patient_records', formData
       )
       .then(response => {
@@ -111,7 +113,7 @@ const PatientHealthDetails = props => {
         medicalReports.push(url)
         getIndividualDocs(url);
       })
-      .catch(() => {})
+      .catch(() => { })
   }
 
   const onEditorStateChange = editorState => {
@@ -153,29 +155,29 @@ const PatientHealthDetails = props => {
     console.log('medicalReports >> fetchHealthInfo', response, medReports)
     dispatch(memberMedicalReports(medReports))
   }
-  const getDocs =  (documents) =>{
+  const getDocs = (documents) => {
     const temp = [];
     setDocumentsArray([]);
-    documents && documents.map( async (docs) =>{
-      let file = 
-      { "name":docs }
+    documents && documents.map(async (docs) => {
+      let file =
+        { "name": docs }
       let res = await memberService.downloadFileUrl(file);
-      if(res){
-        temp.push(res.data.data);
-        if(temp.length == documents.length){
+      if (res) {
+        temp.push(res?.data?.data);
+        if (temp.length == documents.length) {
           setDocumentsArray(temp);
         }
       }
-    
+
     })
   }
-  const getIndividualDocs = async (documents) =>{
+  const getIndividualDocs = async (documents) => {
     const temp = [];
-    let file = 
-    { "name":documents }
+    let file =
+      { "name": documents }
     let res = await memberService.downloadFileUrl(file);
     temp.push(res.data.data);
-    setDocumentsArray([...documentsArray , res.data.data])
+    setDocumentsArray([...documentsArray, res.data.data])
   }
 
   useEffect(() => {
@@ -191,14 +193,25 @@ const PatientHealthDetails = props => {
       setMediCheck(get(healthIfo, ['medicine', 'medi_check'], ''))
       setMediName(get(healthIfo, ['medicine', 'medi_name'], ''))
       setProblems(get(healthIfo, ['problems'], []))
+      // if (allProblems.length) {
+      //   const allProblemsArr = allProblems.map((p) => p.name.toLowerCase())
+      //   const d = intersection(get(healthIfo, ['problems'], []), allProblemsArr)
+      //   const others = differenceWith(
+      //       allProblemsArr,
+      //       intersection(get(healthIfo, ['problems'], []), allProblemsArr),
+      //       function (o1, o2) {
+      //         return o1 !== o2;
+      //       })
+      //   setValue('others', others)
+      // }
       const medReports = get(healthIfo, ['reports'], [])
       console.log('medReports', medReports)
       setReportsArray(medReports)
-      if(medReports.length > 0){
+      if (medReports.length > 0) {
         getDocs(medReports)
       }
     }
-  }, [healthIfo])
+  }, [healthIfo, allProblems.length])
 
   const heightArray = [145, 160, 145, 160, 145, 160, 145, 160, 145, 160, 145, 160]
   const weightArray = [45, 46, 47, 49, 50, 51, 52, 55, 54, 55, 56, 57, 58, 59, 60]
@@ -222,7 +235,7 @@ const PatientHealthDetails = props => {
     respData.patient_id = userDetails._id
 
     console.log('formData >> Patient health info ', respData)
-    const res = await settinService.addHealthInfo(respData).catch(err => {})
+    const res = await settinService.addHealthInfo(respData).catch(err => { })
     if (get(res, ['data', 'status'], '') === 200) {
       setOpenFlash(true)
       setAlertMsg('Saved')
@@ -238,13 +251,13 @@ const PatientHealthDetails = props => {
     console.log('certificateResponse', url)
     window.open(url, '_blank')
   }
-  const openImage = async (docs)=>{
+  const openImage = async (docs) => {
     window.open(docs.url, '_blank');
   }
-  const delImage = async (docs , index) =>{
+  const delImage = async (docs, index) => {
     var data = [...documentsArray]
-    data.splice(index , 1);
-    medicalReports.splice(index , 1);
+    data.splice(index, 1);
+    medicalReports.splice(index, 1);
     setDocumentsArray(data);
   }
   const deleteMedicalReport = async filename => {
@@ -411,6 +424,7 @@ const PatientHealthDetails = props => {
                   {...register('others', {})}
                   placeholder="others ..."
                   margin="normal"
+
                   InputProps={{
                     className: classes.input,
                   }}
@@ -447,7 +461,7 @@ const PatientHealthDetails = props => {
                 )}
               </Dropzone>
             </div>
-{/* 
+            {/* 
             {selectedFiles.map((file, index) => (
               <UploadFile
                 file={file}
@@ -474,22 +488,22 @@ const PatientHealthDetails = props => {
                   </div>
                 </div>
               ))} */}
-               {documentsArray.map((docs , index) => (
-                <span className="docs-view">
-                  <img src={galary_icon} className="galary_icon" alt="success_icon" />
-                  <img
-                    onClick={() => {
-                      openImage(docs)
-                    }}
-                    src={view_details}
-                    className="right"
-                    alt="success_icon"
-                  />
-                  <img src={DeleteIcon} className="del_icon"  onClick={() => {delImage(docs , index)}} alt="delete_icon" />
-                   <p className="align__img__name docs_name"> {docs?.metadata?.name}</p>
-                  <p className="align__img__name img_size"> {docs?.metadata?.size}</p>
-                </span>
-              ))}
+            {documentsArray.map((docs, index) => (
+              <span className="docs-view">
+                <img src={galary_icon} className="galary_icon" alt="success_icon" />
+                <img
+                  onClick={() => {
+                    openImage(docs)
+                  }}
+                  src={view_details}
+                  className="right"
+                  alt="success_icon"
+                />
+                <img src={DeleteIcon} className="del_icon" onClick={() => { delImage(docs, index) }} alt="delete_icon" />
+                <p className="align__img__name docs_name"> {docs?.metadata?.name}</p>
+                <p className="align__img__name img_size"> {docs?.metadata?.size}</p>
+              </span>
+            ))}
           </div>
         </div>
         <ColoredLine color="#E4E7EC" />

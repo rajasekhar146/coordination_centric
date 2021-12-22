@@ -225,6 +225,7 @@ const StaffItemComponent = props => {
             setStaffList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
+            setAlertColor('success')
         } else {
             setSkip(0)
             setOpenFlash(true)

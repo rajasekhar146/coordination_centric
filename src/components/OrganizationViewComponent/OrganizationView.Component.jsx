@@ -91,6 +91,7 @@ const OrganizationViewComponent = (props) => {
     const currentUser = authenticationService.currentUserValue
     const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
     const role = get(currentUser, ['data', 'data', 'role'], false)
+    const [alertColor, setAlertColor] = useState('success');
 
 
 
@@ -169,7 +170,7 @@ const OrganizationViewComponent = (props) => {
                             onClick={() => {
                                 setOpenInviteCollaborator(true)
                             }}
-                            className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
+                            className={(orgDet.planType !== "free" && orgDet.status === 'active') ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
                         >
                             &nbsp;&nbsp; Add Collaborator
                         </Button>
@@ -247,6 +248,7 @@ const OrganizationViewComponent = (props) => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -259,6 +261,8 @@ const OrganizationViewComponent = (props) => {
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
                     orgId={orgId}
+                    setAlertColor={setAlertColor}
+
                 />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -270,6 +274,7 @@ const OrganizationViewComponent = (props) => {
                     setOpenFlash={setOpenFlash}
                     setAlertMsg={setAlertMsg}
                     setSubLabel={setSubLabel}
+                    setAlertColor={setAlertColor}
                 />
             </TabPanel>
             <Modal
@@ -337,7 +342,7 @@ const OrganizationViewComponent = (props) => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color = "success"
+                color={alertColor}
             />
         </div >
     )
