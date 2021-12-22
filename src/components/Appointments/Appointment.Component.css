@@ -288,13 +288,15 @@
     display: block;
     width: 80%;
     border-radius: 10px;
-    height: 50px;
+    min-height: 50px;
     padding: 10px;
+    word-break: break-word;
+    position: relative;
 }
 .to_chat::after{
         content: ''; 
         position: absolute;  
-        right: 9%; top: 50%;
+        right: -7%; top: 32px;
         border: 10px solid transparent;	
         border-left: 25px solid  #E8E8E8; 
         -webkit-transform: translate(0,-50%);
@@ -304,7 +306,7 @@
 .from_chat::after{
     content: ''; 
     position: absolute;  
-    left: 9%; top: 50%;
+    left: -7%; top: 32px;
     border: 10px solid transparent;	
     border-right: 25px solid  #CDE1FF; 
     -webkit-transform: translate(0,-50%);
@@ -312,9 +314,9 @@
     transform: translate(0,-50%);   
 }
 .chat_body{
-    display: block;
+    display: inline-block;
     width: 100%;
-    height: 65px;
+    min-height: 65px;
     position: relative;
     margin-bottom: 15px;
 }
@@ -343,11 +345,12 @@
     height: 40px;
     border-radius: 6px;
     border: 1px solid #52575C;
+    padding: 5px 24px 5px 5px;
 }
 .send__icon{
     position: absolute;
-    right: 5px;
-    top: 10px;
+    right: -17px;
+    top: 14px;
     cursor: pointer;
 }
 
@@ -403,4 +406,8 @@
 }
 .right-10{
     right: 10px;
+}
+.from_msg{
+    margin-bottom: 6px;
+    display: inline-block;
 }

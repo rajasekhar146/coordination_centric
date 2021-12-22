@@ -14,9 +14,9 @@ const secondDepositHandle = (e) =>{
         props.setSecondDeposit(e.target.value)
 }
     return (
-        <div>
+        <div className="verify_bank_info"> 
         <h3>Verify Bank account</h3>
-        <p>stripe sent two small deposits to this bank account. To verify this account please confirm the amounts of these deposits</p>
+        <span>stripe sent two small deposits to this bank account. To verify this account please confirm the amounts of these deposits</span>
         <div className="pas__row pas__height">
         <div className="pas__problem__txtbox__section">
           <TextField
@@ -40,8 +40,11 @@ const secondDepositHandle = (e) =>{
         </div>
       </div>
       {props.secondDepositErr && <span className="reason_error">Second Deposit is required</span>}
+      <p >*Please use 32 and 45 as primary and secondary deposit respectively for testing purpose.</p>
+      <p>*Giving invalid data for three times concurrently, will block the bank verification process</p>
 
-      <div className="pas__row mar-top-30">
+
+      <div className="pas__row mar-top-15">
         <div className="io__cancel">
           <Button className="io__cancel__btn" onClick={props.clickCloseButton} >
             Back

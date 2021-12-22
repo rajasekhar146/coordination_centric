@@ -100,7 +100,7 @@ const PatientConfimationAppointment = props => {
       <div className="pca__row">
         <div className="pca__doctor__column pca__card">
           <label className="pca__label">{role === 'doctor' ? 'Patient' : 'Doctor'}</label>
-          <label className="pca__value__text">{appointmentDetails.name}</label>
+          <label className="pca__value__text">{appointmentDetails.from ?( appointmentDetails.from.first_name + " " + appointmentDetails.from.last_name) : appointmentDetails.name  }</label>
         </div>
         <div className="pca__primary__column pca__card">
           <label className="pca__label">Primary - Date and Time</label>

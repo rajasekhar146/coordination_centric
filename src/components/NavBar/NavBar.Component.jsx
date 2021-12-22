@@ -35,6 +35,17 @@ import Alert from '../Alert/Alert.component';
 import { useSelector, useDispatch } from 'react-redux'
 import { setFlashMsg } from '../../redux/actions/commonActions'
 import Capitalize from 'lodash.capitalize'
+import moment from 'moment'
+import RescheduuleAppointment from '../ModelPopup/RescheduuleAppointment.Component'
+import PatientReschedule from '../ModelPopup/PatientRescheduleModel'
+
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import ConfimationAppointment from  '../ModelPopup/ConfimationAppointment.Component'
+import RejectAppointment from '../ModelPopup/RejectAppointment.Component'
+import CancelAppointmentPopup from '../ModelPopup/CancelAppointmentPopup'
+import CancelAppointmentReasonPopup from '../ModelPopup/CancelAppointmentReasonPopup';
+import { setAppointmentDetails } from '../../redux/actions/appointmentActions'
 
 const profileMenus = [
   { label: 'Profile', icon: ProfileImage },
@@ -115,6 +126,58 @@ const StyledMenuNotification = styled(props => (
   },
 }))
 
+const confirmAppointmentDesign = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 450,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+const confirmAppointment = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+
+const termsAndCondition = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+
+
+const cancelPopup = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 450,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 2,
+}
+
 const NavBarComponent = () => {
 
   const dispatch = useDispatch()
@@ -124,6 +187,8 @@ const NavBarComponent = () => {
   const [anchorElNotification,setAnchorElNotification ] = React.useState(null)
 
   const openNotification = Boolean(anchorElNotification)
+  const [cancelAppointment, setCancelAppointment] = useState(false)
+  const [cancelAppointmentReason, setCancelAppointmentReason] = useState(false)
 
 
   const open = Boolean(anchorEl)
@@ -137,6 +202,18 @@ const NavBarComponent = () => {
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState("")
   const [subLebel, setSubLabel] = useState("")
+  const [alertColor , setAlertColor] = useState('success')
+  const [isConfirmClicked, setIsConfirmClicked] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [isRejectClicked, setIsRejectClicked] = useState(false)
+  const [isResheduleClicked, setIsRescheduleClicked] = useState(false)
+  const [appointmentList, setAppointmentList] = useState([])
+  const [limit, setLimit] = useState(0)
+  const [skip, setSkip] = useState(20)
+  const [isLoading, setIsLoading] = useState(false)
+  const [cancelReasonInput, setcancelReasonInput] = useState();
+  const [cancelReasonInputErr, setcancelReasonInputErr] = useState();
+  const [patientReschedule, setPatientReschedule] = useState(false)
 
   useEffect(()=>{
     eventBus.on("notification", (data) =>
@@ -178,7 +255,35 @@ const NavBarComponent = () => {
     getNotificationList();
   }
 
-
+  const closeAppointmentReasonPopup = () => {
+    setCancelAppointmentReason(false)
+  }
+  const closeRescheduleModel = () => {
+    setIsRescheduleClicked(false)
+}
+const closeCancelReason = () => {
+  setCancelAppointment(true)
+  setCancelAppointmentReason(false);
+}
+const closePatientReschedule = () => {
+  setPatientReschedule(false)
+}
+const submitCancelReason = async () => {
+  if (!cancelReasonInput) {
+      setcancelReasonInputErr(true);
+  } else {
+      setCancelAppointmentReason(false);
+      setcancelReasonInputErr(false);
+      let res = await appointmentService.cancelAppointment(selectedAppointment.appointmentid, cancelReasonInput);
+      if (res.data) {
+          setOpenFlash(true)
+          setAlertMsg('Cancelled')
+          setAlertColor('cancel')
+          setSubLabel(get(res, ['data', 'message'], ''));
+      }
+      getAppointmentList();
+  }
+}
 
   const getNotificationList= ()=>{
     notificationService.getNotificationList({
@@ -200,29 +305,91 @@ const NavBarComponent = () => {
       console.log("getNotifications",error);
     })
   }
+  const getAppointmentList = async () => {
+    setIsLoading(true)
+    let res;
+    let date;
+        date = moment(new Date()).format("YYYY-MM-DD");
+    
+    appointmentService.getAppointments(userId, date, 'upcoming', limit, skip, role).then((res) => {
+        setIsLoading(false)
+        const appointmentsTemp = get(res, ['data', 'data'], []);
+        let appointmentsArray = [];
+        appointmentsTemp.forEach(element => {
+            const timezoneDiff = (new Date()).getTimezoneOffset()
+            let recordNew = {};
+            if (role === "doctor") {
+                recordNew = {
+                    name: element?.userId?.first_name + " "  + (element?.userId?.last_name),
+                    profile: element?.userId?.profilePic,
+                    location: 'Online',
+                    date: element?.startTime ? moment(element?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                    time: (element.startTime ? moment(element.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : ''),
+                    status: element.status,
+                    gender: element?.userId?.gender,
+                    _id: element.userId._id,
+                    appointmentid: element._id,
+                    startTime: element.startTime,
+                    endTime: element.endTime
+                }
+  
+            } else {
+                recordNew = {
+                    name: element?.doctorId?.first_name+ " "  + element?.doctorId?.last_name ,
+                    profile: element?.doctorId?.profilePic,
+                    location: 'Online',
+                    date: moment(element.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'),
+                    time: (element.startTime ? moment(element.startTime).add(timezoneDiff, 'minutes').format('hh:mm a') : "") + " - " + (element.endTime ? moment(element.endTime).add(timezoneDiff, 'minutes').format('hh:mm a') : ''),
+                    status: element.status,
+                    gender: 'male',
+                    _id: element?.doctorId?._id,
+                    appointmentid: element._id,
+                    startTime: element.startTime,
+                    endTime: element.endTime
+                }
+            }
+            appointmentsArray.push(recordNew);
+        });
+        setAppointmentList(appointmentsArray);
+    }).catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+    })
+  }
+  
+  // const confirmAppointment =async (appointmentId)=>{
+  //   const res = await appointmentService.confirmAppointment(appointmentId)
+  //   console.log("RES",res);
+  //   if (res.status === 200) {
+  //     setOpenFlash(true);
+  //     setAlertMsg('Confirm Appointment');
+  //     setSubLabel(get(res,["data","message"]));
+  //   } else {
 
-  const confirmAppointment =async (appointmentId)=>{
-    const res = await appointmentService.confirmAppointment(appointmentId)
-    console.log("RES",res);
-    if (res.status === 200) {
-      setOpenFlash(true);
-      setAlertMsg('Confirm Appointment');
-      setSubLabel(get(res,["data","message"]));
-    } else {
+  //   }
+  // }
 
-    }
+  // const declineAppointment =async (appointmentId)=>{
+  //   const res = await appointmentService.rejectAppointment(appointmentId)
+  //   console.log(res);
+  //   if (res.status === 200) {
+  //     setOpenFlash(true);
+  //     setAlertMsg('Declined');
+  //     setSubLabel(get(res,["data","message"]));
+  //   } else {
+      
+  //   }
+  // }
+  const confirmAppointment =async (appointment)=>{
+    setSelectedAppointment(appointment)
+    dispatch(setAppointmentDetails(appointment))
+    setIsConfirmClicked(true);
   }
 
-  const declineAppointment =async (appointmentId)=>{
-    const res = await appointmentService.rejectAppointment(appointmentId)
-    console.log(res);
-    if (res.status === 200) {
-      setOpenFlash(true);
-      setAlertMsg('Declined');
-      setSubLabel(get(res,["data","message"]));
-    } else {
-      
-    }
+  const declineAppointment =async (appointment)=>{
+    setSelectedAppointment(appointment)
+    dispatch(setAppointmentDetails(appointment))
+    setIsRejectClicked(true);
   }
 
 
@@ -285,6 +452,24 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
       subLabel: ''
     }))
   }
+  
+  const closeCancelTermsAndConds = () => {
+    setCancelAppointment(false)
+}
+
+const closeRejectModel = () => {
+  setIsRejectClicked(false)
+}
+
+const closeConformModel = () => {
+  setIsConfirmClicked(false)
+}
+
+
+const handleNextPopup = () => {
+  setCancelAppointmentReason(true);
+  setCancelAppointment(false)
+}
   return (
     <>
     <div className="nb__main_div">
@@ -366,11 +551,11 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
                           <RemoveRedEyeOutlinedIcon style={{fontSize:14,marginRight:5}}/>
                           View</button>
 
-                          <button className="button button-decline" onClick={()=>{MarkAsRead(item._id);declineAppointment(item.appointmentId)}}>
+                          <button className="button button-decline" onClick={()=>{MarkAsRead(item._id);declineAppointment(item)}}>
                           <CloseIcon style={{fontSize:14,marginRight:5}}/>
                           Reject</button>
 
-                          <button className="button button-accept" onClick={()=>{MarkAsRead(item._id);confirmAppointment(item.appointmentId)}}>
+                          <button className="button button-accept" onClick={()=>{MarkAsRead(item._id);confirmAppointment(item)}}>
                           <DoneOutlinedIcon style={{fontSize:14,marginRight:5}}/>
                           Approve</button>
                       </div>
@@ -441,6 +626,121 @@ notificationService.notificationMakeRead(notificationId).then(res=>{
         </div>
       </div>
      
+    <Modal
+                        open={isConfirmClicked}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={confirmAppointmentDesign}>
+                            <ConfimationAppointment
+                                clickCloseButton={closeConformModel}
+                                selectedAppointment={selectedAppointment}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
+                                setAlertColor={setAlertColor}
+                                getAppointmentList={getAppointmentList}
+                                from = "notification"
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={isRejectClicked}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+
+                        <RejectAppointment
+                            clickCloseButton={closeRejectModel}
+                            setIsRescheduleClicked={setIsRescheduleClicked}
+                            selectedAppointment={selectedAppointment}
+                            setOpenFlash={setOpenFlash}
+                            setAlertMsg={setAlertMsg}
+                            setSubLabel={setSubLabel}
+                            setAlertColor={setAlertColor}
+                            getAppointmentList={getAppointmentList}
+                            setPatientReschedule={setPatientReschedule}
+                            from = "notification"
+                        />
+
+                    </Modal>	
+                    <Modal
+                        open={isResheduleClicked}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={confirmAppointmentDesign}>
+                            <RescheduuleAppointment
+                                clickCloseButton={closeRescheduleModel}
+                                // setSkip={setSkip}
+                                selectedAppointment={selectedAppointment}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
+                                setAlertColor={setAlertColor}
+                                getAppointmentList={getAppointmentList}
+                                from = "notification"
+                                setIsRescheduleClicked = {setIsRescheduleClicked}
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={cancelAppointment}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={termsAndCondition}>
+                            <CancelAppointmentPopup
+                                clickCloseButton={closeCancelTermsAndConds}
+                                clickConfirmButton={handleNextPopup}
+
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={cancelAppointmentReason}
+                        clickCloseButton={closeAppointmentReasonPopup}
+
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={cancelPopup}>
+                            <CancelAppointmentReasonPopup
+                                clickCloseButton={closeCancelReason}
+                                submitCancelReason={submitCancelReason}
+                                cancelReasonInput={cancelReasonInput}
+                                setcancelReasonInput={setcancelReasonInput}
+                                setcancelReasonInputErr={setcancelReasonInputErr}
+                                cancelReasonInputErr={cancelReasonInputErr}
+                                getAppointmentList={getAppointmentList}
+                            />
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={patientReschedule}
+                        // onClose={setIsAcceptClicked}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={termsAndCondition}>
+                            <PatientReschedule
+                                clickCloseButton={closePatientReschedule}
+                                // setSkip={setSkip}
+                                selectedAppointment={selectedAppointment}
+                                setOpenFlash={setOpenFlash}
+                                setAlertMsg={setAlertMsg}
+                                setSubLabel={setSubLabel}
+                                // handleNavigation={handleNavigation}
+                                getAppointmentList={getAppointmentList}
+                                setPatientReschedule = {setPatientReschedule}
+                                from = "notification"
+                            />
+                        </Box>
+                    </Modal>
     </div>
     
      <Alert

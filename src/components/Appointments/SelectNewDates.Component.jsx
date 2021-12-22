@@ -81,9 +81,16 @@ const SelectNewDatesComponent = () => {
           >
             <ArrowBackIosNewIcon style={{ fontSize: '10', marginRight: '4' }} /> Back
           </Button>
+          { appointmentDetails.from && 
+        <h5 className="orgTitle">
+          {`${appointmentDetails?.gender === 'Male' ? 'Mr.' : 'Ms.'} ${ appointmentDetails.from?.first_name + " " + (appointmentDetails?.from?.last_name)}`}
+          </h5> 
+          }
+          {!appointmentDetails.from && 
           <h5 className="orgTitle">
             {`${appointmentDetails.gender === 'male' ? 'Mr.' : 'Ms.'} ${appointmentDetails.name}`}
           </h5>
+          }
         </div>
       </div>
       <div className="od__row">

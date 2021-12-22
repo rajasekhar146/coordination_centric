@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import moment from 'moment'
 import Box from '@mui/material/Box'
+import { authenticationService } from '../../services'
 
 const styles = theme => ({
     // root: {
@@ -61,7 +62,8 @@ const rejectPopupWithoutSecondary = {
     borderRadius: 3,
     p: 2,
 }
-
+const currentUser = authenticationService.currentUserValue;
+const role = get(currentUser, ['data', 'data', 'role'], '')
 
 
 const RejectAppointmentComponent = props => {
@@ -72,10 +74,11 @@ const RejectAppointmentComponent = props => {
         clickCloseButton,
         selectedAppointment,
         setIsRescheduleClicked,
+        setPatientReschedule,
         setAlertColor,
-        getAppointmentList
+        getAppointmentList,
+        from,
     } = props
-
     const [secondarySlots, setSecondarySlots] = useState(null)
     const [selectedSlot, setSelectedSlot] = useState(null)
     const timezoneDiff = (new Date()).getTimezoneOffset()
@@ -96,7 +99,11 @@ const RejectAppointmentComponent = props => {
                 _id: element?.userId?._id,
                 appointmentid: element?._id,
                 startTime: element?.startTime,
-                endTime: element?.endTime
+                endTime: element?.endTime,
+                doctorName : element?.doctorId?.first_name + " " + (element?.doctorId?.last_name),
+                doctorGender: element?.doctorId?.gender,
+                primayDate: element.slotMapping && element.slotMapping.startTime ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM') : "",
+                primaryTime: (element.slotMapping && element.slotMapping.startTime  ? moment(element?.slotMapping?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') : "") + " - " + (element.slotMapping && element.slotMapping.endTime ? moment(element.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a') : ''),
             }
             setSecondarySlots(recordNew)
         } else {
@@ -120,6 +127,15 @@ const RejectAppointmentComponent = props => {
 
     }
 
+    const handleReschedule = () =>{
+        if(role == 'doctor') {
+            setIsRescheduleClicked(true)
+        }else{
+            setPatientReschedule(true)
+        }
+        clickCloseButton()
+    }
+
 
 
     return (
@@ -140,16 +156,41 @@ const RejectAppointmentComponent = props => {
                     <div style={{ width: '33%' }} className="io_slot_selector">
                         <div>
                             <label className="io_user_label">
-                                Patient
+                            {role == 'doctor' ? 'Patient' : 'Doctor'}
                             </label>
                         </div>
+                        {from == 'notification' && 
+                        <div>
+                            <label className="io_user_name">
+                        {selectedAppointment?.from?.gender === 'Male' ? 'Mr.' : 'Ms.'}
+                        {selectedAppointment?.from?.first_name + " " + selectedAppointment?.from?.last_name}
+                            </label>
+                        </div>
+                        }
+                         {from != 'notification' && 
                         <div>
                             <label className="io_user_name">
                                 {`${selectedAppointment.gender === 'male' ? 'Mr.' : 'Ms.'} ${selectedAppointment.name}`}
                             </label>
                         </div>
+                        }
 
                     </div>
+                    {from == 'notification' &&
+                    <div style={{ width: '33%' }} className="io_slot_selector">
+                     <div>
+                         <label className="io_user_label">
+                             Primary - Date and Time
+                         </label>
+                     </div>
+                     <div>
+                         <label className="io_user_name">
+                             
+                             {`${secondarySlots && secondarySlots.primayDate} ${secondarySlots && secondarySlots.primaryTime}`}
+                         </label>
+                     </div>
+                 </div>}
+                        {from != 'notification' &&
                     <div style={{ width: '33%' }} className="io_slot_selector">
                         <div>
                             <label className="io_user_label">
@@ -157,11 +198,11 @@ const RejectAppointmentComponent = props => {
                             </label>
                         </div>
                         <div>
-                            <label className="io_user_name">
-                                {`${selectedAppointment.date} ${selectedAppointment.time}`}
+                            <label className="io_user_name">                                 {`${selectedAppointment.date} ${selectedAppointment.time}`}
                             </label>
                         </div>
                     </div>
+                    }
                     {get(secondarySlots, ['startTime'], null) && get(secondarySlots, ['endTime'], null)
                         && <div
                         style={{ width: '33%' }}
@@ -193,10 +234,7 @@ const RejectAppointmentComponent = props => {
                         </div>
                         <div className="io__cancel">
                             <Button className="io__cancel__btn io_reschedule_btn"
-                                onClick={() => {
-                                    setIsRescheduleClicked(true)
-                                    clickCloseButton()
-                                }}>
+                                onClick={handleReschedule}>
                                 Re-schedule
                             </Button>
                         </div>

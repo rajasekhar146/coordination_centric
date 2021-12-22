@@ -71,6 +71,7 @@ const WeekDaysViewComponent = props => {
   const history = useHistory()
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
+  const currentUserId = get(currentUser, ['data', 'data', '_id'], '')
   console.log('Logged User Role', role)
   const getUserId = role => {
     switch (role) {
@@ -81,9 +82,18 @@ const WeekDaysViewComponent = props => {
     }
   }
 
+  const getUserIdFromNotification = (role) =>{
+    switch (role) {
+      case 'doctor':
+        return appointmentDetails.to
+      default:
+        return appointmentDetails.from._id 
+    }
+  }
+
   console.log('WeekDaysViewComponent', props)
 
-  const userId = getUserId(role)
+  const userId = appointmentDetails.from ? getUserIdFromNotification(role , type) : getUserId(role)
   const appointmentUserId = props.id
   const [days, setDays] = useState([])
   const selectedCalender = useSelector(state => state.calendarAppointmentDate)
@@ -575,7 +585,7 @@ const WeekDaysViewComponent = props => {
   const clickConfirmButton = async () => {
     // setClickedAppointment(false)
     // setClickedConfirm(true)
-    if (role === 'patient' && type !== 'rescheduleByPatient') {
+    if (role === 'patient' && type !== 'rescheduleByPatient' && appointmentDetails.from) {
       setClickedAppointment(false)
       setClickedConfirm(true)
       return false
@@ -605,10 +615,10 @@ const WeekDaysViewComponent = props => {
     reqData.documents = selectedFiles.map(x => x.path)
 
     if (role === 'doctor') {
-      reqData.patientId = appointmentDetails._id
+      reqData.patientId =   appointmentDetails.to ? appointmentDetails.to : appointmentDetails._id
       reqData.doctorId = userId
     } else if (role === 'patient') {
-      reqData.doctorId = appointmentDetails._id
+      reqData.doctorId =  appointmentDetails?.from ? appointmentDetails.from._id :  appointmentDetails._id
     }
     let res
     console.log('role', role)
@@ -701,9 +711,9 @@ const WeekDaysViewComponent = props => {
     reqData.documents = selectedFiles.map(x => x)
 
     if (role === 'doctor') {
-      reqData.patientId = appointmentDetails.id
+      reqData.patientId =   appointmentDetails.to ? appointmentDetails.to : appointmentDetails._id
     } else if (role === 'patient') {
-      reqData.doctorId = appointmentDetails._id
+      reqData.doctorId =  appointmentDetails?.from ? appointmentDetails.from._id :  appointmentDetails._id
     }
     console.log('appointmentRequest', reqData)
 
