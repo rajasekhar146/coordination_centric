@@ -12,7 +12,10 @@ import get from 'lodash.get'
 import { memberService } from '../../services'
 import CircularProgress from '@mui/material/CircularProgress';
 import TablePagination from '@mui/material/TablePagination'
-
+import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
+import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
+import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
 
 const columns = [
     { id: 'facilityName', label: 'Name', minWidth: 180, align: 'left', visible: true },
@@ -22,6 +25,19 @@ const columns = [
     { id: 'action', label: 'Action', minWidth: 40, align: 'center', visible: true },
 ]
 
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: 0,
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px'
+}
 const colorcodes = {
     invited: '#2E90FA',
     pending_verification: '#F79009',
@@ -43,7 +59,12 @@ const CollaboratorComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
-        setAlertColor
+        setAlertColor,
+        orgId,
+        openInviteCollaborator,
+        setOpenInviteCollaborator,
+        openInviteCollaboratorSuccess,
+        setOpenInviteCollaboratorSuccess
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
@@ -55,6 +76,17 @@ const CollaboratorComponent = props => {
     const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+
+    const closeInviteModel = () => {
+        setOpenInviteCollaborator(false)
+    }
+
+    const closeInviteSuccessModel = () => {
+        setOpenInviteCollaboratorSuccess(false)
+        getStaffList()
+    }
+
     const handleClose = () => {
         setAnchorEl(null)
     }
@@ -164,6 +196,39 @@ const CollaboratorComponent = props => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
+            <Modal
+                open={openInviteCollaborator}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaborator
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteCollaborator={setOpenInviteCollaborator}
+                        setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+                        orgId={orgId}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setCollaboratorList={{setCollaboratorList}}
+                        collaboratorList={collaboratorList}
+                        // setMembersList={setMembersList}
+                        // setOpenFlash={setOpenFlash}
+                        // setAlertMsg={setAlertMsg}
+                        // setSubLabel={setSubLabel}
+                    />
+                </Box>
+            </Modal>
+            <Modal
+                open={openInviteCollaboratorSuccess}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaboratorSuccess
+                        clickCloseButton={closeInviteSuccessModel}
+                        
+                    />
+                </Box>
+            </Modal>
         </div>
     )
 }

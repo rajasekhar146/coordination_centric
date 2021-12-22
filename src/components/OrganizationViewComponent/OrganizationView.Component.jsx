@@ -26,8 +26,7 @@ import Collaborator from './Collaborator.Component'
 import Patient from './Patients.Component'
 import InviteMemberComponent from '../ModelPopup/InviteMemberComponent'
 import InviteMemberSuccess from '../ModelPopup/MemberInvitationSuccess'
-import InviteCollaborator from '../ModelPopup/InviteCollaboratorComponent'
-import InviteCollaboratorSuccess from '../ModelPopup/InviteCollaboratorSuccess'
+
 import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import get from 'lodash.get'
@@ -79,8 +78,6 @@ const OrganizationViewComponent = (props) => {
     const [value, setValue] = React.useState('0');
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
-    const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
-    const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
     const [subLebel, setSubLabel] = useState('')
@@ -92,6 +89,8 @@ const OrganizationViewComponent = (props) => {
     const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
     const role = get(currentUser, ['data', 'data', 'role'], false)
     const [alertColor, setAlertColor] = useState('success');
+    const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
+    const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
 
 
 
@@ -185,12 +184,12 @@ const OrganizationViewComponent = (props) => {
 
     const closeInviteModel = () => {
         setOpenInviteMember(false)
-        setOpenInviteCollaborator(false)
+        // setOpenInviteCollaborator(false)
     }
 
     const closeInviteSuccessModel = () => {
         setOpenInviteMemberSuccess(false)
-        setOpenInviteCollaboratorSuccess(false)
+        // setOpenInviteCollaboratorSuccess(false)
     }
 
     const handleCloseFlash = (event, reason) => {
@@ -262,6 +261,10 @@ const OrganizationViewComponent = (props) => {
                     setSubLabel={setSubLabel}
                     orgId={orgId}
                     setAlertColor={setAlertColor}
+                    setOpenInviteCollaborator={setOpenInviteCollaborator}
+                    openInviteCollaborator={openInviteCollaborator}
+                    openInviteCollaboratorSuccess={openInviteCollaboratorSuccess}
+                    setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
 
                 />
             </TabPanel>
@@ -304,7 +307,7 @@ const OrganizationViewComponent = (props) => {
                     />
                 </Box>
             </Modal>
-            <Modal
+            {/* <Modal
                 open={openInviteCollaborator}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -324,8 +327,8 @@ const OrganizationViewComponent = (props) => {
                         // setSubLabel={setSubLabel}
                     />
                 </Box>
-            </Modal>
-            <Modal
+            </Modal> */}
+            {/* <Modal
                 open={openInviteCollaboratorSuccess}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -336,7 +339,7 @@ const OrganizationViewComponent = (props) => {
                         
                     />
                 </Box>
-            </Modal>
+            </Modal> */}
             <Alert
                 handleCloseFlash={handleCloseFlash}
                 alertMsg={alertMsg}
