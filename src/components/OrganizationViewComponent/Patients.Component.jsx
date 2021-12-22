@@ -41,6 +41,7 @@ const PatientComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setAlertColor
     } = props
 
 
@@ -150,6 +151,8 @@ const PatientComponent = props => {
                                             setAlertMsg={setAlertMsg}
                                             setSubLabel={setSubLabel}
                                             setPatientList={setPatientList}
+                                            getStaffList={getStaffList}
+                                            setAlertColor={setAlertColor}
                                         />
                                     ))
                                 }

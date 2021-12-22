@@ -87,6 +87,7 @@ const CollaboratorsComponent = props => {
     const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [alertColor, setAlertColor] = useState('');
 
    
     const getStaffList = async () => {
@@ -203,6 +204,8 @@ const CollaboratorsComponent = props => {
                                             setCollaboratorList={setCollaboratorList}
                                             setSkip={setSkip}
                                             organizationId={organizationId}
+                                            getStaffList={getStaffList}
+                                            setAlertColor={setAlertColor}
                                         />
                                     ))
                                 }
@@ -262,7 +265,7 @@ const CollaboratorsComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color="success"
+                color={alertColor}
             />
         </div>
 

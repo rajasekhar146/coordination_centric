@@ -218,7 +218,9 @@ const MemberItemComponent = props => {
         setAlertMsg,
         setSubLabel,
         setMembersList,
-        organizationId
+        organizationId,
+        setAlertColor,
+        getStaffList
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -241,13 +243,12 @@ const MemberItemComponent = props => {
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setMembersList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
+            setAlertColor('success')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             // setSubLabel('Another invitation was sended to this Member.')
@@ -257,13 +258,12 @@ const MemberItemComponent = props => {
     const cancelInvite = async (org, status) => {
         const res = await memberService.cancelInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setMembersList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
+            setAlertColor('cancel')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
         }
@@ -272,11 +272,19 @@ const MemberItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setMembersList([])
+            if (status === 'active') {
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                setAlertColor('success')
+            } else {
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                setAlertColor('fail')
+            }
+
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -291,8 +299,7 @@ const MemberItemComponent = props => {
         switch (action) {
             case 'setIsDeactivateClicked':
                 handleActivate(row, 'inactive')
-                setAlertMsg('Deactivated')
-                setSubLabel('This account was deactivated, users no longer have access.')
+                
                 break
             case 'setIsCancelInviteClicked':
                 cancelInvite(row, 'cancel')
@@ -300,8 +307,7 @@ const MemberItemComponent = props => {
                 break
             case 'setIsActivateClicked':
                 handleActivate(row, 'active')
-                setAlertMsg('Activated')
-                setSubLabel('This account was successfully activated.')
+               
                 break
             case 'setIsResendClicked':
                 resendInvite(row, 'resend')

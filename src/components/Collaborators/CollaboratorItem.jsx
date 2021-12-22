@@ -7,7 +7,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
-import { memberService } from '../../services'
+import { memberService, organizationService } from '../../services'
 import history from '../../history'
 import '../OrganizationDashboard/OrganizationDashboard.Component.css'
 
@@ -227,21 +227,23 @@ const CollaboratorComponent = props => {
         setAlertMsg,
         setSubLabel,
         setStaffList,
-        organizationId
+        organizationId,
+        getStaffList,
+        setAlertColor
     } = props
 
     const resendInvite = async (org, status) => {
         const res = await memberService.resendInvite(org._id, status, 'facility')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setCollaboratorList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
+            setAlertColor('success')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
+            setAlertColor('fail')
             // setSubLabel('Another invitation was sended to this Member.')
         }
     }
@@ -249,15 +251,38 @@ const CollaboratorComponent = props => {
         const res = await memberService.cancelInvite(org._id, status, 'facility')
 
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setCollaboratorList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
+            setAlertColor('cancel')
         } else {
-            setSkip(0)
             setOpenFlash(true)
             setAlertMsg('Error')
+            setAlertColor('fail')
+        }
+    }
+
+    const handleActivate = async (org, status) => {
+        const res = await organizationService.updateOrganization(org._id, status)
+        if (res.status === 200) {
+            getStaffList()
+            setOpenFlash(true)
+            if (status === 'active') {
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                setAlertColor('success')
+            } else {
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                setAlertColor('fail')
+            }
+
+        } else {
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+
         }
     }
 
@@ -272,14 +297,14 @@ const CollaboratorComponent = props => {
                 // setIsRejectClicked(true)
                 break
             case 'setIsDeactivateClicked':
-                // setIsDeactivateClicked(true)
+                handleActivate(row, 'inactive')
                 break
             case 'setIsCancelInviteClicked':
                 cancelInvite(row, 'cancel')
 
                 break
             case 'setIsActivateClicked':
-                // handleStatus(row, 'active')
+                handleActivate(row, 'active')
                 // setIsActiva/teClicked(true)
                 break
             case 'setIsResendClicked':

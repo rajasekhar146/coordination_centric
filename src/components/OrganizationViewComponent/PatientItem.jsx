@@ -211,7 +211,9 @@ const PatientItemComponent = props => {
         setSubLabel,
         setPatientList,
         setSkip,
-        organizationId
+        organizationId,
+        getStaffList,
+        setAlertColor
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -232,15 +234,15 @@ const PatientItemComponent = props => {
     }
 
     const resendInvite = async (org, status) => {
-        const res = await memberService.resendInvite(org._id, status, 'facility')
+        const res = await memberService.resendInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setPatientList([])
             setAlertMsg('Re-sended')
             setSubLabel('Another invitation was sended to this Member.')
+            setAlertColor('success')
         } else {
-            setSkip(0)
+           
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
@@ -248,13 +250,13 @@ const PatientItemComponent = props => {
     }
 
     const cancelInvite = async (org, status) => {
-        const res = await memberService.cancelInvite(org._id, status, 'facility')
+        const res = await memberService.cancelInvite(org._id, status, 'member')
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setPatientList([])
             setAlertMsg('Cancelled')
             setSubLabel('Invitation Cancelled.')
+            setAlertColor('cancel')
         } else {
             setOpenFlash(true)
             setAlertMsg('Error')
@@ -264,14 +266,23 @@ const PatientItemComponent = props => {
     const handleActivate = async(org, status) => {
         const res = await memberService.updateStatus(org._id, status)
         if (res.status === 200) {
-            setSkip(0)
+            getStaffList()
             setOpenFlash(true)
-            setPatientList([])
-           
+            if (status === 'active') {
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                setAlertColor('success')
+            } else {
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                setAlertColor('fail')
+            }
+
         } else {
             setOpenFlash(true)
             setAlertMsg('Error')
             setSubLabel('')
+
         }
     }
 
