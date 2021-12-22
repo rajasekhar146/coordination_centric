@@ -41,6 +41,7 @@
     width: 80%;
     padding: 25px;
     border-radius: 11px;
+    word-break: break-word;
 }
 .chat-tile.woner .triangle-left {
 	width: 0;
