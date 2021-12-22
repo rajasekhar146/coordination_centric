@@ -204,7 +204,10 @@ function ViewAppointmentComponent() {
 
           {role == 'doctor' && (
             <p className="row-data flex-dr">
-              <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
+              {get(appointmentList, ['data', 'profilePicPatient'], '') ?
+                <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
+                : <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image" />
+              }
               {/* <ViewImageComponent category={'doctors_certificate'} pic={appointmentList.data?.profilePicPatient} imageClass={"ap_profile mar-right-10"} /> */}
               <p className="mar-left-10">{appointmentList.data?.patientName}</p>
             </p>
@@ -218,41 +221,41 @@ function ViewAppointmentComponent() {
           )}
         </div>
         {role == 'patient' &&
-        <div className="row-details">
-        <p className="row-title">Speciality</p>
-        <p className="row-data">
-          {appointmentList.data?.speciality.map((d , index) => (
-            <span> {d + " "}
-            {index != (appointmentList.data?.speciality.length - 1) &&
-            <span> , </span>
-            }
-             </span>
-            
-          ))}
-        </p>
-      </div>
-         }
-         {appointmentList.data?.appointmentStatus == 'accepted' && 
           <div className="row-details">
-          <p className="row-title">Appointment Time</p>
-          <p className="row-data">
-          {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
-          </p>
-        </div>
-         }
-         {appointmentList.data?.appointmentStatus != 'accepted' && 
-         <div className="row-details">
-         <p className="row-title">Primary Time</p>
-         <p className="row-data">
-         {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
-         </p>
-       </div>
-          }
-        {appointmentList.data?.appointmentStatus != 'accepted' && 
-        <div className="row-details">
-          <p className="row-title">Secondary Time</p>
-          <p className="row-data">{`${moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
-        </div>
+            <p className="row-title">Speciality</p>
+            <p className="row-data">
+              {appointmentList.data?.speciality.map((d, index) => (
+                <span> {d + " "}
+                  {index != (appointmentList.data?.speciality.length - 1) &&
+                    <span> , </span>
+                  }
+                </span>
+
+              ))}
+            </p>
+          </div>
+        }
+        {appointmentList.data?.appointmentStatus == 'accepted' &&
+          <div className="row-details">
+            <p className="row-title">Appointment Time</p>
+            <p className="row-data">
+              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+            </p>
+          </div>
+        }
+        {appointmentList.data?.appointmentStatus != 'accepted' &&
+          <div className="row-details">
+            <p className="row-title">Primary Time</p>
+            <p className="row-data">
+              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+            </p>
+          </div>
+        }
+        {appointmentList.data?.appointmentStatus != 'accepted' &&
+          <div className="row-details">
+            <p className="row-title">Secondary Time</p>
+            <p className="row-data">{`${moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
+          </div>
         }
         <div className="row-details">
           <p className="row-title">Reason for appointment</p>
@@ -262,38 +265,38 @@ function ViewAppointmentComponent() {
           <p className="row-title">Previous Health Condition</p>
           <p className="row-data">
             {appointmentList.data?.healthinfo[0]?.problems.map((d, index) => (
-              <span> {d + " "} 
-              {index != (appointmentList.data?.healthinfo[0]?.problems.length - 1) &&
-            <span> , </span>
-            } </span>
+              <span> {d + " "}
+                {index != (appointmentList.data?.healthinfo[0]?.problems.length - 1) &&
+                  <span> , </span>
+                } </span>
             ))}
           </p>
         </div>
-       
-       
-          <div className="row-details">
-            <p className="row-title">Past Medical Reports</p>
-            <p className="row-data">
-              {documentsArray.map(docs => (
-                <span className="docs-view">
-                  <img src={galary_icon} className="galary_icon" alt="success_icon" />
 
-                  <img
-                    onClick={() => {
-                      openImage(docs)
-                    }}
-                    src={view_details}
-                    className="right"
-                    alt="success_icon"
-                  />
-                  <p className="align__img__name docs_name"> {docs.metadata.name}</p>
-                  <p className="align__img__name img_size"> {docs.metadata.size}</p>
 
-                </span>
-              ))}
-            </p>
-          </div>
-        
+        <div className="row-details">
+          <p className="row-title">Past Medical Reports</p>
+          <p className="row-data">
+            {documentsArray.map(docs => (
+              <span className="docs-view">
+                <img src={galary_icon} className="galary_icon" alt="success_icon" />
+
+                <img
+                  onClick={() => {
+                    openImage(docs)
+                  }}
+                  src={view_details}
+                  className="right"
+                  alt="success_icon"
+                />
+                <p className="align__img__name docs_name"> {docs.metadata.name}</p>
+                <p className="align__img__name img_size"> {docs.metadata.size}</p>
+
+              </span>
+            ))}
+          </p>
+        </div>
+
         {
           (role == 'doctor' || role == 'patient') &&
 
@@ -307,55 +310,55 @@ function ViewAppointmentComponent() {
                   View Chat History</button>
               }
               {type == 'history' && showChat &&
-              <p className="close_chat" onClick={showChatDialog}>
-                <img className="chat__close__icon" src={reject} alt="reject" />
-                Close Chat History</p>
-            }
-            {showChat &&
-              <div className="chat_content">
-                {messages.map(d => (
-                  <div className="chat_body ">
-                    {d.from == userId && (
-                      <p>
-                        <img
-                          src={senderImg}
-                          alt="Profile"
-                          className="nb__chat__image left_img"
-                        />
-                        <div className="from_chat chat__box">
-                        <span className="from_msg">  {d.message}</span>
-                        <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
-                        </div>
-                      </p>
-                    )}
-                    {d.from != userId && (
-                      <p >
-                        <div className="to_chat chat__box">
-                        <span className="from_msg">  {d.message}</span>
-                        <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
-                        </div>
+                <p className="close_chat" onClick={showChatDialog}>
+                  <img className="chat__close__icon" src={reject} alt="reject" />
+                  Close Chat History</p>
+              }
+              {showChat &&
+                <div className="chat_content">
+                  {messages.map(d => (
+                    <div className="chat_body ">
+                      {d.from == userId && (
+                        <p>
+                          <img
+                            src={senderImg}
+                            alt="Profile"
+                            className="nb__chat__image left_img"
+                          />
+                          <div className="from_chat chat__box">
+                            <span className="from_msg">  {d.message}</span>
+                            <span className="time_stamp right-10">{new Date(d.createdDate).toLocaleString()}</span>
+                          </div>
+                        </p>
+                      )}
+                      {d.from != userId && (
+                        <p >
+                          <div className="to_chat chat__box">
+                            <span className="from_msg">  {d.message}</span>
+                            <span className="time_stamp left-10">{new Date(d.createdDate).toLocaleString()}</span>
+                          </div>
 
-                        <img 
-                          src={recieverImg}
-                          alt="Profile"
-                          className="nb__chat__image right_img"
-                        />
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            }
-            {type == 'upcoming' &&
-              <div className="send_message_textbox">
-                <textarea className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
-                  value={inputValue} onInput={e => setInputValue(e.target.value)}
-                />
-                <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
+                          <img
+                            src={recieverImg}
+                            alt="Profile"
+                            className="nb__chat__image right_img"
+                          />
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              }
+              {type == 'upcoming' &&
+                <div className="send_message_textbox">
+                  <textarea className="chat_input" placeholder="Write something..." onKeyDown={handleKeyDown}
+                    value={inputValue} onInput={e => setInputValue(e.target.value)}
+                  />
+                  <img className="send__icon" onClick={sendMessage} src={sendIcon} alt="upload" />
 
-              </div>
-            }
-          </div>
+                </div>
+              }
+            </div>
 
 
           </div>

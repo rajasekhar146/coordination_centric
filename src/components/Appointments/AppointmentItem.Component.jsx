@@ -330,10 +330,10 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                            {value ? 
-                <img src={value} alt="Profile" className="nb__profile__image" /> : 
-                <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image"  />
-                }
+                                {value ?
+                                    <img src={value} alt="Profile" className="nb__profile__image" /> :
+                                    <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image" />
+                                }
                                 {/* <img className="ap_profile" src={value} alt="profile" className="nb__profile__image" /> */}
                                 {/* <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} /> */}
                             </div>
