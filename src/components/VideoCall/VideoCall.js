@@ -28,6 +28,7 @@ import {useSelector,useDispatch} from 'react-redux';
 import { Provider } from 'react-redux'
 import store from '../../redux/store';
 import {v4 as uuidv4} from 'uuid';
+import moment from 'moment';
 
 import SocketIoComponent from './SocketIoComponent/SocketIoComponent';
 import io from "socket.io-client";
@@ -35,6 +36,7 @@ import './VideoCall.css';
 import * as env from '../../environments/environment';
 import { authHeader } from '../../helpers';
 const apiURL = env.environment.apiBaseUrl;
+
 const axiosConfig = {
   headers: authHeader(),
 }
@@ -59,7 +61,7 @@ const  VideoCallWidget=({
   countDownResult,
   setCountDownResultAction
   })=>{
-
+    const timezoneDiff = (new Date()).getTimezoneOffset()
     //const [socket,setSocket]=useState(null);
     const [meetingStartTime,setMeetingStartTime]=useState({date:null});
     const [meetingEndTime,setMeetingEndTime]=useState({date:null});
@@ -190,7 +192,7 @@ const SocketEventNames = {
 
 }
 const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
-  console.log("Join canned>>>>>>>>>>>>>>>>>>", socket,authToken,appointmentId,participantId)
+  
   socket.emit(SocketEventNames.JOIN,{
       authToken,
       appointmentId,
@@ -198,7 +200,7 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
   },(data)=>{
       console.log('join reply:',data);
       if(data){
-        setMeetingEndTime({...meetingEndTime,date:new Date(data.endTime)});
+        setMeetingEndTime({...meetingEndTime,date:new Date(moment(data.endTime).add(timezoneDiff, 'minutes')).getTime()});
       }
   });
 };
