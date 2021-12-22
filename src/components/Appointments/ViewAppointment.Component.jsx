@@ -49,7 +49,7 @@ function ViewAppointmentComponent() {
       const res = await appointmentService.getSecondaryAppointment(appointmentId)
       if (res.status === 200) {
         const element = get(res, ['data', 'data'], {})
-        setSecondaryTimings(moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + (moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')))
+        setSecondaryTimings(moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + (moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')))
       } else {
 
       }
@@ -232,17 +232,28 @@ function ViewAppointmentComponent() {
         </p>
       </div>
          }
-
-        <div className="row-details">
-          <p className="row-title">Primary Time</p>
+         {appointmentList.data?.appointmentStatus == 'accepted' && 
+          <div className="row-details">
+          <p className="row-title">Appointment Time</p>
           <p className="row-data">
           {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
           </p>
         </div>
+         }
+         {appointmentList.data?.appointmentStatus != 'accepted' && 
+         <div className="row-details">
+         <p className="row-title">Primary Time</p>
+         <p className="row-data">
+         {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') + " - " + moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')}`}
+         </p>
+       </div>
+          }
+        {appointmentList.data?.appointmentStatus != 'accepted' && 
         <div className="row-details">
           <p className="row-title">Secondary Time</p>
-          <p className="row-data">{`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
+          <p className="row-data">{`${moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${secondaryTimings}`}</p>
         </div>
+        }
         <div className="row-details">
           <p className="row-title">Reason for appointment</p>
           <p className="row-data">{appointmentList.data?.appointmentReason}</p>
