@@ -53,7 +53,8 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
                         {
                             !messageCreatedByMe &&  (   <div className="chat-tile-img">
                                                             <div className="triangle-right"></div>
-                                                            <img src={content.userImg} onError={(event)=>{onImageErroRemote(event,content)}} />
+                                                            {content.userImg ? <img src={content.userImg} onError={(event)=>{onImageErroRemote(event,content)}} /> :  <img src={profileImg(content.userRole)} onError={(event)=>{onImageErroRemote(event,content)}}/> }
+                                                            
                                                         </div>
                                                     )
                         }
