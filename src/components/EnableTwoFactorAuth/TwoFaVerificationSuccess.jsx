@@ -43,7 +43,7 @@ const TwoFaVerificationSuccess = props => {
                 }
               }}
             >
-              {!chooseAnotherAuth ? 'Continue' : 'Go to Dashboard'}
+              {chooseAnotherAuth ? 'Continue' : 'Go to Dashboard'}
 
 
             </Button>

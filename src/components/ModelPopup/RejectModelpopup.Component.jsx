@@ -24,14 +24,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const RejectModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor} = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor, getOrganization} = props
   const [reason, setReason] = useState(null)
 
   const handleSubmit = () => {
     const res = organizationService.updateOrganization(selectedOrg.id, 'declined', reason)
     res.then(() => {
-      setOrganizations([])
-      setSkip(0)
+      getOrganization()
+      // setSkip(0)
       setOpenFlash(true)
       setAlertMsg('Rejected')
       setSubLabel('This account was successfully rejected, and is now disabled.')
