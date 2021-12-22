@@ -32,7 +32,8 @@ export default function RightSideControl({
     setMeetingEndTime,
     setMeetingDuration,
     setMeetingRemainingTime,
-    setCountDownResultAction
+    setCountDownResultAction,
+    apiMeetingEndTime
 }) {
 
 
@@ -60,7 +61,7 @@ export default function RightSideControl({
                 {/* <CallExtendConfirm/> */}
                 {store.getState().videoCallReducer.user.role === "doctor" && <PatientRecordsWid togglePatientRecordsFun={togglePatientRecordsFun}/> }
                 <ChatWid toggleChatFun={toggleChatFun}/>
-                {store.getState().videoCallReducer.user.role === "doctor" &&  <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend} meetingEndTime={meetingEndTime}/>}
+                {store.getState().videoCallReducer.user.role === "doctor" &&  <ExtendWid toggleExtend={toggleExtend} toggleExtendFun={toggleExtendFun} setToggleExtend={setToggleExtend} meetingEndTime={meetingEndTime} apiMeetingEndTime={apiMeetingEndTime}/>}
                
                 {/* <ShareWid toggleShare={toggleShare} toggleShareFun={toggleShareFun} setToggleShare={setToggleShare}/> */}
             

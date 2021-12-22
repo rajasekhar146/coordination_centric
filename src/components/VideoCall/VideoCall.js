@@ -64,6 +64,7 @@ const  VideoCallWidget=({
     const timezoneDiff = (new Date()).getTimezoneOffset()
     //const [socket,setSocket]=useState(null);
     const [meetingStartTime,setMeetingStartTime]=useState({date:null});
+    const [apiMeetingEndTime,setApiMeetingEndTime]=useState({date:null});
     const [meetingEndTime,setMeetingEndTime]=useState({date:null});
     const [meetingDuration,setMeetingDuration]=useState();
     const [meetingRemainingTime,setMeetingRemainingTime]=useState(0);
@@ -200,6 +201,7 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
   },(data)=>{
       console.log('join reply:',data);
       if(data){
+        setApiMeetingEndTime({...apiMeetingEndTime,date:data.endTime});
         setMeetingEndTime({...meetingEndTime,date:new Date(moment(data.endTime).add(timezoneDiff, 'minutes')).getTime()});
       }
   });
@@ -227,9 +229,11 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
       });    
       
       socket.on(SocketEventNames.MEETING_DATA, (data) => {
-        console.log("meeting_data:",data);
+        console.log("meeting_data:",data.endTime);
         if(data){
-          setMeetingEndTime({...meetingEndTime,date:new Date(data.endTime)});
+          setApiMeetingEndTime({...apiMeetingEndTime,date:data.endTime});
+          setMeetingEndTime({...meetingEndTime,date:new Date(moment(data.endTime).add(timezoneDiff, 'minutes')).getTime()});
+          // setMeetingEndTime({...meetingEndTime,date:new Date(data.endTime)});
         }
       });    
       
@@ -280,6 +284,7 @@ const sendJoinEvent = (socket,authToken,appointmentId,participantId)=>{
                                                     setMeetingRemainingTime={setMeetingRemainingTime}
                                                     setCountDownResultAction={setCountDownResultAction}
                                                     watingListSync={watingListSync}
+                                                    apiMeetingEndTime={apiMeetingEndTime}
                                                     />
                                                     <VideoSection room={room} setRoom={setRoom}/>
                                                     { toggleChat && <Chat closeChatFun={closeChatFun}/> }
