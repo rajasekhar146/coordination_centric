@@ -547,7 +547,7 @@ const handleNextPopup = () => {
 
                       {(item.module_slug =="new_appointment" || item.module_slug == "reschedule_appointment")&&(
                       <div className="button-section">
-                        <button className="button button-view" onClick={()=>{MarkAsRead(item._id);viewAppointment(item.appointmentId); history.push(`/viewApointment/upcoming/${item.appointmentId}`)}}>
+                        <button className="button button-view" onClick={()=>{MarkAsRead(item._id);viewAppointment(item.appointmentid); history.push(`/viewApointment/upcoming/${item.appointmentId}`)}}>
                           <RemoveRedEyeOutlinedIcon style={{fontSize:14,marginRight:5}}/>
                           View</button>
 
