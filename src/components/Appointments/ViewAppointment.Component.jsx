@@ -204,7 +204,7 @@ function ViewAppointmentComponent() {
 
           {role == 'doctor' && (
             <p className="row-data flex-dr">
-              {get(appointmentList, ['data', 'profilePicPatient'], true) ?
+              {get(appointmentList, ['data', 'profilePicPatient'], '') ?
                 <img src={appointmentList.data?.profilePicPatient} alt="Profile" className="nb__profile__image" />
                 : <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image" />
               }
