@@ -764,7 +764,7 @@ const PersonalInfo = props => {
                 />
               )}
             </div>
-            <div className="io_services">Presential Consultation</div>
+            <div className="io_services">Personal Consultation</div>
           </div>
         </div>
       </div>
