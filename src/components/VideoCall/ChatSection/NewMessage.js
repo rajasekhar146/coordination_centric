@@ -3,9 +3,20 @@ import SendChatImg from './send-chat.png';
 import { sendMessageUsignDataChannel } from '../utils/TwilioUtils';
 export default function NewMessage() {
     const [message, setMessage] = useState('');
+    let localUser = JSON.parse(localStorage.getItem("currentUser"));
+    let userId = localUser.data.data._id;
+    let userImg = localUser.data.data.profilePic;
+    let userRole = localUser.data.data.role;
     const sendMessage = ()=>{
         if(message){
-            sendMessageUsignDataChannel(message, true)
+            let msz = {
+                message:message,
+                userId:userId,
+                userImg:userImg,
+                userRole:userRole,
+                date:new Date().getTime()
+            }
+            sendMessageUsignDataChannel(msz, true)
             setMessage('');
         }
     }

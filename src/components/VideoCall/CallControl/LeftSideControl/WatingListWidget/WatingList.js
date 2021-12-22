@@ -1,8 +1,12 @@
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import watingUserImg from  "./wating-user-1.png";
-import history from '../../../../../history';
+import {useHistory} from 'react-router-dom';
 export default function WatingList({watingListSync,closeList}) {
+    const history = useHistory();
+    const reDireactToVideoCall = (appointmentId)=>{
+        history.push(`/video-call/${appointmentId}`)
+    }
     return (
         <div className="watingroom-dropdown">
         <div className="watingroom-header">
@@ -27,7 +31,7 @@ export default function WatingList({watingListSync,closeList}) {
                                     </div>
                                 </div>
                                 <div className="wating-action">
-                                    <button className="add-btn" onClick={() => {history.push(`/video-call/${itm.appointmentId}`)}}> Add to call</button>
+                                    <button className="add-btn" onClick={reDireactToVideoCall(itm.appointmentId)}> Add to call</button>
                                 </div>
                             </li>
                         )
