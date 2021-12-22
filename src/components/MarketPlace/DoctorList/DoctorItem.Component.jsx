@@ -10,12 +10,28 @@ import { setDoctorDetials } from '../../../redux/actions/appointmentActions'
 import { useDispatch } from 'react-redux'
 import history from '../../../history'
 import default_profile_image from '../../../assets/icons/default_profile_image.png'
+import {
+  primaryAppointmentDate,
+  secondaryAppointmentDate,
+} from '../../../redux/actions/commonActions'
 
 const DoctorListComponent = props => {
   const { row } = props
   const dispatch = useDispatch()
 
   const handleBookAppointment = () => {
+    const selectedDate = {
+      Day: null,
+      timings: {
+        startTime: null,
+        endTime: null,
+        timeSlotId: null,
+      },
+    }
+
+    dispatch(primaryAppointmentDate(selectedDate))
+    dispatch(secondaryAppointmentDate(selectedDate))
+
     dispatch(setDoctorDetials(row))
     history.push({
       pathname: '/marketplace/make-a-appointments',
