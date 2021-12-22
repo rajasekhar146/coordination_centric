@@ -29,7 +29,7 @@ const DoctorListComponent = props => {
         {row.pic ? (
           <img src={row.pic} alt="prof_pic" className="dl__pic" />
         ) : (
-          <img src={require('../../../assets/icons/default_profile_image.png').default} alt="profile" />
+          <img src={require('../../../assets/icons/default_profile_image.png').default} className="dl__pic" alt="profile" />
         )}
         {/* <ViewImageComponent category={'doctors_certificate'} pic={row.pic} imageClass={"dl__pic"} /> */}
       </TableCell>

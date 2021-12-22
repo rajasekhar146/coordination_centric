@@ -53,7 +53,7 @@ const problemAndSymptoms = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 350,
+  width: 440,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -585,7 +585,7 @@ const WeekDaysViewComponent = props => {
   const clickConfirmButton = async () => {
     // setClickedAppointment(false)
     // setClickedConfirm(true)
-    if (role === 'patient' && type !== 'rescheduleByPatient' && appointmentDetails.from) {
+    if (role === 'patient' && type !== 'rescheduleByPatient' && !appointmentDetails.from) {
       setClickedAppointment(false)
       setClickedConfirm(true)
       return false

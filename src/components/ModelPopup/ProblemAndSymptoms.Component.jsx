@@ -10,6 +10,8 @@ import { useForm } from 'react-hook-form'
 import InviteMember from './InviteMemberItem'
 import { memberService } from '../../services'
 import galary_icon from '../../assets/icons/galary_icon.png';
+import view_details from '../../assets/icons/download_icon.png'
+import DeleteIcon from '../../assets/icons/delete_icon.png'
 
 const ProblemAndSymptomsComponent = props => {
   const setInvitedMembers = props.setInvitedMembers
@@ -82,7 +84,15 @@ const ProblemAndSymptomsComponent = props => {
     setImgCounter(imgCounter + 1)
     setshowUpload(!showUpload)
   }
-
+  const openImage = async (docs)=>{
+    window.open(docs.url, '_blank');
+  }
+  const delImage = async (docs , index) =>{
+    var data = [...documentsArray]
+    data.splice(index , 1);
+    selectedFiles.splice(index,1)
+    setDocumentsArray(data);
+  }
   const updateInviteEmail = (email, index) => {
     const emailValidation =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -159,9 +169,18 @@ const ProblemAndSymptomsComponent = props => {
       </div>
 
       <div className="od_input_p">
-      {documentsArray&& documentsArray.map(docs => (
+      {documentsArray&& documentsArray.map((docs , index) => (
                 <span className="docs-view">
                   <img src={galary_icon} className="absolute"  alt="success_icon" />
+                  <img
+                    onClick={() => {
+                      openImage(docs)
+                    }}
+                    src={view_details}
+                    className="right"
+                    alt="success_icon"
+                  />
+                  <img src={DeleteIcon} className="del_icon"  onClick={() => {delImage(docs , index)}} alt="delete_icon" />
                   <span className="align__img__name docs_name" > {docs.metadata?.name}</span>
                   <span className="align__img__name img_size"> {docs.metadata?.size}</span>
 
