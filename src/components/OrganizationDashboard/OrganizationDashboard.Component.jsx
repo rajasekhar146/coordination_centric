@@ -575,6 +575,7 @@ const OrganizationDashboardComponent = () => {
           invited_facilityName: get(r, ['invited_facilityName'], ''),
           status: r.status,
           action: '',
+          planType: r?.planType,
         }
 
         data.push(record)

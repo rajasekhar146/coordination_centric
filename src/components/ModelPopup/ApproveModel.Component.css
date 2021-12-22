@@ -679,3 +679,7 @@
 .mar-top-15{
     margin-top: 15px;
 }
+
+.MuiButtonBase-root.Mui-disabled {
+    color: #353031 !important
+}

@@ -12,6 +12,20 @@ const ApproveModel = props => {
       facilityId: selectedOrg.id,
     }
     console.log('Approve Model Popup', params)
+    if (selectedOrg.planType == 'free' || selectedOrg.planType == undefined) {
+      const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
+        console.log(err)
+      })
+      if (res.status === 200) {
+        setOrganizations([])
+        setSkip(0)
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel('This account was successfully verified.')
+        setAlertColor('success')
+        props.clickCloseButton()
+      }
+    } else {
     const response = await organizationService.subscriptionOrganization(params).catch(err => {
       console.log(err)
     })
@@ -27,7 +41,8 @@ const ApproveModel = props => {
         setSubLabel('This account was successfully verified.')
         setAlertColor('success')
         props.clickCloseButton()
-      // }
+        // }
+      }
     }
   }
 
