@@ -5,6 +5,7 @@ const DeactivateModel = props => {
   return (
     <React.Fragment>
       <DeactivateModelComponent 
+       getOrganization={props.getOrganization}
       clickCloseButton={props.clickCloseButton} 
       selectedOrg={props.selectedOrg}
       setSkip={props.setSkip}

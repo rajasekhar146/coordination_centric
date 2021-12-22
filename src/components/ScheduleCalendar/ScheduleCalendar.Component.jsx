@@ -12,6 +12,7 @@ import history from '../../history'
 import Capitalize from 'lodash.capitalize'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
+import moment from 'moment'
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
 
@@ -21,6 +22,7 @@ const ScheduleCalendar = (props) => {
     appointmentList,
     type
   } = props;
+  const timezoneDiff = (new Date()).getTimezoneOffset()
 
   const currentUser = authenticationService.currentUserValue
   const role = get(currentUser, ['data', 'data', 'role'], '')
@@ -48,8 +50,8 @@ const ScheduleCalendar = (props) => {
       const formattesData = appointmentList.map((appointment) => (
         {
           title: getLabel(appointment),
-          start: new Date(appointment.startTime),
-          end: new Date(appointment.endTime),
+          start: new Date(moment(appointment.startTime).add(timezoneDiff, 'minutes')),
+          end: new Date(moment(appointment.endTime).add(timezoneDiff, 'minutes')),
           status: appointment.status,
           appointmentid: appointment.appointmentid
         }

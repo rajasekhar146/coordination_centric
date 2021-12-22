@@ -110,6 +110,7 @@ const WeekDaysViewComponent = props => {
   const [IsClickedSubmit, setClickedSubmit] = useState(false)
   const [newTimings, setTimeSlots] = useState([])
   const [newAvailabilities, setNewAvailabilities] = useState([])
+  const [newBookedSlots, setNewBookedSlots] = useState([])
   const interval = 30
   const startSlotHour = 6
   const startSlotMinute = 0
@@ -357,6 +358,7 @@ const WeekDaysViewComponent = props => {
     // }
 
     setNewAvailabilities(doctorAvailability.availabilities)
+    setNewBookedSlots(doctorAvailability.bookedSlots)
     await getWeekDays(selectedDate, doctorAvailability.availabilities, doctorAvailability.bookedSlots)
     console.log('selectedYear', selectedYear, 'selectedMonth', selectedMonth, 'selectedDay', selectedDay)
     console.log('useEffect Week Days >> selectedDate ', selectedDate.format('dddd, DD'))
@@ -403,6 +405,7 @@ const WeekDaysViewComponent = props => {
       const newTimeSlots = getUnBookedSlots(currentDate, availabilityDayDetail.availableTimeSlots, bookedSlots)
 
       const actualTimeSlots = disabledPassedTime(currentDate, newTimeSlots)
+
       console.log('Actual TimeSlots', actualTimeSlots)
 
       console.log('newTimeSlots', currentDate.format('YYYY-MM-DD'), newTimeSlots)
@@ -429,9 +432,12 @@ const WeekDaysViewComponent = props => {
     console.log('Current Day >> timezoneDiff', timezoneDiff)
 
     timeSlots.map(ts => {
+      const startTime = ts.startTime.split(' ')
+      const endTime = ts.endTime.split(' ')
+      ts.isSelected = false
+      ts.isPrimary = false
+      ts.isSecondary = false
       if (today === dDate) {
-        const startTime = ts.startTime.split(' ')
-        const endTime = ts.endTime.split(' ')
         var aDateTime = moment(dDate + ' ' + startTime).format('YYYY-MM-DD HH:mm:ss') //.add(-timezoneDiff, 'minutes').format('YYYY-MM-DD HH:mm:ss')
         console.log('Current Day >> before', ts)
         console.log('Current Day >> before >> date ', todayWithTime, aDateTime)
@@ -439,12 +445,46 @@ const WeekDaysViewComponent = props => {
         console.log('Current Day >> before >> a', a)
         const subDate = moment(todayWithTime).subtract(moment(aDateTime)).add(timezoneDiff, 'minutes')
         console.log('Current Day >> before >> subDate', subDate.format('HH:mm'))
-        if (todayWithTime > aDateTime) {
+
+        if (primaryDate.Day != null || secondaryDate.Day != null) {
+          console.log(
+            'Check >> WeekDaysView >> primaryDate or secondaryDate',
+            dDate,
+            primaryDate.Day,
+            secondaryDate.Day
+          )
+          if (primaryDate.Day == dDate) {
+            console.log('Check >> WeekDaysView >> startTime', ts.startTime)
+            console.log('Check >> WeekDaysView >> Primary', primaryDate.timings.startTime)
+            if (ts.startTime == primaryDate.timings.startTime) {
+              console.log('Check >> WeekDaysView >> Primary >> Found')
+              ts.isSelected = true
+              ts.isPrimary = true
+              ts.isSecondary = false
+              return ts
+            }
+          }
+          if (secondaryDate.Day == dDate) {
+            console.log('Check >> WeekDaysView >> startTime', ts.startTime)
+            console.log('Check >> WeekDaysView >> Primary', secondaryDate.timings.startTime)
+            if (ts.startTime == secondaryDate.timings.startTime) {
+              console.log('Check >> WeekDaysView >> Primary >> Found')
+              ts.isSelected = true
+              ts.isPrimary = false
+              ts.isSecondary = true
+              return ts
+            }
+          }
+        } else if (todayWithTime > aDateTime) {
           console.log('Current Day >> Passed')
           ts.isEnabled = false
+          ts.isPrimary = false
+          ts.isSecondary = false
           return ts
         } else {
           console.log('Current Day >> Not Passed', ts)
+          ts.isPrimary = false
+          ts.isSecondary = false
           return ts
         }
         // if (startTime.length > 0) {
@@ -465,8 +505,35 @@ const WeekDaysViewComponent = props => {
         //     return ts
         //   }
         // }
+      } else if (primaryDate.Day != null || secondaryDate.Day != null) {
+        console.log('Check >> WeekDaysView >> primaryDate or secondaryDate', dDate, primaryDate.Day, secondaryDate.Day)
+        if (primaryDate.Day == dDate) {
+          console.log('Check >> WeekDaysView >> startTime', ts.startTime)
+          console.log('Check >> WeekDaysView >> Primary', primaryDate.timings.startTime)
+          if (ts.startTime == primaryDate.timings.startTime) {
+            console.log('Check >> WeekDaysView >> Primary >> Found')
+            ts.isSelected = true
+            ts.isPrimary = true
+            ts.isSecondary = false
+            return ts
+          }
+        }
+
+        if (secondaryDate.Day == dDate) {
+          console.log('Check >> WeekDaysView >> startTime', ts.startTime)
+          console.log('Check >> WeekDaysView >> secondaryDate', secondaryDate.timings.startTime)
+          if (ts.startTime == secondaryDate.timings.startTime) {
+            console.log('Check >> WeekDaysView >> secondaryDate >> Found')
+            ts.isSelected = true
+            ts.isPrimary = false
+            ts.isSecondary = true
+            return ts
+          }
+        }
       } else {
         console.log('Current Day >> Not today')
+        ts.isPrimary = false
+        ts.isSecondary = false
         return ts
       }
     })
@@ -557,7 +624,10 @@ const WeekDaysViewComponent = props => {
       Day: newSelectedDate.format('DD'),
     }
     dispatch(calendarAppointmentDate(calenderDay))
+    console.log('moveBack >> selectedDate', newSelectedDate.format('YYYY-MM-DD'))
+    await getWeekDays(newSelectedDate.format('YYYY-MM-DD'), newAvailabilities, newBookedSlots)
   }
+
   const moveNext = async () => {
     console.log('useEffect Week Days', selectedCalender)
     const selectedYear = selectedCalender.calenderDate.Year
@@ -567,7 +637,7 @@ const WeekDaysViewComponent = props => {
 
     const newSelectedDate = moment(selectedDate).add(5, 'd')
     const newDay = newSelectedDate.format('MMMM, YYYY')
-    console.log(newSelectedDate.format('dddd, DD'))
+    console.log('newSelectedDate', newSelectedDate.format('dddd, DD'))
     setCurrentDate(newDay)
     setCurrentDay(newSelectedDate)
     const calenderDay = {
@@ -576,6 +646,10 @@ const WeekDaysViewComponent = props => {
       Day: newSelectedDate.format('DD'),
     }
     dispatch(calendarAppointmentDate(calenderDay))
+    console.log('moveNext >> selectedDate', newSelectedDate.format('YYYY-MM-DD'))
+    console.log('moveNext >> selectedDate >> newAvailabilities', newAvailabilities)
+    console.log('moveNext >> selectedDate >> newBookedSlots', newBookedSlots)
+    await getWeekDays(newSelectedDate.format('YYYY-MM-DD'), newAvailabilities, newBookedSlots)
   }
 
   const clickCloseButton = () => {

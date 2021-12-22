@@ -426,20 +426,24 @@ const getMenuList = role => {
       ]
   }
 }
-const currentUser = authenticationService.currentUserValue
-const role = get(currentUser, ['data', 'data', 'role'], '')
-const menus = getMenuList(role)
+
 
 const LeftMenuComponent = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  dispatch(leftMenus(menus))
+  // dispatch(leftMenus(menus))
   const filteredMenus = useSelector(state => state.leftMenus)
   console.log('Menus filtered:', filteredMenus)
   const [newMenus, setMenus] = useState([])
   useEffect(() => {
-    setMenus(filteredMenus)
-  }, [filteredMenus])
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    console.log('currentUser', currentUser)
+    const role = get(currentUser, ['data', 'data', 'role'], '')
+    const menus = getMenuList(role)
+    dispatch(leftMenus(menus))
+    console.log('Left Menu')
+    setMenus(menus)
+  }, [])
   return newMenus.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
 
   // return (
@@ -487,9 +491,10 @@ const SingleLevel = ({ item, index, level, isSelected }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dispatch = useDispatch()
   console.log('Menu Items', item)
+  var newMenus = useSelector(state => state.leftMenus)
   const handleSelectedMenu = (pageURL, idx) => {
     setSelectedIndex(idx)
-    var newMenus = menus
+    
     console.log('Selected Menu Items >> before', newMenus, idx, level)
     newMenus.map(m => {
       if (level > 1 && m.items && m.items.length > 0) {

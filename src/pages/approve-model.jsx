@@ -6,6 +6,7 @@ const ApproveModel = props => {
     <React.Fragment>
       <ApproveModelComponent 
       clickCloseButton={props.clickCloseButton} 
+      getOrganization={props.getOrganization}
       setSkip={props.setSkip}
       selectedOrg={props.selectedOrg} 
       setAlertMsg={props.setAlertMsg}

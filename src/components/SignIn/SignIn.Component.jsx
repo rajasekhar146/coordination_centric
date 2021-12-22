@@ -23,6 +23,8 @@ import SigninStore from '../../stores/signinstore'
 import { getTokenFn } from '../../firebase'
 import moment from 'moment'
 import Cookies from 'js-cookie'
+import { useSelector, useDispatch } from 'react-redux'
+import { leftMenus } from '../../redux/actions/commonActions'
 
 const SignInComponent = () => {
   const [isSubmit, setIsSubmit] = useState(false)
@@ -37,7 +39,7 @@ const SignInComponent = () => {
   const [activeLink, setActiveLink] = useState(false)
   const [subLabel, setSubLabel] = useState(false)
   const [keepMeSignIn, setKeepMeSignIn] = useState(false)
-
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -48,6 +50,7 @@ const SignInComponent = () => {
   console.log(errors)
 
   useEffect(() => {
+    dispatch(leftMenus([]))
     var tz = moment.tz.guess()
     var zone = moment.tz(tz).format('Z')
     console.log('Local Time', tz, zone)

@@ -442,10 +442,10 @@ const OrganizationDashboardComponent = () => {
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
-  const [isVerifyBankClicked , setIsVerifyBankClicked] = useState(false);
+  const [isVerifyBankClicked, setIsVerifyBankClicked] = useState(false);
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [isAcivated, setIsActivateClicked] = useState(false)
-  const [isActivateClickedFromSuspend , setIsActivateClickedFromSuspend] = useState(false)
+  const [isActivateClickedFromSuspend, setIsActivateClickedFromSuspend] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -470,8 +470,8 @@ const OrganizationDashboardComponent = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [firstDeposit, setFirstDeposit] = useState(0)
   const [secondDeposit, setSecondDeposit] = useState(0)
-  const [secondDepositErr , setSecondDepositErr] = useState(false)
-  const [firstDepositErr , setFirstDepositErr] = useState(false)
+  const [secondDepositErr, setSecondDepositErr] = useState(false)
+  const [firstDepositErr, setFirstDepositErr] = useState(false)
 
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
@@ -586,12 +586,12 @@ const OrganizationDashboardComponent = () => {
 
 
 
-  const getOrganization = (nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus) => {
+  const getOrganization = () => {
     setIsLoading(true)
     let allOrganizations;
     if (role === 'admin') {
       // memberService.getStaffList(organizationId, 'facility', limit, skip).then((res) => {
-        organizationService.allOrganization(skip, limit, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus).then((data) => {
+      organizationService.allOrganization(skip, limit, searchText, searchStartDate, searchEndDate, selectedStatus).then((data) => {
         setOrganisations(data)
         setIsLoading(false)
       }).catch((err) => {
@@ -599,7 +599,7 @@ const OrganizationDashboardComponent = () => {
         setIsLoading(false)
       })
     } else {
-      organizationService.allOrganization(skip, limit, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus).then((data) => {
+      organizationService.allOrganization(skip, limit, searchText, searchStartDate, searchEndDate, selectedStatus).then((data) => {
         setOrganisations(data)
         setIsLoading(false)
       }).catch((err) => {
@@ -654,25 +654,25 @@ const OrganizationDashboardComponent = () => {
     getOrganization()
   }
 
-  const closeVerifyBankButton =()=>{
+  const closeVerifyBankButton = () => {
     setIsVerifyBankClicked(false)
     getOrganization()
 
   }
 
-  const verifyBankHanlde = () =>{
+  const verifyBankHanlde = () => {
     setFirstDepositErr(false);
-      setSecondDepositErr(false)
-    if(!firstDeposit && !secondDeposit){
+    setSecondDepositErr(false)
+    if (!firstDeposit && !secondDeposit) {
       setFirstDepositErr(true);
       setSecondDepositErr(true)
       return;
     }
-    if(!firstDeposit ){
+    if (!firstDeposit) {
       setFirstDepositErr(true);
       return
     }
-    if(!secondDeposit){
+    if (!secondDeposit) {
       setSecondDepositErr(true)
       return
     }
@@ -680,17 +680,17 @@ const OrganizationDashboardComponent = () => {
     amnt.push(Number(firstDeposit))
     amnt.push(Number(secondDeposit))
     const bankDetail = {
-      amount : amnt,
-      facilityId:selectedOrg.id
+      amount: amnt,
+      facilityId: selectedOrg.id
     }
 
-    organizationService.verifyBankHanlde(bankDetail).then((data , err) => {
-      if(data.data){
+    organizationService.verifyBankHanlde(bankDetail).then((data, err) => {
+      if (data.data) {
         setOpenFlash(true)
         setAlertMsg('Verified')
-        setSubLabel(data.data.message )
+        setSubLabel(data.data.message)
         setAlertColor('success')
-      }else{
+      } else {
         setOpenFlash(true)
         setAlertMsg('Error')
         setSubLabel('You have tried to verify 3 times. To continue please reach out to us directly.')
@@ -698,8 +698,8 @@ const OrganizationDashboardComponent = () => {
       }
       setIsVerifyBankClicked(false)
       getOrganization();
-      
-     
+
+
     })
 
   }
@@ -840,7 +840,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                label = "End Date"
+                label="End Date"
                 value={searchEndDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchEndDate(e)}
@@ -852,7 +852,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                label = "Start Date"
+                label="Start Date"
                 value={searchStartDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchStartDate(e)}
@@ -899,7 +899,7 @@ const OrganizationDashboardComponent = () => {
                   ? <TableBody>
                     <tr>
                       <td className="app_loader" colSpan={15}>
-                          <CircularProgress />
+                        <CircularProgress />
                       </td>
                     </tr>
                   </TableBody>
@@ -927,7 +927,7 @@ const OrganizationDashboardComponent = () => {
                             setIsRejectClicked={setIsRejectClicked}
                             setIsAcceptClicked={setIsAcceptClicked}
                             setIsDeactivateClicked={setIsDeactivateClicked}
-                            setIsVerifyBankClicked = {setIsVerifyBankClicked}
+                            setIsVerifyBankClicked={setIsVerifyBankClicked}
                             getTextColor={getTextColor}
                             setSelectedOrg={setSelectedOrg}
                             rows={rows}
@@ -941,7 +941,8 @@ const OrganizationDashboardComponent = () => {
                             setIsActivateClicked={setIsActivateClicked}
                             role={role}
                             setAlertcolor={setAlertColor}
-                            setIsActivateClickedFromSuspend = {setIsActivateClickedFromSuspend}
+                            setIsActivateClickedFromSuspend={setIsActivateClickedFromSuspend}
+                            getOrganization={getOrganization}
                           />
                         ))
                         : null
@@ -999,6 +1000,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={rejectModelStyle}>
           <RejectOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -1018,6 +1020,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <AprroveOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -1037,6 +1040,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <DeactivateOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -1056,6 +1060,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <CancelInviteModel
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -1076,7 +1081,7 @@ const OrganizationDashboardComponent = () => {
         <Box sx={verifyBankModelStyle}>
           <VerifyBankingInfoPopup
             clickCloseButton={closeVerifyBankButton}
-            clickSubmitButton = {verifyBankHanlde}
+            clickSubmitButton={verifyBankHanlde}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
             setOrganizations={setOrganizations}
@@ -1084,19 +1089,19 @@ const OrganizationDashboardComponent = () => {
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
             setAlertColor={setAlertColor}
-            setFirstDeposit = {setFirstDeposit}
-            setSecondDeposit = {setSecondDeposit}
-            firstDeposit = {firstDeposit}
-            secondDeposit = {secondDeposit}
-            firstDepositErr = {firstDepositErr}
-            secondDepositErr = {secondDepositErr}
-            setFirstDepositErr = {setFirstDepositErr}
-            setSecondDepositErr = {setSecondDepositErr}
+            setFirstDeposit={setFirstDeposit}
+            setSecondDeposit={setSecondDeposit}
+            firstDeposit={firstDeposit}
+            secondDeposit={secondDeposit}
+            firstDepositErr={firstDepositErr}
+            secondDepositErr={secondDepositErr}
+            setFirstDepositErr={setFirstDepositErr}
+            setSecondDepositErr={setSecondDepositErr}
 
           />
         </Box>
       </Modal>
-      
+
       <Alert
         handleCloseFlash={handleCloseFlash}
         alertMsg={alertMsg}

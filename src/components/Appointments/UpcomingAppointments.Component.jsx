@@ -190,7 +190,7 @@ const UpcomongAppointmentComponent = props => {
         if (type === 'upcoming') {
             date = moment(new Date()).format("YYYY-MM-DD");
         } else {
-            date = moment(new Date()).subtract(1, 'days').format("YYYY-MM-DD");
+            date = moment(new Date()).format("YYYY-MM-DD");
         }
         appointmentService.getAppointments(userId, date, type, limit, skip, role).then((res) => {
             setIsLoading(false)

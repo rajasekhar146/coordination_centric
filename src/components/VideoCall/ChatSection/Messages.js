@@ -84,7 +84,7 @@ const Messages =({messages})=>{
                                     sameAuthor={sameAuthor}
                                     messageCreatedByMe={message.messageCreatedByMe}
                                     />
-                                    { (idx > 3 && idx === arr.length -1 ) ? scrollBottom() : null}
+                                    { (idx === arr.length -1) ? scrollBottom() : null}
                                 </>
                                
                                 
