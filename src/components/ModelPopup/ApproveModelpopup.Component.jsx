@@ -5,7 +5,7 @@ import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
 const ApproveModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor, getOrganization } = props
 
   const handleSubmit = async () => {
     const params = {
@@ -21,8 +21,7 @@ const ApproveModel = props => {
       //   console.log(err)
       // })
       // if (res.status === 200) {
-        setOrganizations([])
-        setSkip(0)
+        getOrganization()
         setOpenFlash(true)
         setAlertMsg('Verified')
         setSubLabel('This account was successfully verified.')
