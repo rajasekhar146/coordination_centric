@@ -14,6 +14,7 @@
     /* width: calc(100vw - 262px); */
     /* height: 100vh; */
     /* float: left;  */
+    margin-top: 8px;
 }
 
 .master__contect__placeholder{
