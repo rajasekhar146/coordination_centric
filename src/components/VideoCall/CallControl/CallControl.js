@@ -32,7 +32,8 @@ export default function CallControl({
   setMeetingDuration,
   setMeetingRemainingTime,
   setCountDownResultAction,
-  watingListSync
+  watingListSync,
+  apiMeetingEndTime
 }) {
     useEffect(() => {
     },[])
@@ -76,6 +77,7 @@ export default function CallControl({
                             setMeetingDuration={setMeetingDuration}
                             setMeetingRemainingTime={setMeetingRemainingTime}
                             setCountDownResultAction={setCountDownResultAction}
+                            apiMeetingEndTime={apiMeetingEndTime}
                         />
                     </div>
                     )}

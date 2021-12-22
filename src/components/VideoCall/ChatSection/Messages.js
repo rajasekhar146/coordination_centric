@@ -10,6 +10,13 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
     const authorText = messageCreatedByMe ? "Doctor": author;
     const applicationUserImg = store.getState().videoCallReducer.user.img;
     const contentAdditanalStyle = messageCreatedByMe ? 'message_right_styles ':'message_left_styles';
+    const profileImg = (role)=>{
+        if(role === "doctor"){
+            return ChatDoctorDefaultImg;
+        }else {
+            return ChatPatientDefaultImg;
+        }
+    }
     const onImageErro = (e)=>{
         e.target.onerror = null; 
         if(store.getState().videoCallReducer.user.role === "doctor"){
@@ -33,7 +40,8 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
                    <div className={`chat-tile ${alignClass}`}>
                         {
                             messageCreatedByMe &&  (  <div className="chat-tile-img">
-                                                            <img src={applicationUserImg} onError={onImageErro}/>
+                                                         {applicationUserImg ?  <img src={applicationUserImg} onError={onImageErro}/> : <img src={profileImg(content.userRole)} onError={onImageErro}/>}  
+                                                         
                                                             <div className="triangle-left"></div>
                                                         </div>
                                                     )
