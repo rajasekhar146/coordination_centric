@@ -58,7 +58,7 @@ const TotalOnboardings = (props) => {
                 const year = d.getFullYear(appointment.year)
                 const month = d.getMonth(appointment.month)
                 const day = d.getDate(appointment.day)
-                const catItem = moment(`${day}-${month}-${year}`, "DD-MM-YYYY").format('DD-MM-YYYY');
+                const catItem = moment(`${day}-${month + 1}-${year}`, "DD-MM-YYYY").format('DD-MM-YYYY');
                 categoryArray.push(catItem)
             });
             return categoryArray;

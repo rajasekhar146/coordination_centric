@@ -223,65 +223,68 @@ const AppointmentItemComponent = props => {
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
                             <div >
-                                <img className="nb__profile__image" src={value} alt="profile" />
+                                {value ?
+                                    <img src={value} alt="Profile" className="nb__profile__image" /> :
+                                    <img src={require('../../assets/icons/default_profile_image.png').default} alt="profile" className="nb__profile__image" />
+                                }
                                 {/* <ViewImageComponent category={'doctors_certificate'} pic={value} imageClass={"ap_profile"} /> */}
                             </div>
                         </div>
                     </TableCell>
-                ) : 
-                // column.id == 'action' ? (
-                //     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
-                //         <IconButton
-                //             aria-label="more"
-                //             id="long-button"
-                //             aria-controls="long-menu"
-                //             aria-expanded={open ? 'true' : undefined}
-                //             aria-haspopup="true"
-                //             disabled={row['status'] === 'compleated' || row['status'] === 'cancelled'}
-                //             onClick={e => handleClick(e, `${row['status']}`)}
-                //         >
-                //             <MoreVertRoundedIcon />
-                //         </IconButton>
-                //         <Menu
-                //             MenuListProps={{
-                //                 'aria-labelledby': 'long-button',
-                //             }}
-                //             anchorEl={anchorEl}
-                //             open={open}
-                //             onClose={handleClose}
-                //             className={classes.menu}
-                //         // PaperProps={{
-                //         //     style: {
-                //         //         maxHeight: ITEM_HEIGHT * 4.5,
-                //         //         width: '20ch',
-                //         //         boxShadow:
-                //         //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-                //         //         border: '1px solid #9fa2a3',
-                //         //         left: '-75px'
-                //         //     },
-                //         // }}
-                //         >
-                //             {menuOptions.map((option, idx) => (
-                //                 <MenuItem
-                //                     key={option}
-                //                     onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
-                //                     className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
-                //                 >
-                //                     <div className="od__menu__icon__column">
-                //                         <img width={18} src={option.icon} alt={option.text} />
-                //                     </div>
-                //                     <div className="od__menu__text__column">{option.text}</div>
-                //                 </MenuItem>
-                //             ))}
-                //         </Menu>
-                //     </TableCell>
-                // ) 
-                // : 
-                column.id == 'id' ? null : (
-                    <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
-                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                    </TableCell>
-                )
+                ) :
+                    // column.id == 'action' ? (
+                    //     <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
+                    //         <IconButton
+                    //             aria-label="more"
+                    //             id="long-button"
+                    //             aria-controls="long-menu"
+                    //             aria-expanded={open ? 'true' : undefined}
+                    //             aria-haspopup="true"
+                    //             disabled={row['status'] === 'compleated' || row['status'] === 'cancelled'}
+                    //             onClick={e => handleClick(e, `${row['status']}`)}
+                    //         >
+                    //             <MoreVertRoundedIcon />
+                    //         </IconButton>
+                    //         <Menu
+                    //             MenuListProps={{
+                    //                 'aria-labelledby': 'long-button',
+                    //             }}
+                    //             anchorEl={anchorEl}
+                    //             open={open}
+                    //             onClose={handleClose}
+                    //             className={classes.menu}
+                    //         // PaperProps={{
+                    //         //     style: {
+                    //         //         maxHeight: ITEM_HEIGHT * 4.5,
+                    //         //         width: '20ch',
+                    //         //         boxShadow:
+                    //         //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+                    //         //         border: '1px solid #9fa2a3',
+                    //         //         left: '-75px'
+                    //         //     },
+                    //         // }}
+                    //         >
+                    //             {menuOptions.map((option, idx) => (
+                    //                 <MenuItem
+                    //                     key={option}
+                    //                     onClick={e => handleMenuAction(e, option.fnKey, index, row.id)}
+                    //                     className={`${classes.menuItem} ${classes[getTextColor(option.text)]} od__menu__row od__menu__text`}
+                    //                 >
+                    //                     <div className="od__menu__icon__column">
+                    //                         <img width={18} src={option.icon} alt={option.text} />
+                    //                     </div>
+                    //                     <div className="od__menu__text__column">{option.text}</div>
+                    //                 </MenuItem>
+                    //             ))}
+                    //         </Menu>
+                    //     </TableCell>
+                    // ) 
+                    // : 
+                    column.id == 'id' ? null : (
+                        <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
+                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                        </TableCell>
+                    )
             })}
         </TableRow>
     )

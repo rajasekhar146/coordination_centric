@@ -301,7 +301,6 @@ const OrganizationViewComponent = (props) => {
                 <Box sx={successStyle}>
                     <InviteMemberSuccess
                         clickCloseButton={closeInviteSuccessModel}
-                   
                     />
                 </Box>
             </Modal>
@@ -334,6 +333,7 @@ const OrganizationViewComponent = (props) => {
                 <Box sx={style}>
                     <InviteCollaboratorSuccess
                         clickCloseButton={closeInviteSuccessModel}
+                        
                     />
                 </Box>
             </Modal>
