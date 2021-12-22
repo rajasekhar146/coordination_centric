@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import { connect } from "react-redux";
 import ChatPatientImg from './chat-patient.png';
 import ChatDoctorDefaultImg from './doctor_default.png';
@@ -19,6 +19,14 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
         }
 
     }
+    const onImageErroRemote = (event,content)=>{
+        event.target.onerror = null; 
+        if(content.userRole === "doctor"){
+            event.target.src=ChatDoctorDefaultImg;
+        }else {
+            event.target.src=ChatPatientDefaultImg;
+        }
+    }
     return(
         <>
                 {
@@ -32,12 +40,12 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
                         }
                         <div className="chat-tile-ping">
                             {!sameAuthor && <p className="message_title">{author}</p>}
-                            <p className={`message_content ping ${contentAdditanalStyle}`}>{content}</p>
+                            <p className={`message_content ping ${contentAdditanalStyle}`}>{content.message}</p>
                         </div>
                         {
                             !messageCreatedByMe &&  (   <div className="chat-tile-img">
                                                             <div className="triangle-right"></div>
-                                                            <img src={ChatPatientImg}/>
+                                                            <img src={content.userImg} onError={(event)=>{onImageErroRemote(event,content)}} />
                                                         </div>
                                                     )
                         }
@@ -51,20 +59,35 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
 
 
 const Messages =({messages})=>{
+    const refChat = useRef(null);
+    const scrollBottom=()=>{
+        let myTimeout;
+        clearTimeout(myTimeout);
+
+        myTimeout = setTimeout(()=>{
+            refChat.current.scrollTop = (refChat.current.scrollHeight);
+        },100)
+        
+    }
     return (
-            <div className="chat-workspace">
+            <div className="chat-workspace" onClick={scrollBottom} ref={refChat} >
                 {
-                    messages.map((message,idx)=>{
-                            const sameAuthor = 
-                            idx > 0 && message.identity === messages[idx - 1].identity;
+                    messages.map((message,idx,arr)=>{
+                            const sameAuthor = idx > 0 && message.identity === messages[idx - 1].identity;
+                           
                             return (
-                                <Message
-                                key={idx}
-                                author={message.identity}
-                                content={message.content}
-                                sameAuthor={sameAuthor}
-                                messageCreatedByMe={message.messageCreatedByMe}
-                                />
+                                <>
+                                    <Message
+                                    key={idx}
+                                    author={message.identity}
+                                    content={message.massage}
+                                    sameAuthor={sameAuthor}
+                                    messageCreatedByMe={message.messageCreatedByMe}
+                                    />
+                                    { (idx > 3 && idx === arr.length -1 ) ? scrollBottom() : null}
+                                </>
+                               
+                                
                             )
                     })
                 }

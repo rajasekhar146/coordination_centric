@@ -5,7 +5,7 @@ import './WatingListWidget.css';
 import {useSelector} from 'react-redux';
 
 
-export default function WatingRoomWid({watingList,toggleWatingList,toggleWatingListHandel,setToggleWatingList}) {
+export default function WatingRoomWid({watingListSync,toggleWatingList,toggleWatingListHandel,setToggleWatingList}) {
     const closeList = ()=>{
         setToggleWatingList(false)
     }
@@ -13,15 +13,12 @@ export default function WatingRoomWid({watingList,toggleWatingList,toggleWatingL
 
     return (
                 <>
-                {
-                    !videoCallReducer.isFullScreen && (<div className="watingroom-wrp">
-                                                            {
-                                                                toggleWatingList && <WatingList watingList={watingList} closeList={closeList}/>
-                                                            }
-                                                            <WatingListButton toggleWatingListHandel={toggleWatingListHandel}/>
-                                                        </div>
-                                                    )
-                }
+                    <div className="watingroom-wrp">
+                        {
+                            toggleWatingList && <WatingList watingListSync={watingListSync} closeList={closeList}/>
+                        }
+                        <WatingListButton toggleWatingListHandel={toggleWatingListHandel}/>
+                    </div>
                 </>
     )
 }

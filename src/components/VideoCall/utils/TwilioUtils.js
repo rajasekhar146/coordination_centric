@@ -124,19 +124,19 @@ export const checkIfRoomExists = async(roomId)=>{
 }
 
 // Data chennel utils 
-export  const sendMessageUsignDataChannel =(content,messageCreatedByMe=false)=>{
-      const identity = store.getState().videoCallReducer.identity;
-      const applicationUserId = store.getState().videoCallReducer.user.id;
+export  const sendMessageUsignDataChannel =(msz,messageCreatedByMe=false)=>{
+  const identity = store.getState().videoCallReducer.identity;
+  const applicationUserId = store.getState().videoCallReducer.user.id;
       const ownMessage = {
         identity,
         applicationUserId,
-        content,
+        massage:msz,
         messageCreatedByMe
       };
       addMessageToMessenger(ownMessage);
       const messageToSend = {
         identity,
-        content
+        massage:msz
       } 
       const stringifiedMessage = JSON.stringify(messageToSend) 
       dataChannel.send(stringifiedMessage)
