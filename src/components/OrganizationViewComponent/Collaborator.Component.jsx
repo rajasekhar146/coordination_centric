@@ -43,6 +43,7 @@ const CollaboratorComponent = props => {
         setOpenFlash,
         setAlertMsg,
         setSubLabel,
+        setAlertColor
     } = props
 
     // const collaboratorList = get(orgDet, ['invited_facilityName'], [])
@@ -144,6 +145,8 @@ const CollaboratorComponent = props => {
                                             setSkip={setSkip}
                                             organizationId={organizationId}
                                             collaboratorList={collaboratorList}
+                                            getStaffList={getStaffList}
+                                            setAlertColor={setAlertColor}
                                         />
                                     ))
                                 }

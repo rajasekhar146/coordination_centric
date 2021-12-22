@@ -223,9 +223,9 @@ const PersonalInfo = props => {
       console.log(error)
     })
 
-    console.log('getCountries', response.data.data)
-    setAllCountries(response.data.data.data)
-    dispatch(setCountries(response.data.data.data))
+    console.log('getCountries', response?.data?.data)
+    setAllCountries(response?.data?.data?.data)
+    dispatch(setCountries(response?.data?.data?.data))
   }
 
   const onSubmit = async data => {

@@ -46,6 +46,7 @@ const PatientComponent = props => {
     const [page, setPage] = useState(0)
     const [count, setCount] = useState(50)
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [alertColor, setAlertColor] = useState('success')
 
 
     const getStaffList = async () => {
@@ -152,6 +153,7 @@ const PatientComponent = props => {
                                             setStaffList={setPatientList}
                                             type="member"
                                             role="patient"
+                                            setAlertColor={setAlertColor}
                                         />
                                     ))
                                 }
@@ -173,7 +175,7 @@ const PatientComponent = props => {
                 alertMsg={alertMsg}
                 openflash={openflash}
                 subLebel={subLebel}
-                color = "success"
+                color={alertColor}
             />
             </Paper>
         </div>
