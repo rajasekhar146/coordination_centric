@@ -27,7 +27,7 @@ const TwoFaVerificationSuccess = props => {
           <div className="io_apologize_label">
             <label>Your account is extra secured now</label>
           </div>
-          {!chooseAnotherAuth &&
+          {chooseAnotherAuth &&
             <div className="io_apologize_label">
               <label>You need to login again for Security Reasons</label>
             </div>
