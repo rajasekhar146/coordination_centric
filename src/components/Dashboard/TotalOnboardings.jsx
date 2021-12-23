@@ -101,6 +101,9 @@ const TotalOnboardings = (props) => {
                     //     },
                     // },
                 },
+                credits: {
+                    enabled: false
+                },
                 legend: {
                     align: 'right',
                     x: -30,
