@@ -36,4 +36,5 @@
 
 .ac__hyper__link {
     text-decoration: none;
+    margin-left: -5px !important;
 }
