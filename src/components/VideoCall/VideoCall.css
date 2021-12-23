@@ -172,6 +172,9 @@ transition: all 500ms;
 }
 
 /* ----------------- Min screen css ------------------------------------------------ */
+#remote-participants-0 .participant .video_track_container .video video {
+  height: calc(100vh - 95px);
+}
 .participants .participant .video_track_container .video,
 .participants .participant .video_track_container .video video{
   transition: all 400ms;
