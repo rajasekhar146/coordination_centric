@@ -54,13 +54,13 @@ function ViewAppointmentComponent() {
         const element = get(res, ['data', 'data'], {})
         setPrimaryTimings(
           moment(element?.slotMapping.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
-            ' - ' +
-            moment(element?.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
+          ' - ' +
+          moment(element?.slotMapping.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
         )
         setSecondaryTimings(
           moment(element?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
-            ' - ' +
-            moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
+          ' - ' +
+          moment(element?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
         )
         setPrimaryDate(moment(element?.slotMapping.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'))
         setSecondaryDate(moment(element?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM'))
@@ -254,26 +254,30 @@ function ViewAppointmentComponent() {
           <div className="row-details">
             <p className="row-title">Appointment Time</p>
             <p className="row-data">
-              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${
-                moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
+              {`${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('ddd, Do MMM')} ${moment(appointmentList.data?.startTime).add(timezoneDiff, 'minutes').format('h:mm a') +
                 ' - ' +
                 moment(appointmentList.data?.endTime).add(timezoneDiff, 'minutes').format('h:mm a')
-              }`}
+                }`}
             </p>
           </div>
         )}
         {appointmentList.data?.appointmentStatus != 'accepted' && (
           <div className="row-details">
             <p className="row-title">Primary Time</p>
-            <p className="row-data">
-              {`${primaryDate} ${primaryTimings}`}
-            </p>
+            {primaryDate && primaryTimings
+              && <p className="row-data">
+                {`${primaryDate} ${primaryTimings}`}
+              </p>
+            }
+
           </div>
         )}
         {appointmentList.data?.appointmentStatus != 'accepted' && (
           <div className="row-details">
             <p className="row-title">Secondary Time</p>
-            <p className="row-data">{`${secondaryDate} ${secondaryTimings}`}</p>
+            {secondaryDate && secondaryTimings
+              && <p className="row-data">{`${secondaryDate} ${secondaryTimings}`}</p>
+            }
           </div>
         )}
         <div className="row-details">
