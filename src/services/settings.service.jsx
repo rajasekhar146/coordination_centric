@@ -38,6 +38,9 @@ function getMemberDetails(id) {
 }
 
 function updateMemberDetails(id, reqdata) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -55,6 +58,9 @@ function updateMemberDetails(id, reqdata) {
 }
 
 function addHealthInfo(reqdata) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -72,6 +78,9 @@ function addHealthInfo(reqdata) {
 }
 
 function addInsuranceInfo(info) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
     console.log('axiosConfig', axiosConfig)
     const reData = {
       insurance_info: [
@@ -94,6 +103,9 @@ function addInsuranceInfo(info) {
 }
 
 function getHealthInfo(id) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
     console.log('axiosConfig', axiosConfig)
     return (
         axios
@@ -112,6 +124,9 @@ function getHealthInfo(id) {
 
 
 function getInsuranceInfo(id) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
     console.log('axiosConfig', axiosConfig)
     return (
         axios

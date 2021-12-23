@@ -187,17 +187,18 @@ const UpcomongAppointmentComponent = props => {
         setIsLoading(true)
         let res;
         let date;
+        const timezoneDiff = (new Date()).getTimezoneOffset()
+
         if (type === 'upcoming') {
-            date = moment(new Date()).format("YYYY-MM-DD");
+            date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         } else {
-            date = moment(new Date()).format("YYYY-MM-DD");
+            date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         }
         appointmentService.getAppointments(userId, date, type, limit, skip, role).then((res) => {
             setIsLoading(false)
             const appointmentsTemp = get(res, ['data', 'data'], []);
             let appointmentsArray = [];
             appointmentsTemp.forEach(element => {
-                const timezoneDiff = (new Date()).getTimezoneOffset()
                 let recordNew = {};
                 if (role === "doctor") {
                     recordNew = {

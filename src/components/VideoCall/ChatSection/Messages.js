@@ -2,7 +2,7 @@ import React,{useRef} from 'react';
 import { connect } from "react-redux";
 import ChatPatientImg from './chat-patient.png';
 import ChatDoctorDefaultImg from './doctor_default.png';
-import ChatPatientDefaultImg from './doctor_default.png';
+import ChatPatientDefaultImg from './patient_default.png';
 import store from '../../../redux/store';
 import './Messages.css';
 const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
@@ -53,7 +53,8 @@ const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
                         {
                             !messageCreatedByMe &&  (   <div className="chat-tile-img">
                                                             <div className="triangle-right"></div>
-                                                            <img src={content.userImg} onError={(event)=>{onImageErroRemote(event,content)}} />
+                                                            {content.userImg ? <img src={content.userImg} onError={(event)=>{onImageErroRemote(event,content)}} /> :  <img src={profileImg(content.userRole)} onError={(event)=>{onImageErroRemote(event,content)}}/> }
+                                                            
                                                         </div>
                                                     )
                         }

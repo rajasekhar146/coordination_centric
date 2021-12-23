@@ -49,14 +49,23 @@ const ForgotPasswordResend = props => {
     } = useForm()
 
     const onSubmit = (data) => {
-        SigninStore.load('RequestPassword', {
-            email: email,
-            successCallback: (data) => {
-                setOpenFlash(true)
-                setAlertMsg('Reset password link has been sent to your email')
-                setAlertColor('success')
-            }
+        const reBody = { email: email }
+        const res = authenticationService.requestPassword(reBody)
+        res.then(() => {
+            history.push('/forgotpasswordresend')
+        }).catch((res) => {
+            setOpenFlash(true)
+            setAlertMsg(res?.response?.data?.message)
+            setAlertColor('fail')
         })
+        // SigninStore.load('RequestPassword', {
+        //     email: email,
+        //     successCallback: (data) => {
+        //         setOpenFlash(true)
+        //         setAlertMsg('Reset password link has been sent to your email')
+        //         setAlertColor('success')
+        //     }
+        // })
     }
 
 
