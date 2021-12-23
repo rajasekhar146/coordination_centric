@@ -22,11 +22,13 @@ import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Icon from '@mui/material/Icon'
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const SAASAgreementComponent = props => {
-  const [signatureUrl, setSignature] = useState({})
+  const [signature, setSignature] = useState({})
   const [value, setValue] = useState(new Date())
   const [processSteps, setProcessSteps] = React.useState(steps)
   var sigPad = {}
@@ -39,23 +41,16 @@ const SAASAgreementComponent = props => {
 
   const [facility, setFacility] = useState({})
   const [isVisible, setVisible] = useState(true)
+  const [showClearIcon, setShowClearIcon] = useState(false)
 
   const handleNext = () => {
-    // var updatedFacility = {
-    //   ...facility,
-    //   saas_certificate: 'www.saasagrement.com',
-    // }
-
-    // console.log('updatedFacility', JSON.stringify(updatedFacility))
-    // setFacility(updatedFacility)
-
-    // localStorage.setItem('facility', JSON.stringify(updatedFacility))
-
-    // history.push('/eula-agreement')
     setDateEntered(value != null)
-    setSigned(!sigPad.isEmpty())
 
-    if (value != null && !sigPad.isEmpty()) {
+    var facility = JSON.parse(localStorage.getItem('facility'))
+    facility.saasSign = sigPad.getCanvas().toDataURL('image/png')
+
+    setSigned(!sigPad.isEmpty())
+    if (value != null && sigPad != null && !sigPad.isEmpty()) {
       let domElement = document.getElementById('my-certificate')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
@@ -65,6 +60,8 @@ const SAASAgreementComponent = props => {
           name: base64String,
           type: 'certificate',
         }
+
+        localStorage.setItem('facility', JSON.stringify(facility))
         organizationService.uploadCertificate(certificate, 'SAASAgreement')
       })
     }
@@ -89,6 +86,8 @@ const SAASAgreementComponent = props => {
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
 
     const planType = localStorage?.getItem('plan_type')
+    setSignature(updateFacility?.saasSign)
+    sigPad.fromDataURL(updateFacility?.saasSign)
 
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
@@ -103,6 +102,17 @@ const SAASAgreementComponent = props => {
 
   const captureSignature = () => {
     setSignature({ signatureUrl: sigPad.getTrimmedCanvas().toDataURL('image/png') })
+    console.log('signature', sigPad.getTrimmedCanvas().toDataURL('image/png'))
+  }
+
+  const handleClear = () => {
+    if (signature) setSignature(null)
+
+    sigPad.clear()
+
+    console.log('clear', sigPad)
+
+    setShowClearIcon(false)
   }
 
   const onButtonClick = () => {
@@ -129,6 +139,11 @@ const SAASAgreementComponent = props => {
     setTimeout(() => {
       setVisible(true)
     }, 2000)
+  }
+
+  const handleChange = () => {
+    console.log('handleChange')
+    setShowClearIcon(!sigPad.isEmpty())
   }
 
   return (
@@ -241,12 +256,20 @@ const SAASAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
+                          {(showClearIcon || signature) && (
+                            <div className="sla__clear__icon">
+                              <Icon onClick={handleClear}>
+                                <CancelOutlinedIcon />
+                              </Icon>
+                            </div>
+                          )}
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
                               ref={ref => {
                                 sigPad = ref
                               }}
+                              onEnd={handleChange}
                             />
                           </div>
                           <div className="eulaa__label">Sign Here</div>

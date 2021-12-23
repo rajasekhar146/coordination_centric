@@ -22,11 +22,13 @@ import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
-
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Icon from '@mui/material/Icon'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const EULAAgreementComponent = () => {
-  const [signatureUrl, setSignature] = useState({})
+  
+  const [signature, setSignature] = useState({})
   const [value, setValue] = useState(new Date())
   const [planType, setPlanType] = useState('F')
   var sigPad = {}
@@ -41,22 +43,17 @@ const EULAAgreementComponent = () => {
 
   const { organisationName } = signinStoreData
   const [isVisible, setVisible] = useState(true)
+  const [showClearIcon, setShowClearIcon] = useState(false)
+
   const handleNext = () => {
-    // var updatedFacility = {
-    //   ...facility,
-    //   eula_certificate: 'www.aulaagreement.com',
-    // }
-
-    // console.log('updatedFacility', JSON.stringify(updatedFacility))
-    // setFacility(updatedFacility)
-
-    // localStorage.setItem('facility', JSON.stringify(updatedFacility))
-
-    // history.push('/bank-info')
+   
     setDateEntered(value != null)
-    setSigned(!sigPad.isEmpty())
 
-    if (value != null && !sigPad.isEmpty()) {
+    var facility = JSON.parse(localStorage.getItem('facility'))
+    facility.eulaSign = sigPad.getCanvas().toDataURL('image/png')
+
+    setSigned(!sigPad.isEmpty())
+    if (value != null && sigPad != null && !sigPad.isEmpty()) {
       let domElement = document.getElementById('my-node')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
@@ -66,6 +63,7 @@ const EULAAgreementComponent = () => {
           name: base64String,
           type: 'certificate',
         }
+        localStorage.setItem('facility', JSON.stringify(facility))
         organizationService.uploadCertificate(certificate, 'EULAAgreement')
       })
     }
@@ -82,6 +80,9 @@ const EULAAgreementComponent = () => {
   useEffect(() => {
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
 
+    setSignature(updateFacility?.eulaSign)
+    sigPad.fromDataURL(updateFacility?.eulaSign)
+
     const _planType = localStorage?.getItem('plan_type')
     setPlanType(_planType)
     if (_planType == undefined) localStorage.setItem('plan_type', 'F')
@@ -94,6 +95,16 @@ const EULAAgreementComponent = () => {
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)
   }, [])
+
+  const handleClear = () => {
+    if (signature) setSignature(null)
+
+    sigPad.clear()
+
+    console.log('clear', sigPad)
+
+    setShowClearIcon(false)
+  }
 
   const onButtonClick = () => {
     setVisible(false)
@@ -118,6 +129,11 @@ const EULAAgreementComponent = () => {
     setTimeout(() => {
       setVisible(true)
     }, 2000)
+  }
+
+  const handleChange = () => {
+    console.log('handleChange')
+    setShowClearIcon(!sigPad.isEmpty())
   }
 
   return (
@@ -229,12 +245,20 @@ const EULAAgreementComponent = () => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
+                        {(showClearIcon || signature) && (
+                          <div className="sla__clear__icon">
+                            <Icon onClick={handleClear}>
+                              <CancelOutlinedIcon />
+                            </Icon>
+                          </div>
+                        )}
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
                               ref={ref => {
                                 sigPad = ref
                               }}
+                              onEnd={handleChange}
                             />
                           </div>
                           <div className="eulaa__label">Sign Here</div>

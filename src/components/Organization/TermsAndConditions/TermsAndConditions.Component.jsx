@@ -28,7 +28,12 @@ const TermsAndConditionsComponent = () => {
 
   const handleNext = async () => {
     const updateFacility = JSON.parse(localStorage.getItem('facility'))
-    console.log('facility', updateFacility)
+    console.log('facility >> before', updateFacility)
+    
+    if(Object.prototype.hasOwnProperty.call(updateFacility, 'slaSign')) delete updateFacility['slaSign']
+    if(Object.prototype.hasOwnProperty.call(updateFacility, 'saasSign')) delete updateFacility['saasSign']
+    if(Object.prototype.hasOwnProperty.call(updateFacility, 'eulaSign')) delete updateFacility['eulaSign']
+        
     var response = await organizationService.signupOrganization(updateFacility)
 
     if (response?.status === 200) {

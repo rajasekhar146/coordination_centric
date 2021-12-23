@@ -48,6 +48,8 @@
     margin: 0 auto;
     background-color: #fff;
     border-bottom: 1px solid #252B42;
+    justify-content: center;
+    display: flex;
   }
 
 .sla__sign__pad {
@@ -138,4 +140,19 @@
   .user_name{
     height: 20px;
     margin-top: -32px;
+}
+
+.sla__clear__icon{
+  color: #8b8686;
+  position: absolute;
+  left: 440px;
+  top: 20px;
+  /* display: flex;
+  justify-content: end; */
+  /* padding: 10px; */
+  /* padding-top: 50px; */
+}
+
+.sla__sign__image {
+  padding: 10px;
 }

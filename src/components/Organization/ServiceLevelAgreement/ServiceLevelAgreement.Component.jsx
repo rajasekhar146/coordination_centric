@@ -26,6 +26,8 @@ import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
 import { useSelector, useDispatch } from 'react-redux'
 import { newOrganization } from '../../../redux/actions/organizationActions'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Icon from '@mui/material/Icon'
 
 const useStyles = makeStyles(theme => ({
   datefield: {
@@ -39,7 +41,7 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 const ServiceLevelAgreementComponent = props => {
   const classes = useStyles()
 
-  const [signatureUrl, setSignature] = useState({})
+  const [signature, setSignature] = useState({})
   const [value, setValue] = useState(new Date())
   const [processSteps, setProcessSteps] = React.useState(steps)
   const [IsDateEntered, setDateEntered] = useState(true)
@@ -58,13 +60,15 @@ const ServiceLevelAgreementComponent = props => {
 
   const newOrg = useSelector(state => state.newOrganization)
   const dispatch = useDispatch()
-
+  const [showClearIcon, setShowClearIcon] = useState(false)
   const handleNext = async () => {
-    console.log('Date', sigPad.isEmpty())
+    // console.log('signature', sigPad.getTrimmedCanvas().toDataURL('image/png'))
     setDateEntered(value != null)
+    var facility = JSON.parse(localStorage.getItem('facility'))
+    facility.slaSign = sigPad.getCanvas().toDataURL('image/png')
     setSigned(!sigPad.isEmpty())
-
-    if (value != null && !sigPad.isEmpty()) {
+    if (value != null && sigPad != null && !sigPad.isEmpty()) {
+      console.log('sign >> success')
       let domElement = document.getElementById('my-certificate')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
@@ -74,26 +78,11 @@ const ServiceLevelAgreementComponent = props => {
           name: base64String,
           type: 'certificate',
         }
+        localStorage.setItem('facility', JSON.stringify(facility))
         organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
-        //console.log('updateFacility', updateFacility)
-        // .then(data => {
-        //   console.log('uploadFile >> response', data)
-        //   var updatedFacility = {
-        //     ...facility,
-        //     business_certificate: 'www.servicelevelagreement.com',
-        //   }
-
-        //   console.log('updatedFacility', JSON.stringify(updatedFacility))
-        //   setFacility(updatedFacility)
-
-        //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
-
-        //   history.push('/saas-agreement')
-
-        // })
-        // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
       })
-    }
+      // }
+    } else console.log('sign >> failure')
   }
 
   const handleBack = () => {
@@ -112,7 +101,8 @@ const ServiceLevelAgreementComponent = props => {
   }
 
   const captureSignature = () => {
-    setSignature({ signatureUrl: sigPad.getTrimmedCanvas().toDataURL('image/png') })
+    setSignature({ url: sigPad.getTrimmedCanvas().toDataURL('image/png') })
+    console.log('signature', sigPad.getTrimmedCanvas().toDataURL('image/png'))
   }
 
   const onButtonClick = () => {
@@ -140,12 +130,27 @@ const ServiceLevelAgreementComponent = props => {
       setVisible(true)
     }, 2000)
   }
+  const handleClear = () => {
+    if (signature) setSignature(null)
+
+    sigPad.clear()
+
+    console.log('clear', sigPad)
+
+    setShowClearIcon(false)
+  }
+
+  const isEmptyObject = obj => {
+    return !!obj && Object.keys(obj).length === 0 && obj.constructor === Object
+  }
 
   useEffect(() => {
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)
 
+    setSignature(updateFacility.slaSign)
+    sigPad.fromDataURL(updateFacility.slaSign)
     const planType = localStorage.getItem('plan_type')
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
@@ -155,6 +160,10 @@ const ServiceLevelAgreementComponent = props => {
     }
   }, [])
 
+  const handleChange = () => {
+    console.log('handleChange')
+    setShowClearIcon(!sigPad.isEmpty())
+  }
   return (
     <div className="ob__main__section">
       <div className="ob__align__center">
@@ -264,13 +273,27 @@ const ServiceLevelAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
+                          {(showClearIcon || signature) && (
+                            <div className="sla__clear__icon">
+                              <Icon onClick={handleClear}>
+                                <CancelOutlinedIcon />
+                              </Icon>
+                            </div>
+                          )}
                           <div className="sla__sign__container">
-                            <SignaturePad
-                              canvasProps={{ className: 'sla__sign__pad' }}
-                              ref={ref => {
-                                sigPad = ref
-                              }}
-                            />
+                            {/*signature && <img src={signature} alt="Sign" className="sla__sign__image" /> */}
+                            {
+                              <SignaturePad
+                                canvasProps={{ className: 'sla__sign__pad' }}
+                                ref={ref => {
+                                  sigPad = ref
+                                }}
+                                onEnd={handleChange}
+                              />
+                            }
+                            {/*<button onClick={captureSignature}>
+                              <CancelOutlinedIcon />
+                            </button>*/}
                           </div>
                           <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
