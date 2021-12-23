@@ -2,7 +2,7 @@ import React,{useRef} from 'react';
 import { connect } from "react-redux";
 import ChatPatientImg from './chat-patient.png';
 import ChatDoctorDefaultImg from './doctor_default.png';
-import ChatPatientDefaultImg from './doctor_default.png';
+import ChatPatientDefaultImg from './patient_default.png';
 import store from '../../../redux/store';
 import './Messages.css';
 const Message = ({author,content,sameAuthor,messageCreatedByMe})=>{
