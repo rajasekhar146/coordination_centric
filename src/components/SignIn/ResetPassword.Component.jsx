@@ -107,9 +107,8 @@ const ResetPasswordPage = props => {
 
     useEffect(() => {
         authenticationService.validateToken(token).then((res) => {
-            if(get(res, ['data', 'status_code'], '') === 400) {
-                setIsValidLink(false)
-                setSubLabel(get(res, ['data', 'message'], ''))
+            if(get(res, ['data', 'status_code'], '') !== 200) {
+                history.push('/error-page')
             } else if (get(res, ['data', 'status_code'], '') === 200) {
                 setIsValidLink(true)
                 setSubLabel(get(res, ['data', 'message'], ''))

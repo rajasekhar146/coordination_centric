@@ -21,7 +21,7 @@ function generateToken(bodyMsg) {
       .post(`${apiURL}/payment/generateToken`, bodyMsg, axiosConfig)
       //.then(handleResponse)
       .then(response => {
-        console.log('generateToken', response)
+        // console.log('generateToken', response)
         return response
       })
       .catch(err => {
