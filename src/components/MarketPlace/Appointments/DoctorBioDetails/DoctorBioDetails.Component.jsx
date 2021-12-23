@@ -39,11 +39,14 @@ const DoctorBioDetailsComponent = props => {
         if (res?.data?.status === 200) {
           let obj = {
             name: info.first_name.charAt(0).toUpperCase() + info.first_name.slice(1) + ' ' + info.last_name,
-            bioText: styleBioText(info?.biograhpy_object?.blocks?.[0]),
             profilePic: info.profilePic,
             speciality: info.speciality,
           }
-
+          if (get(info, ['biograhpy_object'], '')) {
+            obj.bioText = setText(info?.biograhpy_object?.blocks)
+          } else {
+            obj.bioText = info?.bio
+          }
           setDoctorInfo(obj)
         }
       },
@@ -52,6 +55,16 @@ const DoctorBioDetailsComponent = props => {
       }
     )
   }
+
+  const setText = (bioObjectBlock) => {
+    let text = '';
+    bioObjectBlock.forEach(element => {
+      text += styleBioText(element)
+    });
+    return text
+  }
+
+
   const styleBioText = bioObject => {
     if (!bioObject) return
     let text = bioObject.text
