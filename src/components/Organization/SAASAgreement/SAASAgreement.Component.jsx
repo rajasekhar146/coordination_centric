@@ -256,7 +256,7 @@ const SAASAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          {(showClearIcon || signature) && (
+                          {isVisible && (showClearIcon || signature) && (
                             <div className="sla__clear__icon">
                               <Icon onClick={handleClear}>
                                 <CancelOutlinedIcon />
