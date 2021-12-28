@@ -255,7 +255,7 @@ const CollaboratorItemComponent = props => {
         if (res.status === 200) {
             getStaffList()
             setOpenFlash(true)
-            setAlertMsg('Re-sended')
+            setAlertMsg('Resent')
             setSubLabel('Another invitation was sended to this Member.')
         } else {
             setOpenFlash(true)

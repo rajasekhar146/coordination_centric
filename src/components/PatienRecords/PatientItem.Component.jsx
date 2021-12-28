@@ -116,7 +116,7 @@ const PatientItemComponent = props => {
                 break
             case 'setIsResendClicked':
                 handleStatus(row, 'resend')
-                setAlertMsg('Re-sended')
+                setAlertMsg('Resent')
                 setSubLabel('Another invitation was sended to this Member.')
                 break
             // case 'setIsActivateClicked':

@@ -106,7 +106,7 @@ const OrganisationItem = props => {
     res.then(res => {
       getOrganization()
       // setSkip(0)
-      setAlertMsg('Re-sended')
+      setAlertMsg('Resent')
       setSubLabel('Another invitation was sended to this organization.')
       setAlertcolor('success')
       setOpenFlash(true)

@@ -238,7 +238,7 @@ const PatientItemComponent = props => {
         if (res.status === 200) {
             getStaffList()
             setOpenFlash(true)
-            setAlertMsg('Re-sended')
+            setAlertMsg('Resent')
             setSubLabel('Another invitation was sended to this Member.')
             setAlertColor('success')
         } else {
