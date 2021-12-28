@@ -194,7 +194,7 @@ const AddPatientRecord = props => {
                                     openTo={new Date('1980/01/01')}
                                     maxDate={new Date()}
                                     {...register('dob', {
-                                        required: 'Dob is required.'
+                                        required: 'DOB is required.'
                                     })}
                                     onChange={newValue => {
                                         setValue('dob',  moment(newValue).format("YYYY-MM-DD HH:mm:ss"))
@@ -243,14 +243,7 @@ const AddPatientRecord = props => {
                         <FormControl variant="outlined" className={classes.formControl}>
                             <label>Blood Group</label>
                             <Select
-                                {...register('blood_group', {
-                                    required: 'Blood Group is required.',
-                                    // pattern: {
-                                    //   value:
-                                    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                    //   message: 'Please enter a valid email',
-                                    // },
-                                })}
+                                {...register('blood_group')}
                                 className={classes.select}
                                 MenuProps={{ classes: { paper: classes.dropdownStyle } }}
                                 id="demo-simple-select-helper"
@@ -305,9 +298,7 @@ const AddPatientRecord = props => {
                         <FormControl variant="outlined" className={classes.formControl}>
                             <label>Patient Id</label>
                             <TextField
-                                {...register('patient_id', {
-                                    required: 'Patient Id is required.'
-                                })}
+                                {...register('patient_id')}
                                 onChange={e => {
                                     setValue('patient_id', e.target.value.replace(/[^0-9]/g, ''))
                                 }}
@@ -373,9 +364,7 @@ const AddPatientRecord = props => {
                         <FormControl variant="outlined" className={classes.formControl}>
                             <label>EMR Id</label>
                             <TextField
-                                {...register('medical_records', {
-                                    required: 'Medical Records Id is required.'
-                                })}
+                                {...register('medical_records')}
                                 onChange={(e) => {
                                     let val;
                                     if (e.target.value.length === 1) {
