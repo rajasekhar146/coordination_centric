@@ -78,6 +78,7 @@ const EULAAgreementComponent = () => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
 
     setSignature(updateFacility?.eulaSign)

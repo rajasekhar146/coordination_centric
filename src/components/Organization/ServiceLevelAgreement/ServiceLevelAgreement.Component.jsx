@@ -145,6 +145,8 @@ const ServiceLevelAgreementComponent = props => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)

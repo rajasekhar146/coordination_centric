@@ -83,6 +83,7 @@ const SAASAgreementComponent = props => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
 
     const planType = localStorage?.getItem('plan_type')
