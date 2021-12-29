@@ -84,6 +84,7 @@ const PersonalDetailComponent = () => {
   const { invitedBy } = useParams()
   const currentStep = useSelector(state => state.quickProfileSetupReducer)
   const [IsDateEntered, setDateEntered] = useState(true)
+  const [isRequiredForOccupation, setRequiredForOccupation] = useState(false)
 
   var {
     register,
@@ -162,7 +163,9 @@ const PersonalDetailComponent = () => {
     await fetchCountries()
     featchOcupations()
     const newMemberDetail = member?.member
+    console.log('Personal Detail >>', newMemberDetail)
     if (newMemberDetail) {
+      setRequiredForOccupation(newMemberDetail.role == 'doctor')
       await fetchStates(newMemberDetail.country)
       // setValue('first_name', newMemberDetail.first_name)
       // setValue('middle_name', newMemberDetail.middle_name)
@@ -293,10 +296,10 @@ const PersonalDetailComponent = () => {
 
                 <div className="pdc__column">
                   <div className="pdc__label">
-                    Occupation <span className="pdc__required">*</span>
+                    Occupation {isRequiredForOccupation && <span className="pdc__required">*</span>}
                   </div>
 
-                  <select {...register('occupation', { required: 'Occupation is required.' })} className="ac__dropdown">
+                  <select {...register('occupation', { required: isRequiredForOccupation})} className="ac__dropdown">
                     {ocupations &&
                       ocupations.map(c => (
                         <option value={c.occupation_name} key={c.occupation_name} className="ac__dropdown">
@@ -304,7 +307,7 @@ const PersonalDetailComponent = () => {
                         </option>
                       ))}
                   </select>
-                  {errors.occupation && <p className="ac__required">{errors.occupation.message}</p>}
+                  {errors.occupation?.type === 'required' && <p className="ac__required">Occupation is required.</p>}
                 </div>
               </div>
 

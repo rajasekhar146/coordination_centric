@@ -396,6 +396,9 @@ const AddPatientRecord = props => {
                                     setValue('contact_number', e.target.value.replace(/[^0-9]/g, ''))
                                 }}
                                 margin="normal"
+                                inputProps={{
+                                    maxLength: 15,
+                                  }}
                             />
                         </FormControl>
                         {errors.contact_number && <p className="io__required">{errors.contact_number.message}</p>}
