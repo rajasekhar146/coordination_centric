@@ -8,8 +8,6 @@ import get from 'lodash.get'
 import * as env from '../environments/environment'
 const apiURL = env.environment.apiBaseUrl
 
-
-
 export const organizationService = {
   allOrganization,
   addOrganization,
@@ -26,7 +24,8 @@ export const organizationService = {
   subscriptionOrganization,
   paymentSubscription,
   downloadFile,
-  verifyBankHanlde
+  verifyBankHanlde,
+  updateOrganizationDetail,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
@@ -64,8 +63,6 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   // }
 
   // console.log('searchCond', searchCond)
-
-  
 
   let url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
   // if (searchText != null) {
@@ -159,7 +156,7 @@ function getOrganizationDetails(orgId) {
           const payment = get(data, ['data', 'payment'], {})
 
           console.log('Result >> ', res)
-          return {data:res,payment:payment}
+          return { data: res, payment: payment }
         } else {
           return null
         }
@@ -334,7 +331,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
 //       return null
 //     })
 
-function resendInvite(id , type) {
+function resendInvite(id, type) {
   const axiosConfig = {
     headers: authHeader(),
   }
@@ -409,7 +406,7 @@ function disableTwoFa() {
   const axiosConfig = {
     headers: authHeader(),
   }
-  
+
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -440,7 +437,7 @@ function getPrices() {
   )
 }
 
-function paymentSubscription(bodyMsg){
+function paymentSubscription(bodyMsg) {
   const axiosConfig = {
     headers: authHeader(),
   }
@@ -476,7 +473,7 @@ function downloadFile(fileObj) {
       })
   )
 }
-function verifyBankHanlde(bodyMsg){
+function verifyBankHanlde(bodyMsg) {
   const axiosConfig = {
     headers: authHeader(),
   }
@@ -492,4 +489,19 @@ function verifyBankHanlde(bodyMsg){
         return err
       })
   )
+}
+
+function updateOrganizationDetail(id, bobyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('updateOrganizationDetail >> ', id, bobyMsg)
+  return axios
+    .put(`${apiURL}/facilityList/updateFacility/${id}`, bobyMsg, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return err
+    })
 }
