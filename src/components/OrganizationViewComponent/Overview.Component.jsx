@@ -487,7 +487,7 @@ const OverView = props => {
                 {errors.facilityPhone && <p className="ac__required">{errors.facilityPhone.message}</p>}
               </Typography>
             </div>
-            <div className="detailWrapper">
+            <div className="detailWrapper div__adjument">
               <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
                 Address
               </Typography>

@@ -269,3 +269,28 @@
 .capital {
     text-transform: capitalize;
 }
+
+.vsd__action__section {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    padding-right: 50px !important;
+    /* background-color: #474444; */
+  }
+
+  .vsd__button {
+    background: #E42346 !important;
+    border-radius: 8px !important;
+    /* width: 250px !important; */
+    color: #fff !important;
+    padding: 4px 16px 4px 16px !important;
+  }
+  
+  .block-containers {
+      /* padding-left:1px; */
+      display: flex !important;
+  }
+
+  .div__adjument {
+      margin-left: -8px !important;
+  }

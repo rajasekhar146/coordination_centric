@@ -18,7 +18,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
-import { loadStripe } from '@stripe/stripe-js/pure'
+// import { loadStripe } from '@stripe/stripe-js/pure'
 import { useSelector, useDispatch } from 'react-redux'
 import { commonService } from '../../../services'
 import FormControl from '@mui/material/FormControl'
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const stripe = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx')
+// const stripe = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx')
 
 const BankInformationComponent = () => {
   const classes = useStyles()

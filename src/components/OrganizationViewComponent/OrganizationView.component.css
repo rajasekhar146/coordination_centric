@@ -195,5 +195,9 @@
 }
 
 .ov__address__section {
-  margin-left: 8px !important;
+  margin-left: 6px !important;
+}
+
+.div__adjument {
+  margin-left: -8px !important;
 }

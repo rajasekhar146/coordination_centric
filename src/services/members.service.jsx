@@ -27,7 +27,8 @@ export const memberService = {
   getDetailsById,
   downloadFileUrl,
   addNewPatientRecord,
-  getFacilityData
+  getFacilityData,
+  updateMemberDetail,
 }
 
 function inviteMember(data) {
@@ -63,36 +64,32 @@ function uploadCertificate(formData, role, onUploadProgress) {
   )
 }
 
-function uploadFile(type , file) {
+function uploadFile(type, file) {
   let axiosConfig = {
-    headers: authHeader()
+    headers: authHeader(),
   }
-  return (
-    axios
-      .post(`${apiURL}/files/fileUpload/${type}` , file , axiosConfig)
-      .then(data => {
-        return data
-      })
-      .catch(err => {
-        return err
-      })
-  )
+  return axios
+    .post(`${apiURL}/files/fileUpload/${type}`, file, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return err
+    })
 }
 
 function downloadFileUrl(file) {
   let axiosConfig = {
-    headers: authHeader()
+    headers: authHeader(),
   }
-  return (
-    axios
-      .post(`${apiURL}/files/download_url` , file , axiosConfig)
-      .then(data => {
-        return data
-      })
-      .catch(err => {
-        return err
-      })
-  )
+  return axios
+    .post(`${apiURL}/files/download_url`, file, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return err
+    })
 }
 function saveMember(member) {
   return (
@@ -206,7 +203,7 @@ function updateStatus(id, status) {
   let axiosConfig = {
     headers: authHeader(),
   }
- 
+
   return (
     axios
       .put(`${apiURL}/users/updateMemberStatus/${id}/${status}`, null, axiosConfig)
@@ -221,9 +218,20 @@ function updateStatus(id, status) {
   )
 }
 
-
-
-
+function updateMemberDetail(id, bobyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('updateMemberDetail >> ', id, bobyMsg)
+  return axios
+    .put(`${apiURL}/users/updateMember/${id}`, bobyMsg, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return err
+    })
+}
 
 function getPatientRecords(id, limit, skip) {
   let axiosConfig = {
@@ -264,15 +272,17 @@ function getDetailsById(id) {
   let axiosConfig = {
     headers: authHeader(),
   }
+  console.log('getDetailsById >> axiosConfig ', axiosConfig)
   return (
     axios
-    .get(`${apiURL}/users/getMemberDetailsById?id=${id}`, axiosConfig)
+      .get(`${apiURL}/users/getMemberDetailsById?id=${id}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
-        console.log('data', data)
+        console.log('getDetailsById >> data', data)
         return data
       })
       .catch(err => {
+        console.log('getDetailsById >> err', err)
         return err
       })
   )
@@ -284,7 +294,7 @@ function addNewPatientRecord(reqData) {
   }
   return (
     axios
-    .post(`${apiURL}/users/AddPatient`, reqData, axiosConfig)
+      .post(`${apiURL}/users/AddPatient`, reqData, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
@@ -301,7 +311,7 @@ function getFacilityData(id) {
   }
   return (
     axios
-    .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${id}`, axiosConfig)
+      .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${id}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
