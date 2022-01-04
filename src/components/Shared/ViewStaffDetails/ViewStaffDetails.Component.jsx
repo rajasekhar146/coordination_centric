@@ -68,6 +68,7 @@ function ViewStaffDetailsComponent() {
   const [countries, setAllCountries] = useState([])
   const dispatch = useDispatch()
   const [dateOfBirth, setDOB] = React.useState(null)
+  const [memberRole, setMemberRole] = useState('')
   var {
     register,
     setValue,
@@ -128,7 +129,7 @@ function ViewStaffDetailsComponent() {
     setValue('bio', memberData.bio)
     setValue('address', memberData.address)
     setDOB(memberData.dob)
-
+    setMemberRole(memberData.role)
     console.log('params', res.data)
   }
 
@@ -258,6 +259,13 @@ function ViewStaffDetailsComponent() {
     speciality.forEach(s => {
       specialityIds.push(s._id || s.id)
     })
+    const fullName = formData.name.split(' ')
+
+    if (fullName.length > 0) {
+      formData.first_name = fullName[0]
+      formData.last_name = fullName[1]
+    } else formData.first_name = fullName
+
     formData.speciality = specialityIds
     formData.dob = dateOfBirth
     console.log('saveMemberDetail >> formData', formData)
@@ -269,12 +277,12 @@ function ViewStaffDetailsComponent() {
       console.log('saveMemberDetail >> response >> status', response)
       setOpenFlash(true)
       setAlertMsg('Saved')
-      setSubLabel('Member detail was successfully updated.')
+      setSubLabel('User details was successfully updated.')
       setAlertColor('success')
     } else {
       setOpenFlash(true)
       setAlertMsg('Error')
-      setSubLabel('Error occured while updating the Member detail.')
+      setSubLabel('Error occured while updating the User detail.')
       setAlertColor('fail')
     }
   }
@@ -392,32 +400,34 @@ function ViewStaffDetailsComponent() {
           </p>
           {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
         </div>
-        <div className="row-details">
-          <p className="row-title">Speciality</p>
-          <p className="row-data">
-            <div style={{ width: '290px' }}>
-              {' '}
-              {!isViewStaffDetEdit ? <p>{tspeciality}</p> : null}
-              {isViewStaffDetEdit ? (
-                <div>
-                  <Autocomplete
-                    multiple
-                    onChange={(event, value) => {
-                      console.log(value)
-                      handleChange(event, value)
-                      setIsSubmit(false)
-                    }}
-                    options={specialities}
-                    getOptionLabel={option => option.speciality_name}
-                    defaultValue={memberSpecialities}
-                    renderInput={params => <TextField {...params} />}
-                  />
-                  {errors.speciality && <p className="ac__required">{errors.speciality.message}</p>}
-                </div>
-              ) : null}
-            </div>
-          </p>
-        </div>
+        {memberRole == 'doctor' && (
+          <div className="row-details">
+            <p className="row-title">Speciality</p>
+            <p className="row-data">
+              <div style={{ width: '290px' }}>
+                {' '}
+                {!isViewStaffDetEdit ? <p>{tspeciality}</p> : null}
+                {isViewStaffDetEdit ? (
+                  <div>
+                    <Autocomplete
+                      multiple
+                      onChange={(event, value) => {
+                        console.log(value)
+                        handleChange(event, value)
+                        setIsSubmit(false)
+                      }}
+                      options={specialities}
+                      getOptionLabel={option => option.speciality_name}
+                      defaultValue={memberSpecialities}
+                      renderInput={params => <TextField {...params} />}
+                    />
+                    {errors.speciality && <p className="ac__required">{errors.speciality.message}</p>}
+                  </div>
+                ) : null}
+              </div>
+            </p>
+          </div>
+        )}
 
         <div className="row-details">
           <p className="row-title">Role</p>
@@ -538,9 +548,9 @@ function ViewStaffDetailsComponent() {
           <p className="row-title">Address</p>
           <p className="row-data">
             <div className="ov__address__section">
-            <div className="det-subtitle">
-            <b>Address Line</b>
-          </div>
+              <div className="det-subtitle">
+                <b>Address Line</b>
+              </div>
               <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
                 <div style={{ width: '250px' }}>
                   {' '}
@@ -560,21 +570,21 @@ function ViewStaffDetailsComponent() {
                     <b>Country</b>
                   </div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-                  <div style={{ width: '200px' }}>
-                    <select
-                      disabled={!isViewStaffDetEdit}
-                      {...register('country', { required: 'Country is required' })}
-                      className={isViewStaffDetEdit ? 'ov__text__box' : 'ov__ro__text__box'}
-                      onChange={e => fetchStates(e.target.value)}
-                    >
-                      {countries &&
-                        countries.map(c => (
-                          <option value={c.code} key={c.code}>
-                            {c.name}
-                          </option>
-                        ))}
-                    </select>
-                    {errors.country && <p className="ac__required">{errors.country.message}</p>}
+                    <div style={{ width: '200px' }}>
+                      <select
+                        disabled={!isViewStaffDetEdit}
+                        {...register('country', { required: 'Country is required' })}
+                        className={isViewStaffDetEdit ? 'ov__text__box' : 'ov__ro__text__box'}
+                        onChange={e => fetchStates(e.target.value)}
+                      >
+                        {countries &&
+                          countries.map(c => (
+                            <option value={c.code} key={c.code}>
+                              {c.name}
+                            </option>
+                          ))}
+                      </select>
+                      {errors.country && <p className="ac__required">{errors.country.message}</p>}
                     </div>
                   </Typography>
                 </div>
@@ -583,20 +593,20 @@ function ViewStaffDetailsComponent() {
                     <b>State</b>
                   </div>
                   <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-                  <div style={{ width: '200px' }}>
-                    <select
-                      {...register('state', { required: 'State is required' })}
-                      disabled={!isViewStaffDetEdit}
-                      className={isViewStaffDetEdit ? 'ov__text__box' : 'ov__ro__text__box'}
-                    >
-                      {states &&
-                        states.map(c => (
-                          <option value={c.statecode} key={c.statecode}>
-                            {c.name}
-                          </option>
-                        ))}
-                    </select>
-                    {errors.state && <p className="ac__required">{errors.state.message}</p>}
+                    <div style={{ width: '200px' }}>
+                      <select
+                        {...register('state', { required: 'State is required' })}
+                        disabled={!isViewStaffDetEdit}
+                        className={isViewStaffDetEdit ? 'ov__text__box' : 'ov__ro__text__box'}
+                      >
+                        {states &&
+                          states.map(c => (
+                            <option value={c.statecode} key={c.statecode}>
+                              {c.name}
+                            </option>
+                          ))}
+                      </select>
+                      {errors.state && <p className="ac__required">{errors.state.message}</p>}
                     </div>
                   </Typography>
                 </div>
@@ -690,12 +700,12 @@ function ViewStaffDetailsComponent() {
         </div>
       </div>
       <Alert
-      handleCloseFlash={handleCloseFlash}
-      alertMsg={alertMsg}
-      openflash={openflash}
-      subLebel={subLebel}
-      color={alertcolor}
-    />
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color={alertcolor}
+      />
     </div>
   )
 }
