@@ -222,7 +222,7 @@ const componenetsMap = {
 const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState()
-  const [isOpenCompleteProfile, setIsOpenCompleteProfile] = useState(useSelector(state => state.completeProfile))
+  const [isOpenCompleteProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -273,11 +273,10 @@ const DashboardComponent = () => {
     setIsOpen2FA(false)
 
     if (isShowCompleteProfile()) {
-      setIsOpenCompleteProfile(true)
-    } 
-   if  (!last_login_time && !twoFaSkipped) {
+      setIsOpenCompleateProfile(true)
+    }
+    if (!last_login_time && !twoFaSkipped) {
       setIsOpen2FA(true)
-      
     } else if (role == 'admin' && !isPWDChanged) {
       setPwdChangeClicked(true)
     }
@@ -287,7 +286,9 @@ const DashboardComponent = () => {
   const getDashboardDetails = async () => {
     const res = await dashboardService.getDashboardDetails(role)
     if (res.status === 200) {
-      setDashboardDetails(get(res, ['data', 'data'], {}))
+      const dashboardData = get(res, ['data', 'data'], {})
+      console.log('dashboardData >>', dashboardData)
+      setDashboardDetails(dashboardData)
     } else {
     }
   }
@@ -386,7 +387,7 @@ const DashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={twoFaModelStyle}>
-          <TwoFaModel clickCloseButton={close2FaModel} setIsOpenCompleteProfile={setIsOpenCompleteProfile} />
+          <TwoFaModel clickCloseButton={close2FaModel} setIsOpenCompleateProfile={setIsOpenCompleateProfile} />
         </Box>
       </Modal>
       <Modal
@@ -398,7 +399,7 @@ const DashboardComponent = () => {
         <Box sx={twoFaModelStyle}>
           <CompleateProfile
             clickCloseButton={close2FaModel}
-            setIsOpenCompleteProfile={setIsOpenCompleteProfile}
+            setIsOpenCompleateProfile={setIsOpenCompleateProfile}
             userId={userId}
           />
         </Box>
