@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import get from 'lodash.get'
-import TabPanel from '../TabPanel/TabPanel.Component';
+import TabPanel from '../TabPanel/TabPanel.Component'
 import UpcomingAppointments from './UpcomingAppointments.Component'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Button from '@mui/material/Button'
@@ -12,16 +12,16 @@ import GtidView from '../../assets/icons/grid_view.png'
 import Alert from '../Alert/Alert.component'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFlashMsg } from '../../redux/actions/commonActions'
-
+import { setMyAppointmentTabIndex } from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
   indicator: {
-    backgroundColor: "#E42346",
-    height: "3px"
-  }
-}));
+    backgroundColor: '#E42346',
+    height: '3px',
+  },
+}))
 
-const TabItem = withStyles((theme) => ({
+const TabItem = withStyles(theme => ({
   root: {
     backgroundColor: '#F6F8FB',
     color: '#667085',
@@ -54,44 +54,41 @@ const TabItem = withStyles((theme) => ({
     },
   },
   selected: {},
-}))((props) => <Tab {...props} />)
+}))(props => <Tab {...props} />)
 
-
-
-
-
-const AppointmentsComponent = (props) => {
+const AppointmentsComponent = props => {
   const dispatch = useDispatch()
 
   const classes = useStyles()
-  const [value, setValue] = useState('1');
-  const [showGrid, setShowGrid] = useState(true);
+  const [value, setValue] = useState(useSelector(state => state.setMyAppointmentTabIndex))
+  const [showGrid, setShowGrid] = useState(true)
   const [openflash, setOpenFlash] = React.useState(useSelector(state => state.flashMsgObj.openFlash))
   const [alertMsg, setAlertMsg] = React.useState(useSelector(state => state.flashMsgObj.alertMsg))
   const [subLebel, setSubLabel] = useState(useSelector(state => state.flashMsgObj.subLabel))
   const [alertcolor, setAlertColor] = React.useState(useSelector(state => state.flashMsgObj.color))
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+    dispatch(setMyAppointmentTabIndex(newValue))
+  }
 
   const handleCloseFlash = (event, reason) => {
     setOpenFlash(false)
-    dispatch(setFlashMsg({
-      openFlash: false,
-      alertMsg: '',
-      subLabel: '',
-      color: ''
-    }))
+    dispatch(
+      setFlashMsg({
+        openFlash: false,
+        alertMsg: '',
+        subLabel: '',
+        color: '',
+      })
+    )
   }
 
   return (
     <div className="od__main__div">
       <div className="od__row">
         <div className="od__title__text">My Appointments</div>
-        <div className="od__btn__div od__align__right">
-
-        </div>
+        <div className="od__btn__div od__align__right"></div>
       </div>
       <div className="od__row">
         <Tabs
@@ -107,22 +104,24 @@ const AppointmentsComponent = (props) => {
           <TabItem value="2" label="History" />
         </Tabs>
         <div className="io_view_as">
-          View as: <div className="io_handle_view">
+          View as:{' '}
+          <div className="io_handle_view">
             <span
               onClick={() => {
                 setShowGrid(true)
               }}
-              className={showGrid ? "io_grid_item io_active" : 'io_grid_item'} >
+              className={showGrid ? 'io_grid_item io_active' : 'io_grid_item'}
+            >
               <img src={GtidView} alt="grid_view" />
             </span>
             <span
               onClick={() => {
                 setShowGrid(false)
               }}
-              className={!showGrid ? "io_grid_item io_active" : 'io_grid_item'}>
+              className={!showGrid ? 'io_grid_item io_active' : 'io_grid_item'}
+            >
               <img src={CalenderView} alt="calender_view" />
             </span>
-
           </div>
         </div>
       </div>
@@ -132,7 +131,7 @@ const AppointmentsComponent = (props) => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
-          setAlertColor = {setAlertColor}
+          setAlertColor={setAlertColor}
           type="upcoming"
         />
       </TabPanel>
@@ -142,7 +141,7 @@ const AppointmentsComponent = (props) => {
           setAlertMsg={setAlertMsg}
           setSubLabel={setSubLabel}
           setOpenFlash={setOpenFlash}
-          setAlertColor = {setAlertColor}
+          setAlertColor={setAlertColor}
           type="history"
         />
       </TabPanel>
@@ -151,7 +150,7 @@ const AppointmentsComponent = (props) => {
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
-        color = {alertcolor}
+        color={alertcolor}
       />
     </div>
   )

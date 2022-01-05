@@ -44,7 +44,7 @@ const flagMsg = {
   openFlash: false,
   alertMsg: '',
   subLabel: '',
-  color: ''
+  color: '',
 }
 
 const buildTimeSlots = () => {
@@ -98,13 +98,11 @@ const availableTimeSlotsInitialState = {
 
 const getTwofaValueFromLocalStorage = () => {
   if (localStorage.getItem('isSkippedTwoFa')) {
-    const val = localStorage.getItem('isSkippedTwoFa');
-    return true;
+    const val = localStorage.getItem('isSkippedTwoFa')
+    return true
   }
   return false
 }
-  ;
-
 export const commonReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ActionTypes.SET_COUNTRIES:
@@ -251,3 +249,11 @@ export const chooseAnotherAuthReducer = (state = false, { type, payload }) => {
   }
 }
 
+export const setMyAppointmentTabIndexReducer = (state = "1", { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_MY_APPOINTMENT_TAB_INDEX:
+      return payload
+    default:
+      return state
+  }
+}

@@ -70,7 +70,6 @@ export const setFlashMsg = data => {
   }
 }
 
-
 export const setSkip2fa = data => {
   return {
     type: ActionTypes.SET_SKIP_TWOFA,
@@ -116,5 +115,12 @@ export const chooseAnotherAuth = val => {
   return {
     type: ActionTypes.SET_CHOOSE_ANOTHER_AUTH,
     payload: val,
+  }
+}
+
+export const setMyAppointmentTabIndex = tabIdx => {
+  return {
+    type: ActionTypes.SET_MY_APPOINTMENT_TAB_INDEX,
+    payload: tabIdx,
   }
 }

@@ -28,7 +28,8 @@ import {
   rescheduleSecondaryAppointmentDateReducer,
   enableTwofaReducer,
   leftMenusReducer,
-  chooseAnotherAuthReducer
+  chooseAnotherAuthReducer,
+  setMyAppointmentTabIndexReducer,
 } from './commonReducer'
 import { appointmentDetailsReducer, doctorDetailsReducer } from './appointmentReducer'
 
@@ -62,7 +63,8 @@ const reducers = combineReducers({
   rescheduleSecondaryAppointmentDate: rescheduleSecondaryAppointmentDateReducer,
   enableTwofa: enableTwofaReducer,
   leftMenus: leftMenusReducer,
-  chooseAnotherAuth: chooseAnotherAuthReducer
+  chooseAnotherAuth: chooseAnotherAuthReducer,
+  setMyAppointmentTabIndex: setMyAppointmentTabIndexReducer,
 })
 
 export default reducers
