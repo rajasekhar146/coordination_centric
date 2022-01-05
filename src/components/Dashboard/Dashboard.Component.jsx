@@ -265,22 +265,20 @@ const DashboardComponent = () => {
   }
 
   const close2FaModel = () => {
-    // const res = authenticationService.skipTwoFa()
-    // res.then(data => {
-    //   // setIsOpenCompleateProfile(true)
-    //   // dispatch(setCopmletPropfilePopup(true))
-    // })
     setIsOpen2FA(false)
 
-    if (isShowCompleteProfile()) {
-      setIsOpenCompleateProfile(true)
-    }
-    if (!last_login_time && !twoFaSkipped) {
-      setIsOpen2FA(true)
-    } else if (role == 'admin' && !isPWDChanged) {
+    console.log('close2FaModel >> last_login_time', last_login_time)
+    if (role == 'admin' && !isPWDChanged) {
       setPwdChangeClicked(true)
+    } else {
+      if (isShowCompleteProfile()) {
+        setIsOpenCompleateProfile(true)
+      }
+      if (!last_login_time) {
+        setIsOpen2FA(true)
+      }
+      dispatch(setSkip2fa(true))
     }
-    dispatch(setSkip2fa(true))
   }
 
   const getDashboardDetails = async () => {
