@@ -30,7 +30,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import history from '../../history'
 
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -135,21 +134,26 @@ const ChangePassword = props => {
           const data = {}
           data.oldPassword = oldPassword
           data.newPassword = newPassword
-          const res = await authenticationService.changePassword(data).catch(res => {
-            console.log(res.response)
-            props.handleFailureClose()
+          await authenticationService.changePassword(data)
+          .then(res => {
+            console.log('change PWD >> data', res)
+            props.handleSuccessClose()
+          })
+          .catch(err => {
+            console.log('change PWD >> err', err.response)
+            const errMsg =  get(err.response, ['data', 'message'], '')  
+            setErrMsg(errMsg) 
+            // props.handleFailureClose()
           })
 
-          console.log ('res >>data', res)
-          props.handleSuccessClose()
+         
           // res
           //   .then(() => {
           //     setFormSubmitted(false)
           //     props.handleSuccessClose()
           //   })
-            
         } else {
-          setErrMsg('The password confirmation doesn’t match.')
+          setErrMsg('New password and confirm password doesn’t match.')
         }
       } else {
         setErrMsg('Password should match the given requirements')
@@ -265,12 +269,12 @@ const ChangePassword = props => {
                     </IconButton>
                   </InputAdornment>
                 }
-              />
-              {!confirmPassword && formSubmitted && <p className="io__required">Confirm Password is Required</p>}
-              {errMsg && <p className="ac__required">{errMsg}</p>}
+              />              
             </div>
           </div>
           <ColoredLine color="#E4E7EC" />
+          {!confirmPassword && formSubmitted && <p className="io__required">Confirm Password is Required</p>}
+              {errMsg && <p className="ac__required">{errMsg}</p>}
           <div className="od__row od_flex_space_between">
             <div className="od__p_title io_pl0"></div>
             <div className="od__btn__div od__align__right io_pr0">

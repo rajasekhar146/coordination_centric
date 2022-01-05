@@ -222,7 +222,7 @@ const componenetsMap = {
 const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState()
-  const [isOpenCompleateProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
+  const [isOpenCompleteProfile, setIsOpenCompleteProfile] = useState(useSelector(state => state.completeProfile))
   const currentUser = authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
@@ -237,23 +237,23 @@ const DashboardComponent = () => {
   const [alertMsg, setAlertMsg] = useState('')
   const [subLebel, setSubLabel] = useState('')
   const [alertcolor, setAlertColor] = useState('')
-  
+
   useEffect(() => {
+    console.log('Dashboard >> useEffect ', last_login_time, twoFaSkipped)
     if (!isLoggedToken) {
       history.push('signin')
     }
-    if (!last_login_time && !twoFaSkipped) {
+    if (!last_login_time) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
-    }
-    if(role == 'admin' && !isPWDChanged) {
+    } else if (role == 'admin' && !isPWDChanged) {
       setPwdChangeClicked(true)
     }
     setElementStats(dashboardComponentConfig[role])
     getDashboardDetails()
   }, [])
 
-  const isShowCopleateProfile = () => {
+  const isShowCompleteProfile = () => {
     switch (role) {
       case 'doctor':
       case 'patient':
@@ -272,8 +272,14 @@ const DashboardComponent = () => {
     // })
     setIsOpen2FA(false)
 
-    if (isShowCopleateProfile()) {
-      setIsOpenCompleateProfile(true)
+    if (isShowCompleteProfile()) {
+      setIsOpenCompleteProfile(true)
+    } 
+   if  (!last_login_time && !twoFaSkipped) {
+      setIsOpen2FA(true)
+      
+    } else if (role == 'admin' && !isPWDChanged) {
+      setPwdChangeClicked(true)
     }
     dispatch(setSkip2fa(true))
   }
@@ -313,12 +319,12 @@ const DashboardComponent = () => {
     setAlertColor('fail')
   }
 
-const handleCloseFlash = (event, reason) => {
-  setOpenFlash(false)
-  setAlertMsg('')
-  setSubLabel('')
-  setAlertColor('')
-}
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+    setAlertMsg('')
+    setSubLabel('')
+    setAlertColor('')
+  }
 
   return (
     <div className="dashboard__main__div">
@@ -380,11 +386,11 @@ const handleCloseFlash = (event, reason) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={twoFaModelStyle}>
-          <TwoFaModel clickCloseButton={close2FaModel} setIsOpenCompleateProfile={setIsOpenCompleateProfile} />
+          <TwoFaModel clickCloseButton={close2FaModel} setIsOpenCompleteProfile={setIsOpenCompleteProfile} />
         </Box>
       </Modal>
       <Modal
-        open={isOpenCompleateProfile}
+        open={isOpenCompleteProfile}
         // onClose={closeApproveModel}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -392,7 +398,7 @@ const handleCloseFlash = (event, reason) => {
         <Box sx={twoFaModelStyle}>
           <CompleateProfile
             clickCloseButton={close2FaModel}
-            setIsOpenCompleateProfile={setIsOpenCompleateProfile}
+            setIsOpenCompleteProfile={setIsOpenCompleteProfile}
             userId={userId}
           />
         </Box>
@@ -408,12 +414,12 @@ const handleCloseFlash = (event, reason) => {
         </Box>
       </Modal>
       <Alert
-      handleCloseFlash={handleCloseFlash}
-      alertMsg={alertMsg}
-      openflash={openflash}
-      subLebel={subLebel}
-      color={alertcolor}
-    />
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color={alertcolor}
+      />
     </div>
   )
 }
