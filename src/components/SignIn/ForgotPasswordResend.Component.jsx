@@ -50,13 +50,15 @@ const ForgotPasswordResend = props => {
 
     const onSubmit = (data) => {
         const reBody = { email: email }
-        const res = authenticationService.requestPassword(reBody)
-        res.then(() => {
-            history.push('/forgotpasswordresend')
-        }).catch((res) => {
+        const res = authenticationService.requestPassword(reBody).then(res => {
+            //history.push('/forgotpasswordresend')
             setOpenFlash(true)
-            setAlertMsg(res?.response?.data?.message)
-            setAlertColor('fail')
+            setAlertMsg(get(res, ['data', 'message'], ''))
+            setAlertColor('success')
+        }).catch((res) => {
+          setOpenFlash(true)
+          setAlertMsg(get(res, ['data', 'message'], ''))
+          setAlertColor('fail')
         })
         // SigninStore.load('RequestPassword', {
         //     email: email,
@@ -120,9 +122,11 @@ const ForgotPasswordResend = props => {
 
                         <div className="io__icon">
                             {' '}
-                            <Button type="submit" className="si__login__btn">
+                            <Button className="si__login__btn" onClick={() => {
+                              history.push('/signin')
+                          }}>
                                 {' '}
-                                Open email app
+                                Back to log in
                                 {' '}
                             </Button>{' '}
                         </div>
@@ -140,24 +144,7 @@ const ForgotPasswordResend = props => {
                                     setActiveResend(false)
                                 }} >Click to resend</span>
                         </div>
-                        <div
-                            onClick={() => {
-                                history.push('/signin')
-                            }}
-                            onMouseOver={() => {
-                                setActiveLink(true)
-                            }}
-                            onMouseOut={() => {
-                                setActiveLink(false)
-                            }}
-                            className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
-                        >
-                            <img src={ArrowLeft} alt="Login Left Logo" />
-                            <span style={{ marginLeft: "10px" }}>
-                                Back to log in
-                            </span>
-
-                        </div>
+                        
                     </div>
                 </div>
                 <Alert

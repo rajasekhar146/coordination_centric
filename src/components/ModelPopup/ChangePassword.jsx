@@ -134,19 +134,24 @@ const ChangePassword = props => {
           const data = {}
           data.oldPassword = oldPassword
           data.newPassword = newPassword
-          await authenticationService.changePassword(data)
-          .then(res => {
-            console.log('change PWD >> data', res)
-            props.handleSuccessClose()
-          })
-          .catch(err => {
-            console.log('change PWD >> err', err.response)
-            const errMsg =  get(err.response, ['data', 'message'], '')  
-            setErrMsg(errMsg) 
-            // props.handleFailureClose()
-          })
+          await authenticationService
+            .changePassword(data)
+            .then(res => {
+              console.log('change PWD >> data', res)
+              var loggedUser = JSON.parse(localStorage.getItem('currentUser'))         
+              if (get(loggedUser, ['data', 'data'], false)) {
+                loggedUser.data.data.isPasswordChanged = true
+                localStorage.setItem('currentUser', JSON.stringify(loggedUser))
+              }  
+              props.handleSuccessClose()
+            })
+            .catch(err => {
+              console.log('change PWD >> err', err.response)
+              const errMsg = get(err.response, ['data', 'message'], '')
+              setErrMsg(errMsg)
+              // props.handleFailureClose()
+            })
 
-         
           // res
           //   .then(() => {
           //     setFormSubmitted(false)
@@ -269,12 +274,12 @@ const ChangePassword = props => {
                     </IconButton>
                   </InputAdornment>
                 }
-              />              
+              />
             </div>
           </div>
           <ColoredLine color="#E4E7EC" />
           {!confirmPassword && formSubmitted && <p className="io__required">Confirm Password is Required</p>}
-              {errMsg && <p className="ac__required">{errMsg}</p>}
+          {errMsg && <p className="ac__required">{errMsg}</p>}
           <div className="od__row od_flex_space_between">
             <div className="od__p_title io_pl0"></div>
             <div className="od__btn__div od__align__right io_pr0">
