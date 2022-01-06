@@ -53,7 +53,7 @@ const PersonalInfo = props => {
   const timezones = moment.tz.names()
   console.log(timezones)
 
-  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails ,setAlertColor} = props
+  const { userDetails, classes, setOpenFlash, setAlertMsg, setSubLabel, getMemberDetails, setAlertColor } = props
   const [profilepic, setProfilePic] = useState('')
   const [prfileUrl, setProfileUrl] = useState('')
   const [updatedUrl, setUpdatedUrl] = useState('')
@@ -66,7 +66,7 @@ const PersonalInfo = props => {
   const [states, setStates] = useState([])
   const [amazonProfileURL, setAmazonProfileURL] = useState([])
   const memberSpecialities = useSelector(state => state.memberSpecialties)
-  
+  const [userRole, setUserRole] = useState('')
   const {
     register,
     handleSubmit,
@@ -125,10 +125,10 @@ const PersonalInfo = props => {
     await fetchMemberProfessionalInfo()
     console.log('userDetails', userDetails)
     if (get(userDetails, ['biograhpy_object', 'blocks'], []).length) {
-      let count = 0;
+      let count = 0
       get(userDetails, ['biograhpy_object', 'blocks'], []).forEach(element => {
         count += element.text.length
-      });
+      })
       setTextCount(count)
       userDetails.biograhpy_object.entityMap = {}
       const data = convertFromRaw(userDetails.biograhpy_object)
@@ -159,14 +159,16 @@ const PersonalInfo = props => {
     setValue('last_name', get(userDetails, ['last_name'], ''))
     setValue('email', get(userDetails, ['email'], ''))
     setValue('role', get(userDetails, ['role'], ''))
-    // setValue('phoneNumber', get(userDetails, ['phoneNumber'], ''))
+    console.log('User Role >> ', get(userDetails, ['role'], ''))
+    setUserRole(get(userDetails, ['role'], ''))
+    setValue('phoneNo', get(userDetails, ['phoneNo'], ''))
     // setValue('gender', get(userDetails, ['ssn'], ''))
     // setValue('address', get(userDetails, ['ssn'], ''))
     // setValue('country', get(userDetails, ['country'], ''))
     setSelectedCountry(get(userDetails, ['country'], ''))
     setSelectedTimeZone(get(userDetails, ['timezone'], ''))
     setProfilePic(get(userDetails, ['profilePic'], ''))
-    setAmazonProfileURL(get(userDetails , ['profilePic'] , ''))
+    setAmazonProfileURL(get(userDetails, ['profilePic'], ''))
     setValue('country', get(userDetails, ['country'], ''))
     setValue('city', get(userDetails, ['city'], ''))
     await fetchStates(get(userDetails, ['country'], ''))
@@ -195,17 +197,20 @@ const PersonalInfo = props => {
       const reader = new FileReader()
       // reader.onload = () => {
       //   setUpdatedUrl(URL.createObjectURL(file))
-       
-  })
-      memberService
-      .uploadFile('profile', formData
+    })
+    memberService
+      .uploadFile(
+        'profile',
+        formData
         // setProgress(Math.round((100 * event.loaded) / event.total));
       )
       .then(response => {
+        console.log('Upload Profile Image', response)
+        setProfilePic(response.data.data)
         setAmazonProfileURL(response.data.data)
       })
       .catch(() => {})
-    }
+  }
   const onEditorStateChange = editorState => {
     if (editorState) {
       if (editorState.getCurrentContent().getPlainText().length < 500) {
@@ -229,10 +234,15 @@ const PersonalInfo = props => {
   }
 
   const onSubmit = async data => {
-    data.timezone = selectedTimeZone
-    //data.country = selectedCountry
     data.profilePic = amazonProfileURL
-    data.biograhpy_object = convertToRaw(editorState.getCurrentContent())
+    if (!(userRole == 'admin' || userRole == 'superadmin')) {
+      data.biograhpy_object = convertToRaw(editorState.getCurrentContent())
+      data.timezone = selectedTimeZone
+    } else {
+      data.biograhpy_object = ''
+      data.timezone = ''
+    }
+    console.log('Personal Info Detail >> ', data)
     const res = await settinService.updateMemberDetails(userDetails._id, data).catch(err => {})
     if (get(res, ['data', 'status'], '') === 200) {
       setOpenFlash(true)
@@ -265,38 +275,57 @@ const PersonalInfo = props => {
         <ColoredLine color="#E4E7EC" />
 
         <div className="od__row_p">
-          <div className="od_label_p">First Name</div>
+          <div className="od_label_p">
+            {userRole == 'admin' || userRole == 'superadmin' ? 'Full Name' : 'First Name'}
+          </div>
           <div className="od_input_p">
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField
                 {...register('first_name', {
                   required: 'First Name is required.',
+                  maxLength: 50,
+                  pattern: {
+                    value: /^[A-Za-z\s]+$/,
+                    message: 'This input is characters only.',
+                  },
                 })}
                 margin="normal"
                 InputProps={{
                   className: classes.input,
                 }}
               />
+              {errors.first_name && <p className="ac__required">{errors.first_name.message}</p>}
             </FormControl>
           </div>
         </div>
-        <ColoredLine color="#E4E7EC" />
-        <div className="od__row_p">
-          <div className="od_label_p">Last Name</div>
-          <div className="od_input_p">
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                {...register('last_name', {
-                  required: 'Last Name is required.',
-                })}
-                margin="normal"
-                InputProps={{
-                  className: classes.input,
-                }}
-              />
-            </FormControl>
-          </div>
-        </div>
+        {!(userRole == 'admin' || userRole == 'superadmin') ? (
+          <>
+            {' '}
+            <ColoredLine color="#E4E7EC" />
+            <div className="od__row_p">
+              <div className="od_label_p">Last Name</div>
+              <div className="od_input_p">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <TextField
+                    {...register('last_name', {
+                      required: 'Last Name is required.',
+                      maxLength: 50,
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message: 'This input is characters only.',
+                      },
+                    })}
+                    margin="normal"
+                    InputProps={{
+                      className: classes.input,
+                    }}
+                  />
+                  {errors.last_name && <p className="ac__required">{errors.last_name.message}</p>}
+                </FormControl>
+              </div>
+            </div>{' '}
+          </>
+        ) : null}
         <ColoredLine color="#E4E7EC" />
         <div className="od__row_p">
           <div className="od_label_p">Email address</div>
@@ -305,6 +334,11 @@ const PersonalInfo = props => {
               <TextField
                 {...register('email', {
                   required: 'Email is required.',
+                  maxLength: 150,
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: 'Enter a valid e-mail address',
+                  },
                 })}
                 type="email"
                 margin="normal"
@@ -312,6 +346,36 @@ const PersonalInfo = props => {
                   className: classes.input,
                 }}
               />
+              {errors.email && <p className="ac__required">{errors.email.message}</p>}
+            </FormControl>
+          </div>
+        </div>
+        <ColoredLine color="#E4E7EC" />
+        <div className="od__row_p">
+          <div className="od_label_p">Phone Number</div>
+          <div className="od_input_p">
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                {...register('phoneNo', {
+                  required: {
+                    value: true,
+                    message: 'Phone Number is required',
+                  },
+                  pattern: {
+                    value: /^[1-9]\d*(\d+)?$/i,
+                    message: 'Phone Number accepts only integer',
+                  },
+                })}
+                maxLength={15}
+                characterLimit={15}
+                onInput={e => {
+                  e.target.value = e.target.value.toString().slice(0, 15)
+                }}
+                InputProps={{ className: 'ac__text__box' }}
+                style={{ width: '290px', minHeight: '24px' }}
+                margin="normal"
+              />
+              {errors.phoneNo && <p className="ac__required">{errors.phoneNo.message}</p>}
             </FormControl>
           </div>
         </div>
@@ -339,15 +403,7 @@ const PersonalInfo = props => {
                 )}
               </Dropzone>
             </div>
-            <div>
-              {profilepic && (
-                <img
-                  src={amazonProfileURL}
-                  alt="profile"
-                  className="io_profile"
-                />
-              )}
-            </div>
+            <div>{profilepic && <img src={amazonProfileURL} alt="profile" className="io_profile" />}</div>
           </div>
         </div>
         <ColoredLine color="#E4E7EC" />
@@ -378,28 +434,24 @@ const PersonalInfo = props => {
           </div>
           <div className="od_input_p">
             <div className="od_address mb_25">
-            <select
-            {...register('country')}
-            className="ac__dropdown"
-            onChange={e => fetchStates(e.target.value)}
-          >
-            {countries &&
-              countries.map(c => (
-                <option value={c.code} key={c.code} className="ac__dropdown">
-                  {c.name}
-                </option>
-              ))}
-          </select>
+              <select {...register('country')} className="ac__dropdown" onChange={e => fetchStates(e.target.value)}>
+                {countries &&
+                  countries.map(c => (
+                    <option value={c.code} key={c.code} className="ac__dropdown">
+                      {c.name}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="mb_25">
-            <select {...register('state')} className="ac__dropdown">
-            {states &&
-              states.map(c => (
-                <option value={c.statecode} key={c.statecode} className="ac__dropdown">
-                  {c.name}
-                </option>
-              ))}
-          </select>
+              <select {...register('state')} className="ac__dropdown">
+                {states &&
+                  states.map(c => (
+                    <option value={c.statecode} key={c.statecode} className="ac__dropdown">
+                      {c.name}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="mb_25">
               <FormControl variant="outlined" className={classes.formControl}>
@@ -424,6 +476,9 @@ const PersonalInfo = props => {
                   InputProps={{
                     className: classes.input,
                   }}
+                  inputProps={{
+                    maxLength: 20,
+                  }}
                 />
               </FormControl>
             </div>
@@ -433,78 +488,83 @@ const PersonalInfo = props => {
                         Country
                     </div> */}
         </div>
-        <ColoredLine color="#E4E7EC" />
-        <div className="od__row_p">
-          <div className="od_label_p">Timezone</div>
-          <div className="od_input_p">
-            <FormControl variant="outlined" className={classes.formControl}>
-              <Select
-                // {...register('timezone', {
-                //     required: 'timezone is required.',
-                // })}
-                onChange={e => {
-                  setSelectedTimeZone(e.target.value)
-                }}
-                value={selectedTimeZone}
-                MenuProps={{ classes: { paper: classes.dropdownStyle } }}
-                id="demo-simple-select-helper"
-                // value={userDetails.timezone}
-              >
-                {timezones.map(op => (
-                  <MenuItem key={op} value={op}>
-                    <ListItemText primary={op} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {/* <Select 
-                        className={classes.select}
-                        onChange={e => register({ name: 'timezone', value: e.target.value })}>
-                            {timezones.map(op => (
-                                <MenuItem key={op} value={op}>
-                                    <ListItemText primary={op} />
-                                </MenuItem>
-                            ))}
-                            </Select> */}
-          </div>
-        </div>
-        <ColoredLine color="#E4E7EC" />
-        <div className="od__row_p">
-          <div className="od_label_p">
-            Bio
-            <div className="io_p_info_label">Write a short introduction.</div>
-          </div>
-          <div className="od_input_p">
-            <Editor
-              editorState={editorState}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              onEditorStateChange={onEditorStateChange}
-              toolbar={{
-                options: ['inline', 'list'],
-                inline: {
-                  inDropdown: false,
-                  className: 'test',
-                  component: undefined,
-                  dropdownClassName: undefined,
-                  options: ['bold', 'italic'],
-                  bold: { className: 'test', style: { color: 'red' } },
-                  italic: { className: undefined },
-                  underline: { className: undefined },
-                },
-                list: {
-                  inDropdown: false,
-                  className: undefined,
-                  component: undefined,
-                  dropdownClassName: undefined,
-                  options: ['unordered', 'ordered'],
-                },
-              }}
-            />
-            <p className="io_count_label">{textCount} characters left</p>
-          </div>
-        </div>
+        {!(userRole == 'admin' || userRole == 'superadmin') ? (
+          <>
+            <ColoredLine color="#E4E7EC" />
+            <div className="od__row_p">
+              <div className="od_label_p">Timezone</div>
+              <div className="od_input_p">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <Select
+                    // {...register('timezone', {
+                    //     required: 'timezone is required.',
+                    // })}
+                    onChange={e => {
+                      setSelectedTimeZone(e.target.value)
+                    }}
+                    value={selectedTimeZone}
+                    MenuProps={{ classes: { paper: classes.dropdownStyle } }}
+                    id="demo-simple-select-helper"
+                    // value={userDetails.timezone}
+                  >
+                    {timezones.map(op => (
+                      <MenuItem key={op} value={op}>
+                        <ListItemText primary={op} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {/* <Select 
+                               className={classes.select}
+                               onChange={e => register({ name: 'timezone', value: e.target.value })}>
+                                   {timezones.map(op => (
+                                       <MenuItem key={op} value={op}>
+                                           <ListItemText primary={op} />
+                                       </MenuItem>
+                                   ))}
+                                   </Select> */}
+              </div>
+            </div>
+
+            <ColoredLine color="#E4E7EC" />
+            <div className="od__row_p">
+              <div className="od_label_p">
+                Bio
+                <div className="io_p_info_label">Write a short introduction.</div>
+              </div>
+              <div className="od_input_p">
+                <Editor
+                  editorState={editorState}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={onEditorStateChange}
+                  toolbar={{
+                    options: ['inline', 'list'],
+                    inline: {
+                      inDropdown: false,
+                      className: 'test',
+                      component: undefined,
+                      dropdownClassName: undefined,
+                      options: ['bold', 'italic'],
+                      bold: { className: 'test', style: { color: 'red' } },
+                      italic: { className: undefined },
+                      underline: { className: undefined },
+                    },
+                    list: {
+                      inDropdown: false,
+                      className: undefined,
+                      component: undefined,
+                      dropdownClassName: undefined,
+                      options: ['unordered', 'ordered'],
+                    },
+                  }}
+                />
+                <p className="io_count_label">{textCount} characters left</p>
+              </div>
+            </div>
+          </>
+        ) : null}
         <ColoredLine color="#E4E7EC" />
         <div className="od__row od_flex_space_between">
           <div className="od__p_title io_pl0"></div>

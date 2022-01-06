@@ -223,13 +223,13 @@ const DashboardComponent = () => {
   const dispatch = useDispatch()
   const [isOpen2FA, setIsOpen2FA] = useState()
   const [isOpenCompleteProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
-  const currentUser = authenticationService.currentUserValue
+  const currentUser = JSON.parse(localStorage.getItem('currentUser')) //authenticationService.currentUserValue
   const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
   const userId = get(currentUser, ['data', 'data', '_id'], '')
   const role = get(currentUser, ['data', 'data', 'role'], '')
   const [elementsStats, setElementStats] = useState([])
   const [dashboardDetails, setDashboardDetails] = useState(null)
-  const isLoggedToken = get(JSON.parse(localStorage.getItem('currentUser')), ['data', 'token'], null)
+  const isLoggedToken = get(currentUser, ['data', 'token'], null)
   const [twoFaSkipped, setSkipTwoFa] = useState(useSelector(state => state.skipTwoFaValue))
   const isPWDChanged = get(currentUser, ['data', 'data', 'isPasswordChanged'], false)
   const [isPwdChangeClicked, setPwdChangeClicked] = useState(false)
@@ -239,11 +239,13 @@ const DashboardComponent = () => {
   const [alertcolor, setAlertColor] = useState('')
 
   useEffect(() => {
-    console.log('Dashboard >> useEffect ', last_login_time, twoFaSkipped)
+    const loggedUser = JSON.parse(localStorage.getItem('currentUser'))
+    const isFirstTimeLoggedIn = get(loggedUser, ['data', 'data', 'last_login_time'], false)
+    console.log('Dashboard >> useEffect ', isFirstTimeLoggedIn, twoFaSkipped)
     if (!isLoggedToken) {
       history.push('signin')
     }
-    if (!last_login_time) {
+    if (!isFirstTimeLoggedIn) {
       setIsOpen2FA(true)
       // localStorage.setItem('IsShow2FAPopup', false)
     } else if (role == 'admin' && !isPWDChanged) {
@@ -266,6 +268,15 @@ const DashboardComponent = () => {
 
   const close2FaModel = () => {
     setIsOpen2FA(false)
+
+    var loggedUser = JSON.parse(localStorage.getItem('currentUser'))
+    // var user = get(loggedUser, ['data', 'data'], {})
+    if (get(loggedUser, ['data', 'data'], false)) {
+      loggedUser.data.data.last_login_time = true
+      loggedUser.data.data.isPasswordChanged = true
+    }
+
+    localStorage.setItem('currentUser', JSON.stringify(loggedUser))
 
     console.log('close2FaModel >> last_login_time', last_login_time)
     if (role == 'admin' && !isPWDChanged) {
