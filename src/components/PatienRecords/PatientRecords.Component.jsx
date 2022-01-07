@@ -26,7 +26,7 @@ import { memberService } from '../../services'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
 import TablePagination from '@mui/material/TablePagination'
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress'
 import AddPatientRecordPopup from './AddrecordPopup'
 import Alert from '../Alert/Alert.component'
 import './PatientRecords.Component.css'
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 5,
     paddingBottom: 15,
     display: 'flex',
-    justifyContent: "space-between"
+    justifyContent: 'space-between',
   },
   approved: {
     color: '#03B575',
@@ -61,9 +61,6 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0,
   },
 }))
-
-
-
 
 const getTextColor = text => {
   switch (text) {
@@ -91,7 +88,7 @@ const invitepatientModelStyle = {
   borderRadius: '10px',
   padding: '0px',
   paddingTop: 0,
-  overflow: 'auto'
+  overflow: 'auto',
 }
 
 const invitePatientSuccess = {
@@ -123,12 +120,8 @@ const addRecordStyle = {
 }
 const menuList = getOptions()
 
-const PatienRecordsComponent = (props) => {
-  const {
-    fromVideCall,
-    setfromVideCall,
-    videoClick
-  } = props
+const PatienRecordsComponent = props => {
+  const { fromVideCall, setfromVideCall, videoClick } = props
 
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [invitePatientClicked, setInvitePatientClicked] = useState(false)
@@ -144,7 +137,7 @@ const PatienRecordsComponent = (props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [count, setCount] = useState(50)
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const open = Boolean(anchorEl)
   const classes = useStyles()
   const [addPatientRecordPopup, setAddPatientRecordPopup] = useState(false)
@@ -163,15 +156,17 @@ const PatienRecordsComponent = (props) => {
 
   const getPatientRecords = async () => {
     setIsLoading(true)
-    memberService.getPatientRecords(userId, limit, skip).then((res) => {
-      setPatientRecords(get(res, ['data', 'data', '0', 'totalData'], []))
-      // setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], 0))
-      setIsLoading(false)
-    }).catch((err) => {
-      console.log(err)
-      setIsLoading(false)
-    })
-
+    memberService
+      .getPatientRecords(userId, limit, skip)
+      .then(res => {
+        setPatientRecords(get(res, ['data', 'data', '0', 'totalData'], []))
+        // setCount(get(res, ['data', 'data', '0', 'totalCount', '0', 'count'], 0))
+        setIsLoading(false)
+      })
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false)
+      })
   }
 
   useEffect(() => {
@@ -192,18 +187,18 @@ const PatienRecordsComponent = (props) => {
   ]
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage)
     setSkip(limit * newPage)
     setIsLoading(true)
-  };
+  }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
     setSkip(0)
     setLimit(parseInt(event.target.value, 10))
     setIsLoading(true)
-  };
+  }
 
   const closeInviteSuccessModel = () => {
     setAddPatientRecordPopup(false)
@@ -218,7 +213,8 @@ const PatienRecordsComponent = (props) => {
             onClick={() => {
               setAddPatientRecordPopup(true)
             }}
-            className="od_add_member_btn">
+            className="od_add_member_btn"
+          >
             &nbsp;&nbsp; Add Record
           </Button>
         </div>
@@ -248,23 +244,23 @@ const PatienRecordsComponent = (props) => {
                     )}
                   </TableRow>
                 </TableHead>
-                {isLoading
-                  ? <TableBody>
+                {isLoading ? (
+                  <TableBody>
                     <tr>
                       <td className="app_loader" colSpan={15}>
                         <CircularProgress />
                       </td>
                     </tr>
                   </TableBody>
-                  :
-                  <TableBody >
-                    {patientRecords.length === 0
-                      ? <tr>
+                ) : (
+                  <TableBody>
+                    {patientRecords.length === 0 ? (
+                      <tr>
                         <td className="app_loader" colSpan={15}>
                           <label>No Results Found</label>
                         </td>
-
-                      </tr> :
+                      </tr>
+                    ) : (
                       patientRecords.map((row, index) => (
                         <PatientItem
                           row={row}
@@ -283,9 +279,9 @@ const PatienRecordsComponent = (props) => {
                           videoClick={videoClick}
                         />
                       ))
-                    }
+                    )}
                   </TableBody>
-                }
+                )}
               </Table>
             </TableContainer>
             <TablePagination
@@ -329,10 +325,7 @@ const PatienRecordsComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={invitePatientSuccess}>
-          <InvitePatientSuccess
-            clickCloseButton={closeModel}
-            getPatientRecords={getPatientRecords}
-          />
+          <InvitePatientSuccess clickCloseButton={closeModel} getPatientRecords={getPatientRecords} />
         </Box>
       </Modal>
       <Modal
@@ -342,10 +335,7 @@ const PatienRecordsComponent = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={invitePatientSuccess}>
-          <SharePatientRecord
-            clickCloseButton={closeModel}
-
-          />
+          <SharePatientRecord clickCloseButton={closeModel} />
         </Box>
       </Modal>
       <Modal

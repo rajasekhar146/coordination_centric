@@ -11,7 +11,7 @@ const axiosConfig = {
 export const accountService = {
   getAll,
   sendEmailWithVerificationCode,
-  // sendEmailVerificationCode,
+  getDoctorListByOrganizationById,
 }
 
 function getAll() {
@@ -35,4 +35,21 @@ function sendEmailWithVerificationCode(email) {
         return { errorCode: err.status, errorMessage: err.message }
       })
   )
+}
+
+function getDoctorListByOrganizationById(orgId) {
+  const headers = {
+    headers: authHeader(),
+  }
+
+  console.log('getDoctorListByOrganizationById >> axiosConfig', headers)
+
+  return axios
+    .get(`${apiURL}/users/getDoctorListByOrganization?facility_id=${orgId}`, headers)
+    .then(data => {
+      return { data }
+    })
+    .catch(err => {
+      return null
+    })
 }

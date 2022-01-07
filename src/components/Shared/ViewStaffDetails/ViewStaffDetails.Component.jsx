@@ -116,7 +116,7 @@ function ViewStaffDetailsComponent() {
     setValue('name', fullName)
     setValue('email', memberData.email)
     setValue('phoneNo', memberData.phoneNo)
-    setValue('role', memberData.role)
+    setValue('role', capitalize(memberData.role))
     setValue('speciality', speciality)
     setValue('ssn', memberData.ssn)
     setValue('occupation', memberData.occupation)
@@ -131,6 +131,11 @@ function ViewStaffDetailsComponent() {
     setDOB(memberData.dob)
     setMemberRole(memberData.role)
     console.log('params', res.data)
+  }
+
+  const capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
   }
 
   const colorcodes = {
@@ -459,10 +464,6 @@ function ViewStaffDetailsComponent() {
               {' '}
               <TextField
                 {...register('ssn', {
-                  required: {
-                    value: true,
-                    message: 'SSN/ITIN is required',
-                  },
                   pattern: {
                     value: /^[1-9]\d*(\d+)?$/i,
                     message: 'NPI accepts only integer',
@@ -477,7 +478,6 @@ function ViewStaffDetailsComponent() {
               />
             </div>
           </p>
-          {errors.ssn && <p className="ac__required">{errors.ssn.message}</p>}
         </div>
 
         <div className="row-details">

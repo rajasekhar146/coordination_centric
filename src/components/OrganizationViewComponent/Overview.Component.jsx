@@ -59,7 +59,8 @@ const OverView = props => {
   const [alertMsg, setAlertMsg] = useState('')
   const [subLebel, setSubLabel] = useState('')
   const [alertcolor, setAlertColor] = useState('')
-
+  const [aboutList, setAboutList] = useState([])
+  const [aboutOther, setAboutOther] = useState(false)
   var {
     register,
     setValue,
@@ -142,6 +143,7 @@ const OverView = props => {
   //     })
   useEffect(async () => {
     await fetchCountries()
+    await fetchAboutUsList()
     const response = await memberService.getFacilityData(orgId)
     const orgData = get(response, ['data', 'data'], {})
     console.log('Overview >> orgDet', orgData)
@@ -167,7 +169,8 @@ const OverView = props => {
     setValue('country', orgData.country)
     await fetchStates(orgData.country)
     setValue('state', orgData.state)
-
+    setValue('subject', orgData.subject)
+    setAboutOther(orgData.about === 'Others')
     downloadFile(new Blob(data.data), 'myfile.pdf', { type: 'application/pdf' })
   }, [])
 
@@ -189,6 +192,11 @@ const OverView = props => {
     } else {
       setAdminEmailSame(false)
     }
+  }
+
+  const fetchAboutUsList = async () => {
+    const aboutUsList = await commonService.getAboutUsList().catch(err => {})
+    setAboutList(get(aboutUsList, ['data', 'data', 'data'], []))
   }
 
   const fetchStates = async selectedCountryCode => {
@@ -704,20 +712,47 @@ const OverView = props => {
                 How did you hear about us?
               </Typography>
               <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
-                <div style={{ width: '250px' }}>
-                  {' '}
-                  <TextField
-                    {...register('about')}
-                    inputProps={{
-                      maxLength: 120,
-                    }}
+                <div style={{ width: '290px' }}>
+                  <select
                     disabled={!isOrgInfoEdit}
-                    margin="normal"
-                    InputProps={{ className: isOrgInfoEdit ? 'ov__text__box' : 'ov__ro__text__box' }}
-                  />
+                    {...register('about')}
+                    className="ac__dropdown"
+                    onChange={e => {
+                      setAboutOther(e.target.value === 'Others')
+                      setValue('subject', '')
+                    }}
+                  >
+                    {aboutList &&
+                      aboutList.map(c => (
+                        <option value={c.name} key={c.name} className="ac__dropdown">
+                          {c.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </Typography>
             </div>
+            {aboutOther && (
+              <div className="detailWrapper">
+                <Typography variant="subtitle2" display="block" className="det-title" gutterBottom>
+                  Others
+                </Typography>
+                <Typography variant="subtitle2" display="block" className="det-value" gutterBottom>
+                  <div style={{ width: '250px' }}>
+                    {' '}
+                    <TextField
+                      {...register('subject')}
+                      inputProps={{
+                        maxLength: 120,
+                      }}
+                      disabled={!isOrgInfoEdit}
+                      margin="normal"
+                      InputProps={{ className: isOrgInfoEdit ? 'ov__text__box' : 'ov__ro__text__box' }}
+                    />
+                  </div>
+                </Typography>
+              </div>
+            )}
             <div className="ov__action__section">
               {!isOrgInfoEdit && (
                 <Button onClick={handleOrgInfoEdit} className="ov__button">

@@ -126,24 +126,23 @@ const PersonalDetailComponent = () => {
     // data.state = state
 
     var age = 0
-    if(dateOfBirth != null){
-      const newAge = moment(dateOfBirth, "YYYY/MM/DD").fromNow();
-      age = newAge.split(" ")[0];
+    if (dateOfBirth != null) {
+      const newAge = moment(dateOfBirth, 'YYYY/MM/DD').fromNow()
+      age = newAge.split(' ')[0]
     }
-    
-    if(!dateOfBirth){
+
+    if (!dateOfBirth) {
       setDateEntered(false)
-    }else{
+    } else {
       var memberData = { ...member.member, ...data }
-    console.log('submit data >> ', memberData)
-    console.log('submit role >> ', memberData.role)
+      console.log('submit data >> ', memberData)
+      console.log('submit role >> ', memberData.role)
 
-    dispatch(newMember(memberData))
-    if (memberData.role == 'doctor' || Number(age) >= 18) {
-      history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
-    } else setIsUnder19(true)
+      dispatch(newMember(memberData))
+      if (memberData.role == 'doctor' || Number(age) >= 18) {
+        history.push(`/members/profile-setup/${invitetoken}/${referredby}/${invitedBy}`)
+      } else setIsUnder19(true)
     }
-
   }
   const fetchCountries = async () => {
     const response = await commonService.getCountries().catch(error => {
@@ -159,7 +158,7 @@ const PersonalDetailComponent = () => {
     dispatch(setCountries(response.data.data.data))
   }
 
-  useEffect(async() => {
+  useEffect(async () => {
     await fetchCountries()
     featchOcupations()
     const newMemberDetail = member?.member
@@ -181,7 +180,7 @@ const PersonalDetailComponent = () => {
       setValue('city', newMemberDetail.city)
       setValue('postalCode', newMemberDetail.postalCode)
       setValue('gender', newMemberDetail.gender)
-      if(newMemberDetail.dob){
+      if (newMemberDetail.dob) {
         setDOB(newMemberDetail.dob)
       }
       // setCountry('country', newMemberDetail.country)
@@ -272,12 +271,9 @@ const PersonalDetailComponent = () => {
               </div>
               <div className="pdc__row__two_grid">
                 <div className="pdc__column">
-                  <div className="pdc__label">
-                    SSN/ITIN <span className="pdc__required">*</span>
-                  </div>
+                  <div className="pdc__label">SSN/ITIN</div>
                   <TextField
                     {...register('ssn', {
-                      required: 'SSN/ITIN is required.',
                       pattern: {
                         value: /\d/,
                         message: 'This input is number only.',
@@ -291,7 +287,6 @@ const PersonalDetailComponent = () => {
                     margin="normal"
                     InputProps={{ className: 'pdc__text__box' }}
                   />
-                  {errors.ssn && <p className="ac__required">{errors.ssn.message}</p>}
                 </div>
 
                 <div className="pdc__column">
@@ -299,7 +294,7 @@ const PersonalDetailComponent = () => {
                     Occupation {isRequiredForOccupation && <span className="pdc__required">*</span>}
                   </div>
 
-                  <select {...register('occupation', { required: isRequiredForOccupation})} className="ac__dropdown">
+                  <select {...register('occupation', { required: isRequiredForOccupation })} className="ac__dropdown">
                     {ocupations &&
                       ocupations.map(c => (
                         <option value={c.occupation_name} key={c.occupation_name} className="ac__dropdown">
@@ -327,11 +322,8 @@ const PersonalDetailComponent = () => {
                       InputProps={{ className: 'pdc__date__field' }}
                     />
                   </LocalizationProvider>
-                  {!IsDateEntered && 
-                        <p className="ac__required">Please select the date</p>
-                    }
+                  {!IsDateEntered && <p className="ac__required">Please select the date</p>}
                 </div>
-              
 
                 <div className="pdc__column">
                   <div className="pdc__label">
