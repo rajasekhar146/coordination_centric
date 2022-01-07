@@ -14,9 +14,6 @@ import { useParams } from 'react-router-dom'
 import SigninStore from '../../../stores/signinstore'
 import { useSelector, useDispatch } from 'react-redux'
 import { newOrganization } from '../../../redux/actions/organizationActions'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import { commonService } from '../../../services'
 import { setCountries } from '../../../redux/actions/commonActions'
 import get from 'lodash.get'
@@ -35,7 +32,9 @@ const AcceptanceCriteriaComponent = props => {
   const dispatch = useDispatch()
   const [states, setStates] = useState(null)
   const [countries, setAllCountries] = useState([])
-  const [adminEmailSame , setAdminEmailSame] = useState()
+  const [adminEmailSame, setAdminEmailSame] = useState()
+  const [aboutList, setAboutList] = useState([])
+  const [aboutOther, setAboutOther] = useState(false)
 
   var {
     register,
@@ -45,7 +44,6 @@ const AcceptanceCriteriaComponent = props => {
   } = useForm()
 
   const fetchStates = async selectedCountryCode => {
-    console.log('selected country code: ' + selectedCountryCode)
     const response = await commonService.getStates(selectedCountryCode).catch(error => {
       console.log(error)
     })
@@ -55,9 +53,9 @@ const AcceptanceCriteriaComponent = props => {
     // setValue('state', data[0].statecode)
   }
   const onSubmit = data => {
-    if(data.email == data.facilityEmail){
-      return
-    }
+    // if (data.email == data.facilityEmail) {
+    //   return
+    // }
     const admin = {
       fullName: data.fullName,
       email: data.email,
@@ -65,7 +63,7 @@ const AcceptanceCriteriaComponent = props => {
     }
     console.log('form data', data)
     SigninStore.set({ organisationName: data.facilityName })
-    
+
     // data.planType = plan == 'P' ? 'premium' : 'free'
 
     data.admin = [admin]
@@ -78,13 +76,12 @@ const AcceptanceCriteriaComponent = props => {
 
     var uFacility = JSON.parse(localStorage.getItem('facility'))
 
-    if(uFacility.planType === 'free') data.planType = 'free'
+    if (uFacility.planType === 'free') data.planType = 'free'
     else {
       data.planType = uFacility.planType
-      data.subscription_price= uFacility.subscription_price
-      data.subscription_price_id= uFacility.subscription_price_id
+      data.subscription_price = uFacility.subscription_price
+      data.subscription_price_id = uFacility.subscription_price_id
     }
-    console.log('uFacility >> AC page', data)
     localStorage.setItem('facility', JSON.stringify(data))
 
     dispatch(newOrganization(data))
@@ -92,11 +89,15 @@ const AcceptanceCriteriaComponent = props => {
     history.push(`/service-level-agreement/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
+  const fetchAboutUsList = async () => {
+    const aboutUsList = await commonService.getAboutUsList().catch(err => {})
+    setAboutList(get(aboutUsList, ['data', 'data', 'data'], []))
+  }
+
   useEffect(async () => {
-    console.log('New AC -- >> ', props.props)
     await fetchCountries()
+    await fetchAboutUsList()
     var uFacility = JSON.parse(localStorage.getItem('facility'))
-    console.log('uFacility', uFacility)
     if (uFacility != null) {
       var data = uFacility
       await fetchStates(data.country)
@@ -117,47 +118,35 @@ const AcceptanceCriteriaComponent = props => {
       setValue('state', data.state)
       setValue('zipcode', data.zipcode)
       setValue('country', data.country)
+      setValue('subject', data.subject)
       setFacilityName(data.facilityEmail)
+      setAboutOther(data.about === 'Others')
     }
 
     const planType = localStorage?.getItem('plan_type')
-    console.log('referredBy 1 ', referredby, 'inviteToken 1 ', invitetoken)
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
-      console.log('newSteps', newSteps)
     }
-
-    // const updateFacility = localStorage.getItem('facility')
-
-    // if (updateFacility != null) {
-    //   const newFacility = JSON.parse(updateFacility)
-    //   console.log('updateFacility', newFacility)
-    //   setInitialFormData(newFacility)
-    // } else {
-    //   console.log('Else')
-    //   setInitialFormData(null)
-    // }
 
     setPlanType('F')
 
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
-      console.log('newSteps', newSteps)
     }
 
     if (planType === '') setPlanType('F')
     else setPlanType(planType)
   }, [])
 
-  const checkAdminEmail = (e) =>{
-      if(e.target.value == facilityEmail ){
-        setAdminEmailSame(true);
-      }else{
-        setAdminEmailSame(false);
-      }
+  const checkAdminEmail = e => {
+    if (e.target.value == facilityEmail) {
+      setAdminEmailSame(true)
+    } else {
+      setAdminEmailSame(false)
+    }
   }
   const handleBack = () => {
     if (referredby === undefined || referredby === null) referredby = 0
@@ -171,8 +160,6 @@ const AcceptanceCriteriaComponent = props => {
     const response = await commonService.getCountries().catch(error => {
       console.log(error)
     })
-
-    console.log('getCountries', response.data.data.data)
     setAllCountries(response.data.data.data)
     dispatch(setCountries(response.data.data.data))
   }
@@ -252,7 +239,9 @@ const AcceptanceCriteriaComponent = props => {
                               // name="email"
                               // value={initialValues ? initialValues.email : ''}
                             />
-                            {adminEmailSame && <p className = "ac__required" > Admin Email should not be same as Organization's Email </p>}
+                            {adminEmailSame && (
+                              <p className="ac__required"> Admin Email should not be same as Organization's Email </p>
+                            )}
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
 
@@ -261,16 +250,16 @@ const AcceptanceCriteriaComponent = props => {
                               Phone Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('phoneNumber',{
+                              {...register('phoneNumber', {
                                 required: {
-                                    value: true,
-                                    message: "Admin's Phone Number is required",
+                                  value: true,
+                                  message: "Admin's Phone Number is required",
                                 },
                                 pattern: {
-                                    value: /^[1-9]\d*(\d+)?$/i,
-                                    message: 'Phone Number accepts only integer',
-                                }
-                          })}
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Phone Number accepts only integer',
+                                },
+                              })}
                               inputProps={{
                                 maxLength: 15,
                               }}
@@ -333,16 +322,16 @@ const AcceptanceCriteriaComponent = props => {
                               Phone Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('facilityPhone',{
+                              {...register('facilityPhone', {
                                 required: {
-                                    value: true,
-                                    message: "Organization's Phone Number is required",
+                                  value: true,
+                                  message: "Organization's Phone Number is required",
                                 },
                                 pattern: {
-                                    value: /^[1-9]\d*(\d+)?$/i,
-                                    message: 'Phone Number accepts only integer',
-                                }
-                          })}
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Phone Number accepts only integer',
+                                },
+                              })}
                               maxLength={15}
                               characterLimit={15}
                               onInput={e => {
@@ -364,14 +353,14 @@ const AcceptanceCriteriaComponent = props => {
                             <TextField
                               {...register('faxNumber', {
                                 required: {
-                                    value: true,
-                                    message: "Fax Number is required",
+                                  value: true,
+                                  message: 'Fax Number is required',
                                 },
                                 pattern: {
-                                    value: /^[1-9]\d*(\d+)?$/i,
-                                    message: 'Fax accepts only integer',
-                                }
-                          })}
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Fax accepts only integer',
+                                },
+                              })}
                               inputProps={{
                                 maxLength: 10,
                               }}
@@ -460,7 +449,7 @@ const AcceptanceCriteriaComponent = props => {
                             <TextField
                               {...register('zipcode', { required: 'Zipcode is required ' })}
                               inputProps={{
-                                maxLength: 20
+                                maxLength: 20,
                               }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
@@ -480,17 +469,17 @@ const AcceptanceCriteriaComponent = props => {
                             <TextField
                               {...register('npi', {
                                 required: {
-                                    value: true,
-                                    message: "NPI is required",
+                                  value: true,
+                                  message: 'NPI is required',
                                 },
                                 pattern: {
-                                    value: /^[1-9]\d*(\d+)?$/i,
-                                    message: 'NPI accepts only integer',
-                                }
-                          })}
-                          inputProps={{
-                            maxLength: 10,
-                          }}
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'NPI accepts only integer',
+                                },
+                              })}
+                              inputProps={{
+                                maxLength: 10,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               // value={nip}
@@ -503,11 +492,11 @@ const AcceptanceCriteriaComponent = props => {
                           <div className="ac__column">
                             <div className="ac__label">Tax ID</div>
                             <TextField
-                              {...register('taxId' , {
+                              {...register('taxId', {
                                 pattern: {
                                   value: /^[1-9]\d*(\d+)?$/i,
                                   message: 'Tax Id accepts only integer',
-                              }
+                                },
                               })}
                               inputProps={{
                                 maxLength: 20,
@@ -525,10 +514,10 @@ const AcceptanceCriteriaComponent = props => {
                             <TextField
                               {...register('medicalId', {
                                 pattern: {
-                                    value: /^[1-9]\d*(\d+)?$/i,
-                                    message: 'Medical ID accepts only integer',
-                                }
-                          })}
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Medical ID accepts only integer',
+                                },
+                              })}
                               inputProps={{
                                 maxLength: 14,
                               }}
@@ -558,20 +547,37 @@ const AcceptanceCriteriaComponent = props => {
 
                           <div className="ac__column">
                             <div className="ac__label">How did you hear about us?</div>
-                            <TextField
+                            <select
                               {...register('about')}
-                              inputProps={{
-                                maxLength: 120,
+                              className="ac__dropdown"
+                              onChange={e => {
+                                setAboutOther(e.target.value === 'Others')
+                                setValue('subject', '')
                               }}
-                              InputProps={{ className: 'ac__text__box' }}
-                              margin="normal"
-                              // value={about}
-                              // name="about"
-                              // value={initialValues ? initialValues.about : ''}
-                            />
+                            >
+                              {aboutList &&
+                                aboutList.map(c => (
+                                  <option value={c.name} key={c.name} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
                           </div>
-                        </div>
 
+                          {aboutOther && (
+                            <div className="ac__column">
+                              <div className="ac__label">Others</div>
+                              <TextField
+                                {...register('subject')}
+                                inputProps={{
+                                  maxLength: 120,
+                                }}
+                                InputProps={{ className: 'ac__text__box' }}
+                                margin="normal"
+                              />
+                            </div>
+                          )}
+                        </div>
                         <div className="ac__gap__div"></div>
 
                         <div className="ac_align_buttons">
