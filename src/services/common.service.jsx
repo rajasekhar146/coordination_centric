@@ -16,7 +16,8 @@ export const commonService = {
   getProfile,
   getSpecializations,
   getAllOcupations,
-  getPolicyList
+  getPolicyList,
+  getAboutUsList,
 }
 
 function getCountries() {
@@ -59,17 +60,15 @@ function getAllRoles() {
   const axiosConfig = {
     headers: authHeader(),
   }
-  return (
-    axios
-      .get(`${apiURL}/utils/getRoles`, axiosConfig)
-      .then(data => {
-        return { data }
-      })
-      .catch(err => {
-        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-        return null
-      })
-  )
+  return axios
+    .get(`${apiURL}/utils/getRoles`, axiosConfig)
+    .then(data => {
+      return { data }
+    })
+    .catch(err => {
+      // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+      return null
+    })
 }
 
 function getHealthProblems(countryCode) {
@@ -146,7 +145,6 @@ function getAllOcupations() {
   )
 }
 
-
 function getPolicyList() {
   console.log('axiosConfig', axiosConfig)
 
@@ -163,5 +161,16 @@ function getPolicyList() {
         return null
       })
   )
-}     
+}
 
+function getAboutUsList() {
+  console.log('axiosConfig', axiosConfig)
+  return axios
+    .get(`${apiURL}/utils/aboutUs`, axiosConfig)
+    .then(data => {
+      return { data }
+    })
+    .catch(err => {
+      return null
+    })
+}
