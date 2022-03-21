@@ -7,6 +7,8 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
+import { memberService } from '../../services'
+import history from '../../history'
 
 const colorcodes = {
     invited: '#2E90FA',
@@ -92,7 +94,7 @@ const menuList = [
         menu: 'pending_verification',
         options: [
             { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
@@ -133,19 +135,10 @@ const menuList = [
         ],
     },
     {
-        menu: 'invited',
+        menu: 'true',
         options: [
-            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            {
-                text: 'Resend Invitation',
-                fnKey: 'setIsResendClicked',
-                icon: require('../../assets/icons/resent_invitation.png').default,
-            },
-            {
-                text: 'Cancel Invite',
-                fnKey: 'setIsCancelInviteClicked',
-                icon: require('../../assets/icons/suspend.png').default,
-            },
+            { text: 'Deactivate', fnKey: 'setIsDeactivateClicked', icon: require('../../assets/icons/suspend.png').default },
+
         ],
     },
 
@@ -168,7 +161,7 @@ const menuList = [
         menu: 'unverified',
         options: [
             { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -177,7 +170,7 @@ const menuList = [
         menu: 'pending_acceptance',
         options: [
             { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-            { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+            // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
             { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
             { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
         ],
@@ -194,6 +187,22 @@ const menuList = [
             { text: 'Cancel Invite', icon: require('../../assets/icons/suspend.png').default },
         ],
     },
+    {
+        menu: 'invited',
+        options: [
+            { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+            {
+                text: 'Resend Invitation',
+                fnKey: 'setIsResendClicked',
+                icon: require('../../assets/icons/resent_invitation.png').default,
+            },
+            {
+                text: 'Cancel Invite',
+                fnKey: 'setIsCancelInviteClicked',
+                icon: require('../../assets/icons/suspend.png').default,
+            },
+        ],
+    },
 ]
 
 
@@ -203,8 +212,15 @@ const MemberItemComponent = props => {
     const {
         row,
         columns,
-        handleClose,
-        index
+        index,
+        setSkip,
+        setOpenFlash,
+        setAlertMsg,
+        setSubLabel,
+        setMembersList,
+        organizationId,
+        setAlertColor,
+        getStaffList
     } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -224,13 +240,90 @@ const MemberItemComponent = props => {
         console.log('menus[0].options', menus[0].options)
     }
 
+    const resendInvite = async (org, status) => {
+        const res = await memberService.resendInvite(org._id, status, 'member')
+        if (res.status === 200) {
+            getStaffList()
+            setOpenFlash(true)
+            setAlertMsg('Resent')
+            setSubLabel('Another invitation was sended to this Member.')
+            setAlertColor('success')
+        } else {
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            // setSubLabel('Another invitation was sended to this Member.')
+        }
+    }
+
+    const cancelInvite = async (org, status) => {
+        const res = await memberService.cancelInvite(org._id, status, 'member')
+        if (res.status === 200) {
+            getStaffList()
+            setOpenFlash(true)
+            setAlertMsg('Cancelled')
+            setSubLabel('Invitation Cancelled.')
+            setAlertColor('cancel')
+        } else {
+            setOpenFlash(true)
+            setAlertMsg('Error')
+        }
+    }
+
+    const handleActivate = async(org, status) => {
+        const res = await memberService.updateStatus(org._id, status)
+        if (res.status === 200) {
+            getStaffList()
+            setOpenFlash(true)
+            if (status === 'active') {
+                setAlertMsg('Activated')
+                setSubLabel('This account was successfully activated.')
+                setAlertColor('success')
+            } else {
+                setAlertMsg('Deactivated')
+                setSubLabel('This account was deactivated, users no longer have access.')
+                setAlertColor('fail')
+            }
+
+        } else {
+            setOpenFlash(true)
+            setAlertMsg('Error')
+            setSubLabel('')
+        }
+    }
+
+
     const handleMenuAction = (e, action, index, orgId) => {
         e.preventDefault()
         e.stopPropagation()
         console.log('orgId', orgId)
         switch (action) {
+            case 'setIsDeactivateClicked':
+                handleActivate(row, 'inactive')
+                
+                break
+            case 'setIsCancelInviteClicked':
+                cancelInvite(row, 'cancel')
 
+                break
+            case 'setIsActivateClicked':
+                handleActivate(row, 'active')
+               
+                break
+            case 'setIsResendClicked':
+                resendInvite(row, 'resend')
+                break
+            // case 'setIsActivateClicked':
+            //   handleActivate()
+            case 'viewdetails':
+                handleRowClick(row)
+                break;
+            default:
+                return null
         }
+        setAnchorEl(null)
+    }
+
+    const handleClose = () => {
         setAnchorEl(null)
     }
 
@@ -247,27 +340,38 @@ const MemberItemComponent = props => {
         }
     }
 
+    const handleRowClick = async() =>{
+        history.push(`/viewDetails/${row._id}`)
+     }
 
 
     return (
         <TableRow
             hover
             role="checkbox"
+            onClick = {()=>{
+                handleRowClick(index,row)
+            }}
             style={{ width: '100%' }} tabIndex={-1} key={row.id}>
             {columns.map(column => {
                 var value = row[column.id]
                 if (row[column.id]) value = row[column.id]
+                if(column.id == 'role'){
+                    if (row[column.id]) 
+                    value = <span style={{textTransform: 'capitalize'}}> {row[column.id]}</span> 
+                }
                 // else if (column.id === 'orgName') value = 'John Deo'
                 // else if (column.id === 'referedBy') value = 'Sachin Smith'
 
-                return column.id == 'status' ? (
+                return column.id == 'memberStatus' ? (
                     <TableCell
                         key={column.id}
                         align={column.align}
                         style={{ paddingBottom: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'center' }}
                     >
                         <div className={`od__${value?.toLowerCase()}__status`}>
-                            <CircleIcon fontSize="small"  />
+                            <CircleIcon fontSize="small" sx={{ color: colorcodes[value.toLowerCase()] }} />
+
                             <div className={`od__${value?.toLowerCase()}__label`}>
                                 {column.format && typeof value === 'number' ? column.format(value) : getValue(value)}
                             </div>
@@ -281,7 +385,7 @@ const MemberItemComponent = props => {
                             aria-controls="long-menu"
                             aria-expanded={open ? 'true' : undefined}
                             aria-haspopup="true"
-                            onClick={e => handleClick(e, `${row['status']}`)}
+                            onClick={e => handleClick(e, `${row['memberStatus']}`)}
                         >
                             <MoreVertRoundedIcon />
                         </IconButton>

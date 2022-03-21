@@ -32,6 +32,12 @@
     top: 30%;
     left: 150%;
 }
+.si_left_signin {
+    left: 185% !important;  
+}
+.si__left__200{
+    left: 210% !important;
+}
 
 .si__left__content {
     font-family: Lato;
@@ -87,13 +93,10 @@
     font-weight: normal;
     font-size: 18px;
     line-height: 24px;
-
-    /* identical to box height, or 133% */
     letter-spacing: 0.1px;
-
-    /* Neutral/Gray */
     color: #A0A4A8;
     text-align: center;
+    cursor: pointer;
 }
 
 .si__right__label {
@@ -146,7 +149,7 @@
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 18px;
     line-height: 16px;
     
     /* identical to box height, or 133% */
@@ -155,10 +158,29 @@
     text-align: center !important;
     justify-content: center !important;
     letter-spacing: 0.1px;
-    
-    /* Neutral/Gray */
-    color: #A0A4A8;
     display: flex !important;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.si__forgot__link_active{
+    width: 100% !important;
+    color: #E42346 !important;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 16px;
+    
+    /* identical to box height, or 133% */
+    display: flex;
+    align-items: center !important;
+    text-align: center !important;
+    justify-content: center !important;
+    letter-spacing: 0.1px;
+    display: flex !important;
+    margin-top: 15px;
+    cursor: pointer;
 }
 
 .si__right__content > div {
@@ -208,14 +230,14 @@
     background-color: #fff;
     width: 40%;
     margin: auto;
-    margin-top: 80px
+    padding-top: 80px
 }
 .io_top_logo {
     position: absolute;
     top: 10px;
 }
 .io_sent_logo {
-    margin-top: 100px;
+    /* margin-top: 100px; */
 }
 .io_width60 {
     width: 60%;
@@ -284,9 +306,10 @@
     width: 180px !important;
     background-color: #DBDDE0 !important;
     border-radius: 10px !important;
-    color: #fff !important;
+    /* color: #fff !important; */
     padding: 10px !important;
     pointer-events: none;
+    color: #E42346 !important;
 }
 
 .evp__label__time {
@@ -390,9 +413,37 @@
 .si_left180 {
     left: 180% !important;
 }
-.si_left270 {
-    left: 270% !important;
+.si_left_reset {
+    left: 255% !important;
 }
 .si_top_zero {
     top: 0 !important;
+}
+.si_reset {
+    left: 130%;
+}
+input[type="email"] {
+    text-transform: lowercase;
+}
+
+input::placeholder{
+    text-transform: capitalize;
+}
+
+::-webkit-input-placeholder {
+    text-transform: initial;
+ }
+
+ :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    text-transform: initial;
+ }
+ ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    text-transform: initial;
+ }
+ :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    text-transform: initial;
+ }
+ 
+.si_acive_resend {
+    color: #E42346 !important;
 }

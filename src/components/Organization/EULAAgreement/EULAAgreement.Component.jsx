@@ -20,14 +20,15 @@ import downloadIcon from '../../../assets/icons/download_icon.png'
 import printIcon from '../../../assets/icons/print_icon.png'
 import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
-import useStore from '../../../hooks/use-store';
+import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
-
-
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Icon from '@mui/material/Icon'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
 const EULAAgreementComponent = () => {
-  const [signatureUrl, setSignature] = useState({})
+  
+  const [signature, setSignature] = useState({})
   const [value, setValue] = useState(new Date())
   const [planType, setPlanType] = useState('F')
   var sigPad = {}
@@ -38,29 +39,21 @@ const EULAAgreementComponent = () => {
   const [activeStep, setActiveStep] = React.useState(1)
   const [facility, setFacility] = useState({})
 
+  const [signinStoreData] = useStore(SigninStore)
 
-  const [signinStoreData] = useStore(SigninStore);
-
-  const {
-    organisationName,
-  } = signinStoreData;
+  const { organisationName } = signinStoreData
+  const [isVisible, setVisible] = useState(true)
+  const [showClearIcon, setShowClearIcon] = useState(false)
 
   const handleNext = () => {
-    // var updatedFacility = {
-    //   ...facility,
-    //   eula_certificate: 'www.aulaagreement.com',
-    // }
-
-    // console.log('updatedFacility', JSON.stringify(updatedFacility))
-    // setFacility(updatedFacility)
-
-    // localStorage.setItem('facility', JSON.stringify(updatedFacility))
-
-    // history.push('/bank-info')
+   
     setDateEntered(value != null)
-    setSigned(!sigPad.isEmpty())
 
-    if (value != null && !sigPad.isEmpty()) {
+    var facility = JSON.parse(localStorage.getItem('facility'))
+    facility.eulaSign = sigPad.getCanvas().toDataURL('image/png')
+
+    setSigned(!sigPad.isEmpty())
+    if (value != null && sigPad != null && !sigPad.isEmpty()) {
       let domElement = document.getElementById('my-node')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
@@ -70,6 +63,7 @@ const EULAAgreementComponent = () => {
           name: base64String,
           type: 'certificate',
         }
+        localStorage.setItem('facility', JSON.stringify(facility))
         organizationService.uploadCertificate(certificate, 'EULAAgreement')
       })
     }
@@ -84,7 +78,11 @@ const EULAAgreementComponent = () => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
+
+    setSignature(updateFacility?.eulaSign)
+    sigPad.fromDataURL(updateFacility?.eulaSign)
 
     const _planType = localStorage?.getItem('plan_type')
     setPlanType(_planType)
@@ -99,9 +97,20 @@ const EULAAgreementComponent = () => {
     setFacility(updateFacility)
   }, [])
 
+  const handleClear = () => {
+    if (signature) setSignature(null)
+
+    sigPad.clear()
+
+    console.log('clear', sigPad)
+
+    setShowClearIcon(false)
+  }
+
   const onButtonClick = () => {
+    setVisible(false)
     console.log('Child >> trigered')
-    let domElement = document.getElementById('my-node')
+    let domElement = document.getElementById('my-certificate')
     console.log(domElement)
     htmlToImage
       .toPng(domElement)
@@ -118,6 +127,14 @@ const EULAAgreementComponent = () => {
       .catch(function (error) {
         console.error('oops, something went wrong!', error)
       })
+    setTimeout(() => {
+      setVisible(true)
+    }, 2000)
+  }
+
+  const handleChange = () => {
+    console.log('handleChange')
+    setShowClearIcon(!sigPad.isEmpty())
   }
 
   return (
@@ -141,21 +158,20 @@ const EULAAgreementComponent = () => {
               })}
             </Stepper>
             {
-              <div className="ac__main__div">
+              <div className="ac__main__div" id="my-certificate">
                 <div className="ac__title__text">EULA Agreement</div>
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
-                <div className="sla__download__print__section">
-                  <div className="sla__download__print">
-                    <div className="sla__download__text" onClick={onButtonClick}>
-                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
-                    </div>
-                    <div className="sla__download__text">
-                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
+                {isVisible && (
+                  <div className="sla__download__print__section">
+                    <div className="sla__download__print">
+                      <div className="sla__download__text" onClick={onButtonClick}>
+                        <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 <div>
                   <div className="ac__form">
                     <div id="my-node">
@@ -230,25 +246,31 @@ const EULAAgreementComponent = () => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          
+                        {isVisible && (showClearIcon || signature) && (
+                          <div className="sla__clear__icon">
+                            <Icon onClick={handleClear}>
+                              <CancelOutlinedIcon />
+                            </Icon>
+                          </div>
+                        )}
                           <div className="sla__sign__container">
                             <SignaturePad
                               canvasProps={{ className: 'sla__sign__pad' }}
                               ref={ref => {
                                 sigPad = ref
                               }}
+                              onEnd={handleChange}
                             />
                           </div>
                           <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
                             <div className="sla__text__align__center">
-                              <p className="ac__required">Please sigh here</p>
+                              <p className="ac__required">Please sign here</p>
                             </div>
                           )}
                         </div>
 
                         <div className="eulaa__column">
-                         
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -270,29 +292,24 @@ const EULAAgreementComponent = () => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ position: "relative",  marginBottom: "33px", }}>
-                      <h4 style={{
-                        position: "absolute",
-                        left: "19%",
-                        bottom: "0"
-                      }}>{organisationName}</h4>
-                    </div>
+                    <div className="sla__column eulaa__label user_name"> {organisationName}</div>
                     <div className="ac__gap__div"></div>
+                    {isVisible && (
+                      <div className="ac__row">
+                        <div className="ac__column ac__left__action">
+                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                            Back
+                          </Button>
+                        </div>
 
-                    <div className="ac__row">
-                      <div className="ac__column ac__left__action">
-                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                          Back
-                        </Button>
+                        <div className="ac__column ac__right__action">
+                          <Button className="ac__next__btn" onClick={handleNext}>
+                            Save & Next
+                            <ArrowForwardIosRoundedIcon />
+                          </Button>
+                        </div>
                       </div>
-
-                      <div className="ac__column ac__right__action">
-                        <Button className="ac__next__btn" onClick={handleNext}>
-                          Save & Next
-                          <ArrowForwardIosRoundedIcon />
-                        </Button>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="ac__gap__bottom__div"></div>

@@ -7,7 +7,6 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-    margin-top: 40px;
 }
 .io__two_fa__app {
     background-color: #fff;
@@ -34,6 +33,12 @@
 }
 .io__two_justify {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.io__two_justify_success {
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -92,7 +97,6 @@
     background: #FFFFFF;
     box-shadow: 0px 2px 14px 1px rgba(0, 0, 0, 0.06);
     border-radius: 6px;
-    margin-left: 25px;
     border: 1px solid #E42346;
 }
 .io__option_icon {
@@ -133,7 +137,7 @@
 }
 .io__text {
     position: absolute;
-    top: 55%;
+    top: 60%;
     right: 39%;
 }
 .io__text_email {
@@ -218,6 +222,7 @@
     order: 1;
     flex-grow: 0;
     margin: 0px 8px;
+    cursor: pointer;
 }
 .io__width__45 {
     width: 45%;
@@ -435,6 +440,7 @@
     font-size: 14px;
     line-height: 20px;
     color: #A0A4A8;
+    cursor: pointer;
 }
 .io_mr_20 {
     margin-right: 20px;

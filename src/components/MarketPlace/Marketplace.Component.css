@@ -1,0 +1,21 @@
+.mp__title__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 34px;
+
+    /* identical to box height, or 131% */
+    letter-spacing: 0.2px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin-bottom: 20px;
+}
+
+.mp__main__div {
+    background: #F6F8FB;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+}

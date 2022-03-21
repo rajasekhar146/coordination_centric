@@ -1,0 +1,46 @@
+.call-extendConfirm-wrp {
+    position: absolute;
+    right: 30px;
+    background-color: #03A65A;
+    border-radius: 15px;
+    bottom: 110px;
+    width: 380px;
+    text-align: center;
+}
+.call-extendConfirm-wrp2{
+    position: relative;
+    padding: 25px 25px 0 0;
+    display: flex;
+}
+.title-wrp h1{
+    line-height: 32px;
+    margin: 0;
+    color: #fff;
+    font-size: 25px;
+    line-height: 32px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.content {
+    padding-bottom: 23px;
+}
+.content p{
+    font-size: 14px;
+    color: #fff;
+}
+.bg-wrp {
+    position: relative;
+    left: 0;
+    bottom: 0px;
+    margin-right: 10px;
+    display: flex;
+    align-items: flex-end;
+}
+.bg-wrp img {
+    border-bottom-left-radius: 15px;
+}
+.close-wrp {
+    color: #fff;
+    cursor: pointer;
+}

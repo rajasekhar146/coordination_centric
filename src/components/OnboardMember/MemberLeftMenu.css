@@ -42,7 +42,7 @@
     justify-content: center;
     /* Neutral/White */
     color: #FFFFFF;
-    width: 350px;
+    width: 320px;
 }
 
 .mlm__quick__setup {
@@ -74,12 +74,13 @@
     color: #FFFFFF !important;
 }
 
-.MuiStepLabel-label {
+.mlm__main__div .MuiStepLabel-label {
     color: #FFFFFF !important;
 }
 
 .Mui-active {
     font-weight: bold !important;
+    color: #E42346 !important;
 }
 
 .Mui-disabled {
@@ -88,4 +89,13 @@
 
 .Mui-disabled > .MuiStepIcon-text {
     color: #c5bfbf !important;
+}
+
+.mlm__main__div .MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed {
+    background: white !important;
+    border-radius: 50% !important;
+    color: white !important;
+}
+.mlm__main__div .MuiStepLabel-label.Mui-active{
+    color:white !important;
 }

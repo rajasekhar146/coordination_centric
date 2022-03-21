@@ -5,18 +5,45 @@ import ApproveOrgIcon from '../../assets/icons/approve_org.png'
 import { organizationService } from '../../services'
 
 const ApproveModel = props => {
-  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel } = props
+  const { selectedOrg, setSkip, setOrganizations, setOpenFlash, setAlertMsg, setSubLabel , setAlertColor, getOrganization } = props
 
-  const handleSubmit = () => {
-    const res = organizationService.updateOrganization(selectedOrg.id, 'active')
-    res.then(() => {
-      setOrganizations([])
-      setSkip(1)
-      setOpenFlash(true)
-      setAlertMsg('Verified')
-      setSubLabel('This account was successfully verified.')
-      props.clickCloseButton()
+  const handleSubmit = async () => {
+    const params = {
+      facilityId: selectedOrg.id,
+    }
+    console.log('Approve Model Popup', params)
+    if (selectedOrg.planType == 'free' || selectedOrg.planType == undefined) {
+      const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
+        console.log(err)
+      })
+      if (res.status === 200) {
+        setOrganizations([])
+        setSkip(0)
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel('This account was successfully verified.')
+        setAlertColor('success')
+        props.clickCloseButton()
+      }
+    } else {
+    const response = await organizationService.subscriptionOrganization(params).catch(err => {
+      console.log(err)
     })
+    console.log('Approve Model Popup >> 1 ', response)
+    if (response.status === 200) {
+      // const res = await organizationService.updateOrganization(selectedOrg.id, 'active').catch(err => {
+      //   console.log(err)
+      // })
+      // if (res.status === 200) {
+        getOrganization()
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel('This account was successfully verified.')
+        setAlertColor('success')
+        props.clickCloseButton()
+        // }
+      }
+    }
   }
 
   return (

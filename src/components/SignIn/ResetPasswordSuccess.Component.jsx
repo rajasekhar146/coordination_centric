@@ -26,6 +26,7 @@ const ResetPasswordPage = props => {
     const { search } = useLocation();
     const token = new URLSearchParams(search).get('token');
     const email = new URLSearchParams(search).get('email');
+    const [activeLink, setActiveLink] = useState(false)
 
     const [validations, setValidations] = useState({
         passwordLength: false,
@@ -113,7 +114,14 @@ const ResetPasswordPage = props => {
                             onClick={() => {
                                 history.push('/signin')
                             }}
-                            className="si__forgot__link">
+                            onMouseOver={() => {
+                                setActiveLink(true)
+                            }}
+                            onMouseOut={() => {
+                                setActiveLink(false)
+                            }}
+                            className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
+                        >
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in

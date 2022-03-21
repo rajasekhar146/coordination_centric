@@ -1,0 +1,14 @@
+.ma__main__div {
+    width: 100%;
+    background: #F6F8FB;
+}
+
+.ma__row {
+    width: 100%;
+    display: flex;
+}
+
+.ma__appointment {
+    padding: 10px;
+}
+

@@ -14,7 +14,7 @@ import NavBarComponent from './components/NavBar/NavBar.Component'
 import OrganizationDashboard from './pages/organization-dashboard'
 import OrganizationView from './pages/organization-view'
 import Appointments from './pages/appointments'
-import Users from './pages/users'
+import PatienRecords from './pages/patien_records'
 import Patients from './pages/patients'
 import Vaccinations from './pages/vaccinations'
 import Notifications from './pages/notifications'
@@ -45,15 +45,29 @@ import MemberSignIn from './pages/member-signin'
 import PersonalDetail from './pages/personal-detail'
 import TokenValidationError from './pages/token-validation-error'
 import ProfileSetup from './pages/profile-setup'
-
+import MasterLayoutWithOutLefuMenuComponent from './components/MasterLayoutWithoutLeftMenu/MasterLayoutWithoutLeftMenu.Component'
+import Settings from './components/Settings/Settings.Component'
+import ScheduleCalendar from './components/ScheduleCalendar/ScheduleCalendar.Component'
+import StaffComponent from './components/Staff/Staff.Component'
+import Collaborators from './components/Collaborators/Collaborators.Component'
+import PatientsComponent from './components/Patients/Patients.Component'
+import TwoFaCodeVerificationFail from './components/EnableTwoFactorAuth/TwoFaCodeVerificationFail.Component'
+import Marketplace from './pages/marketplace'
+import MakeAppointments from './pages/make-a-appointments'
+import SelectNewDatesComponent from './components/Appointments/SelectNewDates.Component'
+import VideoCall from './components/VideoCall/VideoCall';
+import RescheduleAppointment from './components/MarketPlace/RescheduleAppointment'
+import ViewAppointmentComponent from './components/Appointments/ViewAppointment.Component'
+import ViewStaffDetailsComponent from './components/Shared/ViewStaffDetails/ViewStaffDetails.Component'
+import ViewCollaboratorComponent from './components/OrganizationViewComponent/ViewCollaborator'
 class Routes extends Component {
   render() {
     return (
       <Router history={history}>
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/signin" />
-          </Route>
+          <MasterLayoutWithLefuMenuComponent exact path="/" component={Dashboard}>
+            <Redirect to="/dashboard" />
+          </MasterLayoutWithLefuMenuComponent>
           <DefaultLayoutComponentRoute path="/signin" component={Signin} />
           <DefaultLayoutComponentRoute path="/forgotpassword" component={ForgotPassword} />
           <DefaultLayoutComponentRoute path="/forgotpasswordresend" component={ForgotPasswordResend} />
@@ -88,19 +102,46 @@ class Routes extends Component {
           <DefaultLayoutComponentRoute path="/2faverificationsuccess" component={TwoFaVerificationSuccess} />
           <DefaultLayoutComponentRoute path="/2faverificationfail" component={TwoFaVerificationFail} />
           <DefaultLayoutComponentRoute path="/2facodeverification" component={TwoFaCodeVerification} />
-          <DefaultLayoutComponentRoute path="/members/register" component={MemberSignIn} />
+          <DefaultLayoutComponentRoute path="/2facodeverificationfail" component={TwoFaCodeVerificationFail} />
+          <DefaultLayoutComponentRoute
+            path="/members/register/:invitetoken/:referredby/:invitedBy"
+            component={MemberSignIn}
+          />
           <DefaultLayoutComponentRoute path="/error-page" component={TokenValidationError} />
+          <DefaultLayoutComponentRoute path="/video-call/:meetingid" component={VideoCall} />
           <MasterLayoutWithLefuMenuComponent path="/dashboard" component={Dashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organizations" component={OrganizationDashboard} />
           <MasterLayoutWithLefuMenuComponent path="/organization-view/:orgId" component={OrganizationView} />
           <MasterLayoutWithLefuMenuComponent path="/appointments" component={Appointments} />
-          <MasterLayoutWithLefuMenuComponent path="/users" component={Users} />
+          <MasterLayoutWithLefuMenuComponent path="/patientrecords" component={PatienRecords} />
           <MasterLayoutWithLefuMenuComponent path="/patients" component={Patients} />
           <MasterLayoutWithLefuMenuComponent path="/inventory" component={Vaccinations} />
           <MasterLayoutWithLefuMenuComponent path="/notifications" component={Notifications} />
           <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
-          <MemberLayoutComponent path="/members/personal-detail" component={PersonalDetail} />
-          <MemberLayoutComponent path="/members/profile-setup" component={ProfileSetup} />
+          <MasterLayoutWithOutLefuMenuComponent path="/settings/:userId" component={Settings} />
+          <MasterLayoutWithLefuMenuComponent path="/payments" component={Payments} />
+          <MasterLayoutWithLefuMenuComponent path="/staff" component={StaffComponent} />
+          <MasterLayoutWithLefuMenuComponent path="/collaborators" component={Collaborators} />
+          <MasterLayoutWithLefuMenuComponent path="/marketplace/make-a-appointments" component={MakeAppointments} />
+          <MasterLayoutWithLefuMenuComponent path="/marketplace" component={Marketplace} />
+          <MasterLayoutWithLefuMenuComponent path="/reschedule_appointment" component={RescheduleAppointment} />
+          <MasterLayoutWithLefuMenuComponent path="/selectdates" component={SelectNewDatesComponent} />
+          <MasterLayoutWithLefuMenuComponent path="/viewApointment/:type/:id" component={ViewAppointmentComponent} />
+          <MasterLayoutWithLefuMenuComponent path="/viewDetails/:id" component={ViewStaffDetailsComponent} />
+          <MasterLayoutWithLefuMenuComponent path="/viewCollaborator/:id" component={ViewCollaboratorComponent} />
+          {/* <MasterLayoutWithLefuMenuComponent path="/patients" component={PatientsComponent} /> */}
+          <MemberLayoutComponent
+            path="/members/personal-detail/:invitetoken/:referredby/:invitedBy"
+            component={PersonalDetail}
+          />
+          <MemberLayoutComponent
+            path="/members/profile-setup/:invitetoken/:referredby/:invitedBy"
+            component={ProfileSetup}
+          />
+          <MasterLayoutWithLefuMenuComponent path="/calendar" component={ScheduleCalendar} />
+          <Route >
+            <Redirect to="/signin" />
+          </Route>
         </Switch>
       </Router>
     )

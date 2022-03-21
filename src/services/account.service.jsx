@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import { authHeader, handleResponse } from '../helpers'
-
-const apiURL = 'https://api.csuite.health'
+import * as env from '../environments/environment'
+const apiURL = env.environment.apiBaseUrl
 
 const axiosConfig = {
   headers: authHeader(),
@@ -11,7 +11,7 @@ const axiosConfig = {
 export const accountService = {
   getAll,
   sendEmailWithVerificationCode,
-  sendEmailVerificationCode,
+  getDoctorListByOrganizationById,
 }
 
 function getAll() {
@@ -24,34 +24,32 @@ function sendEmailWithVerificationCode(email) {
 
   return (
     axios
-    .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
-    //.then(handleResponse)
-    .then(data => {
-      console.log('sendEmailWithVerificationCode', data)
-      return data
-    })
-    .catch(err => {
-      // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
-      return { errorCode: err.status, errorMessage: err.message }
-    })
+      .post(`${apiURL}/users/emailVerification/${email}`, null, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('sendEmailWithVerificationCode', data)
+        return data
+      })
+      .catch(err => {
+        // console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err))
+        return { errorCode: err.status, errorMessage: err.message }
+      })
   )
 }
 
-async function sendEmailVerificationCode(email, code) {
-  console.log('axiosConfig', axiosConfig)
-  var bodyMsg = {
-    email: email,
-    code: code,
+function getDoctorListByOrganizationById(orgId) {
+  const headers = {
+    headers: authHeader(),
   }
-  return await axios
-    .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
-    //.then(handleResponse)
-    .then(response => {
-      console.log('sendEmailVerificationCode', response)
-      return response
+
+  console.log('getDoctorListByOrganizationById >> axiosConfig', headers)
+
+  return axios
+    .get(`${apiURL}/users/getDoctorListByOrganization?facility_id=${orgId}`, headers)
+    .then(data => {
+      return { data }
     })
     .catch(err => {
-      console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
-      return err.response
+      return null
     })
 }

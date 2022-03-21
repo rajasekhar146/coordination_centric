@@ -1,0 +1,37 @@
+.acv__main__div {
+    width: 100%;
+}
+
+.acv__row {
+    width: 100%;
+    display: flex;
+}
+.acv__appointment__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 34px;
+
+    /* identical to box height, or 131% */
+    letter-spacing: 0.2px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin: 20px 0px 10px 0px;
+}
+
+.acv__subtitle__text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+
+    /* identical to box height, or 143% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+    margin-bottom: 20px;
+}

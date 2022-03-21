@@ -22,14 +22,18 @@ import html2canvas from 'html2canvas'
 import { organizationService } from '../../../services'
 import { useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/core/styles'
-import useStore from '../../../hooks/use-store';
+import useStore from '../../../hooks/use-store'
 import SigninStore from '../../../stores/signinstore'
+import { useSelector, useDispatch } from 'react-redux'
+import { newOrganization } from '../../../redux/actions/organizationActions'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Icon from '@mui/material/Icon'
 
 const useStyles = makeStyles(theme => ({
   datefield: {
     top: '22px',
-    borderBottom: "1px solid #000000"
-  }
+    borderBottom: '1px solid #000000',
+  },
 }))
 
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
@@ -37,31 +41,35 @@ const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Inform
 const ServiceLevelAgreementComponent = props => {
   const classes = useStyles()
 
-  const [signatureUrl, setSignature] = useState({})
+  const [signature, setSignature] = useState({})
   const [value, setValue] = useState(new Date())
   const [processSteps, setProcessSteps] = React.useState(steps)
   const [IsDateEntered, setDateEntered] = useState(true)
   const [IsSigned, setSigned] = useState(true)
 
-  const [signinStoreData] = useStore(SigninStore);
+  const [signinStoreData] = useStore(SigninStore)
 
-  const {
-    organisationName,
-  } = signinStoreData;
+  const { organisationName } = signinStoreData
 
   var sigPad = {}
 
   const [facility, setFacility] = useState({})
 
   const [activeStep, setActiveStep] = React.useState(1)
+  const [isVisible, setVisible] = useState(true)
 
-  const handleNext = () => {
-    console.log('Date', sigPad.isEmpty())
+  const newOrg = useSelector(state => state.newOrganization)
+  const dispatch = useDispatch()
+  const [showClearIcon, setShowClearIcon] = useState(false)
+  const handleNext = async () => {
+    // console.log('signature', sigPad.getTrimmedCanvas().toDataURL('image/png'))
     setDateEntered(value != null)
+    var facility = JSON.parse(localStorage.getItem('facility'))
+    facility.slaSign = sigPad.getCanvas().toDataURL('image/png')
     setSigned(!sigPad.isEmpty())
-
-    if (value != null && !sigPad.isEmpty()) {
-      let domElement = document.getElementById('my-node')
+    if (value != null && sigPad != null && !sigPad.isEmpty()) {
+      console.log('sign >> success')
+      let domElement = document.getElementById('my-certificate')
       html2canvas(domElement).then(canvas => {
         var base64String = canvas.toDataURL()
         base64String = base64String.replace('data:image/png;base64,', '')
@@ -70,26 +78,11 @@ const ServiceLevelAgreementComponent = props => {
           name: base64String,
           type: 'certificate',
         }
+        localStorage.setItem('facility', JSON.stringify(facility))
         organizationService.uploadCertificate(certificate, 'ServiceLevelAgreement')
-
-        // .then(data => {
-        //   console.log('uploadFile >> response', data)
-        //   var updatedFacility = {
-        //     ...facility,
-        //     business_certificate: 'www.servicelevelagreement.com',
-        //   }
-
-        //   console.log('updatedFacility', JSON.stringify(updatedFacility))
-        //   setFacility(updatedFacility)
-
-        //   localStorage.setItem('facility', JSON.stringify(updatedFacility))
-
-        //   history.push('/saas-agreement')
-
-        // })
-        // .catch(err => console.log('Error occured while uploading the Service Level Certificate'))
       })
-    }
+      // }
+    } else console.log('sign >> failure')
   }
 
   const handleBack = () => {
@@ -100,22 +93,22 @@ const ServiceLevelAgreementComponent = props => {
     var inviteToken = nfacility?.inviteToken
     var invitedBy = nfacility?.invited_by
 
-    if(referredBy === undefined || referredBy === null)
-      referredBy = 0
-    
-    if(invitedBy === undefined || invitedBy === null)  
-      invitedBy = 0
+    if (referredBy === undefined || referredBy === null) referredBy = 0
+
+    if (invitedBy === undefined || invitedBy === null) invitedBy = 0
 
     history.push(`/acceptance-criteria/${inviteToken}/${referredBy}/${invitedBy}`)
   }
 
   const captureSignature = () => {
-    setSignature({ signatureUrl: sigPad.getTrimmedCanvas().toDataURL('image/png') })
+    setSignature({ url: sigPad.getTrimmedCanvas().toDataURL('image/png') })
+    console.log('signature', sigPad.getTrimmedCanvas().toDataURL('image/png'))
   }
 
   const onButtonClick = () => {
+    setVisible(false)
     console.log('Child >> trigered')
-    let domElement = document.getElementById('my-node')
+    let domElement = document.getElementById('my-certificate')
     console.log(domElement)
     htmlToImage
       .toPng(domElement)
@@ -132,13 +125,34 @@ const ServiceLevelAgreementComponent = props => {
       .catch(function (error) {
         console.error('oops, something went wrong!', error)
       })
+
+    setTimeout(() => {
+      setVisible(true)
+    }, 2000)
+  }
+  const handleClear = () => {
+    if (signature) setSignature(null)
+
+    sigPad.clear()
+
+    console.log('clear', sigPad)
+
+    setShowClearIcon(false)
+  }
+
+  const isEmptyObject = obj => {
+    return !!obj && Object.keys(obj).length === 0 && obj.constructor === Object
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+
     var updateFacility = JSON.parse(localStorage.getItem('facility'))
     console.log('Service >> updateFacility', updateFacility)
     setFacility(updateFacility)
 
+    setSignature(updateFacility.slaSign)
+    sigPad.fromDataURL(updateFacility.slaSign)
     const planType = localStorage.getItem('plan_type')
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
@@ -148,6 +162,10 @@ const ServiceLevelAgreementComponent = props => {
     }
   }, [])
 
+  const handleChange = () => {
+    console.log('handleChange')
+    setShowClearIcon(!sigPad.isEmpty())
+  }
   return (
     <div className="ob__main__section">
       <div className="ob__align__center">
@@ -169,21 +187,20 @@ const ServiceLevelAgreementComponent = props => {
               })}
             </Stepper>
             {
-              <div className="ac__main__div">
+              <div className="ac__main__div" id="my-certificate">
                 <div className="ac__title__text">BUSINESS ASSOCIATE AGREEMENT </div>
                 <div className="ac__subtitle__text">
                   For the purpose of registration please fill the required fields of this form to join our platform.
                 </div>
-                <div className="sla__download__print__section">
-                  <div className="sla__download__print">
-                    <div className="sla__download__text" onClick={onButtonClick}>
-                      <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
-                    </div>
-                    <div className="sla__download__text">
-                      <img src={printIcon} alt="Download" /> &nbsp;&nbsp;&nbsp;Print
+                {isVisible && (
+                  <div className="sla__download__print__section">
+                    <div className="sla__download__print">
+                      <div className="sla__download__text" onClick={onButtonClick}>
+                        <img src={downloadIcon} alt="Download" /> &nbsp;&nbsp;&nbsp; Download
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 <div>
                   <div className="ac__form">
                     <div id="my-node">
@@ -258,25 +275,37 @@ const ServiceLevelAgreementComponent = props => {
 
                       <div className="eulaa__row">
                         <div className="sla__column">
-                          
+                          {isVisible && (showClearIcon || signature) && (
+                            <div className="sla__clear__icon">
+                              <Icon onClick={handleClear}>
+                                <CancelOutlinedIcon />
+                              </Icon>
+                            </div>
+                          )}
                           <div className="sla__sign__container">
-                            <SignaturePad
-                              canvasProps={{ className: 'sla__sign__pad' }}
-                              ref={ref => {
-                                sigPad = ref
-                              }}
-                            />
+                            {/*signature && <img src={signature} alt="Sign" className="sla__sign__image" /> */}
+                            {
+                              <SignaturePad
+                                canvasProps={{ className: 'sla__sign__pad' }}
+                                ref={ref => {
+                                  sigPad = ref
+                                }}
+                                onEnd={handleChange}
+                              />
+                            }
+                            {/*<button onClick={captureSignature}>
+                              <CancelOutlinedIcon />
+                            </button>*/}
                           </div>
                           <div className="eulaa__label">Sign Here</div>
                           {!IsSigned && (
                             <div className="sla__text__align__center">
-                              <p className="ac__required">Please sigh here</p>
+                              <p className="ac__required">Please sign here</p>
                             </div>
                           )}
                         </div>
 
                         <div className="eulaa__column">
-                          
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                               value={value}
@@ -298,29 +327,24 @@ const ServiceLevelAgreementComponent = props => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ position: "relative",  marginBottom: "33px", }}>
-                      <h4 style={{
-                        position: "absolute",
-                        left: "19%",
-                        bottom: "0"
-                      }}>{organisationName}</h4>
-                    </div>
+                    <div className="sla__column eulaa__label user_name"> {organisationName}</div>
                     <div className="ac__gap__div"></div>
+                    {isVisible && (
+                      <div className="ac__row">
+                        <div className="ac__column ac__left__action">
+                          <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
+                            Back
+                          </Button>
+                        </div>
 
-                    <div className="ac__row">
-                      <div className="ac__column ac__left__action">
-                        <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
-                          Back
-                        </Button>
+                        <div className="ac__column ac__right__action">
+                          <Button className="ac__next__btn" onClick={handleNext}>
+                            Save & Next
+                            <ArrowForwardIosRoundedIcon />
+                          </Button>
+                        </div>
                       </div>
-
-                      <div className="ac__column ac__right__action">
-                        <Button className="ac__next__btn" onClick={handleNext}>
-                          Save & Next
-                          <ArrowForwardIosRoundedIcon />
-                        </Button>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="ac__gap__bottom__div"></div>

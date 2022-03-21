@@ -19,13 +19,19 @@ import { Document } from 'react-pdf'
 import Modal from '@mui/material/Modal'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TabPanel from './TabPanel.Component';
+import TabPanel from '../TabPanel/TabPanel.Component';
 import Overview from './Overview.Component';
 import Members from './Members.Component';
+import Collaborator from './Collaborator.Component'
+import Patient from './Patients.Component'
 import InviteMemberComponent from '../ModelPopup/InviteMemberComponent'
 import InviteMemberSuccess from '../ModelPopup/MemberInvitationSuccess'
+
 import { organizationService } from '../../services'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
+import get from 'lodash.get'
+import Alert from '../Alert/Alert.component'
+import { authenticationService } from '../../services'
 
 const useStyles = makeStyles(theme => ({
     indicator: {
@@ -43,9 +49,10 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: 0,
     boxShadow: 24,
     p: 4,
+    borderRadius: '10px'
 }
 
 const successStyle = {
@@ -54,26 +61,48 @@ const successStyle = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    height: '70%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    border: 0,
+    borderRadius: '10px'
 }
-const OrganizationViewComponent = () => {
+const OrganizationViewComponent = (props) => {
+
     const classes = useStyles()
     const { orgId } = useParams()
     const history = useHistory()
     const [orgDet, setOrgDetails] = useState({})
+    const [paymentDetails, setPaymentDetails] = useState({})
     const [value, setValue] = React.useState('0');
     const [openInviteMember, setOpenInviteMember] = useState(false)
     const [openInviteMemberSuccess, setOpenInviteMemberSuccess] = useState(false)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [totalPage, setTotalPage] = React.useState(0)
+    const [membersList, setMembersList] = useState([])
+    const [collaboratorList, setCollaboratorList] = React.useState([])
+    const [patientList, setPatientList] = React.useState([])
+    const currentUser = authenticationService.currentUserValue
+    const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
+    const role = get(currentUser, ['data', 'data', 'role'], false)
+    const [alertColor, setAlertColor] = useState('success');
+    const [openInviteCollaborator, setOpenInviteCollaborator] = useState(false)
+    const [openInviteCollaboratorSuccess, setOpenInviteCollaboratorSuccess] = useState(false)
 
 
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const getOrgDetails = async () => {
+        let orgDetails = await organizationService.getOrganizationDetails(orgId)
+        setOrgDetails(orgDetails.data);
+        setPaymentDetails(orgDetails.payment);
+    }
 
     useEffect(() => {
         getOrgDetails()
@@ -116,37 +145,59 @@ const OrganizationViewComponent = () => {
         selected: {},
     }))((props) => <Tab {...props} />)
 
-    const getOrgDetails = async () => {
-        let orgDetails = await organizationService.getOrganizationDetails(orgId)
-        setOrgDetails(orgDetails)
-    }
+
 
     const getButton = () => {
         switch (value) {
             case '1':
                 return (
                     <div className="od__btn__div od">
-                        <Button 
-                        onClick={() => {
-                            setOpenInviteMember(true)
-                        }}
-                        className="od_add_member_btn">
+                        <Button
+                            onClick={() => {
+                                setOpenInviteMember(true)
+                            }}
+                            className="od_add_member_btn">
                             &nbsp;&nbsp; Add Member
                         </Button>
                     </div>
                 )
                 break
             case '2':
+                return (
+                    <div className="od__btn__div od">
+                        <Button
+                            onClick={() => {
+                                setOpenInviteCollaborator(true)
+                            }}
+                            className={(orgDet.planType !== "free" && orgDet.status === 'active') ? "od__add__organization__btn" : "od__add__organization__btn_disabled"}
+                        >
+                            &nbsp;&nbsp; Add Collaborator
+                        </Button>
+                    </div>
+                    
+                )
                 break
             default:
                 return null
         }
     }
 
-    const closeModel = () => {
+    const closeInviteModel = () => {
         setOpenInviteMember(false)
-        setOpenInviteMemberSuccess(false)
+        // setOpenInviteCollaborator(false)
     }
+
+    const closeInviteSuccessModel = () => {
+        setOpenInviteMemberSuccess(false)
+        // setOpenInviteCollaboratorSuccess(false)
+    }
+
+    const handleCloseFlash = (event, reason) => {
+        setOpenFlash(false)
+    }
+
+
+
 
     return (
         <div className="od__main__div">
@@ -184,16 +235,50 @@ const OrganizationViewComponent = () => {
                 <TabItem value="3" label="Patients" />
             </Tabs>
             <TabPanel value={value} index={0}>
-                <Overview orgDet={orgDet} />
+                <Overview orgDet={orgDet} payment={paymentDetails}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Members orgDet={orgDet} />
+                <Members
+                    list={orgDet.user_details}
+                    getOrgDetails={getOrgDetails}
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    setMembersList={setMembersList}
+                    membersList={membersList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                    setAlertColor={setAlertColor}
+                />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                Item Three
+                <Collaborator
+                    list={orgDet.facility_details}
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    setCollaboratorList={setCollaboratorList}
+                    collaboratorList={collaboratorList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                    orgId={orgId}
+                    setAlertColor={setAlertColor}
+                    setOpenInviteCollaborator={setOpenInviteCollaborator}
+                    openInviteCollaborator={openInviteCollaborator}
+                    openInviteCollaboratorSuccess={openInviteCollaboratorSuccess}
+                    setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+
+                />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                Item Three
+                <Patient
+                    orgDet={orgDet}
+                    organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                    patientList={patientList}
+                    setPatientList={setPatientList}
+                    setOpenFlash={setOpenFlash}
+                    setAlertMsg={setAlertMsg}
+                    setSubLabel={setSubLabel}
+                    setAlertColor={setAlertColor}
+                />
             </TabPanel>
             <Modal
                 open={openInviteMember}
@@ -201,15 +286,13 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                <InviteMemberComponent
-                        clickCloseButton={closeModel}
+                    <InviteMemberComponent
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteMember={setOpenInviteMember}
                         setOpenInviteMemberSuccess={setOpenInviteMemberSuccess}
-                        // setSkip={setSkip}
-                        // selectedOrg={selectedOrg}
-                        // setOrganizations={setOrganizations}
-                        // setOpenFlash={setOpenFlash}
-                        // setAlertMsg={setAlertMsg}
-                        // setSubLabel={setSubLabel}
+                        orgId={orgId}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setMembersList={setMembersList}
                     />
                 </Box>
             </Modal>
@@ -219,17 +302,51 @@ const OrganizationViewComponent = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={successStyle}>
-                <InviteMemberSuccess
-                        clickCloseButton={closeModel}
-                        // setSkip={setSkip}
-                        // selectedOrg={selectedOrg}
-                        // setOrganizations={setOrganizations}
+                    <InviteMemberSuccess
+                        clickCloseButton={closeInviteSuccessModel}
+                    />
+                </Box>
+            </Modal>
+            {/* <Modal
+                open={openInviteCollaborator}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaborator
+                        clickCloseButton={closeInviteModel}
+                        setOpenInviteCollaborator={setOpenInviteCollaborator}
+                        setOpenInviteCollaboratorSuccess={setOpenInviteCollaboratorSuccess}
+                        orgId={orgId}
+                        organizationId={get(orgDet, ['user_details', '0', '_id'], null)}
+                        setCollaboratorList={{setCollaboratorList}}
+                        collaboratorList={collaboratorList}
+                        // setMembersList={setMembersList}
                         // setOpenFlash={setOpenFlash}
                         // setAlertMsg={setAlertMsg}
                         // setSubLabel={setSubLabel}
                     />
                 </Box>
-            </Modal>
+            </Modal> */}
+            {/* <Modal
+                open={openInviteCollaboratorSuccess}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <InviteCollaboratorSuccess
+                        clickCloseButton={closeInviteSuccessModel}
+                        
+                    />
+                </Box>
+            </Modal> */}
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+                color={alertColor}
+            />
         </div >
     )
 }

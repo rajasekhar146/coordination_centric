@@ -10,6 +10,8 @@ import LeftImageIcon from '../../assets/images/left_image_logo.png'
 import SigninStore from '../../stores/signinstore'
 import KeyIcon from '../../assets/icons/key_icon.png'
 import ArrowLeft from '../../assets/icons/arrow-left.png'
+import { authenticationService } from '../../services'
+import Alert from '../Alert/Alert.component'
 
 
 
@@ -23,7 +25,9 @@ const ForgotPasswordComponent = (props) => {
     const [IsValidPassword, setIsValidPassword] = useState(true)
     const [openflash, setOpenFlash] = React.useState(false)
     const [alertMsg, setAlertMsg] = React.useState('')
-
+    const [activeLink, setActiveLink] = useState(false)
+    const [subLebel, setSubLabel] = useState('')
+    const [alertcolor, setAlertColor] = React.useState(null)
 
 
     const handleCloseFlash = () => {
@@ -44,17 +48,20 @@ const ForgotPasswordComponent = (props) => {
 
     const onSubmit = (data) => {
         SigninStore.set({ email: data.email })
-        SigninStore.load('RequestPassword', {
-            email: data.email,
-            successCallback: (data) => {
-                history.push('./forgotpasswordresend')
-            }
+        const reBody = { email: data.email }
+        const res = authenticationService.requestPassword(reBody)
+        res.then(() => {
+            history.push('/forgotpasswordresend')
+        }).catch((res) => {
+            setOpenFlash(true)
+            setAlertMsg(res?.response?.data?.message)
+            setAlertColor('fail')
         })
     }
 
 
-   
-    
+
+
 
     return (
         <div className="si__main__div">
@@ -66,7 +73,7 @@ const ForgotPasswordComponent = (props) => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="si__right__div si_left180">
+                <div className="si__right__div si__left__200 ">
                     <div className="si__right__content">
                         <div className="si__right__forgot">
                             <img src={KeyIcon} alt="key" />
@@ -87,6 +94,7 @@ const ForgotPasswordComponent = (props) => {
                                         message: 'Please enter a valid email',
                                     },
                                 })}
+                                type="email"
                                 margin="normal"
                                 placeholder="Email"
                                 error={errors.email && isSubmit}
@@ -103,22 +111,35 @@ const ForgotPasswordComponent = (props) => {
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div 
-                        className="si__forgot__link"
-                        onClick={() => {
-                            history.push('/signin')
-                          }}
+                        <div
+                            className= {activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
+                            onClick={() => {
+                                history.push('/signin')
+                            }}
+                            onMouseOver={() => {
+                                setActiveLink(true)
+                            }}
+                            onMouseOut={() => {
+                                setActiveLink(false)
+                            }}
                         >
-                            <img src={ArrowLeft} alt="Login Left Logo" /> 
-                            <span style={{ marginLeft: "10px"}}>
-                            Back to log in
+                            <img src={ArrowLeft} alt="Login Left Logo" />
+                            <span style={{ marginLeft: "10px" }}>
+                                Back to log in
                             </span>
-                                 
+
                         </div>
                     </div>
                 </div>
-                
+
             </form>
+            <Alert
+                handleCloseFlash={handleCloseFlash}
+                alertMsg={alertMsg}
+                openflash={openflash}
+                subLebel={subLebel}
+                color={alertcolor}
+            />
         </div>
     )
 }

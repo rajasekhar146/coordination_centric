@@ -39,14 +39,16 @@ import AprroveOrganization from '../../pages/approve-model'
 import RejectOrganization from '../../pages/reject-model'
 import DeactivateOrganization from '../../pages/deactivate_model'
 import CancelInviteModel from '../ModelPopup/CancelInviteModel'
+import VerifyBankingInfoPopup from '../ModelPopup/VerifyBankingInfoPopup'
 import { makeStyles } from '@material-ui/core/styles'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
-import { authenticationService } from '../../services'
+import { authenticationService, memberService } from '../../services'
 import MenuItemComponent from "./MenuItemComponent";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const style = {
   position: 'absolute',
@@ -81,6 +83,19 @@ const rejectModelStyle = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   height: 360,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+const verifyBankModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 400,
   bgcolor: 'background.paper',
   border: '2px solid white',
   boxShadow: 24,
@@ -179,8 +194,18 @@ const menuList = [
     menu: 'pending_verification',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', fnKey: 'setIsAcceptClicked', icon: require('../../assets/icons/approve.png').default },
+      // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
+      { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
+    ],
+  },
+  {
+    menu: 'pending_bank_verification',
+    options: [
+      { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      { text: 'Verify', fnKey: 'setIsVerifyBankClicked', icon: require('../../assets/icons/approve.png').default },
       // { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -241,7 +266,7 @@ const menuList = [
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
       // { text: 'Edit', icon: require('../../assets/icons/edit_icon.png').default },
-      { text: 'Activate', icon: require('../../assets/icons/activate.png').default },
+      { text: 'Activate', fnKey: 'setIsActivateClickedFromSuspend', icon: require('../../assets/icons/activate.png').default },
     ],
   },
   {
@@ -264,7 +289,7 @@ const menuList = [
     menu: 'pending_acceptance',
     options: [
       { text: 'View Details', fnKey: 'viewdetails', icon: require('../../assets/icons/view_details.png').default },
-      { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
+      // { text: 'Send Message', icon: require('../../assets/icons/edit_icon.png').default },
       { text: 'Verify', icon: require('../../assets/icons/suspend.png').default },
       { text: 'Reject', fnKey: 'setIsRejectClicked', icon: require('../../assets/icons/reject.png').default },
     ],
@@ -304,6 +329,9 @@ const statusNames = [
   },
   {
     name: 'Pending Verification', value: "Pending Verification", key: "pending_verification"
+  },
+  {
+    name: 'Pending Bank Verification', value: "Pending Bank Verification", key: "pending_bank_verification"
   },
   {
     name: 'Declined', value: "Declined", key: "declined"
@@ -369,6 +397,7 @@ const colorcodes = {
   cancelled: '#757500',
   inactive: '#A0A4A8',
   declined: '#B42318',
+  pending_bank_verification: '#F79009'
 }
 
 const createData = (name, code, population, size) => {
@@ -406,15 +435,17 @@ const rows1 = [
 
 const OrganizationDashboardComponent = () => {
   const classes = useStyles()
-  const [page, setPage] = React.useState(1)
+  const [page, setPage] = React.useState(0)
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [menuOptions, setMenuOptions] = React.useState([])
   const [IsAddOrganizationClicked, setAddOrganizationClicked] = React.useState(false)
   const [isRejectClicked, setIsRejectClicked] = useState(false)
   const [isAcceptClicked, setIsAcceptClicked] = useState(false)
   const [isDeactivateClicked, setIsDeactivateClicked] = useState(false)
+  const [isVerifyBankClicked, setIsVerifyBankClicked] = useState(false);
   const [isCalcelInviteClicked, setIsCancelInviteClicked] = useState(false)
   const [isAcivated, setIsActivateClicked] = useState(false)
+  const [isActivateClickedFromSuspend, setIsActivateClickedFromSuspend] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
 
@@ -424,7 +455,8 @@ const OrganizationDashboardComponent = () => {
   const [rows, setOrganizations] = React.useState([])
   const [totalPage, setTotalPage] = React.useState(0)
   const [skip, setSkip] = React.useState(0)
-  const [isLoading, setIsLoading] = useState(false)
+  const [limit, setLimit] = useState(10)
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedOrg, setSelectedOrg] = useState(null)
   const [openflash, setOpenFlash] = React.useState(false)
   const [alertMsg, setAlertMsg] = React.useState('')
@@ -434,7 +466,12 @@ const OrganizationDashboardComponent = () => {
   const [searchEndDate, setSearchEndDate] = React.useState(null)
   const [count, setCount] = React.useState(null)
   const [subLebel, setSubLabel] = useState('')
-
+  const [alertColor, setAlertColor] = useState('');
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [firstDeposit, setFirstDeposit] = useState(0)
+  const [secondDeposit, setSecondDeposit] = useState(0)
+  const [secondDepositErr, setSecondDepositErr] = useState(false)
+  const [firstDepositErr, setFirstDepositErr] = useState(false)
 
   // const [searchStatus, setSearchStatus] = React.useState('')
   // useEffect(() => {
@@ -445,9 +482,9 @@ const OrganizationDashboardComponent = () => {
   const currentUser = authenticationService.currentUserValue
   const organizationStatus = get(currentUser, ['data', 'organizationStatus'], false)
   const role = get(currentUser, ['data', 'data', 'role'], false)
+  const organizationId = get(currentUser, ['data', 'data', '_id'], '')
 
-  const planType = get(currentUser, ['data', 'planType'], '')
-
+  const planType = get(currentUser, ['data', 'data', 'planType'], '')
 
 
 
@@ -471,15 +508,21 @@ const OrganizationDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (
-      !isDeactivateClicked
-      && !isRejectClicked
-      && !isAcceptClicked
-      && !isAcivated
-    ) {
-      getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
-    }
-    return () => { }
+    const handler = setTimeout(() => {
+      if (
+        !isDeactivateClicked
+        && !isRejectClicked
+        && !isAcceptClicked
+        && !isAcivated
+      ) {
+        setIsLoading(true)
+        getOrganization(searchText, searchStartDate, searchEndDate, selectedStatus)
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
   }, [
     skip,
     isDeactivateClicked,
@@ -487,7 +530,8 @@ const OrganizationDashboardComponent = () => {
     searchStartDate,
     searchEndDate,
     selectedStatus,
-    isAcivated
+    isAcivated,
+    rowsPerPage
   ])
 
   useEffect(() => {
@@ -502,16 +546,11 @@ const OrganizationDashboardComponent = () => {
     setOpenFlash(false)
   }
 
-
-
-  const getOrganization = async (nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus) => {
-    setIsLoading(true)
-    const allOrganizations = await organizationService.allOrganization(skip, 10, nsearchText, nsearchStartDate, nsearchEndDate, nsearchStatus)
-    console.log('allOrganizations', allOrganizations)
+  const setOrganisations = (allOrganizations) => {
     if (allOrganizations != null) {
       const totalCount = get(allOrganizations, 'totalCount', 'count', null)
       console.log('totalCount', totalCount)
-      setCount(totalCount)
+      setCount(totalCount.count)
       var totalData = allOrganizations?.totalData
       const totalPage = Math.ceil(totalCount?.count / 10)
       var data = []
@@ -536,77 +575,71 @@ const OrganizationDashboardComponent = () => {
           invited_facilityName: get(r, ['invited_facilityName'], ''),
           status: r.status,
           action: '',
+          planType: r?.planType,
         }
 
         data.push(record)
       })
-
       console.log('new totalData', data)
-
       setOrganizations(data)
     }
-    setIsLoading(false)
   }
 
-  const handleChange = event => {
-    const {
-      target: { value },
-    } = event
-    setSelectedStatus(
-      // On autofill we get a the stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    )
-  }
 
-  const handleChangePage = async (event, newPage) => {
-    setPage(newPage)
-    const skipRecords = (newPage - 1) * 10
-    console.log('skipRecords', skipRecords)
-    const allOrganizations = await organizationService.allOrganization(skipRecords, 10, searchText, searchStartDate, searchEndDate, selectedStatus)
-    console.log('skipRecords >> Records', allOrganizations)
-    const totalCount = get(allOrganizations, 'totalCount', 'count', null)
-    console.log('totalCount', totalCount)
-    if (allOrganizations != null) {
-      const totalData = allOrganizations?.totalData
-      console.log('skipRecords >> totalData', totalData)
-      setCount(totalCount)
-      const totalPage = Math.ceil(totalCount?.count / 10)
-      var data = []
-      console.log('totalPage', totalPage)
-      // console.log('totalCount', totalCount?.count)
-      // console.log('totalData', totalData)
-      setTotalPage(totalPage)
 
-      totalData.map(r => {
-        var admin = r.admin
-        console.log(admin)
-
-        var fullName = ''
-        if (admin?.length > 0) fullName = admin[0].fullName
-        var record = {
-          id: r._id,
-          facilityName: r.facilityName,
-          orgName: fullName,
-          facilityAddress: r.facilityAddress,
-          referredBy: r.referred_by == "0" ? '' : r.referred_by,
-          invited_facilityName: get(r, ['invited_facilityName'], ''),
-          status: r.status,
-          action: '',
-        }
-
-        data.push(record)
+  const getOrganization = () => {
+    setIsLoading(true)
+    let allOrganizations;
+    if (role === 'admin') {
+      // memberService.getStaffList(organizationId, 'facility', limit, skip).then((res) => {
+      organizationService.allOrganization(skip, limit, searchText, searchStartDate, searchEndDate, selectedStatus).then((data) => {
+        setOrganisations(data)
+        setIsLoading(false)
+      }).catch((err) => {
+        console.log(err)
+        setIsLoading(false)
       })
-
-      console.log('new totalData', data)
-
-      setOrganizations(data)
-    }
+    } else {
+      organizationService.allOrganization(skip, limit, searchText, searchStartDate, searchEndDate, selectedStatus).then((data) => {
+        setOrganisations(data)
+        setIsLoading(false)
+      }).catch((err) => {
+        setIsLoading(false)
+      })
+    } console.log('allOrganizations', allOrganizations)
   }
 
-  const handleChangeRowsPerPage = event => {
-    // setRowsPerPage(+event.target.value)
-    setPage(0)
-  }
+  // const handleChange = event => {
+  //   const {
+  //     target: { value },
+  //   } = event
+  //   setSelectedStatus(
+  //     // On autofill we get a the stringified value.
+  //     typeof value === 'string' ? value.split(',') : value
+  //   )
+  // }
+
+  // const handleChangePage = async (event, newPage) => {
+  //   setPage(newPage)
+  //   const skipRecords = (newPage - 1) * 10
+  //   console.log('skipRecords', skipRecords)
+  //   let allOrganizations;
+  //   if (role === 'admin') {
+  //     memberService.getStaffList(organizationId, 'facility', 10, skipRecords).then((data) => {
+  //       allOrganizations = data
+  //       setOrganisations(data)
+  //     }).catch((err) => {
+  //       console.log(err)
+  //     })
+  //   } else {
+  //     organizationService.allOrganization(skipRecords, 10, searchText, searchStartDate, searchEndDate, selectedStatus).then((data) => {
+  //       allOrganizations = data
+  //       setOrganisations(data)
+  //     }).catch((err) => {
+  //       console.log(err)
+  //     })
+  //   }
+  // }
 
   const handleAddOrganizationClose = () => {
     console.log('On Click - Close button')
@@ -622,6 +655,56 @@ const OrganizationDashboardComponent = () => {
     getOrganization()
   }
 
+  const closeVerifyBankButton = () => {
+    setIsVerifyBankClicked(false)
+    getOrganization()
+
+  }
+
+  const verifyBankHanlde = () => {
+    setFirstDepositErr(false);
+    setSecondDepositErr(false)
+    if (!firstDeposit && !secondDeposit) {
+      setFirstDepositErr(true);
+      setSecondDepositErr(true)
+      return;
+    }
+    if (!firstDeposit) {
+      setFirstDepositErr(true);
+      return
+    }
+    if (!secondDeposit) {
+      setSecondDepositErr(true)
+      return
+    }
+    const amnt = [];
+    amnt.push(Number(firstDeposit))
+    amnt.push(Number(secondDeposit))
+    const bankDetail = {
+      amount: amnt,
+      facilityId: selectedOrg.id
+    }
+
+    organizationService.verifyBankHanlde(bankDetail).then((data, err) => {
+      if (data.data) {
+        setOpenFlash(true)
+        setAlertMsg('Verified')
+        setSubLabel(data.data.message)
+        setAlertColor('success')
+      } else {
+        setOpenFlash(true)
+        setAlertMsg('Error')
+        setSubLabel('You have tried to verify 3 times. To continue please reach out to us directly.')
+        setAlertColor('fail')
+      }
+      setIsVerifyBankClicked(false)
+      getOrganization();
+
+
+    })
+
+  }
+
   const handleAddOrganizationOpen = () => {
     setAddOrganizationClicked(true)
     getOrganization()
@@ -630,18 +713,26 @@ const OrganizationDashboardComponent = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    setSkip(limit * newPage)
+    setIsLoading(true)
+  };
 
-  const handlePageChange = (event, value) => {
-    setPage(value)
-    console.log('Page Number >> ', value)
-  }
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    setSkip(0)
+    setLimit(parseInt(event.target.value, 10))
+    setIsLoading(true)
+  };
 
-  const loadMore = () => {
-    if (rows.length !== count) {
-      setSkip(skip + 10)
-      setIsLoading(true)
-    }
-  }
+  // const loadMore = () => {
+  //   if (rows.length !== count) {
+  //     setSkip(skip + 10)
+  //     setIsLoading(true)
+  //   }
+  // }
 
   const handleSearchText = e => {
     setSearchText(e.target.value)
@@ -652,7 +743,7 @@ const OrganizationDashboardComponent = () => {
     console.log('start Date', e)
     setSearchStartDate(e)
     setOrganizations([])
-    setSkip(1)
+    setSkip(0)
     // getOrganization(searchText, e, searchStatus)
   }
 
@@ -660,7 +751,7 @@ const OrganizationDashboardComponent = () => {
     console.log('end Date', e)
     setSearchEndDate(e)
     setOrganizations([])
-    setSkip(1)
+    setSkip(0)
     // getOrganization(searchText, e, searchStatus)
   }
 
@@ -688,10 +779,10 @@ const OrganizationDashboardComponent = () => {
         <div className="od__title__text">Organizations Queue</div>
         <div className="od__btn__div od__align__right">
           <Button className="od_clear_btn" onClick={handleClear}>
-           &nbsp;&nbsp; Clear Filters
+            &nbsp;&nbsp; Clear Filters
           </Button>
-          {role === "superadmin" || (planType === "premium") ? (
-            <Button className={role === "superadmin" || organizationStatus === 'active' ? "od__add__organization__btn" : "od__add__organization__btn_disabled"} onClick={handleAddOrganizationOpen}>
+          {role === "superadmin" ? (
+            <Button className="od__add__organization__btn" onClick={handleAddOrganizationOpen}>
               <AddCircleOutlineOutlinedIcon /> &nbsp;&nbsp; Invite Organization
             </Button>
           ) : null}
@@ -717,15 +808,21 @@ const OrganizationDashboardComponent = () => {
         <div className="od__right__section od_status">
           <div style={{ width: "162px" }} className="od__btn__div">
             <FormControl sx={{ m: 1, width: 200 }}>
-              <InputLabel id="demo-multiple-checkbox-label"></InputLabel>
+              {/* <InputLabel id="demo-multiple-checkbox-label">Status</InputLabel> */}
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
+                inputProps={{ placeholder: 'select' }}
+
                 value={selectedStatus}
                 // onChange={e => handleSearchStatus(e)}
-                input={<OutlinedInput />}
-                renderValue={selected => selected.join(', ')}
+                input={<OutlinedInput placeholder='Status' />}
+                renderValue={selected => {
+                  return selected.map(element => element.name).join(', ')
+
+                }}
+
                 MenuProps={MenuProps}
                 className="od__date__field"
               >
@@ -744,6 +841,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
+                label="End Date"
                 value={searchEndDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchEndDate(e)}
@@ -755,6 +853,7 @@ const OrganizationDashboardComponent = () => {
           <div className="od__btn__div">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
+                label="Start Date"
                 value={searchStartDate}
                 maxDate={new Date()}
                 onChange={e => handleSearchStartDate(e)}
@@ -769,12 +868,14 @@ const OrganizationDashboardComponent = () => {
       <div className="od__row">
         <div className="od__table__org">
           <Paper sx={{ width: '100%', height: '40%', overflow: 'hidden' }}>
-            <TableContainer id="scrollableDiv" sx={{ maxHeight: 440 }}>
+            <TableContainer id="scrollableDiv" sx={{ maxHeight: 470 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
                     {columns.map(column =>
-                      column.visible ? (
+                      column.id === 'invited_facilityName' && role !== 'superadmin' ? (
+                        null
+                      ) : (column.visible ? (
                         <TableCell
                           key={column.id}
                           align={column.align}
@@ -788,47 +889,83 @@ const OrganizationDashboardComponent = () => {
                           {column.label}
                         </TableCell>
                       ) : null
-                    )}
+                      ))
+                    }
+
+
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {(planType === "premium") || (role === "superadmin")
-                    ? rows.map((row, index) => (
-                      <OrganisationItem
-                        row={row}
-                        index={index}
-                        columns={columns}
-                        colorcodes={colorcodes}
-                        open={open}
-                        handleClose={handleClose}
-                        classes={classes}
-                        menuOptions={menuOptions}
-                        setIsRejectClicked={setIsRejectClicked}
-                        setIsAcceptClicked={setIsAcceptClicked}
-                        setIsDeactivateClicked={setIsDeactivateClicked}
-                        getTextColor={getTextColor}
-                        setSelectedOrg={setSelectedOrg}
-                        rows={rows}
-                        menuList={menuList}
-                        setSkip={setSkip}
-                        setOrganizations={setOrganizations}
-                        setOpenFlash={setOpenFlash}
-                        setAlertMsg={setAlertMsg}
-                        setIsCancelInviteClicked={setIsCancelInviteClicked}
-                        setSubLabel={setSubLabel}
-                        setIsActivateClicked={setIsActivateClicked}
-                      />
-                    ))
-                    : null
-                  }
 
-                </TableBody>
+                {isLoading
+                  ? <TableBody>
+                    <tr>
+                      <td className="app_loader" colSpan={15}>
+                        <CircularProgress />
+                      </td>
+                    </tr>
+                  </TableBody>
+                  :
+                  <TableBody >
+
+                    {rows.length === 0
+                      ? <tr>
+                        <td className="app_loader" colSpan={15}>
+                          <label>No Results Found</label>
+                        </td>
+
+                      </tr> :
+                      (planType !== "free") || (role === "superadmin")
+                        ? rows.map((row, index) => (
+                          <OrganisationItem
+                            row={row}
+                            index={index}
+                            columns={columns}
+                            colorcodes={colorcodes}
+                            open={open}
+                            handleClose={handleClose}
+                            classes={classes}
+                            menuOptions={menuOptions}
+                            setIsRejectClicked={setIsRejectClicked}
+                            setIsAcceptClicked={setIsAcceptClicked}
+                            setIsDeactivateClicked={setIsDeactivateClicked}
+                            setIsVerifyBankClicked={setIsVerifyBankClicked}
+                            getTextColor={getTextColor}
+                            setSelectedOrg={setSelectedOrg}
+                            rows={rows}
+                            menuList={menuList}
+                            setSkip={setSkip}
+                            setOrganizations={setOrganizations}
+                            setOpenFlash={setOpenFlash}
+                            setAlertMsg={setAlertMsg}
+                            setIsCancelInviteClicked={setIsCancelInviteClicked}
+                            setSubLabel={setSubLabel}
+                            setIsActivateClicked={setIsActivateClicked}
+                            role={role}
+                            setAlertcolor={setAlertColor}
+                            setIsActivateClickedFromSuspend={setIsActivateClickedFromSuspend}
+                            getOrganization={getOrganization}
+                          />
+                        ))
+                        : null
+                    }
+
+                  </TableBody>
+                }
               </Table>
             </TableContainer>
+            <TablePagination
+              component="div"
+              rowsPerPageOptions={[5, 10, 25]}
+              count={count}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </Paper>
         </div>
       </div>
-      {(planType === "premium" && rows.length >= 10) || (role === "superadmin" && rows.length >= 10)
+      {/* {(planType !== "free" && count > 10) || (role === "superadmin" && count > 10)
         ?
         <div className="od__row">
           <div className="od__pagination__section">
@@ -838,7 +975,8 @@ const OrganizationDashboardComponent = () => {
           </div>
         </div>
         : null
-      }
+      } */}
+
       <Modal
         open={IsAddOrganizationClicked}
         aria-labelledby="modal-modal-title"
@@ -851,6 +989,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -862,6 +1001,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={rejectModelStyle}>
           <RejectOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -869,6 +1009,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -880,6 +1021,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <AprroveOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -887,6 +1029,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -898,6 +1041,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <DeactivateOrganization
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -905,6 +1049,7 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
@@ -916,6 +1061,7 @@ const OrganizationDashboardComponent = () => {
       >
         <Box sx={approveModelStyle}>
           <CancelInviteModel
+            getOrganization={getOrganization}
             clickCloseButton={closeApproveModel}
             setSkip={setSkip}
             selectedOrg={selectedOrg}
@@ -923,14 +1069,46 @@ const OrganizationDashboardComponent = () => {
             setOpenFlash={setOpenFlash}
             setAlertMsg={setAlertMsg}
             setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
           />
         </Box>
       </Modal>
+      <Modal
+        open={isVerifyBankClicked}
+        // onClose={setIsAcceptClicked}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={verifyBankModelStyle}>
+          <VerifyBankingInfoPopup
+            clickCloseButton={closeVerifyBankButton}
+            clickSubmitButton={verifyBankHanlde}
+            setSkip={setSkip}
+            selectedOrg={selectedOrg}
+            setOrganizations={setOrganizations}
+            setOpenFlash={setOpenFlash}
+            setAlertMsg={setAlertMsg}
+            setSubLabel={setSubLabel}
+            setAlertColor={setAlertColor}
+            setFirstDeposit={setFirstDeposit}
+            setSecondDeposit={setSecondDeposit}
+            firstDeposit={firstDeposit}
+            secondDeposit={secondDeposit}
+            firstDepositErr={firstDepositErr}
+            secondDepositErr={secondDepositErr}
+            setFirstDepositErr={setFirstDepositErr}
+            setSecondDepositErr={setSecondDepositErr}
+
+          />
+        </Box>
+      </Modal>
+
       <Alert
         handleCloseFlash={handleCloseFlash}
         alertMsg={alertMsg}
         openflash={openflash}
         subLebel={subLebel}
+        color={alertColor}
       />
     </div>
   )

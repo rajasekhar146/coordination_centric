@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useHistory } from 'react-router-dom'
 import { organizationService } from '../../services'
+import './OrganizationDashboard.Component.css'
 
 const ITEM_HEIGHT = 60
 
@@ -32,7 +33,12 @@ const OrganisationItem = props => {
     setAlertMsg,
     setIsCancelInviteClicked,
     setSubLabel,
-    setIsActivateClicked
+    setIsActivateClicked,
+    role,
+    setAlertcolor,
+    setIsVerifyBankClicked,
+    setIsActivateClickedFromSuspend,
+    getOrganization
   } = props
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -50,29 +56,59 @@ const OrganisationItem = props => {
     console.log('menus[0].options', menus[0].options)
   }
 
-  const handleClose = () => {
+  const handleClose = e => {
+    e.preventDefault()
+    e.stopPropagation()
     setAnchorEl(null)
   }
 
-  const handleActivate = org => {
-    const res = organizationService.updateOrganization(org.id, 'active')
-    res.then(() => {
-      setOrganizations([])
-      setSkip(1)
-      setAlertMsg('Activated')
-      setSubLabel('This account was successfully activated.')
-      setOpenFlash(true)
-      setIsActivateClicked(false)
+  const handleActivate = (org , data , from)=> {
+    const params = {
+      facilityId: org.id,
+    }
+    if(from =! 'suspend'){
+    const response = organizationService.subscriptionOrganization(params).catch(err => {
     })
+    if (response.status === 200) {
+        const res = organizationService.updateOrganization(org.id, 'active')
+        res.then(()=>{
+          getOrganization()
+          // setSkip(0)
+          setAlertMsg('Activated')
+          setSubLabel('This account was successfully activated.')
+          setAlertcolor('success')
+          setOpenFlash(true)
+          setIsActivateClicked(false)
+        }).catch(err => {
+        })
+       
+      }
+    }else{
+      const res = organizationService.updateOrganization(org.id, 'active')
+    res.then((response)=>{
+      getOrganization()
+        // setSkip(0)
+        setAlertMsg('Activated')
+        setSubLabel('This account was successfully activated.')
+        setAlertcolor('success')
+        setOpenFlash(true)
+        setIsActivateClicked(false)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    }
   }
 
   const handleResend = org => {
-    const res = organizationService.resendInvite(org.id)
+    const res = organizationService.resendInvite(org.id , 'facility')
     res.then(res => {
-      setOrganizations([])
-      setSkip(1)
-      setAlertMsg('Re-sended')
+      getOrganization()
+      // setSkip(0)
+      setAlertMsg('Resent')
       setSubLabel('Another invitation was sended to this organization.')
+      setAlertcolor('success')
       setOpenFlash(true)
     })
   }
@@ -95,12 +131,21 @@ const OrganisationItem = props => {
         setIsCancelInviteClicked(true)
         break
       case 'setIsActivateClicked':
-        handleActivate(row, 'active')
+        handleActivate(row, 'active' , 'pending_verify')
         setIsActivateClicked(true)
         break
       case 'setIsResendClicked':
         handleResend(row, 'resend')
         break
+      case 'setIsVerifyBankClicked' : 
+      setIsVerifyBankClicked(true);
+      break;
+      case 'setIsActivateClickedFromSuspend' :
+        handleActivate(row, 'active' , 'suspend')
+
+        setIsActivateClickedFromSuspend(true)
+        break;
+      // handleBankVerify()
       // case 'setIsActivateClicked':
       //   handleActivate()
       case 'viewdetails':
@@ -130,6 +175,9 @@ const OrganisationItem = props => {
       case 'pending_verification':
         return 'Pending verification'
         break
+      case 'pending_bank_verification':
+        return 'Pending Bank Verification'
+        break
       case 'pending_acceptance':
         return 'Pending acceptance'
         break
@@ -154,7 +202,10 @@ const OrganisationItem = props => {
       }}
       hover
       role="checkbox"
-      style={{ width: '100%' }} tabIndex={-1} key={row.id}>
+      style={{ width: '100%' }}
+      tabIndex={-1}
+      key={row.id}
+    >
       {columns.map(column => {
         var value = row[column.id]
         if (row[column.id]) value = row[column.id]
@@ -194,16 +245,16 @@ const OrganisationItem = props => {
               open={open}
               onClose={handleClose}
               className={classes.menu}
-            // PaperProps={{
-            //     style: {
-            //         maxHeight: ITEM_HEIGHT * 4.5,
-            //         width: '20ch',
-            //         boxShadow:
-            //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
-            //         border: '1px solid #9fa2a3',
-            //         left: '-75px'
-            //     },
-            // }}
+              // PaperProps={{
+              //     style: {
+              //         maxHeight: ITEM_HEIGHT * 4.5,
+              //         width: '20ch',
+              //         boxShadow:
+              //             '0px 5px 5px -3px rgba(0,0,0,0),0px 2px 2px 1px rgba(0,0,0,0),0px 3px 14px 2px rgba(0,0,0,0)',
+              //         border: '1px solid #9fa2a3',
+              //         left: '-75px'
+              //     },
+              // }}
             >
               {menuOptions.map((option, idx) => (
                 <MenuItem
@@ -219,7 +270,7 @@ const OrganisationItem = props => {
               ))}
             </Menu>
           </TableCell>
-        ) : column.id == 'id' ? null : (
+        ) : column.id === 'invited_facilityName' && role !== 'superadmin' ? null : column.id == 'id' ? null : (
           <TableCell key={column.id} align={column.align} style={{ paddingBottom: 10, paddingTop: 10 }}>
             {column.format && typeof value === 'number' ? column.format(value) : value}
           </TableCell>

@@ -26,7 +26,7 @@
     background-color: #FFFFFF;
     position: relative;
     right: -29%;
-    top: 18%;
+    top: 12%;
 }
 
 .ms__left__image {
@@ -122,6 +122,14 @@
 
 .ms__login__btn {
     background: #E42346 !important;
+    border-radius: 8px !important;
+    width: 100%;
+    color: #fff !important;
+    padding: 12px !important;
+}
+
+.ms__login__btn__disabled {
+    background: #858383 !important;
     border-radius: 8px !important;
     width: 88%;
     color: #fff !important;

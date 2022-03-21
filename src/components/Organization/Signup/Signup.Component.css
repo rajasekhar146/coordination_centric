@@ -129,19 +129,21 @@
 
     width: 100%;
     text-align: center;
-    margin: 20px 0px 50px 0px;
+    margin: 15px 0;
 }
 
 .su__signup__plan {
     width: 100%;
     text-align: center;
+    margin-bottom: 15px;
 }
 
 .su__plan__section {
     display: flex;
     margin: auto;
-    padding: 5% 0 0 0;
+    /* padding: 5% 0 0 0; */
     justify-content: center;
+    width: 100%;
 }
 
 .su__column {

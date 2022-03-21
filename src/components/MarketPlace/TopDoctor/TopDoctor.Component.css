@@ -1,0 +1,68 @@
+.tdl__main__div {
+    /* width: 100%; */
+    background-color: #fff;
+    margin-right: 16px;
+    align-items: center;
+}
+
+.tdl__row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.tdl__image {
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+}
+
+.tdl__doctor__name {
+    margin-top: 10px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 17px;
+
+    /* identical to box height, or 130% */
+    letter-spacing: 0.130357px;
+
+    /* Gray/900 */
+    color: #101828;
+}
+
+.tdl__doctor__desc {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+
+    /* identical to box height, or 130% */
+    letter-spacing: 0.0651786px;
+
+    /* Primary/Default */
+    color: #E42346;
+}
+
+.tdl__button {
+    background: #E42346 !important;
+    border-radius: 4px !important;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold !important;
+    font-size: 14px;
+    line-height: 18px;
+    /* or 129% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    /* light-text-color */
+    color: #FFFFFF !important;
+    padding: 10px 40px !important;
+}
+
+.tdl__action__section {
+    margin-top: 16px
+}

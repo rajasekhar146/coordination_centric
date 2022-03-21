@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { Link } from 'react-router-dom'
 import './LeftMenu.Component.css'
 
@@ -13,6 +13,10 @@ import Collapse from '@material-ui/core/Collapse'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { authenticationService } from '../../services'
+import get from 'lodash.get'
+import { useSelector, useDispatch } from 'react-redux'
+import { leftMenus } from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -86,7 +90,7 @@ const menuOptions = [
       },
       {
         name: 'Patient Records',
-        link: '/users',
+        link: '/patientrecords',
         icon: require('../../assets/icons/users.png').default,
         activeIcon: require('../../assets/icons/users.png').default,
       },
@@ -128,10 +132,319 @@ const menuOptions = [
   },
 ]
 
+const getMenuList = role => {
+  switch (role) {
+    case 'superadmin':
+      return [
+        {
+          level: '1',
+          id: 1,
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+          isSelected: true,
+        },
+        // {
+        //   name: 'Appointments',
+        //   link: '/appointments',
+        //   icon: require('../../assets/icons/appointments.png').default,
+        //   activeIcon: require('../../assets/icons/appointments.png').default,
+        //   items: [],
+        // },
+        {
+          level: '1',
+          id: 2,
+          name: 'Organizations',
+          link: '/organizations',
+          icon: require('../../assets/icons/organizations.png').default,
+          activeIcon: require('../../assets/icons/sitemap_active.png').default,
+          items: [],
+          isSelected: false,
+        },
+        // {
+        //   name: 'Patient Records',
+        //   link: '/patients',
+        //   icon: require('../../assets/icons/patients.png').default,
+        //   items: [],
+        // },
+        {
+          level: '1',
+          id: 3,
+          name: 'Inventory',
+          link: '/inventory',
+          icon: require('../../assets/icons/vaccinations.png').default,
+          activeIcon: require('../../assets/icons/vaccinations.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 4,
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 5,
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+          isSelected: false,
+        },
+      ]
+      break
+    case 'doctor':
+      return [
+        {
+          level: '1',
+          id: 1,
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+          isSelected: true,
+        },
+        {
+          level: '1',
+          id: 2,
+          name: 'Appointments',
+          link: '/appointments',
+          icon: require('../../assets/icons/appointments.png').default,
+          activeIcon: require('../../assets/icons/appointments.png').default,
+          items: [],
+          isSelected: false,
+        },
+
+        // {
+        //   name: 'Marketplace',
+        //   link: '/marketplace',
+        //   icon: require('../../assets/icons/vaccinations.png').default,
+        //   activeIcon: require('../../assets/icons/vaccinations.png').default,
+        //   items: [],
+        // },
+        {
+          level: '1',
+          id: 3,
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 4,
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+          isSelected: false,
+        },
+      ]
+      break
+    case 'patient':
+      return [
+        {
+          level: '1',
+          id: 1,
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+          isSelected: true,
+        },
+        {
+          level: '1',
+          id: 2,
+          name: 'Appointments',
+          link: '/appointments',
+          icon: require('../../assets/icons/appointments.png').default,
+          activeIcon: require('../../assets/icons/appointments.png').default,
+          items: [],
+          isSelected: false,
+        },
+
+        {
+          level: '1',
+          id: 3,
+          name: 'Marketplace',
+          link: '/marketplace',
+          icon: require('../../assets/icons/vaccinations.png').default,
+          activeIcon: require('../../assets/icons/vaccinations.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 4,
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 5,
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+          isSelected: false,
+        },
+      ]
+
+    default:
+      return [
+        {
+          level: '1',
+          id: 1,
+          name: 'Dashboard',
+          link: '/dashboard',
+          icon: require('../../assets/icons/dashboard.png').default,
+          activeIcon: require('../../assets/icons/active_dashboard.png').default,
+          items: [],
+          isSelected: true,
+        },
+        {
+          level: '1',
+          id: 2,
+          name: 'Appointments',
+          link: '/appointments',
+          icon: require('../../assets/icons/appointments.png').default,
+          activeIcon: require('../../assets/icons/appointments.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 3,
+          name: 'Users',
+          link: '/staff',
+          icon: require('../../assets/icons/users.png').default,
+          activeIcon: require('../../assets/icons/users.png').default,
+          isSelected: false,
+          items: [
+            {
+              level: '2',
+              id: 301,
+              name: 'Staff',
+              link: '/staff',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+              isSelected: false,
+            },
+            {
+              level: '2',
+              id: 302,
+              name: 'Collaborators',
+              link: '/collaborators',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+              isSelected: false,
+            },
+            {
+              level: '2',
+              id: 303,
+              name: 'Patient',
+              link: '/patients',
+              icon: require('../../assets/icons/users.png').default,
+              activeIcon: require('../../assets/icons/users.png').default,
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          level: '1',
+          id: 4,
+          name: 'Patient Records',
+          link: '/patientrecords',
+          icon: require('../../assets/icons/users.png').default,
+          activeIcon: require('../../assets/icons/users.png').default,
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 5,
+          name: 'Organizations',
+          link: '/organizations',
+          icon: require('../../assets/icons/organizations.png').default,
+          activeIcon: require('../../assets/icons/sitemap_active.png').default,
+          items: [],
+          isSelected: false,
+        },
+        // {
+        //   name: 'Patient Records',
+        //   link: '/patients',
+        //   icon: require('../../assets/icons/patients.png').default,
+        //   items: [],
+        // },
+        {
+          level: '1',
+          id: 6,
+          name: 'Inventory',
+          link: '/inventory',
+          icon: require('../../assets/icons/vaccinations.png').default,
+          activeIcon: require('../../assets/icons/vaccinations.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 7,
+          name: 'Notifications',
+          link: '/notifications',
+          icon: require('../../assets/icons/notifications.png').default,
+          activeIcon: require('../../assets/icons/notifications.png').default,
+          items: [],
+          isSelected: false,
+        },
+        {
+          level: '1',
+          id: 8,
+          name: 'Payments',
+          link: '/payments',
+          icon: require('../../assets/icons/payments.png').default,
+          activeIcon: require('../../assets/icons/payments.png').default,
+          items: [],
+          isSelected: false,
+        },
+      ]
+  }
+}
+
+
 const LeftMenuComponent = () => {
   const classes = useStyles()
-
-  return menuOptions.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
+  const dispatch = useDispatch()
+  // dispatch(leftMenus(menus))
+  const filteredMenus = useSelector(state => state.leftMenus)
+  console.log('Menus filtered:', filteredMenus)
+  const [newMenus, setMenus] = useState([])
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    console.log('currentUser', currentUser)
+    const role = get(currentUser, ['data', 'data', 'role'], '')
+    const menus = getMenuList(role)
+    dispatch(leftMenus(menus))
+    console.log('Left Menu')
+    setMenus(menus)
+  }, [])
+  return newMenus.map((item, index, key) => <MenuItem key={key} item={item} index={index} />)
 
   // return (
   //   <div div className={classes.root}>
@@ -171,28 +484,66 @@ const hasChildren = item => {
 
 const MenuItem = ({ item, index }) => {
   const Component = hasChildren(item) ? MultiLevel : SingleLevel
-  return <Component item={item} index={index} />
+  return <Component item={item} index={item.id} level={item.level} isSelected={item.isSelected} />
 }
 
-const SingleLevel = ({ item, index }) => {
+const SingleLevel = ({ item, index, level, isSelected }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
-
+  const dispatch = useDispatch()
+  console.log('Menu Items', item)
+  var newMenus = useSelector(state => state.leftMenus)
   const handleSelectedMenu = (pageURL, idx) => {
-    //setOpen(!open);
     setSelectedIndex(idx)
-    console.log(pageURL, idx)
+    
+    console.log('Selected Menu Items >> before', newMenus, idx, level)
+    newMenus.map(m => {
+      if (level > 1 && m.items && m.items.length > 0) {
+        console.log('Sub menu >> ', m.items)
+        m.items.map(sm => {
+          if (sm.id == idx) {
+            sm.isSelected = true
+            return sm
+          } else {
+            sm.isSelected = false
+            return sm
+          }
+        })
+      } else {
+        if(m.items){
+        m.items.map(sm => {
+            sm.isSelected = false
+            return sm
+        })
+      }
+        if (m.id == idx) {
+          console.log('Selected Menu Items 1')
+          m.isSelected = true
+          return m
+        } else {
+          m.isSelected = false
+          return m
+        }
+      }
+    })
+    console.log('Selected Menu Items', newMenus, idx)
+    dispatch(leftMenus(newMenus))
+
     history.push(pageURL)
   }
+  useEffect(() => {
+    console.log('useEffect')
+  }, [])
   return (
     <ListItem
       button
       selected={selectedIndex == index}
       onClick={event => handleSelectedMenu(`${item.link}`, `${index}`)}
+      className={isSelected ? 'lm__selected__menu' : 'lm__unselected__menu'}
     >
       <ListItemIcon>
-        <img src={selectedIndex == index ? item.activeIcon : item.icon} className="lm__menu__icon" />
+        <img src={item.icon} className="lm__menu__icon" />
       </ListItemIcon>
-      <ListItemText primary={item.name} />
+      <ListItemText className={isSelected ? 'lm__selected__menu' : 'lm__unselected__menu'} primary={item.name} />
     </ListItem>
   )
 }

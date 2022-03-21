@@ -17,6 +17,10 @@ import { isUpperCase } from "is-upper-case";
 import { isLowerCase } from "is-lower-case";
 import { useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Alert from '../Alert/Alert.component'
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +39,13 @@ const ResetPasswordPage = props => {
     const { search } = useLocation();
     const token = new URLSearchParams(search).get('token');
     const email = new URLSearchParams(search).get('email');
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [subLebel, setSubLabel] = useState('')
+    const [activeLink, setActiveLink] = useState(false)
+    const [isValidLink, setIsValidLink] = useState(false)
 
     const [validations, setValidations] = useState({
         passwordLength: false,
@@ -44,6 +55,21 @@ const ResetPasswordPage = props => {
         small: false,
     });
 
+    const handleMouseDownPassword = event => {
+        event.preventDefault()
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword)
+    }
+
+
+    const handleCloseFlash = () => {
+        setOpenFlash(false)
+    }
 
     useEffect(() => {
         const validationsObj = {
@@ -79,25 +105,48 @@ const ResetPasswordPage = props => {
         // }
     }, [password])
 
+    useEffect(() => {
+        authenticationService.validateToken(token).then((res) => {
+            if(get(res, ['data', 'status_code'], '') !== 200) {
+                history.push('/error-page')
+            } else if (get(res, ['data', 'status_code'], '') === 200) {
+                setIsValidLink(true)
+                setSubLabel(get(res, ['data', 'message'], ''))
+            }
+        }).catch((err) => {
+           
+        })
+    }, [])
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (password === conformPassword) {
+        if (!isValidLink) {
+            setOpenFlash(true)
+        } else if (password === conformPassword) {
             setIsSubmit(true)
             const resetData = {};
-            resetData.temporaryPassword = password;
+            resetData.password = password;
             resetData.token = token;
             resetData.email = email;
-            SignInStore.load('ResetPassword', {
-                resetData,
-                successCallback: (data) => {
-                    history.push('/resetpasswordsuccess')
-                },
-                errorCallback: (err) => {
-
-                }
+            const res = authenticationService.resetPassword(resetData)
+            res.then(() => {
+                history.push('/resetpasswordsuccess')
+            }).catch(() => {
+                setOpenFlash(true)
+                setSubLabel('Password has been Changed Already')
             })
+            // SignInStore.load('ResetPassword', {
+            //     resetData,
+            //     successCallback: (data) => {
+            //         history.push('/resetpasswordsuccess')
+            //     },
+            //     errorCallback: (err) => {
+
+            //     }
+            // })
+
         } else {
             setErrMsg('The password confirmation doesn’t match.')
         }
@@ -116,7 +165,7 @@ const ResetPasswordPage = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="si__right__div si_top_zero">
+                <div className="si__right__div si_top_zero si_reset">
                     <div className="si__right__content si_width75">
                         <div className="si__right__forgot">
                             <img src={KeyIcon} alt="key" />
@@ -129,15 +178,27 @@ const ResetPasswordPage = props => {
                             Password &nbsp;<span className="ac__required">*</span>
                         </div>
                         <div className="io__icon">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setPassword(e.target.value)
                                 }}
+                                type={showPassword ? 'text' : 'password'}
                                 margin="normal"
-                                type="password"
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">{showPassword ? 'Hide' : 'Show'}</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                         <div>
@@ -226,15 +287,27 @@ const ResetPasswordPage = props => {
                             &nbsp;<span className="ac__required">*</span>
                         </div>
                         <div className="io__icon">
-                            <TextField
+                            <OutlinedInput
                                 // {...useInput('facilityName', { isRequired: true })}
                                 onChange={(e) => {
                                     setConformPassword(e.target.value)
                                 }}
+                                type={showConfirmPassword ? 'text' : 'password'}
                                 margin="normal"
-                                type="password"
                                 className={classes.input}
                                 InputProps={{ className: 'si__right__content_resend' }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            <div className="si__pwd__show">{showConfirmPassword ? 'Hide' : 'Show'}</div>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
                             />
                         </div>
                         {errMsg && <p className="ac__required">{errMsg}</p>}
@@ -259,7 +332,14 @@ const ResetPasswordPage = props => {
                             onClick={() => {
                                 history.push('/signin')
                             }}
-                            className="si__forgot__link">
+                            onMouseOver={() => {
+                                setActiveLink(true)
+                            }}
+                            onMouseOut={() => {
+                                setActiveLink(false)
+                            }}
+                            className={activeLink ? 'si__forgot__link_active' : 'si__forgot__link'}
+                        >
                             <img src={ArrowLeft} alt="Login Left Logo" />
                             <span style={{ marginLeft: "10px" }}>
                                 Back to log in
@@ -268,7 +348,12 @@ const ResetPasswordPage = props => {
                         </div>
                     </div>
                 </div>
-
+                <Alert
+                    handleCloseFlash={handleCloseFlash}
+                    alertMsg={alertMsg}
+                    openflash={openflash}
+                    subLebel={subLebel}
+                    color="fail" />
             </form>
         </div>
     )

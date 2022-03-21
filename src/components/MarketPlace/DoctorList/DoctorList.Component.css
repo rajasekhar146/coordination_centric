@@ -1,0 +1,25 @@
+.dl__pic {
+    width: 70px !important;
+    height: 70px;
+    border-radius: 50% !important;
+}
+
+.MuiTableCell-root {
+    padding: 8px !important;
+}
+.dl__button {
+    background: #E42346 !important;
+    border-radius: 8px !important;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold !important;
+    font-size: 14px;
+    line-height: 18px;
+    /* or 129% */
+    text-align: center;
+    letter-spacing: 0.2px;
+
+    /* light-text-color */
+    color: #FFFFFF !important;
+    padding: 10px 40px !important;
+}

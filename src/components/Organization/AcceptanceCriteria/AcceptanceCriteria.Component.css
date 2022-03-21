@@ -48,7 +48,7 @@
     box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
     border-radius: 8px;
     margin: 50px 0px 0px 0px !important;
-    width: 90%;
+    width: 92%;
     justify-content: left !important;
     text-align: left !important;
     padding: 50px !important;
@@ -129,7 +129,11 @@
 .ac__row {
     width: 100%;
     display: flex;
-    /* background-color: #A0A4A8; */
+}
+
+.ac__row__grid{
+    grid-template-columns: 1fr 1fr 1fr;
+    display: grid;
 }
 
 .ac__column {
@@ -187,6 +191,7 @@
     flex-grow: 0;
     margin: 0px 0px;
     width: 180px !important;
+    height: 100%;
 }
 
 .ac__back__btn {
@@ -230,3 +235,34 @@
     right: 20px !important; */
 }
 
+.ac__dropdown {    
+    background: #FFFFFF;
+    border: 1px solid #c7c5c5;
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* height: 40px; */
+    width: 100% !important;
+    padding: 4px;
+    border-radius: 5px;
+    /* padding: 8px !important; */
+    height: 45px;
+
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    /* identical to box height, or 150% */
+    letter-spacing: 0.1px;
+
+    /* Neutral/Black */
+    color: #25282B;
+}
+
+
+.ac_align_buttons{
+    width: 100%;
+    display: inline-flex;
+    grid-template-columns: 1fr 1fr;
+}

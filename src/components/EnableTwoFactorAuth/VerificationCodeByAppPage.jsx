@@ -10,6 +10,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { authenticationService } from '../../services'
 import { get } from 'lodash'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCompleteProfile, enableTwofa } from '../../redux/actions/commonActions'
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -30,12 +32,30 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const VerificationCodeByAppPage = props => {
+  const dispatch = useDispatch()
   const classes = useStyles()
   const [verificationCode, setVerificationCode] = useState('')
   const googlePlayURl = 'https://play.google.com/store/search?q=authy&c=apps&hl=en_IN&gl=US'
   const qrImg = authenticationService.qrImgvalue
   const currentUser = authenticationService.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
+  const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
+  const role = get(currentUser, ['data', 'data', 'role'], false)
+  const [enableTwofavalue, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
+
+
+  const isShowCopleateProfile = () => {
+    switch(role) {
+      case 'doctor':
+      case 'patient':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+
+
 
   const handleSubmit = () => {
     const dataToSend = {}
@@ -48,6 +68,9 @@ const VerificationCodeByAppPage = props => {
         const isValid = get(res, ['data', 'valid'], false)
         if (isValid) {
           history.push(`/2faverificationsuccess`)
+          if (!last_login_time && isShowCopleateProfile() && !enableTwofavalue) {
+            dispatch(setCompleteProfile(true))
+          }
         } else {
           history.push(`/2faverificationfail`)
         }
@@ -130,8 +153,9 @@ const VerificationCodeByAppPage = props => {
                 type="text"
                 className={classes.textField}
                 value={verificationCode}
+                inputProps={{ maxLength: 6 }}
                 onChange={e => {
-                  setVerificationCode(e.target.value)
+                  setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
                 }}
               />
               <Button

@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { BehaviorSubject } from 'rxjs'
 import get from 'lodash.get'
-
+import * as env from '../environments/environment'
 // import config from 'config';
 import { authHeader, handleResponse } from '../helpers'
-const apiURL = 'https://api.csuite.health'
+const apiURL = env.environment.apiBaseUrl
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')))
 const qrImgSubject = new BehaviorSubject()
@@ -15,8 +15,14 @@ export const authenticationService = {
   logout,
   twoFactorEmailAuth,
   twoFactorByAppAuth,
-  twoFactorEmailAuthVerification,
+  twoFactorAuthVerification,
   twoFactorAppAuthVerification,
+  resetPassword,
+  changePassword,
+  requestPassword,
+  skipTwoFa,
+  sendEmailVerificationCode,
+  validateToken,
   currentUser: currentUserSubject.asObservable(),
   qrImg: qrImgSubject.asObservable(),
   is2faActive: is2FaActiveSubject.asObservable(),
@@ -53,12 +59,14 @@ function login(username, password) {
 
   var bodyMsg = JSON.stringify({ email: username, password, deviceId, deviceType, fcmId, backoffice })
   console.log('request', axiosConfig)
+  console.log('apiURL', process.env.REACT_APP_API_URL)
   return (
     axios
       .post(`${apiURL}/users/login`, bodyMsg, axiosConfig)
       //.then(handleResponse)
       .then(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
+        // const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
         localStorage.setItem('currentUser', JSON.stringify(user))
         currentUserSubject.next(user)
         // console.log(user)
@@ -72,8 +80,10 @@ function login(username, password) {
         //   data: err.data,
         // }
 
-        if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')){
+        if (get(err.response, ['data', 'message'], '').includes('Two Factor Authentication')) {
           update2fa(true)
+          localStorage.setItem('currentUser', JSON.stringify(get(err, ['response'], '')))
+          currentUserSubject.next(get(err, ['response'], ''))
         }
 
         return err.response?.data
@@ -84,6 +94,7 @@ function login(username, password) {
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem('currentUser')
+  // localStorage.removeItem('twoFaVerfied')
   currentUserSubject.next(null)
 }
 
@@ -116,13 +127,30 @@ function twoFactorByAppAuth(email) {
   )
 }
 
-function twoFactorEmailAuthVerification(code) {
+function twoFactorAuthVerification(code, type, email) {
   let axiosConfig = {
     headers: authHeader(),
   }
+  let url = `${apiURL}`
+
+  if (type === 'email') {
+    url += `/users/twoFactorEmailAuthenticationVerification/${code}/${email}`
+  } else if (type === 'app') {
+    url += `/users/twoFactorAuthenticationVerification`
+  }
+
+  const dataTosend =
+    type === 'email'
+      ? null
+      : {
+        code,
+        email: email,
+        token: 'base32',
+      }
+
   return (
     axios
-      .post(`${apiURL}/users/twoFactorEmailAuthenticationVerification/${code}`, null, axiosConfig)
+      .post(url, dataTosend, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         localStorage.setItem('currentUser', JSON.stringify(data))
@@ -141,7 +169,107 @@ function twoFactorAppAuthVerification(data) {
       .post(`${apiURL}/users/twoFactorAuthenticationVerification`, data, axiosConfig)
       //.then(handleResponse)
       .then(data => {
+        localStorage.setItem('currentUser', JSON.stringify(data))
+        currentUserSubject.next(data)
         return data
       })
   )
+}
+
+function requestPassword(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/forgotPassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function resetPassword(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/setNewPassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function changePassword(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/changePassword`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function skipTwoFa(data) {
+  let axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/users/disable2fa`, { twoFactor_auth_type: 'skipped' }, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        const userData = JSON.parse(localStorage.getItem('currentUser'))
+        userData.data.data.twoFactor_auth_type = 'skipped'
+        localStorage.setItem('currentUser', JSON.stringify(userData))
+        currentUserSubject.next(data)
+      })
+  )
+}
+
+
+async function sendEmailVerificationCode(email, code) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  var bodyMsg = {
+    email: email,
+    code: code,
+  }
+  return await axios
+    .post(`${apiURL}/users/codeVerification`, bodyMsg, axiosConfig)
+    //.then(handleResponse)
+    .then(response => {
+      console.log('sendEmailVerificationCode', response)
+      localStorage.setItem('currentUser', JSON.stringify(response))
+      currentUserSubject.next(response)
+      return response
+    })
+    .catch(err => {
+      console.log('sendEmailWithVerificationCode >> err', JSON.stringify(err.response))
+      return err.response
+    })
+}
+
+async function validateToken(token) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  return await axios
+    .get(`${apiURL}/users/linkValidation?token=${token}`, axiosConfig)
+    //.then(handleResponse)
+    .then(response => {
+      return response
+    })
+    .catch(err => {
+      return err.response
+    })
 }

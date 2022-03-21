@@ -12,36 +12,29 @@ import { useForm } from 'react-hook-form'
 import history from '../../../history'
 import { useParams } from 'react-router-dom'
 import SigninStore from '../../../stores/signinstore'
-
-
+import { useSelector, useDispatch } from 'react-redux'
+import { newOrganization } from '../../../redux/actions/organizationActions'
+import { commonService } from '../../../services'
+import { setCountries } from '../../../redux/actions/commonActions'
+import get from 'lodash.get'
 const steps = ['Acceptance Criteria', 'Service Level Agreement', 'Banking Information', 'T&C and Privacy Policy']
 
-
-
-const AcceptanceCriteriaComponent = (props) => {
+const AcceptanceCriteriaComponent = props => {
   const [activeStep, setActiveStep] = useState(0)
   const [planType, setPlanType] = useState('')
   const [processSteps, setProcessSteps] = useState(steps)
+  const [facilityEmail, setFacilityName] = useState(null)
   const [initialValues, setInitialFormData] = useState(props.props)
   const { referredby } = useParams()
   const { invitetoken } = useParams()
   const { invitedBy } = useParams()
-
-  // const [fullName, setFullName] = useState(null)
-  // const [email, setEmail] = useState(null)
-  // const [phoneNumber, setPhoneNumber] = useState(null)
-  // const [facilityName, setFacilityName] = useState(null)
-  // const [facilityEmail, setFacilityEmail] = useState(null)
-  // const [facilityPhone, setFacilityPhone] = useState(null)
-  // const [faxNumber, setFaxNumber] = useState(null)
-  // const [facilityAddress, setFacilityAddress] = useState(null)
-  // const [taxId, setTaxId] = useState(null)
-  // const [nip, setNIP] = useState(null)
-  // const [medicalId, setMedicalId] = useState(null)
-  // const [website, setWebsite] = useState(null)
-  // const [about, setAbout] = useState(null)
-
-  // console.log('props >> AC', props.props)
+  const newOrg = useSelector(state => state.newOrganization)
+  const dispatch = useDispatch()
+  const [states, setStates] = useState(null)
+  const [countries, setAllCountries] = useState([])
+  const [adminEmailSame, setAdminEmailSame] = useState()
+  const [aboutList, setAboutList] = useState([])
+  const [aboutOther, setAboutOther] = useState(false)
 
   var {
     register,
@@ -50,40 +43,64 @@ const AcceptanceCriteriaComponent = (props) => {
     handleSubmit,
   } = useForm()
 
+  const fetchStates = async selectedCountryCode => {
+    const response = await commonService.getStates(selectedCountryCode).catch(error => {
+      console.log(error)
+    })
+    const data = get(response, ['data', 'data', 'data'], null)
+    setStates(data)
+    if (data.length > 0) setValue('state', data[0].statecode)
+    // setValue('state', data[0].statecode)
+  }
   const onSubmit = data => {
+    // if (data.email == data.facilityEmail) {
+    //   return
+    // }
     const admin = {
       fullName: data.fullName,
       email: data.email,
       phoneNumber: data.phoneNumber,
     }
-
+    console.log('form data', data)
     SigninStore.set({ organisationName: data.facilityName })
 
-
-    data.planType = planType == 'P' ? 'premium' : 'free'
+    // data.planType = plan == 'P' ? 'premium' : 'free'
 
     data.admin = [admin]
 
-    if(referredby != "0")
-      data.referred_by = referredby
+    if (referredby != '0') data.referred_by = referredby
 
     data.inviteToken = invitetoken
 
-    if(invitedBy != "0")
-      data.invited_by = invitedBy
+    if (invitedBy != '0') data.invited_by = invitedBy
 
+    var uFacility = JSON.parse(localStorage.getItem('facility'))
+
+    if (uFacility.planType === 'free') data.planType = 'free'
+    else {
+      data.planType = uFacility.planType
+      data.subscription_price = uFacility.subscription_price
+      data.subscription_price_id = uFacility.subscription_price_id
+    }
     localStorage.setItem('facility', JSON.stringify(data))
-   
+
+    dispatch(newOrganization(data))
+
     history.push(`/service-level-agreement/${invitetoken}/${referredby}/${invitedBy}`)
   }
 
-  useEffect(() => {
-    console.log('New AC -- >> ', props.props)
+  const fetchAboutUsList = async () => {
+    const aboutUsList = await commonService.getAboutUsList().catch(err => {})
+    setAboutList(get(aboutUsList, ['data', 'data', 'data'], []))
+  }
 
-    var uFacility = localStorage.getItem('facility')
-
+  useEffect(async () => {
+    await fetchCountries()
+    await fetchAboutUsList()
+    var uFacility = JSON.parse(localStorage.getItem('facility'))
     if (uFacility != null) {
-      var data = JSON.parse(uFacility)
+      var data = uFacility
+      await fetchStates(data.country)
       setValue('fullName', data.fullName)
       setValue('email', data.email)
       setValue('phoneNumber', data.phoneNumber)
@@ -100,49 +117,51 @@ const AcceptanceCriteriaComponent = (props) => {
       setValue('city', data.city)
       setValue('state', data.state)
       setValue('zipcode', data.zipcode)
+      setValue('country', data.country)
+      setValue('subject', data.subject)
+      setFacilityName(data.facilityEmail)
+      setAboutOther(data.about === 'Others')
     }
 
-
     const planType = localStorage?.getItem('plan_type')
-    console.log('referredBy 1 ', referredby, 'inviteToken 1 ', invitetoken)
     if (planType == undefined) localStorage.setItem('plan_type', 'F')
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
-      console.log('newSteps', newSteps)
     }
-
-    // const updateFacility = localStorage.getItem('facility')
-
-    // if (updateFacility != null) {
-    //   const newFacility = JSON.parse(updateFacility)
-    //   console.log('updateFacility', newFacility)
-    //   setInitialFormData(newFacility)
-    // } else {
-    //   console.log('Else')
-    //   setInitialFormData(null)
-    // }
 
     setPlanType('F')
 
     if (planType?.trim().toLocaleUpperCase() === 'F') {
       const newSteps = steps.filter((step, i) => i != 2)
       setProcessSteps(newSteps)
-      console.log('newSteps', newSteps)
     }
 
     if (planType === '') setPlanType('F')
     else setPlanType(planType)
   }, [])
 
+  const checkAdminEmail = e => {
+    if (e.target.value == facilityEmail) {
+      setAdminEmailSame(true)
+    } else {
+      setAdminEmailSame(false)
+    }
+  }
   const handleBack = () => {
-    if(referredby === undefined || referredby === null)
-      referredby = 0
-  
-    if(invitedBy === undefined || invitedBy === null)  
-      invitedBy = 0
+    if (referredby === undefined || referredby === null) referredby = 0
+
+    if (invitedBy === undefined || invitedBy === null) invitedBy = 0
 
     history.push(`/signup/${invitetoken}/${referredby}/${invitedBy}`)
+  }
+
+  const fetchCountries = async () => {
+    const response = await commonService.getCountries().catch(error => {
+      console.log(error)
+    })
+    setAllCountries(response.data.data.data)
+    dispatch(setCountries(response.data.data.data))
   }
 
   return (
@@ -176,18 +195,25 @@ const AcceptanceCriteriaComponent = (props) => {
                     <div className="ac__form">
                       <div className="ac__header__text">Admin's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Full Name <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('fullName', { required: 'Full Name is required', maxLength: 50 })}
+                              {...register('fullName', {
+                                required: 'Full Name is required',
+                                maxLength: 50,
+                                pattern: {
+                                  value: /^[A-Za-z\s]+$/,
+                                  message: 'This input is characters only.',
+                                },
+                              })}
                               margin="normal"
                               // defaultValue={initialValues ? initialValues.fullName : null}
                               InputProps={{ className: 'ac__text__box' }}
-                            // value={fullName}
-                            // name="fullName"
+                              // value={fullName}
+                              // name="fullName"
                             />
                             {errors.fullName && <p className="ac__required">{errors.fullName.message}</p>}
                           </div>
@@ -205,12 +231,17 @@ const AcceptanceCriteriaComponent = (props) => {
                                   message: 'Enter a valid e-mail address',
                                 },
                               })}
+                              type="email"
+                              onChange={checkAdminEmail}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={email}
-                            // name="email"
-                            // value={initialValues ? initialValues.email : ''}
+                              // value={email}
+                              // name="email"
+                              // value={initialValues ? initialValues.email : ''}
                             />
+                            {adminEmailSame && (
+                              <p className="ac__required"> Admin Email should not be same as Organization's Email </p>
+                            )}
                             {errors.email && <p className="ac__required">{errors.email.message}</p>}
                           </div>
 
@@ -220,18 +251,19 @@ const AcceptanceCriteriaComponent = (props) => {
                             </div>
                             <TextField
                               {...register('phoneNumber', {
-                                required: 'Phone Number is required',
-                                maxLength: 20,
+                                required: {
+                                  value: true,
+                                  message: "Admin's Phone Number is required",
+                                },
                                 pattern: {
-                                  value: /\d+/,
-                                  message: 'This input is number only.',
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Phone Number accepts only integer',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box', maxLength: 15 }}
-                              margin="normal"
-                            // value={phoneNumber}
-                            // name="phoneNumber"
-                            // value={initialValues ? initialValues.phoneNumber : ''}
+                              inputProps={{
+                                maxLength: 15,
+                              }}
+                              InputProps={{ className: 'ac__text__box' }}
                             />
                             {errors.phoneNumber && <p className="ac__required">{errors.phoneNumber.message}</p>}
                           </div>
@@ -242,7 +274,7 @@ const AcceptanceCriteriaComponent = (props) => {
 
                       <div className="ac__header__text">Organization's Info</div>
                       <div>
-                        <div className="ac__row">
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Name <span className="ac__required">*</span>
@@ -254,9 +286,9 @@ const AcceptanceCriteriaComponent = (props) => {
                               })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={facilityName}
-                            // name="facilityName"
-                            // value={initialValues ? initialValues.facilityName : ''}
+                              // value={facilityName}
+                              // name="facilityName"
+                              // value={initialValues ? initialValues.facilityName : ''}
                             />
                             {errors.facilityName && <p className="ac__required">{errors.facilityName.message}</p>}
                           </div>
@@ -277,55 +309,69 @@ const AcceptanceCriteriaComponent = (props) => {
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
                               type="email"
-                            // value={facilityEmail}
-                            // name="facilityEmail"
-                            // value={initialValues ? initialValues.facilityEmail : ''}
+                              disabled={facilityEmail?.length > 0}
+                              // value={facilityEmail}
+                              // name="facilityEmail"
+                              // value={initialValues ? initialValues.facilityEmail : ''}
                             />
                             {errors.facilityEmail && <p className="ac__required">{errors.facilityEmail.message}</p>}
                           </div>
-                        </div>
 
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               Phone Number <span className="ac__required">*</span>
                             </div>
                             <TextField
                               {...register('facilityPhone', {
-                                required: 'Organization Phone Number is required',
-                                maxLength: 20,
+                                required: {
+                                  value: true,
+                                  message: "Organization's Phone Number is required",
+                                },
                                 pattern: {
-                                  value: /\d+/,
-                                  message: 'This input is number only.',
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Phone Number accepts only integer',
                                 },
                               })}
-                              InputProps={{ className: 'ac__text__box', maxLength: 15 }}
+                              maxLength={15}
+                              characterLimit={15}
+                              onInput={e => {
+                                e.target.value = e.target.value.toString().slice(0, 15)
+                              }}
+                              InputProps={{ className: 'ac__text__box' }}
                               style={{ width: '290px', minHeight: '24px' }}
                               margin="normal"
-                            // value={facilityPhone}
-                            // name="facilityPhone"
-                            // value={initialValues ? initialValues.facilityPhone : ''}
                             />
                             {errors.facilityPhone && <p className="ac__required">{errors.facilityPhone.message}</p>}
                           </div>
+                        </div>
 
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               Fax Number <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('faxNumber', { required: 'Fax Number is required' })}
+                              {...register('faxNumber', {
+                                required: {
+                                  value: true,
+                                  message: 'Fax Number is required',
+                                },
+                                pattern: {
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Fax accepts only integer',
+                                },
+                              })}
+                              inputProps={{
+                                maxLength: 10,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={faxNumber}
-                            // name="faxNumber"
-                            // value={initialValues ? initialValues.faxNumber : ''}
+                              // value={faxNumber}
+                              // name="faxNumber"
+                              // value={initialValues ? initialValues.faxNumber : ''}
                             />
                             {errors.faxNumber && <p className="ac__required">{errors.faxNumber.message}</p>}
                           </div>
-                        </div>
-
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">
                               Address <span className="ac__required">*</span>
@@ -334,69 +380,111 @@ const AcceptanceCriteriaComponent = (props) => {
                               {...register('facilityAddress', { required: 'Address is required' })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={facilityAddress}
-                            // name="facilityAddress"
-                            // value={initialValues ? initialValues.facilityAddress : ''}
+                              // value={facilityAddress}
+                              // name="facilityAddress"
+                              // value={initialValues ? initialValues.facilityAddress : ''}
                             />
                             {errors.facilityAddress && <p className="ac__required">{errors.facilityAddress.message}</p>}
+                          </div>
+                          <div className="ac__column">
+                            <div className="ac__label">
+                              Country <span className="ac__required">*</span>
+                            </div>
+                            <select
+                              {...register('country', { required: 'Country is required' })}
+                              className="ac__dropdown"
+                              onChange={e => fetchStates(e.target.value)}
+                            >
+                              {countries &&
+                                countries.map(c => (
+                                  <option value={c.code} key={c.code} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
+                            {errors.country && <p className="ac__required">{errors.country.message}</p>}
+                          </div>
+                        </div>
+
+                        <div className="ac__row__grid">
+                          <div className="ac__column">
+                            <div className="ac__label">
+                              State <span className="ac__required">*</span>
+                            </div>
+                            <select {...register('state', { required: 'State is required' })} className="ac__dropdown">
+                              {states &&
+                                states.map(c => (
+                                  <option value={c.statecode} key={c.statecode} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
+                            {errors.state && <p className="ac__required">{errors.state.message}</p>}
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">
                               City <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('city', { required: 'City is required ', maxLength: 20 })}
+                              {...register('city', {
+                                required: 'City is required ',
+                                maxLength: 20,
+                                pattern: {
+                                  value: /^[A-Za-z\s]+$/,
+                                  message: 'This input is characters only.',
+                                },
+                              })}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={nip}
-                            // name="nip"
-                            // value={initialValues ? initialValues.nip : ''}
+                              // value={nip}
+                              // name="nip"
+                              // value={initialValues ? initialValues.nip : ''}
                             />
                             {errors.city && <p className="ac__required">{errors.city.message}</p>}
                           </div>
                           <div className="ac__column">
                             <div className="ac__label">
-                              State <span className="ac__required">*</span>
-                            </div>
-                            <TextField
-                              {...register('state', { required: 'State is required ', maxLength: 20 })}
-                              InputProps={{ className: 'ac__text__box' }}
-                              margin="normal"
-                            // value={nip}
-                            // name="nip"
-                            // value={initialValues ? initialValues.nip : ''}
-                            />
-                            {errors.state && <p className="ac__required">{errors.state.message}</p>}
-                          </div>
-                        </div>
-
-                        <div className="ac__row">
-                          <div className="ac__column">
-                            <div className="ac__label">
                               Zipcode <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('zipcode', { required: 'Zipcode is required ', maxLength: 20 })}
+                              {...register('zipcode', { required: 'Zipcode is required ' })}
+                              inputProps={{
+                                maxLength: 20,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={nip}
-                            // name="nip"
-                            // value={initialValues ? initialValues.nip : ''}
+                              // value={nip}
+                              // name="nip"
+                              // value={initialValues ? initialValues.nip : ''}
                             />
                             {errors.zipcode && <p className="ac__required">{errors.zipcode.message}</p>}
                           </div>
+                        </div>
 
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">
                               NPI <span className="ac__required">*</span>
                             </div>
                             <TextField
-                              {...register('npi', { required: 'NPI is required ', maxLength: 20 })}
+                              {...register('npi', {
+                                required: {
+                                  value: true,
+                                  message: 'NPI is required',
+                                },
+                                pattern: {
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'NPI accepts only integer',
+                                },
+                              })}
+                              inputProps={{
+                                maxLength: 10,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={nip}
-                            // name="nip"
-                            // value={initialValues ? initialValues.nip : ''}
+                              // value={nip}
+                              // name="nip"
+                              // value={initialValues ? initialValues.nip : ''}
                             />
                             {errors.npi && <p className="ac__required">{errors.npi.message}</p>}
                           </div>
@@ -404,56 +492,95 @@ const AcceptanceCriteriaComponent = (props) => {
                           <div className="ac__column">
                             <div className="ac__label">Tax ID</div>
                             <TextField
-                              {...register('taxId', { maxLength: 20 })}
+                              {...register('taxId', {
+                                pattern: {
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Tax Id accepts only integer',
+                                },
+                              })}
+                              inputProps={{
+                                maxLength: 20,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={taxId}
-                            // name="taxId"
-                            // value={initialValues ? initialValues.taxId : ''}
+                              // value={taxId}
+                              // name="taxId"
+                              // value={initialValues ? initialValues.taxId : ''}
                             />
+                            {errors.taxId && <p className="ac__required">{errors.taxId.message}</p>}
                           </div>
-                        </div>
-
-                        <div className="ac__row">
                           <div className="ac__column">
                             <div className="ac__label">Medical ID</div>
                             <TextField
-                              {...register('medicalId', { maxLength: 20 })}
+                              {...register('medicalId', {
+                                pattern: {
+                                  value: /^[1-9]\d*(\d+)?$/i,
+                                  message: 'Medical ID accepts only integer',
+                                },
+                              })}
+                              inputProps={{
+                                maxLength: 14,
+                              }}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={medicalId}
-                            // name="medicalId"
-                            // value={initialValues ? initialValues.medicalId : ''}
+                              // value={medicalId}
+                              // name="medicalId"
+                              // value={initialValues ? initialValues.medicalId : ''}
                             />
+                            {errors.medicalId && <p className="ac__required">{errors.medicalId.message}</p>}
                           </div>
+                        </div>
+
+                        <div className="ac__row__grid">
                           <div className="ac__column">
                             <div className="ac__label">Website</div>
                             <TextField
-                              {...register('website', { maxLength: 20 })}
+                              {...register('website')}
                               InputProps={{ className: 'ac__text__box' }}
                               margin="normal"
-                            // value={website}
-                            // name="website"
-                            // value={initialValues ? initialValues.website : ''}
+                              // value={website}
+                              // name="website"
+                              // value={initialValues ? initialValues.website : ''}
                             />
+                            {errors.website && <p className="ac__required">{errors.website.message}</p>}
                           </div>
 
                           <div className="ac__column">
                             <div className="ac__label">How did you hear about us?</div>
-                            <TextField
-                              {...register('about', { maxLength: 20 })}
-                              InputProps={{ className: 'ac__text__box' }}
-                              margin="normal"
-                            // value={about}
-                            // name="about"
-                            // value={initialValues ? initialValues.about : ''}
-                            />
+                            <select
+                              {...register('about')}
+                              className="ac__dropdown"
+                              onChange={e => {
+                                setAboutOther(e.target.value === 'Others')
+                                setValue('subject', '')
+                              }}
+                            >
+                              {aboutList &&
+                                aboutList.map(c => (
+                                  <option value={c.name} key={c.name} className="ac__dropdown">
+                                    {c.name}
+                                  </option>
+                                ))}
+                            </select>
                           </div>
-                        </div>
 
+                          {aboutOther && (
+                            <div className="ac__column">
+                              <div className="ac__label">Others</div>
+                              <TextField
+                                {...register('subject')}
+                                inputProps={{
+                                  maxLength: 120,
+                                }}
+                                InputProps={{ className: 'ac__text__box' }}
+                                margin="normal"
+                              />
+                            </div>
+                          )}
+                        </div>
                         <div className="ac__gap__div"></div>
 
-                        <div className="ac__row">
+                        <div className="ac_align_buttons">
                           <div className="ac__column ac__left__action">
                             <Button color="inherit" className="ac__back__btn" onClick={handleBack}>
                               Back

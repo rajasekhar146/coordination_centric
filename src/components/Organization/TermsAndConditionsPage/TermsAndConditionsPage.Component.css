@@ -1,0 +1,13 @@
+.tac__main__div {
+    padding: 10px 80px 10px 80px;
+}
+
+.tac__main__img {
+    width: 150px;
+}
+
+.tac__logo_section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

@@ -12,6 +12,8 @@ const RejectModel = props => {
       setOrganizations={props.setOrganizations}
       setOpenFlash={props.setOpenFlash}
       setSubLabel={props.setSubLabel}
+      setAlertColor={props.setAlertColor}
+      getOrganization={props.getOrganization}
       />
     </React.Fragment>
   )

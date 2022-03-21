@@ -3,12 +3,10 @@ import { authHeader, handleResponse } from '../helpers'
 import { authenticationService } from '../services'
 import history from '../history'
 import moment from 'moment'
+import get from 'lodash.get'
 
-const apiURL = 'https://api.csuite.health'
-
-const axiosConfig = {
-  headers: authHeader(),
-}
+import * as env from '../environments/environment'
+const apiURL = env.environment.apiBaseUrl
 
 export const organizationService = {
   allOrganization,
@@ -20,9 +18,20 @@ export const organizationService = {
   resendInvite,
   cancelIvitation,
   validateToken,
+  registerMember,
+  disableTwoFa,
+  getPrices,
+  subscriptionOrganization,
+  paymentSubscription,
+  downloadFile,
+  verifyBankHanlde,
+  updateOrganizationDetail,
 }
 
 function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   console.log('searchText', searchText)
 
@@ -30,7 +39,7 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   //date = 'A'
   const sdateUTC = moment.utc(sdate).local().format('YYYY-MM-DD')
   const edateUTC = moment.utc(edate).local().format('YYYY-MM-DD')
-  const statusvalues = status?.join()
+  const statusvalues = status.map(element => element.key).join()
 
   //status = ''
   // console.log(searchText, date, status)
@@ -54,6 +63,7 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
   // }
 
   // console.log('searchCond', searchCond)
+
   let url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}`
   // if (searchText != null) {
   //   url = `${apiURL}/facilityList/getAllFacilitiesForSuperAdmin?skip=${skip}&limit=${limit}&search_text=${searchText}`
@@ -91,6 +101,9 @@ function allOrganization(skip, limit, searchText, sdate, edate, status = []) {
 }
 
 function addOrganization(bodyMsg, role) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
 
   var url = `${apiURL}/facilityList/inviteFacility`
@@ -110,6 +123,9 @@ function addOrganization(bodyMsg, role) {
 }
 
 function updateOrganization(id, status, reason = null) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   let url = `${apiURL}/facilityList/updateFacilityStatus/${id}/${status}`
   // if (status === 'declined') {
@@ -126,16 +142,21 @@ function updateOrganization(id, status, reason = null) {
 }
 
 function getOrganizationDetails(orgId) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   return (
     axios
-      .get(`${apiURL}/facilityList/getFacilityDetailsById?id=${orgId}`, axiosConfig)
+      .get(`${apiURL}/facilityList/getDetailsById?id=${orgId}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         console.log('getOrganizationDetails - ', data)
         if (data?.data?.data) {
-          const res = data.data.data
+          const res = get(data, ['data', 'data', '0', 'totalData', '0'], {})
+          const payment = get(data, ['data', 'payment'], {})
+
           console.log('Result >> ', res)
-          return res
+          return { data: res, payment: payment }
         } else {
           return null
         }
@@ -143,6 +164,9 @@ function getOrganizationDetails(orgId) {
   )
 }
 function signupOrganization(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
@@ -157,7 +181,29 @@ function signupOrganization(bodyMsg) {
   )
 }
 
+function subscriptionOrganization(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/payment/Subscription`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+      .catch(err => {
+        console.log(err.response)
+        return err.response
+      })
+  )
+}
+
 async function uploadCertificate(bodyMsg, certificateType) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   const currentUser = authenticationService?.currentUserValue
   console.log('currentUser', currentUser)
@@ -176,7 +222,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
     redirect: 'follow',
   }
 
-  fetch(`${apiURL}/files/upload`, requestOptions)
+  return await fetch(`${apiURL}/files/upload`, requestOptions)
     .then(response => response.text())
     .then(result => {
       var response = JSON.parse(result)
@@ -199,6 +245,7 @@ async function uploadCertificate(bodyMsg, certificateType) {
         }
       }
       localStorage.setItem('facility', JSON.stringify(updatedFacility))
+
       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
       else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
       else if (certificateType == 'EULAAgreement') {
@@ -214,6 +261,63 @@ async function uploadCertificate(bodyMsg, certificateType) {
     })
 }
 
+// async function uploadCertificate(bodyMsg, certificateType) {
+//   console.log('axiosConfig', axiosConfig)
+//   const currentUser = authenticationService?.currentUserValue
+//   console.log('currentUser', currentUser)
+//   var myHeaders = new Headers()
+//   myHeaders.append('x-access-token', `${currentUser?.data?.token}`)
+//   myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+
+//   var urlencoded = new URLSearchParams()
+//   urlencoded.append('name', bodyMsg.name)
+//   urlencoded.append('type', bodyMsg.type)
+
+//   var requestOptions = {
+//     method: 'POST',
+//     headers: myHeaders,
+//     body: urlencoded,
+//     redirect: 'follow',
+//   }
+
+//   fetch(`${apiURL}/files/upload`, requestOptions)
+//     .then(response => response.text())
+//     .then(result => {
+//       var response = JSON.parse(result)
+//       var facility = JSON.parse(localStorage.getItem('facility'))
+
+//       if (certificateType == 'ServiceLevelAgreement') {
+//         var updatedFacility = {
+//           ...facility,
+//           business_certificate: response.data,
+//         }
+//       } else if (certificateType == 'SAASAgreement') {
+//         var updatedFacility = {
+//           ...facility,
+//           saas_certificate: response.data,
+//         }
+//       } else {
+//         var updatedFacility = {
+//           ...facility,
+//           eula_certificate: response.data,
+//         }
+//       }
+//       localStorage.setItem('facility', JSON.stringify(updatedFacility))
+//       if (certificateType == 'ServiceLevelAgreement') history.push('/saas-agreement')
+//       else if (certificateType == 'SAASAgreement') history.push('/eula-agreement')
+//       else if (certificateType == 'EULAAgreement') {
+//         const planType = localStorage?.getItem('plan_type')
+//         console.log('planType', planType)
+//         if (planType === 'F') history.push('/terms-condition')
+//         else history.push('/bank-info')
+//       } else history.push('/terms-condition')
+//     })
+//     .catch(error => {
+//       console.log('error', error)
+//       return error
+//     })
+// }
+
 // console.log(updatedFacility)
 // await axios
 //     .post(`${apiURL}/files/upload`, null, updatedFacility)
@@ -227,11 +331,14 @@ async function uploadCertificate(bodyMsg, certificateType) {
 //       return null
 //     })
 
-function resendInvite(id) {
+function resendInvite(id, type) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .get(`${apiURL}/facilityList/resendInvite/${id}`, axiosConfig)
+      .get(`${apiURL}/facilityList/resendInvite/${id}/${type}`, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
@@ -239,11 +346,14 @@ function resendInvite(id) {
   )
 }
 
-function cancelIvitation(id) {
+function cancelIvitation(id, type) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   console.log('axiosConfig', axiosConfig)
   return (
     axios
-      .put(`${apiURL}/facilityList/cancelInvite/${id}`, null, axiosConfig)
+      .put(`${apiURL}/facilityList/cancelInvite/${id}/${type}`, null, axiosConfig)
       //.then(handleResponse)
       .then(data => {
         return data
@@ -252,6 +362,9 @@ function cancelIvitation(id) {
 }
 
 function validateToken(token) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
   const bobyMsg = {
     inviteToken: token,
   }
@@ -268,4 +381,127 @@ function validateToken(token) {
         return err
       })
   )
+}
+
+function registerMember(data) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/users/registerMember`, data, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function disableTwoFa() {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .get(`${apiURL}/users/disable2fa`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function getPrices() {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .get(`${apiURL}/payment/prices`, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+
+function paymentSubscription(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  // const response = organizationService.subscriptionOrganization(params).catch(err => {
+  //   console.log(err)
+  // })
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/payment/subscription`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function downloadFile(fileObj) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('axiosConfig', axiosConfig)
+  return (
+    axios
+      .post(`${apiURL}/files/download_url`, fileObj, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        return data
+      })
+  )
+}
+function verifyBankHanlde(bodyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  return (
+    axios
+      .post(`${apiURL}/payment/verifyBankAccount`, bodyMsg, axiosConfig)
+      //.then(handleResponse)
+      .then(data => {
+        console.log('data', data)
+        return data
+      })
+      .catch(err => {
+        return err
+      })
+  )
+}
+
+function updateOrganizationDetail(id, bobyMsg) {
+  const axiosConfig = {
+    headers: authHeader(),
+  }
+  console.log('updateOrganizationDetail >> ', id, bobyMsg)
+  return axios
+    .put(`${apiURL}/facilityList/updateFacility/${id}`, bobyMsg, axiosConfig)
+    .then(data => {
+      return data
+    })
+    .catch(err => {
+      return err
+    })
 }

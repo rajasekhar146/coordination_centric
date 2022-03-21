@@ -32,6 +32,11 @@ const ForgotPasswordResend = props => {
     const [errMsg, setErrMsg] = useState('')
     const [IsValidEmail, setIsValidEmail] = useState(true)
     const [signinStoreData] = useStore(SigninStore);
+    const [activeLink, setActiveLink] = useState(false)
+    const [activeResend, setActiveResend] = useState(false)
+    const [openflash, setOpenFlash] = React.useState(false)
+    const [alertMsg, setAlertMsg] = React.useState('')
+    const [alertColor, setAlertColor] = useState('')
 
     const {
         email,
@@ -44,15 +49,31 @@ const ForgotPasswordResend = props => {
     } = useForm()
 
     const onSubmit = (data) => {
-        SigninStore.load('RequestPassword', {
-            email: email,
-            successCallback: (data) => {
-                history.push('./forgotpasswordresend')
-            }
+        const reBody = { email: email }
+        const res = authenticationService.requestPassword(reBody).then(res => {
+            //history.push('/forgotpasswordresend')
+            setOpenFlash(true)
+            setAlertMsg(get(res, ['data', 'message'], ''))
+            setAlertColor('success')
+        }).catch((res) => {
+          setOpenFlash(true)
+          setAlertMsg(get(res, ['data', 'message'], ''))
+          setAlertColor('fail')
         })
+        // SigninStore.load('RequestPassword', {
+        //     email: email,
+        //     successCallback: (data) => {
+        //         setOpenFlash(true)
+        //         setAlertMsg('Reset password link has been sent to your email')
+        //         setAlertColor('success')
+        //     }
+        // })
     }
 
 
+    const handleCloseFlash = () => {
+        setOpenFlash(false)
+    }
 
 
 
@@ -66,7 +87,7 @@ const ForgotPasswordResend = props => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="si__right__div si_left270">
+                <div className="si__right__div si_left_reset">
                     <div className="si__right__content ">
                         <div className="si__right__forgot">
                             <img src={MsgIcon} alt="key" />
@@ -101,29 +122,37 @@ const ForgotPasswordResend = props => {
 
                         <div className="io__icon">
                             {' '}
-                            <Button type="submit" className="si__login__btn">
+                            <Button className="si__login__btn" onClick={() => {
+                              history.push('/signin')
+                          }}>
                                 {' '}
-                                Open email app
+                                Back to log in
                                 {' '}
                             </Button>{' '}
                         </div>
-                        <div className="si__right__subtitle  io_margin_bottom30">
-                            Didn’t receive the email? Click to resend
-                        </div>
                         <div
                             onClick={() => {
-                                history.push('/signin')
+                                onSubmit()
                             }}
-                            className="si__forgot__link">
-                            <img src={ArrowLeft} alt="Login Left Logo" />
-                            <span style={{ marginLeft: "10px" }}>
-                                Back to log in
-                            </span>
-
+                            className="si__right__subtitle  io_margin_bottom30">
+                            Didn’t receive the email? <span
+                                className={activeResend ? 'si_acive_resend' : ''}
+                                onMouseOver={() => {
+                                    setActiveResend(true)
+                                }}
+                                onMouseOut={() => {
+                                    setActiveResend(false)
+                                }} >Click to resend</span>
                         </div>
+                        
                     </div>
                 </div>
-
+                <Alert
+                    handleCloseFlash={handleCloseFlash}
+                    alertMsg={alertMsg}
+                    openflash={openflash}
+                    // subLebel={subLabel}
+                    color={alertColor} />
             </form>
         </div>
     )

@@ -3,13 +3,12 @@
     /* height: 100vh; */
     /* min-width: 85%; */
     height: 100%;
-    padding: 10px 0px 0px 50px;
+    padding: 2rem;
 }
 
 .psp__row {
     width: 100%;
     display: flex;
-    margin-top: 20px;
     /* background-color: #A0A4A8; */
 }
 
@@ -17,8 +16,8 @@
     font-family: Lato;
     font-style: normal;
     font-weight: 800;
-    font-size: 28px;
-    line-height: 34px;
+    font-size: 24px;
+    line-height: 34px;  
 
     /* identical to box height, or 121% */
     display: flex;
@@ -26,6 +25,7 @@
     letter-spacing: 0.2px;
 
     color: #000000;
+    margin-top: 0px;
 }
 
 .psp__back__button {
@@ -46,7 +46,7 @@
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 24px;
 
     /* identical to box height, or 133% */
@@ -64,7 +64,8 @@
 .psp__profile__img {
     width: 150px;
     height: 150px;
-    border-radius: 75px;
+    border-radius: 50%;
+    opacity: 0.9
 }
 
 .psp__updload__btn {
@@ -79,11 +80,14 @@
 
     /* identical to box height, or 129% */
     letter-spacing: 0.2px;
+    width: 30%;
 
 }
 
 .psp__image__preview {
-    margin-left: 20px;
+    margin-left: 5%;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .psp__label {
@@ -98,11 +102,13 @@
 
     /* Gray/700 */
     color: #344054;
+    margin-bottom: 10px;
+    margin-top: 20px;
 }
 
 .psp__step__text {
     position: absolute;
-    right: 50px;
+    right: 65px;
     font-family: Lato;
     font-style: normal;
     font-weight: 500;
@@ -124,13 +130,15 @@
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-
+    width: 80% !important;
     /* identical to box height, or 150% */
     letter-spacing: 0.1px;
+    height: 230px !important;
 
     /* Neutral/Gray */
     color: #A0A4A8;
     margin-right: 60px !important;
+    margin-top: 20px;
 }
 
 .psp__next__btn {
@@ -138,7 +146,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 12px 30px !important;
+    padding: 8px 14px !important;
 
     /* Primary/Default */
     background: #E42346 !important;
@@ -157,14 +165,71 @@
     color: #FFFFFF !important;
     
     width: 150px !important;
-    height: 50px !important;
-    justify-content: right !important;
-
+    /* height: 55px !important; */
+    /* position: absolute !important; */
+    right: 5%;
+    padding: 8px;
+    height: 48px !important;
 }
 
 .psp__submit__btn__center__align {
-    display: flex !important;
-    /* justify-content: right !important; */
-    align-items: center !important;
+    /* display: flex !important; */
+    /* justify-content: end !important; */
+    /* align-items: end !important; */
 
+}
+
+.psp__submit__btn__center__align1 {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+    padding: 1px !important;
+    padding-right: 0;
+}
+
+.psp_sub_div{
+    padding: 2.5rem 4rem;
+}
+
+.mar-top-20{
+    margin-top: 20px;
+}
+.mar-top-30{
+    margin-top: 30px;
+}
+
+.psp__submit {
+    bottom: 0px;
+    position: absolute;
+    right: 0px;   
+}
+
+.two-grid{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+}
+
+.tex-field{
+    width: 100%;
+}
+
+.two-grid .MuiOutlinedInput-root{
+    height: 100%;
+    align-items:start;
 }

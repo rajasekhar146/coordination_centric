@@ -1,0 +1,91 @@
+/* ---------- */
+.watingroom-action-menu{
+    display: flex;
+    align-items: center;
+    gap:15px;
+}
+.watingroom-dropdown {
+    position: absolute;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    width: 306px;
+    left: 26px;
+    color: #fff;
+    background-color: #3c3a3aab;
+    border-radius: 8px;
+    padding: 10px;
+}
+.wid-tile{
+    height: 45px;
+    width: 45px;
+    background: #e7e7e7;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.watingroom-header{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.watingroom-header .title{
+    color: #fff;
+    padding: 8px 0;
+    font-size: 26px;
+    margin: 0;
+}
+.watingroom-dropdown ul {
+    margin: 0;
+    padding: 0;
+}
+.watingroom-dropdown ul li{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    gap:10px
+}
+
+.wating-user-info .name, .wating-user-info .type{
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
+.wating-user-info .name {
+    font-weight: bold;
+}
+.wating-user-info .type{
+color:#CACCCF;
+}
+.img-wrp {
+    display: flex;
+    align-items: center;
+}
+.img-wrp img {
+    margin-right: 10px;
+    width: 45px;
+    height: 45px;
+}
+
+.wating-action .add-btn{
+    background-color: #E42346;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+}
+.watingroom-item {
+    margin-bottom: 10px;
+}
+.close-action-wrp {
+    cursor: pointer;
+}
+/* ---------- */

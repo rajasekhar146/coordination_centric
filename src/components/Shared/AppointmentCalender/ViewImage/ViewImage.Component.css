@@ -1,0 +1,9 @@
+.closeImg{
+    float: right;
+    cursor: pointer;
+}
+
+.vi__profile__image {
+    border-radius: 10px !important;
+    width: 100%;
+}

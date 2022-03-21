@@ -1,5 +1,5 @@
 import React from 'react'
-import PersonalDetailComponent from '../components/OnboardMember/MemberSignIn/PersonalDetail/PersonalDetail.Component'
+import PersonalDetailComponent from '../components/OnboardMember/PersonalDetail/PersonalDetail.Component'
 
 const PersonalDetail = () => {
   return (

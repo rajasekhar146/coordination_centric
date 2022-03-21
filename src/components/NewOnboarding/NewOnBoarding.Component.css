@@ -47,7 +47,7 @@
     box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
     border-radius: 8px;
     margin: 50px 0px 0px 0px !important;
-    width: 90%;
+    width: 92%;
     justify-content: left !important;
     text-align: left !important;
     padding: 50px !important;
@@ -113,7 +113,12 @@
 .ac__row {
     width: 100%;
     display: flex;
-    /* background-color: #A0A4A8; */
+}
+
+.ac__row__grid{
+    grid-template-columns: 1fr 1fr 1fr;
+    display: grid;
+
 }
 
 .ac__column {

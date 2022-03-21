@@ -10,12 +10,49 @@ import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import { authenticationService } from '../../services'
 import get from 'lodash.get'
-
+import CompleateProfile from './CompleateProfile.Component'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCopmletPropfilePopup, setSkip2fa } from '../../redux/actions/commonActions'
+import dashboardComponentConfig from './DashboardComponentConfig'
+import ActivePatient from './ActivePatient'
+import ActiveOrganizations from './ActiveOrganizations'
+import ActivePatientsperOrganization from './ActivePatientsperOrganization'
+import UnassignedReadings from './UnassignedReadings'
+import OtherUsers from './OtherUsers'
+import ActiveUsers from './ActiveUsers'
+import TotalUsers from './TotalUsers'
+import Alerts from './Alerts'
+import AcitveDoctors from './AcitveDoctor'
+import Adherence from './Adherence'
+import Appointments from './Appointments'
+import LastLoggedIn from './LastLoggedIn'
+import ReadingsFromLastweek from './ReadingsFromLastweek'
+import TotalAppointments from './TotalAppointments'
+import OrderstoExpireinXdays from './OrderstoExpireinXdays'
+import TotalOnboardings from './TotalOnboardings'
+import { dashboardService } from '../../services'
+import AppointmentList from './AppointmentList'
+import history from '../../history'
+import ChangePassword from '../ModelPopup/ChangePassword'
+import Alert from '../Alert/Alert.component'
 // import EnhancedEncryptionOutlinedIcon from '@mui/icons-material/EnhancedEncryptionOutlined'
 // import AppointmentsIcon from '../../assets/icons/db_appointments.png'
 // import NewPatientsIcon from '../../assets/icons/db_new_patients.png'
 // import OperationsIcon from '../../assets/icons/db_operations.png'
 // import HospitalEarningsIcon from '../../assets/icons/db_hospital_earnings.png'
+const changePasswordModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 900,
+  height: 460,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
 
 const options = {
   chart: {
@@ -91,79 +128,237 @@ const twoFaModelStyle = {
   p: 4,
 }
 
+const completModelStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 380,
+  bgcolor: 'background.paper',
+  border: '2px solid white',
+  boxShadow: 24,
+  borderRadius: 3,
+  p: 4,
+}
+
+const componenetsMap = {
+  ActivePatient: {
+    component: ActivePatient,
+    componentProps: {},
+  },
+  ActiveOrganizations: {
+    component: ActiveOrganizations,
+    componentProps: {},
+  },
+  ActivePatientsperOrganization: {
+    component: ActivePatientsperOrganization,
+    componentProps: {},
+  },
+  TotalAppointments: {
+    component: TotalAppointments,
+    componentProps: {},
+  },
+  UnassignedReadings: {
+    component: UnassignedReadings,
+    componentProps: {},
+  },
+  OtherUsers: {
+    component: OtherUsers,
+    componentProps: {},
+  },
+  ActiveUsers: {
+    component: ActiveUsers,
+    componentProps: {},
+  },
+  TotalUsers: {
+    component: TotalUsers,
+    componentProps: {},
+  },
+  Alerts: {
+    component: Alerts,
+    componentProps: {},
+  },
+  AcitveDoctors: {
+    component: AcitveDoctors,
+    componentProps: {},
+  },
+  Adherence: {
+    component: Adherence,
+    componentProps: {},
+  },
+  Appointments: {
+    component: Appointments,
+    componentProps: {},
+  },
+  LastLoggedIn: {
+    component: LastLoggedIn,
+    componentProps: {},
+  },
+  ReadingsFromLastweek: {
+    component: ReadingsFromLastweek,
+    componentProps: {},
+  },
+  OrderstoExpireinXdays: {
+    component: OrderstoExpireinXdays,
+    componentProps: {},
+  },
+  // OrganizationOnboardings: {
+  //   component: OrganizationOnboardings,
+  //   componentProps: {
+
+  //   },
+  // },
+  AppointmentList: {
+    component: AppointmentList,
+    componentProps: {},
+  },
+  TotalOnboardings: {
+    component: TotalOnboardings,
+    componentProps: {},
+  },
+}
+
 const DashboardComponent = () => {
-  const [isOpen2FA, setIsOpen2FA] = useState(false)
-  const currentUser = authenticationService.currentUserValue
-  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const dispatch = useDispatch()
+  const [isOpen2FA, setIsOpen2FA] = useState()
+  const [isOpenCompleteProfile, setIsOpenCompleateProfile] = useState(useSelector(state => state.completeProfile))
+  const currentUser = JSON.parse(localStorage.getItem('currentUser')) //authenticationService.currentUserValue
+  const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
+  const userId = get(currentUser, ['data', 'data', '_id'], '')
+  const role = get(currentUser, ['data', 'data', 'role'], '')
+  const [elementsStats, setElementStats] = useState([])
+  const [dashboardDetails, setDashboardDetails] = useState(null)
+  const isLoggedToken = get(currentUser, ['data', 'token'], null)
+  const [twoFaSkipped, setSkipTwoFa] = useState(useSelector(state => state.skipTwoFaValue))
+  const isPWDChanged = get(currentUser, ['data', 'data', 'isPasswordChanged'], false)
+  const [isPwdChangeClicked, setPwdChangeClicked] = useState(false)
+  const [openflash, setOpenFlash] = useState(false)
+  const [alertMsg, setAlertMsg] = useState('')
+  const [subLebel, setSubLabel] = useState('')
+  const [alertcolor, setAlertColor] = useState('')
 
   useEffect(() => {
-    var IsShow2FAPopup = localStorage.getItem('IsShow2FAPopup')
-    console.log("name", IsShow2FAPopup, twoFactor_auth_type)
-
-    if (IsShow2FAPopup === null && twoFactor_auth_type === 'none') {
-      setIsOpen2FA(true)
-      localStorage.setItem('IsShow2FAPopup', false)
+    const loggedUser = JSON.parse(localStorage.getItem('currentUser'))
+    const isFirstTimeLoggedIn = get(loggedUser, ['data', 'data', 'last_login_time'], false)
+    console.log('Dashboard >> useEffect ', isFirstTimeLoggedIn, twoFaSkipped)
+    if (!isLoggedToken) {
+      history.push('signin')
     }
+    if (!isFirstTimeLoggedIn) {
+      setIsOpen2FA(true)
+      // localStorage.setItem('IsShow2FAPopup', false)
+    } else if (role == 'admin' && !isPWDChanged) {
+      setPwdChangeClicked(true)
+    }
+    setElementStats(dashboardComponentConfig[role])
+    getDashboardDetails()
   }, [])
+
+  const isShowCompleteProfile = () => {
+    switch (role) {
+      case 'doctor':
+      case 'patient':
+        return true
+        break
+      default:
+        return false
+    }
+  }
 
   const close2FaModel = () => {
     setIsOpen2FA(false)
+
+    var loggedUser = JSON.parse(localStorage.getItem('currentUser'))
+    // var user = get(loggedUser, ['data', 'data'], {})
+    if (get(loggedUser, ['data', 'data'], false)) {
+      loggedUser.data.data.last_login_time = true
+      loggedUser.data.data.isPasswordChanged = true
+    }
+
+    localStorage.setItem('currentUser', JSON.stringify(loggedUser))
+
+    console.log('close2FaModel >> last_login_time', last_login_time)
+    if (role == 'admin' && !isPWDChanged) {
+      setPwdChangeClicked(true)
+    } else {
+      if (isShowCompleteProfile()) {
+        setIsOpenCompleateProfile(true)
+      }
+      if (!last_login_time) {
+        setIsOpen2FA(true)
+      }
+      dispatch(setSkip2fa(true))
+    }
+  }
+
+  const getDashboardDetails = async () => {
+    const res = await dashboardService.getDashboardDetails(role)
+    if (res.status === 200) {
+      const dashboardData = get(res, ['data', 'data'], {})
+      console.log('dashboardData >>', dashboardData)
+      setDashboardDetails(dashboardData)
+    } else {
+    }
+  }
+
+  const checkDoctorOrPatent = () => {
+    switch (role) {
+      // case 'doctor':
+      case 'patient':
+        return false
+        break
+      default:
+        return false
+    }
+  }
+
+  const handleSuccessClose = () => {
+    setPwdChangeClicked(false)
+    setOpenFlash(true)
+    setAlertMsg('Saved')
+    setSubLabel('Password was successfully updated.')
+    setAlertColor('success')
+  }
+
+  const handleFailureClose = () => {
+    setPwdChangeClicked(true)
+    setOpenFlash(true)
+    setAlertMsg('Error')
+    setSubLabel('Error occured while updating the Password.')
+    setAlertColor('fail')
+  }
+
+  const handleCloseFlash = (event, reason) => {
+    setOpenFlash(false)
+    setAlertMsg('')
+    setSubLabel('')
+    setAlertColor('')
   }
 
   return (
-    <div className="db__main__div">
+    <div className="dashboard__main__div">
       <div className="io__flex__spcebetween">
-        <Card
-          sx={{
-            width: '49%',
-            background: '#fff',
-            boxShadow: '0 2px 4px #00000029',
-            borderRadius: '4px',
-          }}
-        >
-          <CardContent>
-            <Typography component="div" variant="h6">
-              User Breakdown
-            </Typography>
-            <div className="io__flex__spcebetween ">
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>TOTAL USERS</label>
-              </div>
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>NEW DOCTORS</label>
-              </div>
-              <div>
-                <h4 className="io__dashboard__card">158</h4>
-                <label>NEW PATIENTS</label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card
-          sx={{
-            width: '49%',
-            background: '#fff',
-            boxShadow: '0 2px 4px #00000029',
-            borderRadius: '4px',
-          }}
-        >
-          <CardContent>
-            <Typography component="div" variant="h6">
-              Notifications
-            </Typography>
-            <div className="io__flex__spcebetween ">
-              <div>
-                <h4 className="io__dashboard__card">5</h4>
-                <label>DOCTOR REQUESTS</label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="io__flex__spcebetween">
-        <Card
+        {elementsStats.map((elem, index) => {
+          const component = componenetsMap[elem]
+          const componentProp = component.componentProps
+          if (component) {
+            const CompName = component.component
+            return (
+              <CompName
+                key={index}
+                componentProp={componentProp}
+                role={role}
+                checkDoctorOrPatent={checkDoctorOrPatent}
+                dashboardDetails={dashboardDetails}
+                last_login_time={last_login_time}
+              />
+            )
+          }
+          return null
+        })}
+
+        {/* <Card
           sx={{
             width: '49%',
             background: '#fff',
@@ -192,7 +387,7 @@ const DashboardComponent = () => {
             </Typography>
             <ReactHighcharts highcharts={Highcharts} options={options}></ReactHighcharts>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
       <Modal
         open={isOpen2FA}
@@ -201,9 +396,40 @@ const DashboardComponent = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={twoFaModelStyle}>
-          <TwoFaModel clickCloseButton={close2FaModel} />
+          <TwoFaModel clickCloseButton={close2FaModel} setIsOpenCompleateProfile={setIsOpenCompleateProfile} />
         </Box>
       </Modal>
+      <Modal
+        open={isOpenCompleteProfile}
+        // onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={twoFaModelStyle}>
+          <CompleateProfile
+            clickCloseButton={close2FaModel}
+            setIsOpenCompleateProfile={setIsOpenCompleateProfile}
+            userId={userId}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={isPwdChangeClicked}
+        // onClose={closeApproveModel}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={changePasswordModelStyle}>
+          <ChangePassword handleSuccessClose={handleSuccessClose} handleFailureClose={handleFailureClose} />
+        </Box>
+      </Modal>
+      <Alert
+        handleCloseFlash={handleCloseFlash}
+        alertMsg={alertMsg}
+        openflash={openflash}
+        subLebel={subLebel}
+        color={alertcolor}
+      />
     </div>
   )
 }

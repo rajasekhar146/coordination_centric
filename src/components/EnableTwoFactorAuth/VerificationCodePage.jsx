@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom'
 import { authenticationService } from '../../services'
 import Alert from '../Alert/Alert.component'
 import get from 'lodash.get'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCompleteProfile, enableTwofa } from '../../redux/actions/commonActions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const VerificationCodePage = props => {
+  const dispatch = useDispatch()
   const currentUser = authenticationService?.currentUserValue
   const currentUserEmail = get(currentUser, ['data', 'data', 'email'], '')
   const { method } = useParams()
@@ -38,16 +41,22 @@ const VerificationCodePage = props => {
   const [alertMsg, setAlertMsg] = useState('')
   const [subLebel, setSubLabel] = useState('')
 
-  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], false)
+  const twoFactor_auth_type = get(currentUser, ['data', 'data', 'twoFactor_auth_type'], '')
+  const last_login_time = get(currentUser, ['data', 'data', 'last_login_time'], false)
+  const role = get(currentUser, ['data', 'data', 'role'], false)
+  const [enableTwofavalue, setEnableTwofa] = useState(useSelector(state => state.enableTwofa))
+  const [activeResend, setActiveResend] = useState(false)
 
 
   const [verificationCode, setVerificationCode] = useState('')
 
   useEffect(() => {
-    if (twoFactor_auth_type !== 'none') {
+    // var twoFaVerfied = localStorage.getItem('twoFaVerfied')
+    if (twoFactor_auth_type !== 'none' && !enableTwofavalue) {
       history.push(`/dashboard`)
     }
   }, [])
+
 
   const getLabel = () => {
     switch (method) {
@@ -62,11 +71,28 @@ const VerificationCodePage = props => {
     }
   }
 
+  const isShowCopleateProfile = () => {
+    switch(role) {
+      case 'doctor':
+      case 'patient':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+
+
   const handleSubmit = () => {
-    const res = authenticationService.twoFactorEmailAuthVerification(verificationCode)
+    const res = authenticationService.twoFactorAuthVerification(verificationCode, method, currentUserEmail)
     res
       .then(() => {
+        // localStorage.setItem('twoFaVerfied', true)
         history.push(`/2faverificationsuccess`)
+        if (!last_login_time && isShowCopleateProfile() && !enableTwofavalue) {
+          dispatch(setCompleteProfile(true))
+        }
+        dispatch(enableTwofa(false))
       })
       .catch(() => {
         history.push(`/2faverificationfail`)
@@ -109,8 +135,9 @@ const VerificationCodePage = props => {
             type="text"
             className={classes.textField}
             value={verificationCode}
+            inputProps={{ maxLength: 6 }}
             onChange={e => {
-              setVerificationCode(e.target.value)
+              setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))
             }}
           />
         </div>
@@ -129,7 +156,16 @@ const VerificationCodePage = props => {
             style={{ width: '70%' }}
             onClick={() => handleResend()}
             className="io__resend__label">
-            Didn't recieve? Resend OTP
+            Didn't recieve?
+            <span
+              className={activeResend ? 'si_acive_resend' : ''}
+              onMouseOver={() => {
+                setActiveResend(true)
+              }}
+              onMouseOut={() => {
+                setActiveResend(false)
+              }} >Resend OTP
+            </span>
           </label>
         </div>
       </div>
@@ -148,6 +184,7 @@ const VerificationCodePage = props => {
           alertMsg={alertMsg}
           openflash={openflash}
           subLebel={subLebel}
+          color="success"
         />
       </div>
     </div>

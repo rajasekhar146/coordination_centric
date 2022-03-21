@@ -1,0 +1,5 @@
+.chat-workspace {
+    height: 70vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

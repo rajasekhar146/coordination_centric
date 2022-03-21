@@ -1,0 +1,69 @@
+.db__main__div {
+    width: 100%;   
+    height: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 8.87732px 18.4944px rgba(16, 30, 115, 0.05);
+    border-radius: 5.91821px;
+}
+
+.db__row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.db__details {
+    padding: 10px;
+}
+
+.db__pic {
+    width: 250px;
+    height: 300px;
+}
+
+.db__doctor__name {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14.755px;
+    line-height: 19px;
+
+    /* identical to box height, or 130% */
+    letter-spacing: 0.147955px;
+
+    /* Gray/900 */
+    color: #101828;
+}
+
+.db__specialist__detail {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13.62px;
+    line-height: 18px;
+    
+    /* identical to box height, or 130% */
+    letter-spacing: 0.0739777px;
+    
+    /* Primary/Default */
+    color: #E42346;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.db__description {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11.35px;
+    line-height: 18px;
+
+    /* or 156% */
+
+    /* Neutral/Gray */
+    color: #A0A4A8;
+}
+
+.db__details__background__white {
+    background-color: #FFFFFF !important;
+}

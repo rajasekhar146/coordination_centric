@@ -1,0 +1,22 @@
+.invite-wrp {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    background: #00000063;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+}
+.form-wrp {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 1px 1px 1px red;
+}
+.icon-wrp{
+    
+}
